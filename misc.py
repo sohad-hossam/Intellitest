@@ -25,3 +25,10 @@ for path, node in parsed_tree:
          print(f"    Variable: {node.name}")
 
 #---------------------------------------------------------#
+         
+print(f"Identifier: {source_code[curr_node.start_byte:curr_node.end_byte]}")
+
+
+
+# if curr_node.is_named==False :
+    #print(curr_node)
