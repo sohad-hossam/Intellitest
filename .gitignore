@@ -1,0 +1,16 @@
+*.bz2
+*.cfm
+*.cfc
+*.gif
+*.png
+*.jar
+*.java
+*.xml
+*.md
+*.csv
+*.pdf
+*.sqlite3
+build/my-languages.so
+build/my-languages.lib
+build/my-languages.exp
+_pycache_/imports.cpython-311.pyc
