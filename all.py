@@ -58,7 +58,7 @@ while(len(queue)):
         id += 1
         queue.append((child, id))
         cst_tree.create_node(child.type, id, parent = parent_id)
-#print(cst_tree.show(stdout=False))
+print(cst_tree.show(stdout=False))
 
 while(len(queue)):
     curr_node, parent_id = queue.pop(0)
@@ -93,7 +93,7 @@ while(len(queue)):
 
 
 unique_operators_count=len(unique_operators)  #n1
-##print(unique_operators_count)
+###print(unique_operators_count)
 
 unique_operands =set()
 operands_count=0
@@ -108,7 +108,7 @@ queue = list()
 queue.append(curr_node)
 while(len(queue)):
     curr_node = queue.pop(0)
-    ##print(curr_node)
+    ###print(curr_node)
     if(curr_node.type in operators):
         unique_operators.add(curr_node.type)
         operators_count+=1
@@ -143,7 +143,7 @@ while(len(queue)):
     if(curr_node.type != "import_declaration" and curr_node.type != "package_declaration"):
         queue.extend(curr_node.children)
         
-##print(unique_operators)
+###print(unique_operators)
 
 ###########################################     operands   ############################################
 # package and import statements are not included in operands
@@ -175,7 +175,7 @@ while(len(queue)):
     if(curr_node.type != "import_declaration" and curr_node.type != "package_declaration"):
         queue.extend(curr_node.children)
 
-#print(unique_operands)
+##print(unique_operands)
 
 unique_operators_count=len(unique_operators)  #n1
 unique_operands_count=len(unique_operands)  #n2
@@ -212,8 +212,22 @@ with open("Operation2.java", "r") as file:
             continue
         if line.strip().rstrip('\n') != "" and not line.strip().startswith(('package', 'import','//')):
             SLOC += 1
-print(SLOC)
+##print(SLOC)
 
     # int x = 4; /* jijopok
     # this is a comment
     # ldkfsl;l */  int y = 5;
+
+################################### Cyclomatic Complexity  ########################################
+
+# if	+1	An if statement is a single decision.
+# elif	+1	The elif statement adds another decision.
+# else	+0	The else statement does not cause a new decision. The decision is at the if.
+# for	+1	There is a decision at the start of the loop.
+# while	+1	There is a decision at the while statement.
+# except	+1	Each except branch adds a new conditional path of execution.
+# finally	+0	The finally block is unconditionally executed.
+# with	+1	The with statement roughly corresponds to a try/except block (see PEP 343 for details).
+# assert	+1	The assert statement internally roughly equals a conditional statement.
+# Comprehension	+1	A list/set/dict comprehension of generator expression is equivalent to a for loop.
+# Boolean Operator	+1	Every boolean operator (and, or) adds a decision point.
