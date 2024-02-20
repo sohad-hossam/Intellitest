@@ -3,7 +3,7 @@ Delete a banner ad associated with a refreshment bar on the computer.
 Partecipating 
 Actor initialization Agency Operator 
 Entry 
-Operator conditions • The agency has logged. 
+Operator conditions   The agency has logged. 
 Flow of events User System 
 1. Receives a list of turning points of the rest use case RicercaPuntiDiRistoro and select one from accessing the function of removal of the banner. 
 2 View the list of banner associated with the point of rest. 
@@ -11,6 +11,6 @@ Flow of events User System
 4 Displays a message confirming the deletion. 
 5 Confirm the operation. 
 6. Removes the banner. 
-Exit conditions • The system shall notify the successful elimination of the selected banner. 
-• Interruption of the connection to the server ETOUR. 
+Exit conditions   The system shall notify the successful elimination of the selected banner. 
+  Interruption of the connection to the server ETOUR. 
 Quality requirements

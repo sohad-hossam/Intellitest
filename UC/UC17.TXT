@@ -3,7 +3,7 @@ Changing the image of a banner ad.
 Partecipating 
 Actor initialization Agency Operator 
 Entry 
-Operator conditions • The agency has logged. 
+Operator conditions   The agency has logged. 
 Flow of events User System 
 1. Receives a list of turning points of the rest use case RicercaPuntiDiRistoro and select one from accessing the function of editing a banner. 
 2 View the list of banner associated with the point of rest. 
@@ -13,6 +13,6 @@ Flow of events User System
 6. Check the characteristics of the inserted and asks for confirmation of the change of the banner. In the event that the inserted image is not valid, enable the use case Errored. 
 7 Confirmation of the transaction change. 
 8 Bookmark this new image for the selected banner. 
-Exit conditions • The system shall notify the successful modification of the banner. 
-• Interruption of the connection to the server ETOUR. 
+Exit conditions   The system shall notify the successful modification of the banner. 
+  Interruption of the connection to the server ETOUR. 
 Quality requirements

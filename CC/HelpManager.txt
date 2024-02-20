@@ -17,7 +17,7 @@ import javax.swing.text.JTextComponent;
   * @ Version 0.2
   * @ Author Mario Gallo
   *
-  * © 2007 eTour Project - Copyright by DMI SE @ SA Lab --
+  *    2007 eTour Project - Copyright by DMI SE @ SA Lab --
   * University of Salerno
   * /
 public class extends HelpManager MouseAdapter

@@ -3,7 +3,7 @@ Inserting a new banner associated with the point of rest.
 Partecipating 
 Actor initialization Operator Point Of Restaurants 
 Entry 
-conditions • The Point Of Restaurant Operator has successfully authenticated to the system. 
+conditions   The Point Of Restaurant Operator has successfully authenticated to the system. 
 Flow of events User System 
 1. Select the feature for the insertion of a new banner. 
 2 Displays a form for the selection of an image. 
@@ -12,8 +12,8 @@ Flow of events User System
 
 5 Confirm the operation of insertion. 
 6. Remember the banners associated with the point of rest. 
-Exit conditions • The notification about the insertion of new banner. 
-• The Point Of Operator Restaurant cancels the operation. 
-• The point of eating has already entered the maximum number of banners allowed. 
-• Interruption of the connection to the server ETOUR. 
+Exit conditions   The notification about the insertion of new banner. 
+  The Point Of Operator Restaurant cancels the operation. 
+  The point of eating has already entered the maximum number of banners allowed. 
+  Interruption of the connection to the server ETOUR. 
 Quality requirements

@@ -4,7 +4,7 @@
   * @ Author Joseph Martone
   * @ Version 0.1
   *
-  * © 2007 eTour Project - Copyright by DMI SE @ SA Lab - University of Salerno
+  *    2007 eTour Project - Copyright by DMI SE @ SA Lab - University of Salerno
   * /
 package unisa.gps.etour.repository;
 

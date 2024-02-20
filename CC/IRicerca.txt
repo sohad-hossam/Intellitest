@@ -11,7 +11,7 @@ import unisa.gps.etour.util.Punto3D;
   * Interface for management of research
   *
   * @ Author Joseph Penna
-  * @ Version 0.1 © 2007 eTour Project - Copyright by DMI SE @ SA Lab --
+  * @ Version 0.1    2007 eTour Project - Copyright by DMI SE @ SA Lab --
   * University of Salerno
   * /
 public interface extends Remote IRicerca

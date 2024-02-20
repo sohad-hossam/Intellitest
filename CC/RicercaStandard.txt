@@ -8,7 +8,7 @@ import java.util.ArrayList;
   * Class for managing Standard Search
   *
   * @ Author Joseph Penna
-  * @ Version 0.1 © 2007 eTour Project - Copyright by DMI SE @ SA Lab --
+  * @ Version 0.1    2007 eTour Project - Copyright by DMI SE @ SA Lab --
   * University of Salerno
   * /
 public class Search extends RicercaStandard

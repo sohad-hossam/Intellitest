@@ -4,7 +4,7 @@ import java.sql.Date;
 
 public class OperatoreAgenzia
 (
-private String Name, Last Name, Citt‡Residenza, Phone, Zip, Address, Email, Password, username;
+private String Name, Last Name, Citt  Residenza, Phone, Zip, Address, Email, Password, username;
 private Date DoB;
 
 public OperatoreAgenzia () ()
@@ -12,7 +12,7 @@ public OperatoreAgenzia (String name, String name, String city, String phone, St
 (
 this.Nome = name;
 this.Cognome = surname;
-this.Citt‡Residenza = city;
+this.Citt  Residenza = city;
 this.Telefono = phone;
 this.Cap = cap;
 this.Indirizzo = address;
@@ -40,13 +40,13 @@ public String getCognome ()
 return Name;
 )
 
-public void setCitt‡Residenza (String par1)
+public void setCitt  Residenza (String par1)
 (
-this.Citt‡Residenza = par1;
+this.Citt  Residenza = par1;
 )
-public String getCitt‡Residenza ()
+public String getCitt  Residenza ()
 (
-Citt‡Residenza return;
+Citt  Residenza return;
 )
 
 public void setTelefono (String par1)

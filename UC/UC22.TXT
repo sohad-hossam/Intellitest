@@ -3,7 +3,7 @@ Delete a news in the system.
 Partecipating 
 Actor initialization Agency Operator 
 Entry 
-Operator conditions • The agency has logged. 
+Operator conditions   The agency has logged. 
 Flow of events User System 
 1. Activate the function of elimination of a news. 
 2 View all news in a form. 
@@ -11,8 +11,8 @@ Flow of events User System
 4 Asks for confirmation of the transaction. 
 5 Confirm the deletion of the news. 
 6. Delete the data news. 
-Exit conditions • The system shall notify the successful elimination of the news. 
-• The Operator Agency cancels the operation. 
-• Interruption of the connection to the server ETOUR. 
+Exit conditions   The system shall notify the successful elimination of the news. 
+  The Operator Agency cancels the operation. 
+  Interruption of the connection to the server ETOUR. 
 Quality 
 requirements

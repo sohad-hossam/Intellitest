@@ -2,7 +2,7 @@
   * Test case for class TestoNewsRenderer
   *
   * @ Author Mario Gallo
-  * @ Version 0.1 © 2007 eTour Project - Copyright by DMI SE @ SA Lab --
+  * @ Version 0.1    2007 eTour Project - Copyright by DMI SE @ SA Lab --
   * University of Salerno
   * /
 package unisa.gps.etour.gui.operatoreagenzia.tables.test;

@@ -192,20 +192,20 @@ for (int i = 0; i <Pr.length i + +)
 (
 
 
-if (Šípu (combo, Pr [i]. getLocal ())){
+if (    pu (combo, Pr [i]. getLocal ())){
 
 jComboBox.addItem (Pr [i]. getLocal ());
 )
 )
 for (int i = 0; i <Bc.length i + +)
 (
-if (Šípu (combo, BC [i]. getLocal ())){
+if (    pu (combo, BC [i]. getLocal ())){
 jComboBox.addItem (bc [i]. getLocal ());
 )
 )
 tabellaSiti.setModel (new ReportTableModel (Bc, Pr));
 )
-private boolean Šípu (JComboBox combo, String loc) (
+private boolean     pu (JComboBox combo, String loc) (
 for (int i = 0; i <combo.getItemCount (); i + +)
 if (combo.getItemAt (i) == loc)
 return false;

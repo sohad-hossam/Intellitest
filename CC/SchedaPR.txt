@@ -5,7 +5,7 @@
 *
 * 28/05/2007
 *
-* © 2007 eTour Project - Copyright by SE @ SA Lab - DMI - University of Salerno
+* 2007 eTour Project - Copyright by SE @ SA Lab - DMI - University of Salerno
 * /
 
 package unisa.gps.etour.gui.operatoreagenzia;
@@ -82,7 +82,7 @@ private JLabel txtNome = null;
 private JLabel txtIndirizzo = null;
 private JLabel txtCAP = null;
 private JLabel txtCitta = null;
-private JLabel txtLocalità = null;
+private JLabel txtLocalit  = null;
 private JLabel txtProvincia = null;
 private JLabel txtPos = null;
 private JLabel txtTel = null;
@@ -647,8 +647,8 @@ txtPos = new JLabel ();
 txtPos.setText ( "Geographic Position");
 txtProvincia = new JLabel ();
 txtProvincia.setText ( "Province");
-txtLocalità = new JLabel ();
-txtLocalità.setText ( "Location");
+txtLocalit = new JLabel ();
+txtLocalit.setText ( "Location");
 txtCitta = new JLabel ();
 txtCitta.setText ( "City");
 txtCAP = new JLabel ();
@@ -663,7 +663,7 @@ datiPR.setBorder (new SoftBevelBorder (SoftBevelBorder.LOWERED));
 datiPR.add (txtNome, gridBagConstraints5);
 datiPR.add (txtIndirizzo, gridBagConstraints6);
 datiPR.add (txtCitta, gridBagConstraints7);
-datiPR.add (txtLocalità, gridBagConstraints8);
+datiPR.add (txtLocalit , gridBagConstraints8);
 datiPR.add (txtCAP, gridBagConstraints9);
 datiPR.add (txtProvincia, gridBagConstraints10);
 datiPR.add (txtPos, gridBagConstraints11);
