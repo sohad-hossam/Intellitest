@@ -1,8 +1,4 @@
-from treelib import Node, Tree
-from tree_sitter import Language, Parser
-import math
-import re
-import math
+from imports import *
 
 Language.build_library(
     # Store the library in the `build` directory

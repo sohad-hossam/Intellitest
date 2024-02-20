@@ -15,3 +15,6 @@ build/my-languages.lib
 build/my-languages.exp
 _pycache_/imports.cpython-311.pyc
 __pycache__/imports.cpython-311.pyc
+CC/*
+UC/*
+*.pyc
