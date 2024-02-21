@@ -8,5 +8,9 @@ import nltk
 #nltk.download() #download_folder = C:/nltk_data 
 from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from scipy.spatial.distance import jensenshannon
+
+from sklearn.decomposition import TruncatedSVD
+from numpy import ndarray

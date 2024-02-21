@@ -59,7 +59,7 @@ def CodePreProcessor(filepath):
     return words_tokenized
 
 def UCPreProcessor(filepath):
-    dataset_txt = open(filepath, "r").read()
+    dataset_txt = open(filepath, "r", encoding='utf-8').read()
     # 2) All numeric characters were removed. 
     numeric_chars_to_remove = r"[0-9]" 
     UCCleanedOfNumbers = re.sub(numeric_chars_to_remove, "", dataset_txt).split()
