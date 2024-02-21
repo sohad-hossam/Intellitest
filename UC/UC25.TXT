@@ -1,6 +1,6 @@
-Use case name VISUALIZZAREPORTSTATISTICI 
+Use case name VIEWSTATISTICALREPORTS 
 View statistical report relating to a selected location. 
-Partecipating 
+Participating 
 Actor initialization Agency Operator 
 Entry 
 Operator conditions   The agency has logged. 

@@ -1,4 +1,4 @@
-Use case name INSERISCINEWS 
+Use case name POSTNEWS 
 Inserts a new news in the system. 
 Participating 
 Actor initialization Agency Operator 

@@ -1,6 +1,6 @@
-Use case name RICERCASITO 
+Use case name SITESEARCH 
 Searching for a specific site on the computer. 
-Partecipating 
+Participating 
 Actor 
 Entry 
 conditions 

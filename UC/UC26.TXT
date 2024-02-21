@@ -1,11 +1,11 @@
-Use case name MODIFICACOMMENTO 
+Use case name EDITCOMMENT 
 Editing a comment by a feedback selected. 
-Partecipating 
+Participating 
 Actor initialization Agency Operator 
 Entry 
 Operator conditions   The agency has logged. 
 Flow of events User System 
-1. View the list of sites as a result of the use case RicercaSito, it selects and activates a function of change in the selected comment. 
+1. View the list of sites as a result of the use case SiteResearch, it selects and activates a function of change in the selected comment. 
 2 Upload feedback issued to that site and displays them in a form. 
 3 Select a feedback from the list and submit the form. 
 4 Displays a form for editing the comment of feedback selected. 

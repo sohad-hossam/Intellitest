@@ -1,6 +1,6 @@
-Use case name ELIMINATAG 
+Use case name DELETETAG 
 Removes one or more search tags in the system. 
-Partecipating 
+Participating 
 Actor initialization Agency Operator 
 Entry 
 Operator conditions   The agency has logged. 

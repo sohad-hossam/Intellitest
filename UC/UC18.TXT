@@ -1,6 +1,6 @@
-Use case name CONTROLLANUMEROBANNER 
+Use case name CHECKBANNERNUMBER 
 Check if a point Refreshments included the maximum number of allowed banners to it. 
-Partecipating 
+Participating 
 Actor 
 Entry 
 Operator conditions   The agency wants to put a new banner 
