@@ -1,6 +1,6 @@
-Use case name VISUALIZZASTATISTICHEPERSONALI 
+Use case name VIEWPERSONALSTATISTICS 
 Viewing statistics for Point Of Restaurants 
-Partecipating 
+Participating 
 Actor initialization Operator Point Of Restaurants 
 Entry 
 conditions   The Point Of Restaurant Operator has successfully authenticated to the system. 

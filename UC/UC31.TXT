@@ -1,4 +1,4 @@
-Use case name MODIFICAPASSWORD 
+Use case name CHANGEPASSWORD 
 The Agency Operator chooses to change the password associated with your account 
 Partecipating 
 Actor initialization Agency Operator 

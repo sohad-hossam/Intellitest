@@ -1,6 +1,6 @@
-Use case name INSERISCIBANNER 
+Use case name INSERTBANNER 
 Inserting a new banner associated with the point of rest. 
-Partecipating 
+Participating 
 Actor initialization Operator Point Of Restaurants 
 Entry 
 conditions   The Point Of Restaurant Operator has successfully authenticated to the system. 

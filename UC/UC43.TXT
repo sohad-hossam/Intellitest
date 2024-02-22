@@ -1,6 +1,6 @@
-Use case name MODIFICADATIPUNTODIRISTORO 
+Use case name CHANGEREFRESHMENTPOINTDATA 
 Change data point associated refreshment. 
-Partecipating 
+Participating 
 Actor initialization Operator Point Of Restaurants 
 Entry 
 conditions   The Point Restaurant Operator has successfully authenticated to the system. 

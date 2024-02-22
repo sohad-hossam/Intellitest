@@ -1,6 +1,6 @@
-Use case name ELIMINAMEN  
+Use case name DELETION  
 Delete a daily menu of a restaurant. 
-Partecipating 
+Participating 
 Actor initialization Operator Point Of Restaurants 
 Entry 
 conditions   The Point Of Restaurant Operator has successfully authenticated to the system. 

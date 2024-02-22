@@ -1,6 +1,6 @@
-Use case name ELIMINABANNER 
+Use case name REMOVEBANNERS 
 Delete a banner ad associated with the point of rest. 
-Partecipating 
+Participating 
 Actor initialization Operator Point Of Restaurants 
 Entry 
 conditions   The Point Of Restaurant Operator has successfully authenticated to the system. 

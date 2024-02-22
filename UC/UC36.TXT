@@ -1,4 +1,4 @@
-Use case name LOGINERRATO 
+Use case name WRONGLOGIN 
 The data supplied for the login is incorrect. 
 Participating 
 Actor 

@@ -1,6 +1,6 @@
-Use case name RICHIESTACONVENZIONE 
+Use case name AGREEMENTREQUEST 
 Require to conclude a Convention between the points of rest and the agency involved. 
-Partecipating 
+Participating 
 Actor initialization Operator Point Of Restaurants 
 Entry 
 conditions   The Point Of Restaurant Operator has successfully authenticated to the system. 

@@ -1,5 +1,5 @@
-Use case name ERROREMODIFICAPASSWORD 
-E 'was asked to enter a password but is not confirmed in a correct way. 
+Use case name ERRORCHANGEPASSWORD 
+it was asked to enter a password but is not confirmed in a correct way. 
 Participating 
 Actor 
 Entry 

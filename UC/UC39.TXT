@@ -1,6 +1,6 @@
-Use case name MODIFICABANNER 
+Use case name EDITBANNERS 
 Changing the image of a banner ad. 
-Partecipating 
+Participating 
 Actor initialization Operator Point Of Restaurants 
 Entry 
 conditions   The Point Of Restaurant Operator has successfully authenticated to the system. 
