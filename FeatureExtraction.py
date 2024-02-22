@@ -29,8 +29,8 @@ class FeatureExtraction:
     # Jensen-Shannon.
     def JensenShannon(self, UC_documents: list, code_documents: list, train_or_test: str) -> np.ndarray:
         
-        code_count_matrix = np.zeros((code_documents.shape[0], code_documents.shape[1]))
-        UC_count_matrix = np.zeros((UC_documents.shape[0], UC_documents.shape[1]))
+        code_count_matrix = np.zeros((len(code_documents), len(code_documents[0])))
+        UC_count_matrix = np.zeros((len(UC_documents),len(UC_documents[0])))
         
         if train_or_test == 'train':
             UC_count_matrix = self.count_vectorizer.fit_transform(UC_documents)
@@ -58,5 +58,6 @@ class FeatureExtraction:
         # for i, UC_count_vector in enumerate(UC_count_matrix.toarray()):
         #     for j, code_count_vector in enumerate(code_count_matrix.toarray()):
         #         JS_matrix[i][j] = pow(jensenshannon(UC_count_vector, code_count_vector), 2)
-        # print(JS_matrix[0])
+        #print(JS_matrix.shape) => (58,116)
+
         return JS_matrix
