@@ -1,6 +1,6 @@
-Use case name ELIMINANEWS 
+Use case name DELETENEWS 
 Delete a news in the system. 
-Partecipating 
+Participating 
 Actor initialization Agency Operator 
 Entry 
 Operator conditions   The agency has logged. 

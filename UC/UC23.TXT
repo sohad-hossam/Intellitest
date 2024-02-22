@@ -1,4 +1,4 @@
-Use case name MODIFICANEWS 
+Use case name EDITNEWS 
 Change data of a news on the computer. 
 Participating 
 Actor initialization Agency Operator 

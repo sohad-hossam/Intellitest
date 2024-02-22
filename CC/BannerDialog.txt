@@ -1,4 +1,4 @@
-﻿package unisa.gps.etour.gui.operatoreagenzia;
+﻿package unisa.gps.etour.gui.operatoragency;
 
 import java.awt .*;
 import java.awt.event .*;
@@ -11,7 +11,7 @@ import javax.swing .*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.border .*;
 
-import unisa.gps.etour.gui.operatoreagenzia.Home;
+import unisa.gps.etour.gui.operatoragency.Home;
 
 / **
   * This class realizes the panel for the dialog for entering a
@@ -27,7 +27,7 @@ public class JPanel extends BannerDialog
 (
 private final static Dimension bannerSize = new Dimension (140, 40);
 private JLabel preview = null;
-private JButton btnCarica = null;
+private JButton btnCharge = null;
 private JPanel that;
 
 / **
@@ -39,22 +39,22 @@ super (null);
 this = this;
 setPreferredSize (new Dimension (420, 160));
 preview = new JLabel ();
-anteprima.setBounds (new Rectangle (40, 20, 250, 60));
-anteprima.setBorder (BorderFactory.createTitledBorder (BorderFactory
+preview.setBounds (new Rectangle (40, 20, 250, 60));
+preview.setBorder (BorderFactory.createTitledBorder (BorderFactory
 . createLineBorder (new Color (51, 102, 255), 3),
 Preview Banner ", TitledBorder.DEFAULT_JUSTIFICATION,
 TitledBorder.DEFAULT_POSITION,
 new Font ( "Dialog", Font.BOLD, 12), new Color (0, 102, 204)));
-btnCarica = new JButton ();
-btnCarica.setBounds (new Rectangle (320, 30, 50, 40));
-btnCarica.setIcon (new ImageIcon (getClass (). getResource (
-Home.URL_IMAGES + "ApriFile.png ")));
-btnCarica.addActionListener (new ActionListener ()
+btnCharge = new JButton ();
+btnCharge.setBounds (new Rectangle (320, 30, 50, 40));
+btnCharge.setIcon (new ImageIcon (getClass (). getResource (
+Home.URL_IMAGES + "openFile.png ")));
+btnCharge.addActionListener (new ActionListener ()
 (
 
 public void actionPerformed (ActionEvent arg0)
 (
-File f = apriFileDialog ();
+File f = openFileDialog ();
 
 if (f == null)
 (
@@ -77,15 +77,15 @@ catch (Exception e)
 e.printStackTrace ();
 )
 N = new ImageIcon ImageIcon (img);
-anteprima.setIcon (n);
-anteprima.repaint ();
+preview.setIcon (n);
+preview.repaint ();
 )
 ));
 
-JLabel txtAttenzione = new JLabel ( "Warning!");
-txtAttenzione.setIcon (new ImageIcon (getClass (). getResource (
+JLabel txtCaution = new JLabel ( "Warning!");
+txtCaution.setIcon (new ImageIcon (getClass (). getResource (
 Home.URL_IMAGES + "warning16.png ")));
-txtAttenzione.setBounds (10, 85, 100, 30);
+txtCaution.setBounds (10, 85, 100, 30);
 JLabel txtTest = new JLabel (
 "<html> <ul> <li> image for the banner can not exceed <b> <font color=\"red\">"
 + BannerSize.width
@@ -93,11 +93,11 @@ JLabel txtTest = new JLabel (
 + BannerSize.height
 + "</ Font> </ b> pixels."
 + "<li> Images of magnitude larger will be resized. </ Ul> </ html>");
-txtTesto.setBounds (0, 90, 420, 80);
+txtText.setBounds (0, 90, 420, 80);
 add (txtTest, null);
-add (txtAttenzione, null);
+add (txtCaution, null);
 add (prev, null);
-add (btnCarica, null);
+add (btnCharge, null);
 
 )
 
@@ -108,7 +108,7 @@ add (btnCarica, null);
 * /
 public void setSelectedBanner (ImageIcon pBanner)
 (
-anteprima.setIcon (pBanner);
+preview.setIcon (pBanner);
 )
 
 / **
@@ -118,7 +118,7 @@ anteprima.setIcon (pBanner);
 * /
 public ImageIcon getSelectedBanner ()
 (
-return (ImageIcon) anteprima.getIcon ();
+return (ImageIcon) preview.getIcon ();
 )
 
 / **
@@ -130,23 +130,23 @@ return (ImageIcon) anteprima.getIcon ();
 * <li> Null - if you have not selected any files.
 * </ Ul>
 * /
-private File apriFileDialog ()
+private File openFileDialog ()
 (
-JFileChooser apriFile = new JFileChooser ();
-apriFile.setDialogTitle ( "Select a new image");
-apriFile.setAcceptAllFileFilterUsed (false);
-apriFile.setMultiSelectionEnabled (false);
+JFileChooser openFile = new JFileChooser ();
+openFile.setDialogTitle ( "Select a new image");
+openFile.setAcceptAllFileFilterUsed (false);
+openFile.setMultiSelectionEnabled (false);
 
 / / File Filter for the window to open the file.
-apriFile.setFileFilter (new FileFilter ()
+openFile.setFileFilter (new FileFilter ()
 (
 public boolean accept (File arg0)
 (
 if (arg0.isDirectory ())
 return true;
 String name = arg0.getName (). ToLowerCase ();
-if (nome.endsWith ( "jpg") | | nome.endsWith ( "gif")
-| | Nome.endsWith ( "png"))
+if (name.endsWith ( "jpg") | | name.endsWith ( "gif")
+| | Name.endsWith ( "png"))
 return true;
 else
 return false;
@@ -158,10 +158,10 @@ return "Images (*. PNG, *. GIF, *. JPG)";
 )
 
 ));
-int returnVal = apriFile.showOpenDialog (this);
+int returnVal = openFile.showOpenDialog (this);
 if (returnVal == JFileChooser.APPROVE_OPTION)
 (
-apriFile.getSelectedFile return ();
+openFile.getSelectedFile return ();
 )
 else
 return null;

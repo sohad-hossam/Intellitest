@@ -1,4 +1,4 @@
-﻿package unisa.gps.etour.gui.operatoreagenzia.tables;
+﻿package unisa.gps.etour.gui.operatoragency.tables;
 
 import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -98,15 +98,15 @@ return (ImageIcon) getUserObject ();
 *
 * Save the image provided as input.
 *
-* @ Param pImmagine Imagelcon - the image to be stored.
+* @ Param pImage Imagelcon - the image to be stored.
 * @ Throws IllegalArgumentException - if the supplied parameter is null.
 * /
-public void setBanner (ImageIcon pImmagine) throws IllegalArgumentException
+public void setBanner (ImageIcon pImage) throws IllegalArgumentException
 (
-if (null == pImmagine)
+if (null == pImage)
 (
 throw new IllegalArgumentException ( "Image is invalid.");
 )
-setUserObject (pImmagine);
+setUserObject (pImage);
 )
 ) 

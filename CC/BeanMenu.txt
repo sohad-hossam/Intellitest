@@ -1,99 +1,90 @@
 ﻿package unisa.gps.etour.bean;
 import java.io.Serializable;
-/ **
-  * Bean containing information relating to a Menu
-  *
-  * @ Author Joseph Martone
-  * @ Version 0.1 2007 eTour Project - Copyright by SE @ SA Lab DMI University
-  * Of Salerno
-  * /
-public class BeanMenu implements Serializable
-(
-private static final long serialVersionUID =-3112032222839565409L;
-private int id;
-private String day;
-private int idPuntoDiRistoro;
 
-/ **
-* Parameterized constructor
-*
-* @ Param pId
-* @ Param pGiorno
-* @ Param pIdPuntoDiRistoro
-* /
-public BeanMenu (int pid, String pGiorno, int pIdPuntoDiRistoro)
-(
-setId (PID);
-setGiorno (pGiorno);
-setIdPuntoDiRistoro (pIdPuntoDiRistoro);
-)
+/**
+ * Bean containing information relating to a Menu
+ *
+ * @Author Joseph Martone
+ * @Version 0.1 2007 eTour Project - Copyright by SE @ SA Lab DMI University
+ * Of Salerno
+ */
+public class BeanMenu implements Serializable {
+    private static final long serialVersionUID = -3112032222839565409L;
+    private int id;
+    private String day;
+    private int restaurantId;
 
-/ **
-* Empty Constructor
-* /
-public BeanMenu ()
-(
+    /**
+     * Parameterized constructor
+     *
+     * @param pId               Menu ID
+     * @param pDay              Day of the menu
+     * @param pRestaurantId     ID of the restaurant associated with the menu
+     */
+    public BeanMenu(int pId, String pDay, int pRestaurantId) {
+        setId(pId);
+        setDay(pDay);
+        setRestaurantId(pRestaurantId);
+    }
 
-)
+    /**
+     * Empty Constructor
+     */
+    public BeanMenu() {
 
-/ **
-* Returns the value of days
-*
-* @ Return Value of the day.
-* /
-public String getGiorno ()
-(
-return day
-)
+    }
 
-/ **
-* Sets the new value of days
-*
-* @ Param value New pGiorno day.
-* /
-public void setGiorno (String pGiorno)
-(
-day = pGiorno;
-)
+    /**
+     * Returns the value of the day
+     *
+     * @return Value of the day.
+     */
+    public String getDay() {
+        return day;
+    }
 
-/ **
-* Returns the value of id
-*
-* @ Return value id.
-* /
-public int getId ()
-(
-return id;
-)
+    /**
+     * Sets the new value of the day
+     *
+     * @param value New day value.
+     */
+    public void setDay(String pDay) {
+        day = pDay;
+    }
 
-/ **
-* Returns the value of idPuntoDiRistoro
-*
-* @ Return value idPuntoDiRistoro.
-* /
-public int getIdPuntoDiRistoro ()
-(
-idPuntoDiRistoro return;
-)
+    /**
+     * Returns the value of the menu ID
+     *
+     * @return Value of the menu ID.
+     */
+    public int getId() {
+        return id;
+    }
 
-/ **
-* Sets the new value of id
-*
-* @ Param pId New value for id.
-* /
-public void setId (int pid)
-(
-id = pid;
-)
+    /**
+     * Returns the value of the restaurant ID
+     *
+     * @return Value of the restaurant ID.
+     */
+    public int getRestaurantId() {
+        return restaurantId;
+    }
 
-/ **
-* Sets the new value of idPuntoDiRistoro
-*
-* @ Param value pIdPuntoDiRistoro New idPuntoDiRistoro.
-* /
-public void setIdPuntoDiRistoro (int pIdPuntoDiRistoro)
-(
-idPuntoDiRistoro = pIdPuntoDiRistoro;
-)
+    /**
+     * Sets the new value of the menu ID
+     *
+     * @param pId New value for the menu ID.
+     */
+    public void setId(int pId) {
+        id = pId;
+    }
 
-)
+    /**
+     * Sets the new value of the restaurant ID
+     *
+     * @param pRestaurantId New restaurant ID.
+     */
+    public void setRestaurantId(int pRestaurantId) {
+        restaurantId = pRestaurantId;
+    }
+}

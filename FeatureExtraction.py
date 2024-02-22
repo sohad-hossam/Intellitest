@@ -2,8 +2,8 @@ import numpy as np
 from imports import *
 
 class FeatureExtraction:
-    def __init__(self) -> None:
-        pass
+    def __init__(self, UCTokens: set) -> None:
+        self.count_vectorizer = CountVectorizer(vocabulary=UCTokens)
 
     # Latent Semantic Analysis.
     def LSA(self, tfidf_matrix_uc: np.ndarray, tfidf_matrix_code: np.ndarray, train_or_test: str) -> np.ndarray:
@@ -27,11 +27,18 @@ class FeatureExtraction:
         
 
     # Jensen-Shannon.
-    def JensenShannon(self, UCTokens: set, UC_documents: list, code_documents: list) -> np.ndarray:
-        count_vectorizer = CountVectorizer(vocabulary=UCTokens)
-        UC_count_matrix = count_vectorizer.fit_transform(UC_documents)
-        code_count_matrix = count_vectorizer.fit_transform(code_documents)
-
+    def JensenShannon(self, UC_documents: list, code_documents: list, train_or_test: str) -> np.ndarray:
+        
+        code_count_matrix = np.zeros((code_documents.shape[0], code_documents.shape[1]))
+        UC_count_matrix = np.zeros((UC_documents.shape[0], UC_documents.shape[1]))
+        
+        if train_or_test == 'train':
+            UC_count_matrix = self.count_vectorizer.fit_transform(UC_documents)
+            code_count_matrix = self.count_vectorizer.fit_transform(code_documents)
+        else:
+            UC_count_matrix = self.count_vectorizer.transform(UC_documents)
+            code_count_matrix = self.count_vectorizer.transform(code_documents)
+            
         UC_words_count = UC_count_matrix.sum(axis=1)
         code_words_count = code_count_matrix.sum(axis=1)
 
@@ -53,6 +60,3 @@ class FeatureExtraction:
         #         JS_matrix[i][j] = pow(jensenshannon(UC_count_vector, code_count_vector), 2)
         # print(JS_matrix[0])
         return JS_matrix
-
-
-

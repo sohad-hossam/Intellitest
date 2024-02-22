@@ -1,11 +1,11 @@
-Use case name ELIMINABANNER 
+Use case name DELETEBANNER 
 Delete a banner ad associated with a refreshment bar on the computer. 
-Partecipating 
+Participating 
 Actor initialization Agency Operator 
 Entry 
 Operator conditions   The agency has logged. 
 Flow of events User System 
-1. Receives a list of turning points of the rest use case RicercaPuntiDiRistoro and select one from accessing the function of removal of the banner. 
+1. Receives a list of turning points of the rest use case SearchRestorePoints and select one from accessing the function of removal of the banner. 
 2 View the list of banner associated with the point of rest. 
 3 Select a banner from the list and enter the function of elimination. 
 4 Displays a message confirming the deletion. 

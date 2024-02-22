@@ -1,4 +1,4 @@
-Use case name ERRORETAGESISTENTE 
+Use case name EXISTINGTAGERROR 
 E 'was asked to enter a search tags already in the system. 
 Participating 
 Actor 
