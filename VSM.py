@@ -20,7 +20,7 @@ for filename in os.listdir("./CC"):
     code_documents.append(tokens)
     CodeTokens.update(tokens.split())
 
-# UCTokens.update(CodeTokens)
+UCTokens.update(CodeTokens)
 
 # create the transform
 vectorizer_uc = TfidfVectorizer(vocabulary=UCTokens)
