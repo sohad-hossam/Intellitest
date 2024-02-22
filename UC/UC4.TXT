@@ -9,8 +9,8 @@ Flow of events User System
 2 Show the form for research. 
 3 Fill in the search form and submit. 
 4 Processing the request. 
-Exit conditions • The system returns a list of cultural goods that meet the search criteria. 
-• Interruption of the connection to the server ETOUR. 
+Exit conditions The system returns a list of cultural goods that meet the search criteria. 
+Interruption of the connection to the server ETOUR. 
 Quality 
 The system requirements should return the results within a set time.
 

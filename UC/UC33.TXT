@@ -1,6 +1,6 @@
 Use case name REGISTRATION 
 Requires the creation of a new system. 
-Partecipating 
+Participating 
 Actor initialized by Guest User 
 Entry 
 conditions   Guest User have access to the system. 
