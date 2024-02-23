@@ -3,7 +3,7 @@ from imports import *
 # 1) All the interpunction was removed. 
 chars_to_remove = r'''(?x)
 _|\s*;\s*|\s*,\s*|\s*\.\s*|  #Standalone Punctuation Marks
-\s*\+\s*|\s*-\s*|\s*\/\s*|\s*\*\s*|  #arethmatic operations
+\s*\+\s*|\s*-\s*|\s*\/\s*|\s*\\*\s*|  #arethmatic operations
 \s*=\s*|\s*==\s*|\s*!=\s*|\s*>\s*|\s*>=\s*|\s*<\s*|\s*<=\s*|\s*&&\s*|\s*&\s*|
 \s*\|\|\s*
 |\s*!\s*|\s*\"\s*|\s*\'\s*|    #assignment 
