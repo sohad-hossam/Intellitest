@@ -4,7 +4,7 @@ from imports import *
 class FeatureExtraction:
     def __init__(self, UCTokens: set) -> None:
         self.count_vectorizer = CountVectorizer(vocabulary=UCTokens)
-        self.vocab_index = {word: idx for idx, word in enumerate(UCTokens)}
+        self.vocab_index = {word: idx for idx, word in enumerate(self.count_vectorizer.get_feature_names_out())}
         # UC_count_matrix, code_count_matrix
 
     # Latent Semantic Analysis.
@@ -34,6 +34,7 @@ class FeatureExtraction:
         if train_or_test == 'train':
             self.UC_count_matrix = self.count_vectorizer.fit_transform(UC_documents)
             self.code_count_matrix = self.count_vectorizer.fit_transform(code_documents)
+            self.code_vocab_index = self.count_vectorizer.vocabulary_
         else:
             self.UC_count_matrix = self.count_vectorizer.transform(UC_documents)
             self.code_count_matrix = self.count_vectorizer.transform(code_documents)
