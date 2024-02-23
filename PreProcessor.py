@@ -3,7 +3,7 @@ from imports import *
 # 1) All the interpunction was removed. 
 chars_to_remove = r'''(?x)
 _|\s*;\s*|\s*,\s*|\s*\.\s*|  #Standalone Punctuation Marks
-\s*\+\s*|\s*-\s*|\s*\/\s*|\s*\*\s*|  #arethmatic operations
+\s*\+\s*|\s*-\s*|\s*\/\s*|\s*\\*\s*|  #arethmatic operations
 \s*=\s*|\s*==\s*|\s*!=\s*|\s*>\s*|\s*>=\s*|\s*<\s*|\s*<=\s*|\s*&&\s*|\s*&\s*|
 \s*\|\|\s*
 |\s*!\s*|\s*\"\s*|\s*\'\s*|    #assignment 
@@ -46,8 +46,9 @@ def CodePreProcessor(filepath):
     for sentence in SourceCodeCleanedOfNumbers:
         #7) All words were lowercased. 
         NTLKTokenized=word_tokenize(sentence)
-        for word in NTLKTokenized:             
-            if word not in stop_words and word != '' and word not in keywords_java:
+        for word in NTLKTokenized:  
+            word = re.sub("\ufeff", "", word)
+            if word not in stop_words and word != '' and word.lower() not in keywords_java:
                 split_words = re.sub(r'(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])', ' ', word)
                 split_words_tokenized=word_tokenize(split_words)
                 for word_part in split_words_tokenized:

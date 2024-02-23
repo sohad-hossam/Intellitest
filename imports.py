@@ -13,4 +13,5 @@ from sklearn.metrics.pairwise import cosine_similarity
 from scipy.spatial.distance import jensenshannon
 
 from sklearn.decomposition import TruncatedSVD
+import numpy as np
 from numpy import ndarray
