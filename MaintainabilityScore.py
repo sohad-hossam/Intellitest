@@ -11,7 +11,7 @@ JAVA = Language("build/my-languages.so", "java")
 parser = Parser()
 parser.set_language(JAVA)
 
-with open("Operation2.java", "r") as f:
+with open("CC/BeanBeneCulturale.txt", "r") as f:
 
     source_code = f.read()
 
@@ -197,7 +197,7 @@ B=V/3000
 # calculate SLOC
 SLOC = 0
 flag = False
-with open("Operation2.java", "r") as file:
+with open("./CC/BeanBeneCulturale.txt", "r") as file:
     for line in file:
         if line.strip().rstrip('\n')[0:2] == '/*':
             flag = True
@@ -227,3 +227,6 @@ with open("Operation2.java", "r") as file:
 # assert	+1	The assert statement internally roughly equals a conditional statement.
 # Comprehension	+1	A list/set/dict comprehension of generator expression is equivalent to a for loop.
 # Boolean Operator	+1	Every boolean operator (and, or) adds a decision point.
+
+
+

@@ -19,106 +19,88 @@ import unisa.gps.etour.util.ControlloDati;
 import unisa.gps.etour.util.MessaggiErrore;
 import unisa.gps.etour.util.Punto3D;
 
-public class Search extends UnicastRemoteObject implements IRicerca
-(
+public class Search extends UnicastRemoteObject implements ISearch {
 
-private static final long serialVersionUID =-6009809097302884655L;
+private static final long serialVersionUID = -6009809097302884655L;
 
-public Search () throws RemoteException
-(
-super ();
-)
+public Search() throws RemoteException {
+    super();
+}
 
-/ / Search Parameters
-private int pIdTurista = -1;
-private String pParoleChiave;
-private double pRaggioMax;
-Private Punto3D pPosizioneUtente;
-private int pElementiPerPagina = -1;
-private byte pTipologiaSito = -1;
+// Search Parameters
+private int touristId = -1;
+private String keywords;
+private double maxRadius;
+private Point3D userPosition;
+private int itemsPerPage = -1;
+private byte siteType = -1;
 
-/ / Objects for the database connection
-Private IDBBeneCulturale BeneCulturale = new DBBeneCulturale ();
-Private IDBPuntoDiRistoro PuntoDiRistoro = new DBPuntoDiRistoro ();
-Private IDBTag Tag DBTag = new ();
+// Objects for the database connection
+private ICulturalAssetDB culturalAssetDB = new CulturalAssetDB();
+private IRestaurantDB restaurantDB = new RestaurantDB();
+private ITagDB tagDB = new TagDB();
 
-/ / List of tags obtained
-private ArrayList <BeanTag> pTags;
+// List of obtained tags
+private ArrayList<BeanTag> tags;
 
-/ / Search Results pages for partitioned
-private Hashtable <Integer, ArrayList <BeanBeneCulturale>> risultatiRicercaBeniCulturali = new Hashtable <Integer, ArrayList <BeanBeneCulturale>> ();
-private Hashtable <Integer, ArrayList <BeanPuntoDiRistoro>> risultatiRicercaPuntiDiRistoro = new Hashtable <Integer, ArrayList <BeanPuntoDiRistoro>> ();
+// Search Results pages partitioned
+private Hashtable<Integer, ArrayList<BeanCulturalAsset>> culturalAssetSearchResults = new Hashtable<>();
+private Hashtable<Integer, ArrayList<BeanRestaurant>> restaurantSearchResults = new Hashtable<>();
 
-/ / Quantity of items and pages results in the research phase
-private int numeroPagineRisultati = -1;
-private int numeroElementiRicerca = -1;
+// Quantity of items and pages results in the research phase
+private int numberOfResultPages = -1;
+private int numberOfSearchElements = -1;
 
-/ * (Non-Javadoc)
-Unisa.gps.etour.control.GestioneRicerche.IRicerca * @ see # search (int, java.lang.String, int [], double, int, unisa.gps.etour.util.Punto3D, byte)
+@Override
+public int search(int touristId, String keywords, int[] tagIds, double maxRadius, int itemsPerPage,
+                  Point3D userPosition, byte siteType) throws RemoteException {
+    // Reset parameters of the previous search
+    resetParameters();
+
+    // Start checking the correctness of the search parameters
+    try {
+        this.touristId = touristId;
+        this.tags = arrayToArrayListTag(tagIds);
+        this.keywords = DataControl.correctString(keywords, true, true, "", DataControl.MAX_LENGTH);
+        this.maxRadius = maxRadius;
+        this.userPosition = userPosition;
+        this.siteType = siteType;
+
+        // If parameters are valid, get the number of results
+        if (itemsPerPage > 0 && ((siteType == 0) || (siteType == 1)) &&
+                maxRadius > 0 && userPosition != null &&
+                (this.numberOfSearchElements = getNumberOfSearchElements()) >= 0) {
+            this.itemsPerPage = itemsPerPage;
+            this.numberOfResultPages = calculateNumberOfSearchPages();
+
+            return this.numberOfSearchElements;
+        } else {
+            return -1; // Otherwise, return -1
+        }
+    } catch (SQLException e) {
+        throw new RemoteException(ErrorMessage.DBMS_ERROR);
+    } catch (Exception e) {
+        throw new RemoteException(ErrorMessage.UNKNOWN_ERROR);
+    }
+}
+}
+
+/* (Non-Javadoc)
+* @ See unisa.gps.etour.control.GestioneRicerche.IRicerca # getResultsPageCulturalAsset (int)
 * /
-public int search (int pIdTurista, pParoleChiave String, int [] pTagsId,
-pRaggioMax double, int pElementiPerPagina,
-Punto3D pPosizioneUtente, byte pTipologiaSito)
+public CulturalAssetBean [] getResultsPageCulturalAsset (int page)
 throws RemoteException
 (
-/ / Reset the parameters of the previous search
-azzeraParametri ();
-
-/ / Start checking the correctness of the search parameters
-TRY
+/ / Check that the site type is valid and that the page is
+/ / Within range
+if ((this.siteType == CULTURAL_ASSET) && checkPage(page))
 (
-this.pIdTurista = pIdTurista;
-this.pTags = arrayToArrayListTag (pTagsId);
-this.pParoleChiave = ControlloDati.correggiStringa (pParoleChiave,
-true, true, "", ControlloDati.LUNGHEZZA_MASSIMA);
-this.pRaggioMax = pRaggioMax;
-this.pPosizioneUtente = pPosizioneUtente;
-this.pTipologiaSito = pTipologiaSito;
-
-/ / If the parameters are valid, I get the number of results
-if (pElementiPerPagina> 0
-& & ((PTipologiaSito == 0) | | (pTipologiaSito == 1))
-PRaggioMax & &> 0
-PPosizioneUtente & &! = Null
-& & (This.numeroElementiRicerca = ottieniNumeroElementiRicercaSpecializzato ())> = 0)
-(
-this.pElementiPerPagina = pElementiPerPagina;
-this.numeroPagineRisultati = calcolaNumeroPagineRicerca ();
-
-this.numeroElementiRicerca return;
-)
-
-/ / Otherwise returns -1
-else
-return -1;
-)
-catch (SQLException e)
-(
-throw new RemoteException (MessaggiErrore.ERRORE_DBMS);
-)
-catch (Exception e)
-(
-throw new RemoteException (MessaggiErrore.ERRORE_SCONOSCIUTO);
-)
-
-)
-
-/ * (Non-Javadoc)
-* @ See unisa.gps.etour.control.GestioneRicerche.IRicerca # ottieniPaginaRisultatiBeneCulturale (int)
-* /
-public BeanBeneCulturale [] ottieniPaginaRisultatiBeneCulturale (int pPagina)
-throws RemoteException
-(
-/ / Check that the type of site is valid and that the page is
-/ / In the range
-if ((this.pTipologiaSito == BENE_CULTURALE) & & controllaPagina (pPagina))
-(
-/ / Transform the list obtained in array
-BeanBeneCulturale [] results = new BeanBeneCulturale [calcolaNumeroElementiPagina (pPagina)];
-/ / Results = ricercaBeniCulturaliPerPagina (pPagina). ToArray (
+/ / Convert the obtained list into an array
+CulturalAssetBean [] results = new CulturalAssetBean [calculatePageElementNumber(page)];
+/ / Results = searchCulturalAssetsPerPage (page). ToArray (
 / / Results);
 
-results = ricercaPerPagina (pPagina). toArray (results);
+results = searchPerPage (page). toArray (results);
 
 return results;
 )
@@ -127,22 +109,22 @@ return null;
 )
 
 / * (Non-Javadoc)
-* @ See unisa.gps.etour.control.GestioneRicerche.IRicerca # ottieniPaginaRisultatiPuntoDiRistoro (int)
+* @ See unisa.gps.etour.control.GestioneRicerche.IRicerca # getResultsPageRestaurant (int)
 * /
-public BeanPuntoDiRistoro [] ottieniPaginaRisultatiPuntoDiRistoro (int pPagina)
+public RestaurantBean [] getResultsPageRestaurant (int page)
 throws RemoteException
 (
-/ / Check that the type of site is valid and that the page is
-/ / In the range
-if ((this.pTipologiaSito == PUNTO_DI_RISTORO)
-& & ControllaPagina (pPagina))
+/ / Check that the site type is valid and that the page is
+/ / Within range
+if ((this.siteType == RESTAURANT)
+& & CheckPage (page))
 (
-/ / Transform the list obtained in array
-BeanPuntoDiRistoro [] results = new BeanPuntoDiRistoro [calcolaNumeroElementiPagina (pPagina)];
-/ / Results = ricercaPuntiDiRistoroPerPagina (pPagina). ToArray (
+/ / Convert the obtained list into an array
+RestaurantBean [] results = new RestaurantBean [calculatePageElementNumber (page)];
+/ / Results = searchRestaurantsPerPage (page). ToArray (
 / / Results);
 
-results = ricercaPerPagina (pPagina). toArray (results);
+results = searchPerPage (page). toArray (results);
 
 return results;
 )
@@ -151,53 +133,52 @@ return null;
 )
 
 / * (Non-Javadoc)
-* @ See unisa.gps.etour.control.GestioneRicerche.IRicerca # ottieniNumeroElementiRicerca ()
+* @ See unisa.gps.etour.control.GestioneRicerche.IRicerca # getNumberOfSearchElements ()
 * /
-public int ottieniNumeroElementiRicerca () throws RemoteException
+public int getNumberOfSearchElements () throws RemoteException
 (
-numeroElementiRicerca return;
+return numberOfSearchElements;
 )
 
 / * (Non-Javadoc)
-* @ See unisa.gps.etour.control.GestioneRicerche.IRicerca # ottieniNumeroPagineRicerca ()
+* @ See unisa.gps.etour.control.GestioneRicerche.IRicerca # getNumberOfSearchPages ()
 * /
-public int ottieniNumeroPagineRicerca () throws RemoteException
+public int getNumberOfSearchPages () throws RemoteException
 (
-numeroPagineRisultati return;
+return numberOfResultPages;
 )
 
 / **
-* Method for returning the number of findings from research
+* Method to obtain the number of search results
 *
-* @ Return number of findings from research. On error
-* Returns -1
-* @ Throws SQLException Exception Connecting to Database
+* @ Return the number of search results. Returns -1 on error
+* @ Throws SQLException Database Connection Exception
 * /
-private int ottieniNumeroElementiRicercaSpecializzato () throws SQLException
+private int getNumberOfSearchElementsSpecialized () throws SQLException
 (
-/ / Check the type of site and gets the number of results
-if (controllaIdTurista ())
+/ / Check the site type and obtain the number of results
+if (checkTouristId ())
 (
-switch (pTipologiaSito)
+switch (siteType)
 (
-homes BENE_CULTURALE:
-return pIdTurista> 0? BeneCulturale
-. ottieniNumeroElementiRicercaAvanzata (
-this.pIdTurista, this.pParoleChiave,
-this.pTags, this.pPosizioneUtente,
-this.pRaggioMax): BeneCulturale
-. ottieniNumeroElementiRicerca (this.pParoleChiave,
-this.pTags, this.pPosizioneUtente,
-this.pRaggioMax);
-homes PUNTO_DI_RISTORO:
-return pIdTurista> 0? PuntoDiRistoro
-. ottieniNumeroElementiRicercaAvanzata (
-this.pIdTurista, this.pParoleChiave,
-this.pTags, this.pPosizioneUtente,
-this.pRaggioMax): PuntoDiRistoro
-. ottieniNumeroElementiRicerca (this.pParoleChiave,
-this.pTags, this.pPosizioneUtente,
-this.pRaggioMax);
+case CULTURAL_ASSET:
+return touristId > 0 ? culturalAssetDB
+. getNumberOfAdvancedSearchElements (
+this.touristId, this.keywords,
+this.tags, this.userPosition,
+this.maxRadius): culturalAssetDB
+. getNumberOfSearchElements (this.keywords,
+this.tags, this.userPosition,
+this.maxRadius);
+case RESTAURANT:
+return touristId > 0 ? restaurantDB
+. getNumberOfAdvancedSearchElements (
+this.touristId, this.keywords,
+this.tags, this.userPosition,
+this.maxRadius): restaurantDB
+. getNumberOfSearchElements (this.keywords,
+this.tags, this.userPosition,
+this.maxRadius);
 )
 )
 return -1;
@@ -206,79 +187,79 @@ return -1;
 / **
 * Method for returning the list of results
 *
-* @ Param pNumeroPagina range of results to return
+* @ Param pPageNumber range of results to return
 * @ Return Container sites emerged in the research phase as the interval
-* @ Throws RemoteException Exception Remote
+* @ Throws RemoteException Remote Exception
 * /
-private ArrayList <?> ricercaPerPagina (int pNumeroPagina)
+private ArrayList <?> searchPerPage (int pPageNumber)
 throws RemoteException
 (
 
-/ / Declare the list of sites related to the page input
-ArrayList <?> RisultatiPaginaCorrente = null;
+/ / Declare the list of sites related to the input page
+ArrayList <?> CurrentPageResults = null;
 TRY
 (
-if (controllaIdTurista ())
+if (checkTouristId ())
 (
 / / Check the type of site
-switch (pTipologiaSito)
+switch (siteType)
 (
-homes BENE_CULTURALE:
+case CULTURAL_ASSET:
 / / If the list has not already been obtained previously
 / / Search
-if ((risultatiPaginaCorrente = risultatiRicercaBeniCulturali
-. get (pNumeroPagina)) == null)
+if ((currentPageResults = searchResultsCulturalAssets
+. get (pPageNumber)) == null)
 (
-risultatiPaginaCorrente = (ArrayList <?>) (pIdTurista> 0? BeneCulturale
-. ricercaAvanzata (pIdTurista, pParoleChiave,
-pTags, pNumeroPagina,
-pElementiPerPagina,
-pPosizioneUtente, pRaggioMax)
-: BeneCulturale.ricerca (pParoleChiave,
-pTags, pNumeroPagina,
-pElementiPerPagina,
-pPosizioneUtente, pRaggioMax));
-risultatiRicercaBeniCulturali
+currentPageResults = (ArrayList <?>) (touristId> 0? CulturalAsset
+. advancedSearch (touristId, keywords,
+tags, pPageNumber,
+itemsPerPage,
+userPosition, maxRadius)
+: CulturalAsset.search (keywords,
+tags, pPageNumber,
+itemsPerPage,
+userPosition, maxRadius));
+searchResultsCulturalAssets
 . put (
-pNumeroPagina,
-(ArrayList <BeanBeneCulturale>) risultatiPaginaCorrente);
+pPageNumber,
+(ArrayList <CulturalAssetBean>) currentPageResults);
 )
 break;
 
-homes PUNTO_DI_RISTORO:
+case RESTAURANT:
 / / If the list has not already been obtained previously
 / / Search
-if ((risultatiPaginaCorrente = risultatiRicercaPuntiDiRistoro
-. get (pNumeroPagina)) == null)
+if ((currentPageResults = searchResultsRestaurants
+. get (pPageNumber)) == null)
 (
-risultatiPaginaCorrente = (ArrayList <?>) (pIdTurista> 0? PuntoDiRistoro
-. ricercaAvanzata (pIdTurista, pParoleChiave,
-pTags, pNumeroPagina,
-pElementiPerPagina,
-pPosizioneUtente, pRaggioMax)
-: PuntoDiRistoro.ricerca (pParoleChiave,
-pTags, pNumeroPagina,
-pElementiPerPagina,
-pPosizioneUtente, pRaggioMax));
-risultatiRicercaPuntiDiRistoro
+currentPageResults = (ArrayList <?>) (touristId> 0? Restaurant
+. advancedSearch (touristId, keywords,
+tags, pPageNumber,
+itemsPerPage,
+userPosition, maxRadius)
+: Restaurant.search (keywords,
+tags, pPageNumber,
+itemsPerPage,
+userPosition, maxRadius));
+searchResultsRestaurants
 . put (
-pNumeroPagina,
-(ArrayList <BeanPuntoDiRistoro>) risultatiPaginaCorrente);
+pPageNumber,
+(ArrayList <RestaurantBean>) currentPageResults);
 )
 break;
 )
 )
 / / Return the results
-risultatiPaginaCorrente return;
+currentPageResults return;
 )
 
 catch (SQLException e)
 (
-throw new RemoteException (MessaggiErrore.ERRORE_DBMS);
+throw new RemoteException (ErrorMessages.DB_ERROR);
 )
 catch (Exception e)
 (
-throw new RemoteException (MessaggiErrore.ERRORE_SCONOSCIUTO);
+throw new RemoteException (ErrorMessages.UNKNOWN_ERROR);
 )
 
 )
@@ -289,57 +270,56 @@ throw new RemoteException (MessaggiErrore.ERRORE_SCONOSCIUTO);
 *
 * @ Return many pages in the research phase
 * /
-private int calcolaNumeroPagineRicerca ()
+private int calculateNumberOfSearchPages ()
 (
 / / If the number of pages is greater than or equal to 0 returns the number of
 / / Pages
-if (numeroPagineRisultati> = 0)
-numeroPagineRisultati return;
+if (numberOfResultPages> = 0)
+return numberOfResultPages;
 / / If the number of elements is a multiple of the number of items per page
 / / Return their relationship
-if ((numeroElementiRicerca% pElementiPerPagina == 0))
-return (numeroElementiRicerca / pElementiPerPagina);
+if ((numberOfSearchElements% itemsPerPage == 0))
+return (numberOfSearchElements / itemsPerPage);
 / / Otherwise returns their relationship + 1
-return (numeroElementiRicerca / pElementiPerPagina) + 1;
+return (numberOfSearchElements / itemsPerPage) + 1;
 )
-
 / **
-* Method for calculating the number of elements of nell'intevallo
-* A given page
+* Method for calculating the number of elements in the interval
+* For a given page
 *
-* @ Param interval nPagina results
+* @ Param pageNumber Results page number
 * @ Return number of elements in a page
 * /
-private int calcolaNumeroElementiPagina (int nPagina)
+private int calculateNumberOfPageElements(int pageNumber)
 (
-/ / If page number is the last return their form
-if (nPagina == (numeroPagineRisultati - 1))
-return (numeroElementiRicerca% pElementiPerPagina);
-/ / Otherwise returns the number of items per page
+/ / If the page number is the last one, return its form
+if (pageNumber == (numberOfResultPages - 1))
+return (numberOfSearchElements % itemsPerPage);
+/ / Otherwise return the number of items per page
 else
-return (pElementiPerPagina);
+return (itemsPerPage);
 )
 
 / **
 * Method for checking the validity of a page
 *
-* @ Param pPagina page to check
+* @ Param pageNumber Page to check
 * @ Return true if the page is valid
 * /
-private boolean controllaPagina (int pPagina)
+private boolean checkPage(int pageNumber)
 (
-/ / If page number is in the range returns true
-return (pPagina> = 0 & & pPagina <numeroPagineRisultati);
+/ / If the page number is in the range, return true
+return (pageNumber> = 0 & & pageNumber <numberOfResultPages);
 )
 
 / **
-* Method for checking the correctness of the identifier Tourist
+* Method for checking the correctness of the Tourist identifier
 *
 * @ Return true if the identifier is valid, false otherwise
 * /
-private boolean controllaIdTurista ()
+private boolean checkTouristId()
 (
-return ((pIdTurista> 0) | | (pIdTurista == -1));
+return ((touristId> 0) | | (touristId == -1));
 )
 
 / **
@@ -347,61 +327,61 @@ return ((pIdTurista> 0) | | (pIdTurista == -1));
 *
 * @ Return A constant that indicates the correct zero
 * /
-private int azzeraParametri ()
+private int resetParameters()
 (
 
-/ / Clears all the search parameters
-pIdTurista = -1;
-pTipologiaSito = -1;
-pElementiPerPagina = -1;
-numeroElementiRicerca = -1;
-numeroPagineRisultati = -1;
+/ / Clear all the search parameters
+touristId = -1;
+siteType = -1;
+itemsPerPage = -1;
+numberOfSearchElements = -1;
+numberOfResultPages = -1;
 
-risultatiRicercaBeniCulturali.clear ();
-risultatiRicercaPuntiDiRistoro.clear ();
+searchResultsCulturalAssets.clear();
+searchResultsRestaurants.clear();
 
 return -1;
 )
 
 / **
-* Method for the detection and conversion of data tags in struttara List
+* Method for detecting and converting tag data into a structured list
 *
-* @ Param list of identifiers pTagsId Search Tags
-* @ Return List Search Tags
+* @ Param pTagsId List of tag identifiers for the search
+* @ Return List of search tags
 * @ Throws SQLException
 * /
-private ArrayList <BeanTag> arrayToArrayListTag (int [] pTagsId)
+private ArrayList <BeanTag> arrayToArrayListTag(int [] pTagsId)
 throws SQLException
 (
 / / Initialize the list of Tags
-<BeanTag> PTags ArrayList <BeanTag> = new ArrayList ();
-/ / If the list of identifiers of the tag is empty I get the tags
+ArrayList <BeanTag> tagsList = new ArrayList<>();
+/ / If the list of tag identifiers is empty, retrieve the tags
 if (pTagsId = null)
 (
 BeanTag currentTag = null;
 TRY
 (
 
-/ / Loop for the insertion of tags found in the list
+/ / Loop for inserting tags found into the list
 for (int i = 0; i <pTagsId.length i + +)
 (
 / / If the identifier is greater than 0
 if (pTagsId [i]> 0)
 (
-currentTag = Tag.ottieniTag (pTagsId [i]);
+currentTag = Tag.getTag(pTagsId [i]);
 / / Check correctness on tags
-if (ControlloDati.checkBeanTag (currentTag))
-pTags.add (currentTag);
+if (DataCheck.checkBeanTag(currentTag))
+tagsList.add(currentTag);
 )
 )
 
 )
 catch (SQLException e)
 (
-throw new SQLException (MessaggiErrore.ERRORE_DBMS);
+throw new SQLException (ErrorMessages.DB_ERROR);
 )
 )
 / / Return the list of tags
-pTags return;
+tagsList return;
 )
 )

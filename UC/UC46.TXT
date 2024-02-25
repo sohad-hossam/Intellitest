@@ -1,6 +1,6 @@
-Use case name MODIFICAPREFERENZEDIRICERCA 
+Use case name CHANGE SEARCH PREFERENCES 
 Edit your personal search preferences. 
-Partecipating 
+Partcipating 
 Actor initialized by Tourist 
 Entry 
 conditions   The Tourist has successfully authenticated to the system. 

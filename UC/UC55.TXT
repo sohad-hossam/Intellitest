@@ -1,4 +1,4 @@
-Use case name FEEDBACKGIA'RILASCIATO 
+Use case name FEEDBACK ALREADY RELEASED
 E 'already been issued with a feedback for the selected site. 
 Partecipating 
 Actor initialization 

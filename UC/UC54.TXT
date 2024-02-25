@@ -1,4 +1,4 @@
-Use case name MODIFICACOMMENTO 
+Use case name EDIT COMMENT 
 Edit the comment previously issued. 
 Partecipating 
 Actor initialized by Tourist 

@@ -1,7 +1,7 @@
 
-Use case name MODIFICADATITURISTA 
+Use case name EDIT TOURIST DATA 
 Change data associated with your account. 
-Partecipating 
+Partcipating 
 Actor initialized by Tourist 
 Entry 
 Conditions   Tourism has successfully authenticated to the system. 

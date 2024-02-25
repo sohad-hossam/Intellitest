@@ -4,130 +4,98 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import unisa.gps.etour.bean.BeanConvenzione;
-import unisa.gps.etour.bean.BeanPuntoDiRistoro;
-import unisa.gps.etour.bean.BeanVisitaPR;
+import unisa.gps.etour.bean.BeanAgreement;
+import unisa.gps.etour.bean.BeanRestaurant;
+import unisa.gps.etour.bean.BeanRestaurantVisit;
 
-/ **
-  * Interface for refreshments on the side of the agency
-  *
-  * @ Author Joseph Morelli
-  * @ Version 0.1 © 2007 eTour Project - Copyright by DMI SE @ SA Lab - University
-  * Of Salerno
-  * /
-public interface extends IGestionePuntiDiRistoroAgenzia
-IGestionePuntiDiRistoroComune
-(
+/**
+ * Interface for managing restaurants from the agency side.
+ *
+ * @Author Joseph Morelli
+ * @Version 0.1
+ * 2007 eTour Project - Copyright by DMI SE @ SA Lab - University
+ * Of Salerno
+ */
+public interface RestaurantManagement extends AgencyRestaurantManagement, CommonRestaurantManagement {
 
-/ **
-* Method for inserting a new Refreshment
-*
-* @ Param pPuntoDiRistoro containing all the data from the Refreshment
-* Add
-* @ Throws RemoteException Exception Remote
-* /
-public boolean inserisciPuntoDiRistoro (BeanPuntoDiRistoro pPuntoDiRistoro)
-throws RemoteException;
+    /**
+     * Method for inserting a new restaurant.
+     *
+     * @param restaurant Contains all the data of the restaurant to be added
+     * @throws RemoteException Remote Exception
+     */
+    public boolean insertRestaurant(BeanRestaurant restaurant) throws RemoteException;
 
-/ **
-* Method for deleting a refreshment bar with ID
-*
-* @ Param pIDPuntoDiRistoro for the unique identification of point
-* Refreshments
-* @ Throws RemoteException Exception Remote
-* /
-public boolean cancellaPuntoDiRistoro (int pPuntoDiRistoroID)
-throws RemoteException;
+    /**
+     * Method for deleting a restaurant by its ID.
+     *
+     * @param restaurantID The unique identifier of the restaurant to be deleted
+     * @throws RemoteException Remote Exception
+     */
+    public boolean deleteRestaurant(int restaurantID) throws RemoteException;
 
-/ **
-* Method to return all the refreshment of the DataBase
-*
-* @ Return ArrayList containing all the beans of the present Refreshments
-* In the DataBase
-* @ Throws RemoteException Exception Remote
-* /
-<BeanPuntoDiRistoro> ottieniPuntiDiRistoro public ArrayList ()
-throws RemoteException;
+    /**
+     * Method to retrieve all the restaurants from the database.
+     *
+     * @return ArrayList containing all the beans of the present restaurants in the database
+     * @throws RemoteException Remote Exception
+     */
+    public ArrayList<BeanRestaurant> getRestaurants() throws RemoteException;
 
-/ **
-* Method to return all the refreshment with convention
-* Active or not
-*
-* @ Param Boolean statoConvenzione for the type of eateries by
-* Get (contracted or not)
-* @ Return ArrayList containing all the beans of the present Refreshments
-* In the database depending on the status of the Convention
-* @ Throws RemoteException Exception Remote
-* /
-public ArrayList <BeanPuntoDiRistoro> ottieniPuntiDiRistoro (
-statoConvenzione boolean) throws RemoteException;
+    /**
+     * Method to retrieve all the restaurants with or without agreements.
+     *
+     * @param agreementStatus Boolean indicating the type of restaurants to retrieve (contracted or not)
+     * @return ArrayList containing all the beans of the present restaurants in the database depending on the status of the agreement
+     * @throws RemoteException Remote Exception
+     */
+    public ArrayList<BeanRestaurant> getRestaurants(boolean agreementStatus) throws RemoteException;
 
-/ **
-* Method for inserting a new convention for a certain point
-* Refreshments
-*
-* @ Param pPuntoDiRistoroID integer that uniquely identifies the point
-* Refreshments
-* @ Param pConv Convention that will enable (Parameter ID
-* Refreshment create redundancy but is useful for security
-* Data)
-* @ Return boolean for confirmation of operation
-* @ Throws RemoteException Exception Remote
-* /
-public boolean attivaConvenzione (int pPuntoDiRistoroID,
-BeanConvenzione pConv) throws RemoteException;
+    /**
+     * Method for activating a new agreement for a certain restaurant.
+     *
+     * @param restaurantID The unique identifier of the restaurant
+     * @param agreement The agreement to be activated
+     * @return boolean for confirmation of operation
+     * @throws RemoteException Remote Exception
+     */
+    public boolean activateAgreement(int restaurantID, BeanAgreement agreement) throws RemoteException;
 
-/ **
-* Method to get all the feedback associated to a certain point
-* Refreshments
-*
-* @ Param pPuntoDiRistoroID unique identifier of the Refreshment
-* To get feedback
-* @ Return HashMap containing the bean as the key value of feedback and how
-* The tourist who issued the feedback
-* @ Throws RemoteException Exception Remote
-* /
-public HashMap <BeanVisitaPR, String> ottieniFeedbackPuntoDiRistoro (
-pPuntoDiRistoroID int) throws RemoteException;
+    /**
+     * Method to get all the feedback associated with a certain restaurant.
+     *
+     * @param restaurantID The unique identifier of the restaurant to get feedback from
+     * @return HashMap containing the bean as the key value of feedback and the tourist who issued the feedback
+     * @throws RemoteException Remote Exception
+     */
+    public HashMap<BeanRestaurantVisit, String> getRestaurantFeedback(int restaurantID) throws RemoteException;
 
-/ **
-* Method for updating (or change) the data of a Refreshment
-*
-* @ Param pPuntoDiRistoroID for the unique identification of point
-* Refreshments to be amended
-* @ Param pPuntoDiRistoroAggiornato containing the new data to be saved
-* @ Return Boolean value-true if the operation went successfully,
-* False otherwise
-* @ Throws RemoteException Exception Remote
-* /
-public boolean modificaPuntoDiRistoro (
-BeanPuntoDiRistoro pPuntoDiRistoroAggiornato)
-throws RemoteException;
+    /**
+     * Method for updating (or changing) the data of a restaurant.
+     *
+     * @param updatedRestaurant The new data to be saved
+     * @return Boolean value - true if the operation went successfully, false otherwise
+     * @throws RemoteException Remote Exception
+     */
+    public boolean modifyRestaurant(BeanRestaurant updatedRestaurant) throws RemoteException;
 
-/ **
-* Method which allows you to insert a tag to search for a useful point
-* Refreshments
-*
-* @ Param pPuntoDiRistoroId unique identifier of Refreshment
-* @ Param pTagId unique ID tags to be inserted
-* @ Return Boolean value-true if the operation went successfully,
-* False otherwise
-* @ Throws RemoteException Exception Remote
-* /
-public boolean inserisciTagPuntoDiRistoro (pPuntoDiRistoroId int, int pTagId)
-throws RemoteException;
+    /**
+     * Method which allows inserting a tag for searching for a useful restaurant.
+     *
+     * @param restaurantId The unique identifier of the restaurant
+     * @param tagId The unique ID of the tag to be inserted
+     * @return Boolean value - true if the operation went successfully, false otherwise
+     * @throws RemoteException Remote Exception
+     */
+    public boolean insertRestaurantTag(int restaurantId, int tagId) throws RemoteException;
 
-/ **
-* Method which allows you to delete a tag to search for a useful point
-* Refreshments
-*
-* @ Param pPuntoDiRistoroId unique identifier of Refreshment
-* @ Param pTagId unique ID tags to be inserted
-* @ Return Boolean value-true if the operation went successfully,
-* False otherwise
-* @ Throws RemoteException Exception Remote
-* /
-public boolean cancellaTagPuntoDiRistoro (pPuntoDiRistoroId int, int pTagId)
-throws RemoteException;
-
-) 
+    /**
+     * Method which allows deleting a tag for searching for a useful restaurant.
+     *
+     * @param restaurantId The unique identifier of the restaurant
+     * @param tagId The unique ID of the tag to be deleted
+     * @return Boolean value - true if the operation went successfully, false otherwise
+     * @throws RemoteException Remote Exception
+     */
+    public boolean deleteRestaurantTag(int restaurantId, int tagId) throws RemoteException;
+}

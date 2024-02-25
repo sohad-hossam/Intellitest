@@ -1,4 +1,4 @@
-Use case name VISUALIZZASCHEDASITO 
+Use case name VIEW SITE INFO 
 View the details of a particular site. 
 Partecipating 
 Actor initialized by Tourist 

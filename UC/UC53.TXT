@@ -1,4 +1,4 @@
-Use case name INSERISCIFEEDBACK 
+Use case name ADD FEEDBACK 
 Inserts a feedback for the selected site. 
 Partecipating 
 Actor initialized by Tourist 

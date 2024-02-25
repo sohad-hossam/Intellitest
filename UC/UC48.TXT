@@ -1,4 +1,4 @@
-Use case name MODIFICAPREFERENZEGENERICHE 
+Use case name EDIT GENERIC PREFERENCERS 
 Edit Preferences generic personal. 
 Partecipating 
 Actor initialized by Tourist 

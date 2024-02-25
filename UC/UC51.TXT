@@ -1,6 +1,6 @@
-Use case name INSERISCISITONEIPREFERITI 
+Use case name ADD SITE TO FAVORITES 
 Inserts a site selected in the list of bookmarks. 
-Partecipating 
+Partcipating 
 Actor initialized by Tourist 
 Entry 
 conditions   The tourist card is in a particular site. 

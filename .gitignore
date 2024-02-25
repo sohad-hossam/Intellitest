@@ -18,3 +18,5 @@ __pycache__/imports.cpython-311.pyc
 
 *.pyc
 tree-sitter-java/
+build/*
+tree-sitter-java/*

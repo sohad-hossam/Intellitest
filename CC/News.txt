@@ -23,10 +23,8 @@ import unisa.gps.etour.gui.operatoreagenzia.tables.PrioritaRenderer;
 import unisa.gps.etour.gui.operatoreagenzia.tables.ScrollableTable;
 import unisa.gps.etour.gui.operatoreagenzia.tables.TestoNewsRenderer;
 import unisa.gps.etour.util.Data;
-
 / **
-  * This class implements the interface for collecting news for the actor
-  * Operator Agency.
+  * This class implements the interface for collecting news for the Operator Agency actor.
   *
   * @ Version 1.0
   * @ Author Mario Gallo
@@ -34,14 +32,13 @@ import unisa.gps.etour.util.Data;
   * © 2007 eTour Project - Copyright by DMI SE @ SA Lab --
   * University of Salerno
   * /
-public class News extends JInternalFrame
-(
+public class News extends JInternalFrame {
 private JPanel jContentPane = null;
-Private JToolBar NewsToolbar = null;
+private JToolBar NewsToolbar = null;
 private JButton btnEliminaN = null;
 private JPanel rightPanel = null;
 private JPanel formNews = null;
-Private JSlider prSlider = null;
+private JSlider prSlider = null;
 private JButton btnInsertModify = null;
 private JButton btnReset = null;
 private JPanel panelHelp = null;
@@ -54,16 +51,15 @@ private JButton btnModificaN = null;
 private JLabel labelCaratteri;
 private int idNews = -1;
 private NewsTableModel TableModel;
-Private HelpManager newsHelp;
+private HelpManager newsHelp;
 protected DeskManager desktopManager;
 protected JDesktopPane JDesktopPane;
-Private IGestioneAdvertisementAgenzia gestioneNews;
+private IGestioneAdvertisementAgenzia gestioneNews;
 
 / **
 * This is the default constructor.
 * /
-public News ()
-(
+public News () {
 super ( "News");
 setPreferredSize (Home.CHILD_SIZE);
 setMinimumSize (new Dimension (600, 480));
@@ -74,28 +70,23 @@ setIconifiable (true);
 setMaximizable (true);
 setClosable (true);
 
-/ / Setting up dell'help manager to manage the news.
+/ / Setting up of the help manager to manage the news.
 textGuida = new JTextPane ();
-TRY
-(
-newsHelp = new HelpManager (Home.URL_HELP + "news.txt" textGuida);
-)
-catch (FileNotFoundException e)
-(
+try {
+newsHelp = new HelpManager (Home.URL_HELP + "news.txt", textGuida);
+} catch (FileNotFoundException e) {
 textGuida
 . setText ( "<html> <b> Help not available </ b> </ html>");
-)
+}
 
 setContentPane (getJContentPane ());
 
-addInternalFrameListener (new InternalFrameAdapter ()
-(
-
+addInternalFrameListener (new InternalFrameAdapter () {
 / *
-* Inclusion of the frame on the desktop desktop retrieves bread bread
-* And desktop manager and initializes the remote objects
-* Management of cultural heritage.
+* Inclusion of the frame on the desktop retrieves the desktop pane and desktop manager,
+* And initializes the remote objects management.
 * /
+
 
 public void internalFrameOpened (InternalFrameEvent pEvent)
 (

@@ -1,4 +1,4 @@
-Use case name RICERCAAVANZATA 
+Use case name ADVANCED SEARCH 
 The tourist searching for a site using the potential offered by the Advanced Search. 
 Partecipating 
 Actor initialized by Tourist 

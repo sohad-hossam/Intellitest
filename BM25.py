@@ -98,4 +98,5 @@ BM25_uc = BM25_uc.transpose()
 BM25_code = np.append(BM25_code, BM25_uc, axis=0)
 
 # print the BM25_code matrix
+
 print(BM25_code.shape)

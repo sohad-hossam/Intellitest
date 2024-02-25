@@ -1,4 +1,4 @@
-Use case name ELIMINASITODAIPREFERITI 
+Use case name DELETE FROM FAVORITES 
 Tourism delete a site from the list of bookmarks. 
 Partecipating 
 Actor initialized by Tourist 

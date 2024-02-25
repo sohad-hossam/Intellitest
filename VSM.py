@@ -1,35 +1,39 @@
-from imports import *
 from PreProcessor import *
 import os
+import pickle
 
-CodeTokens = set()
-UCTokens = set()
-
-UC_documents = list()
-for filename in os.listdir("./UC"):
-    filepath = os.path.join("./UC", filename)
-    tokens = UCPreProcessor(filepath)
-    UC_documents.append(tokens)
-    UCTokens.update(tokens.split())
+cache_file = "vsm_cache.pkl"
 
 
-code_documents = list()
-for filename in os.listdir("./CC"):
-    filepath = os.path.join("./CC", filename)
-    tokens = CodePreProcessor(filepath)
-    code_documents.append(tokens)
-    CodeTokens.update(tokens.split())
+def VectorSpaceModel():
+    if os.path.exists(cache_file):
+        # If the cache file exists, load the result from it
+        with open(cache_file, "rb") as f:
+            similarity_list = pickle.load(f)
+    else:
 
-UCTokens.update(CodeTokens)
+        _PreProcessor = PreProcessor()
+        UC_documents, code_documents, UCTokens, CodeTokens = _PreProcessor.setup(
+            "./UC", "./CC"
+        )
 
-# create the transform
-vectorizer_uc = TfidfVectorizer(vocabulary=UCTokens)
-tfidf_matrix_uc = vectorizer_uc.fit_transform(UC_documents)
+        UCTokens.update(CodeTokens)
 
-# create the transform
-vectorizer_code = TfidfVectorizer(vocabulary=UCTokens)
-tfidf_matrix_code = vectorizer_code.fit_transform(code_documents)
+        # create the transform
+        vectorizer = TfidfVectorizer(vocabulary=UCTokens)
+        tfidf_matrix_uc = vectorizer.fit_transform(UC_documents)
+        tfidf_matrix_code = vectorizer.fit_transform(code_documents)
 
-# cosine similarity
-cosine_similarities = cosine_similarity(tfidf_matrix_uc, tfidf_matrix_code)
-# print(tfidf_matrix_uc.shape, tfidf_matrix_code.shape, cosine_similarities)
+        # cosine similarity
+        cosine_similarities = cosine_similarity(tfidf_matrix_uc, tfidf_matrix_code)
+
+        similarity_list = []
+        for i in range(cosine_similarities.shape[0]):
+            similarity_dict = {}
+            for j in range(cosine_similarities.shape[1]):
+                similarity_dict[code_documents[j]] = cosine_similarities[i][j]
+            similarity_list.append(similarity_dict)
+
+        with open(cache_file, "wb") as f:
+            pickle.dump(similarity_list, f)
+    return similarity_list

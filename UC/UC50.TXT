@@ -1,4 +1,4 @@
-Use case name VISUALIZZASITIVISITATI 
+Use case name VIEW VISITED SITES 
 View the list of sites for which it has issued a feedback. 
 Participating 
 Actor initialized by Tourist 

@@ -242,90 +242,84 @@ JScrollPane return;
 )
 
 / **
-* This method initializes tabellas
+/**
+* This method initializes the table.
 *
-* @ Return javax.swing.JTable
-* /
-private JTable getTabellaSiti () (
+* @return javax.swing.JTable
+*/
+private JTable getTableSites() {
 
 
-if (tabellas == null) (
-tabellas = new JTable ();
+if (tableSites == null) {
+    tableSites = new JTable();
+}
 
+return tableSites;
+}
 
-
-)
-tabellas return;
-)
-
-/ **
-* This method initializes southPanel
+/**
+* This method initializes the southPanel.
 *
-* @ Return javax.swing.JPanel
-* /
-private JPanel getSouthPanel ()
-(
-if (null == southPanel)
-(
-GridBagConstraints gridBagConstraints11 = new GridBagConstraints ();
-gridBagConstraints11.anchor = GridBagConstraints.SOUTH;
-gridBagConstraints11.insets = new Insets (0, 0, 5, 0);
-GridBagConstraints = GridBagConstraints new GridBagConstraints ();
-gridBagConstraints.fill = GridBagConstraints.BOTH;
-gridBagConstraints.weighty = 1.0;
-gridBagConstraints.insets = new Insets (5, 5, 5, 5);
-gridBagConstraints.gridx = 0;
-gridBagConstraints.gridy = 0;
-gridBagConstraints.weightx = 1.0;
-southPanel = new JPanel ();
-southPanel.setLayout (new GridBagLayout ());
-southPanel.add (getJTabbedPane (), GridBagConstraints);
-southPanel.add (getGuidainlinea (), gridBagConstraints11);
-)
-southPanel return;
-)
+* @return javax.swing.JPanel
+*/
+private JPanel getSouthPanel() {
+if (null == southPanel) {
+    GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+    gridBagConstraints11.anchor = GridBagConstraints.SOUTH;
+    gridBagConstraints11.insets = new Insets(0, 0, 5, 0);
+    GridBagConstraints gridBagConstraints = new GridBagConstraints();
+    gridBagConstraints.fill = GridBagConstraints.BOTH;
+    gridBagConstraints.weighty = 1.0;
+    gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.weightx = 1.0;
+    southPanel = new JPanel();
+    southPanel.setLayout(new GridBagLayout());
+    southPanel.add(getTabbedPane(), gridBagConstraints);
+    southPanel.add(getOnlineGuide(), gridBagConstraints11);
+}
+return southPanel;
+}
 
-/ **
-* This method initializes JTabbedPane
+/**
+* This method initializes the tabbedPane.
 *
-* @ Return javax.swing.JTabbedPane
-* /
-private JTabbedPane getJTabbedPane ()
-(
-if (JTabbedPane == null)
-(
-JTabbedPane = new JTabbedPane ();
-jTabbedPane.setPreferredSize (new Dimension (100, 200));
-jTabbedPane.setName ("");
-jTabbedPane.setTabPlacement (JTabbedPane.TOP);
-jTabbedPane.addTab ( "General Statistics", null, getGenStat (), null);
-jTabbedPane.addTab ( "Site Statistics", null, getEvdStat (), null);
-jTabbedPane.addTab ( "Additional Statistics", null, getStat (), null);
-)
-JTabbedPane return;
-)
+* @return javax.swing.JTabbedPane
+*/
+private JTabbedPane getTabbedPane() {
+if (tabbedPane == null) {
+    tabbedPane = new JTabbedPane();
+    tabbedPane.setPreferredSize(new Dimension(100, 200));
+    tabbedPane.setName("");
+    tabbedPane.setTabPlacement(JTabbedPane.TOP);
+    tabbedPane.addTab("General Statistics", null, getGenStat(), null);
+    tabbedPane.addTab("Site Statistics", null, getEvdStat(), null);
+    tabbedPane.addTab("Additional Statistics", null, getStat(), null);
+}
+return tabbedPane;
+}
 
-/ **
-* This method initializes guidainlinea
+/**
+* This method initializes the onlineGuide.
 *
-* @ Return javax.swing.JPanel
-* /
-private JPanel getGuidainlinea ()
-(
-if (null == guidainlinea)
-(
-GridBagConstraints gridBagConstraints1 = new GridBagConstraints ();
-gridBagConstraints1.fill = GridBagConstraints.BOTH;
-gridBagConstraints1.weighty = 1.0;
-gridBagConstraints1.weightx = 1.0;
-guidainlinea = new JPanel ();
-guidainlinea.setLayout (new GridBagLayout ());
-guidainlinea.setBorder (BorderFactory.createTitledBorder (BorderFactory.createLineBorder (new Color (51, 102, 255), 3), "Help", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font ( "Dialog", Font.BOLD, 12), new Color (51, 153, 255)));
-guidainlinea.setPreferredSize (new Dimension (180, 200));
-guidainlinea.add (getJTextPane (), gridBagConstraints1);
-)
-guidainlinea return;
-)
+* @return javax.swing.JPanel
+*/
+private JPanel getOnlineGuide() {
+if (null == onlineGuide) {
+    GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+    gridBagConstraints1.fill = GridBagConstraints.BOTH;
+    gridBagConstraints1.weighty = 1.0;
+    gridBagConstraints1.weightx = 1.0;
+    onlineGuide = new JPanel();
+    onlineGuide.setLayout(new GridBagLayout());
+    onlineGuide.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(51, 102, 255), 3), "Help", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 153, 255)));
+    onlineGuide.setPreferredSize(new Dimension(180, 200));
+    onlineGuide.add(getTextPane(), gridBagConstraints1);
+}
+return onlineGuide;
+}
+
 
 / **
 * This method initializes jTextPane
@@ -635,42 +629,41 @@ gridBagConstraints17.anchor = GridBagConstraints.WEST;
 gridBagConstraints17.gridy = 0;
 jLabel11 = new JLabel ();
 jLabel11.setText ( "Really a nice place, we'll be back!");
-GridBagConstraints gridBagConstraints16 = new GridBagConstraints ();
+GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
 gridBagConstraints16.gridx = 0;
-gridBagConstraints16.insets = new Insets (5, 5, 5, 5);
+gridBagConstraints16.insets = new Insets(5, 5, 5, 5);
 gridBagConstraints16.gridy = 0;
-jLabel10 = new JLabel ();
-jLabel10.setText ( "Bells");
-jPanel1 = new JPanel ();
-jPanel1.setLayout (new GridBagLayout ());
-jPanel1.setBorder (BorderFactory.createTitledBorder (BorderFactory.createLineBorder (new Color (0, 51, 255), 3), "Last feedback issued:" TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font ( "Dialog", Font.BOLD , 12), new Color (0, 102, 255)));
-jPanel1.add (jLabel10, gridBagConstraints16);
-jPanel1.add (jLabel11, gridBagConstraints17);
-jPanel1.add (jLabel12, gridBagConstraints18);
-jPanel1.add (jLabel13, gridBagConstraints19);
-jPanel1.add (jLabel14, gridBagConstraints20);
-jPanel1.add (jLabel15, gridBagConstraints21);
-jPanel1.add (jLabel16, gridBagConstraints22);
-jPanel1.add (getBtnVisualizza (), gridBagConstraints29);
-)
-jPanel1 return;
-)
+jLabel10 = new JLabel();
+jLabel10.setText("Bells");
+jPanel1 = new JPanel();
+jPanel1.setLayout(new GridBagLayout());
+jPanel1.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 51, 255), 3), "Last feedback issued:", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(0, 102, 255)));
+jPanel1.add(jLabel10, gridBagConstraints16);
+jPanel1.add(jLabel11, gridBagConstraints17);
+jPanel1.add(jLabel12, gridBagConstraints18);
+jPanel1.add(jLabel13, gridBagConstraints19);
+jPanel1.add(jLabel14, gridBagConstraints20);
+jPanel1.add(jLabel15, gridBagConstraints21);
+jPanel1.add(jLabel16, gridBagConstraints22);
+jPanel1.add(getBtnView(), gridBagConstraints29);
 
-/ **
-* This method initializes btnVisualizza
+return jPanel1;
+}
+
+/**
+* This method initializes the view button.
 *
-* @ Return javax.swing.JButton
-* /
-private JButton getBtnVisualizza ()
-(
-if (null == btnVisualizza)
-(
-btnVisualizza = new JButton ();
-btnVisualizza.setText ( "View All");
-btnVisualizza.setMnemonic (KeyEvent.VK_UNDEFINED);
-btnVisualizza.setIcon (new ImageIcon (getClass (). getResource ( "/ interfacceAgenzia / images / Forward 216.png ")));
-)
-btnVisualizza return;
-)
+* @return javax.swing.JButton
+*/
+private JButton getBtnView() {
+if (null == btnView) {
+    btnView = new JButton();
+    btnView.setText("View All");
+    btnView.setMnemonic(KeyEvent.VK_UNDEFINED);
+    btnView.setIcon(new ImageIcon(getClass().getResource("/interfacceAgenzia/images/Forward216.png")));
+}
+return btnView;
+}
+
 
 ) / / @ JVE: decl-index = 0: visual-constraint = "-7, -61" 

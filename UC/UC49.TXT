@@ -1,4 +1,4 @@
-Use case name VISUALIZZASITIPREFERITI 
+Use case name VIEW FAVORITES SITES 
 View the list of personal favorites. 
 Participating 
 Actor initialized by Tourist 
