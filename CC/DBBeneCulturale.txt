@@ -1,103 +1,82 @@
-package unisa.gps.etour.control.GestioneBeniCulturali.test.stub;
+package unisa.gps.etour.control.ManagingCulturalHeritageResources.test.stub;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import unisa.gps.etour.bean.BeanBeneCulturale;
+import unisa.gps.etour.bean.BeanCulturalAsset;
 import unisa.gps.etour.bean.BeanTag;
-import unisa.gps.etour.repository.IDBBeneCulturale;
-import unisa.gps.etour.util.Punto3D;
+import unisa.gps.etour.repository.IDBCulturalAsset;
+import unisa.gps.etour.util.Point3D;
 
-public class DBBeneCulturale implements IDBBeneCulturale
-(
-private ArrayList <BeanBeneCulturale> b;
+public class DBCulturalAsset implements IDBCulturalAsset {
+    private ArrayList<BeanCulturalAsset> b;
 
-public DBBeneCulturale ()
-(
-b = new ArrayList <BeanBeneCulturale> (0);
-)
+    public DBCulturalAsset() {
+        b = new ArrayList<BeanCulturalAsset>(0);
+    }
 
-public boolean cancellaBeneCulturale (int pIdBene) throws SQLException
-(
-boolean res = false;
+    public boolean deleteCulturalAsset(int pIdAsset) throws SQLException {
+        boolean res = false;
 
-for (int i = 0; i <b.size (); i + +)
-if (b.get (i). getId () == pIdBene)
-(
-b.remove (i);
-res = true;
-)
+        for (int i = 0; i < b.size(); i++) {
+            if (b.get(i).getId() == pIdAsset) {
+                b.remove(i);
+                res = true;
+            }
+        }
 
-return res;
-)
+        return res;
+    }
 
-public boolean inserisciBeneCulturale (BeanBeneCulturale pBene)
-throws SQLException
-(
-return (b.add (pBene));
-)
+    public boolean insertCulturalAsset(BeanCulturalAsset pAsset) throws SQLException {
+        return b.add(pAsset);
+    }
 
-public boolean modificaBeneCulturale (BeanBeneCulturale pBene)
-throws SQLException
-(
-boolean res = false;
+    public boolean modifyCulturalAsset(BeanCulturalAsset pAsset) throws SQLException {
+        boolean res = false;
 
-for (int i = 0; i <b.size (); i + +)
-if (b.get (i). getId () == pBene.getId ())
-(
-b.set (i, pBene);
-return true;
-)
+        for (int i = 0; i < b.size(); i++) {
+            if (b.get(i).getId() == pAsset.getId()) {
+                b.set(i, pAsset);
+                return true;
+            }
+        }
 
-return res;
-)
+        return res;
+    }
 
-public BeanBeneCulturale ottieniBeneCulturale (int pid) throws SQLException
-(
-BeanBeneCulturale res = null;
+    public BeanCulturalAsset getCulturalAsset(int pid) throws SQLException {
+        BeanCulturalAsset res = null;
 
-for (int i = 0; i <b.size (); i + +)
-if (b.get (i). getId () == pid)
-res = b.get (i);
+        for (int i = 0; i < b.size(); i++) {
+            if (b.get(i).getId() == pid) {
+                res = b.get(i);
+            }
+        }
 
-return res;
-)
+        return res;
+    }
 
-<BeanBeneCulturale> ottieniListaBC public ArrayList () throws SQLException
-(
-return b;
-)
+    public ArrayList<BeanCulturalAsset> getList() throws SQLException {
+        return b;
+    }
 
-public int ottieniNumeroElementiRicerca (String pKeyword,
-ArrayList <BeanTag> pTags, Punto3D pPosizione,
-double pDistanzaMassima) throws SQLException
-(
-/ / TODO Auto-generated method stub
-return 0;
-)
+    public int getNumberOfSearchElements(String pKeyword, ArrayList<BeanTag> pTags, Point3D pPosition, double pMaxDistance) throws SQLException {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
-public int ottieniNumeroElementiRicercaAvanzata (int pIdTurista,
-PKeyword String, ArrayList <BeanTag> pTags, Punto3D pPosizione,
-double pDistanzaMassima) throws SQLException
-(
-/ / TODO Auto-generated method stub
-return 0;
-)
+    public int getNumberOfAdvancedSearchElements(int pTouristId, String pKeyword, ArrayList<BeanTag> pTags, Point3D pPosition, double pMaxDistance) throws SQLException {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
-public ArrayList <BeanBeneCulturale> search (String pKeyword,
-ArrayList <BeanTag> pTags, int pNumPagina,
-int pNumeroElementiPerPagina, Punto3D pPosizione,
-double pDistanzaMassima) throws SQLException
-(
-/ / TODO Auto-generated method stub
-return null;
-)
+    public ArrayList<BeanCulturalAsset> search(String pKeyword, ArrayList<BeanTag> pTags, int pPageNumber, int pElementsPerPage, Point3D pPosition, double pMaxDistance) throws SQLException {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-<BeanBeneCulturale> ricercaAvanzata public ArrayList (int pIdTurista,
-PKeyword String, ArrayList <BeanTag> pTags, int pNumPagina,
-int pNumeroElementiPerPagina, Punto3D pPosizione,
-double pDistanzaMassima) throws SQLException
-(
-/ / TODO Auto-generated method stub
-return null;
-)
-) 
+    public ArrayList<BeanCulturalAsset> advancedSearch(int pTouristId, String pKeyword, ArrayList<BeanTag> pTags, int pPageNumber, int pElementsPerPage, Point3D pPosition, double pMaxDistance) throws SQLException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+}
