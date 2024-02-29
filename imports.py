@@ -19,3 +19,5 @@ from sklearn.decomposition import TruncatedSVD
 import numpy as np
 from numpy import ndarray
 import random
+
+from typing import Callable
