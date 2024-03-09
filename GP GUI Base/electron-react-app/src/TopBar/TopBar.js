@@ -3,7 +3,21 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './TopBar.css';
 
 
-export function Header() {
+export function Header({ visibleHyperlinks,activeLink  }) {
+    const allHyperlinks = [
+        { url: '/', label: 'Home' }, 
+        { url: '../AboutUs', label: 'About Us' },
+        { url: '/ImportProject', label: 'Import Project' },
+        { url: '/ProceedWith', label: 'Proceed With' },
+        { url: '/MaintainbiltyScores', label: 'Maintainability Scores' },
+        { url: '/TraceLinks', label: 'Trace Links' },
+
+    ];
+
+    const filteredHyperlinks = allHyperlinks.filter(link =>
+        visibleHyperlinks.includes(link.label)
+    );
+
   return (
     <header className="header">
       <div className="row align-items-center">
@@ -11,21 +25,14 @@ export function Header() {
           <img src={require("../assets/searching.png")} alt="Icon" />
         </div>
         <div className="col-6">
-          <div className="row">
-            <div className="col">
-              <a href="/index.js" className="hyperpages mt-4">Home</a>
-            </div>
-            <div className="col">
-              <a href="/page2" className="hyperpages mt-4">About Us</a>
-            </div>
-            <div className="col">
-              <a href="/page3" className="hyperpages mt-4">Import Project</a>
-            </div>
-            <div className="col">
-              <a href="/page4" className=" hyperpages mt-4">Proceed with</a>
-            </div>
-          </div>
-        </div>
+                    <div className="row">
+                        {filteredHyperlinks.map((link, index) => (
+                            <div key={index} className="col">
+                               <a href={link.url}className={`hyperpages mt-4 ${link.label === activeLink ? 'activeLink' : ''}`} >{link.label}</a>
+                            </div>
+                        ))}
+                    </div>
+                </div>
       </div>
     </header>
   );
