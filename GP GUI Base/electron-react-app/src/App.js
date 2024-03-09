@@ -31,10 +31,22 @@ function Header() {
 </header>
 );
 }
+
+
+function PageTitle() {
+  return (
+    <div className="PageTitle">
+      EL PROJECT ELSOHADY
+    </div>
+  );
+}
+   
+
 function App() {
   return (
       <div className="App">
           <Header />
+          <PageTitle />
       </div>
   );
 }
