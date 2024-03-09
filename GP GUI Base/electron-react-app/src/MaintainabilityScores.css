@@ -1,18 +1,24 @@
 @import '~bootstrap/dist/css/bootstrap.min.css';
-.progress-container {
-    width: 60%;
-    background-color: #5c8374 !important;
-    position: absolute;
-    top: 60%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 10px;
-
-  }
-  
-  .progress-bar {
-    width: 0%;
-    height: 15px;
-    transition: width 1s ease-in-out;
-    border-radius: 10px;
-  }
+.progress{
+  background-color: #5c8374;
+  font-size: 25px;
+  font-weight: 500;
+}
+.progress-bar{
+  background-color: #092635;
+}
+.progress-label
+{
+  font-size: 25px;
+  font-weight: 500;
+}
+.btn-primary
+{
+  background-color: #092635 !important;
+  border-color: #092635 !important;
+  color: white !important;
+}
+.page-link{
+  color: #092635;
+ 
+}
