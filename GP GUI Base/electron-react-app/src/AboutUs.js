@@ -24,7 +24,7 @@ export function AboutUs() {
     const visibleHyperlinks = ['Home', 'About Us', 'Import Project','Proceed With'];
     return (
       <div className="App">
-        <Header visibleHyperlinks={visibleHyperlinks} activeLink="AboutUs" />
+        <Header visibleHyperlinks={visibleHyperlinks} activeLink="About Us" />
         <div class="mt-5"></div>
         <PageTitle title={"Welcome to Intellitest"} />
         <div class="mt-5"></div>
