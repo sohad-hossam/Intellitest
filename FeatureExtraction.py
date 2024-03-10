@@ -84,14 +84,17 @@ class FeatureExtraction:
         # print(JS_matrix.shape) => (58,116)
 
         return JS_matrix
+    def TFIDFVectorizer(self, UC_documents: list, code_documents: list
+    ) :
+        	
+        # create the transform
+        self.tfidf_matrix_uc = self.tfidf_vectorizer.fit_transform(UC_documents)
+        self.tfidf_matrix_code = self.tfidf_vectorizer.fit_transform(code_documents)
+        return  self.tfidf_matrix_uc,self.tfidf_matrix_code
 
     def VectorSpaceModel(
-        self, UC_documents: list, code_documents: list
+        self, tfidf_matrix_uc: np.ndarray, tfidf_matrix_code: np.ndarray , code_documents
     ) -> np.ndarray:
-
-        # create the transform
-        tfidf_matrix_uc = self.tfidf_vectorizer.fit_transform(UC_documents)
-        tfidf_matrix_code = self.tfidf_vectorizer.fit_transform(code_documents)
 
         # cosine similarity
         cosine_similarities = cosine_similarity(tfidf_matrix_uc, tfidf_matrix_code)
@@ -109,27 +112,27 @@ class FeatureExtraction:
         query_term_set = set(np.argpartition(query_term_list, -10)[-10:])
         return len(query_term_set & total_query_set)
 
-    def _SubqueryOverlapTerms(self, query_term: str, code_idx: int, UC_count_matrix: np.ndarray, code_count_matrix: np.ndarray, feature_extraction: object) -> np.ndarray:
+    def _SubqueryOverlapTerms(self, query_term: str, code_idx: int, UC_count_matrix: np.ndarray, code_count_matrix: np.ndarray, feature_extraction: object,feature_extraction_method:Callable) -> np.ndarray:
         
         word_index = feature_extraction.code_vocab_index[query_term]
         term_vector = np.zeros((1, UC_count_matrix.shape[1])) #1*
         term_vector[:,word_index]=code_count_matrix[code_idx, word_index]
 
-        query_term_jensen_shannon = feature_extraction.JensenShannon(UC_count_matrix, term_vector)
+        query_term_jensen_shannon = feature_extraction_method(UC_count_matrix, term_vector)
         query_term_len = query_term_jensen_shannon.shape[0] * query_term_jensen_shannon.shape[1]
 
         query_term_jensen_shannon = query_term_jensen_shannon.reshape(query_term_len)
         return query_term_jensen_shannon
 
-    def _SubqueryOverlapCode(self, code_idx, code, UC_count_matrix: np.ndarray, code_count_matrix: np.ndarray, feature_extraction: object, total_query_list: np.ndarray):
+    def _SubqueryOverlapCode(self, code_idx, code, UC_count_matrix: np.ndarray, code_count_matrix: np.ndarray, feature_extraction: object, total_query_list: np.ndarray,feature_extraction_method:Callable):
 
         code_idx = int(code_idx)
         code_words = code.split(" ")
         code_words = np.ascontiguousarray(code_words[0:-1])
-        vSubqueryOverlap = np.vectorize(lambda query_term: self._SubqueryOverlapTerms(query_term, code_idx, UC_count_matrix, code_count_matrix, feature_extraction), otypes=[np.ndarray])
+        vSubqueryOverlap = np.vectorize(lambda query_term: self._SubqueryOverlapTerms(query_term, code_idx, UC_count_matrix, code_count_matrix, feature_extraction,feature_extraction_method), otypes=[np.ndarray])
         
         query_term_jensen_shannon = vSubqueryOverlap(code_words)
-        total_query_set = set(np.argpartition(total_query_list[:, code_idx], -10)[-10:])
+        total_query_set = set(np.argpartition(total_query_list[:, code_idx], -10)[-10:]) #should be edited
     
         vGetOverlap = np.vectorize(lambda query_term_jensen_shannon: self._getOverlap(query_term_jensen_shannon, total_query_set), otypes=[np.int16])
         query_term_overlap = vGetOverlap(query_term_jensen_shannon)
@@ -145,7 +148,7 @@ class FeatureExtraction:
         query_tuples =  np.ascontiguousarray(list(enumerate(query)))
         
         ### Run each individual query term qt in the original query as a separate query and obtain the result list Rt.
-        vSubqueryOverlapCode = np.vectorize(lambda code_idx, code_doc: self._SubqueryOverlapCode(code_idx, code_doc, document_count_matrix, query_count_matrix, feature_extraction, total_score_query_feature_extraction), otypes=[np.float16])
+        vSubqueryOverlapCode = np.vectorize(lambda code_idx, code_doc: self._SubqueryOverlapCode(code_idx, code_doc, document_count_matrix, query_count_matrix, feature_extraction, total_score_query_feature_extraction,feature_extraction_method), otypes=[np.float16])
 
         overall_queries_score = vSubqueryOverlapCode(query_tuples[:,0], query_tuples[:,1])
         return overall_queries_score
