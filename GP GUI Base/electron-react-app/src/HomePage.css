@@ -1,16 +1,5 @@
 @import '~bootstrap/dist/css/bootstrap.min.css';
 
-.App {
-background-color:#092635;
-color:white !important;
-}
-.header{
-    background-color:#092635;
-    color:white !important;
-}
-.hyperpages{
-    color:white !important;
-}
 .PageTitle{
     color:white !important;
     font-weight: bold;
@@ -41,8 +30,13 @@ color:white !important;
 }
 .thebuttons{
     color : white !important;
+    text-align: center;
+    position:relative;
     top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
+
 .btnImport {
     background-color: #5c8374 ;
     border-color: #5c8374;

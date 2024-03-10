@@ -7,11 +7,11 @@ import { MaintainabilityScore } from './MaintainabilityScores';
 import { HomePage } from './HomePage';
 import { AboutUs } from './AboutUs';
 function App() {
-    return (
-        <div className="App">
-          <AboutUs />
-        </div>
-      );
+  return (
+     <div className="App">
+      <MaintainabilityScore/>
+      </div>
+    );
 }
 
 export default App;

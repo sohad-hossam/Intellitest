@@ -53,7 +53,7 @@ function ThisMighTakeFew() {
 export function ImportProject() {
   const visibleHyperlinks = ['Home', 'About Us', 'Import Project','Proceed With'];
   return (
-    <div className="App">
+    <div className="ImportProject">
       <Header visibleHyperlinks={visibleHyperlinks} activeLink="Import Project" />
       <PageTitle title={"EL PROJECT ELSOHADY"} />
       <ProcessingProject />

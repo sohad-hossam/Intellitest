@@ -1,13 +1,10 @@
 @import '~bootstrap/dist/css/bootstrap.min.css';
 .header {
-    background-color: #fff;
-    color: #092635;
     padding: 40px;
     font-family: 'Oswald', sans-serif;
     font-weight: 500;
 }
 .hyperpages{
-    color: #092635;
     padding: 10px;
     font-family: 'Oswald', sans-serif;
     font-weight: 700;

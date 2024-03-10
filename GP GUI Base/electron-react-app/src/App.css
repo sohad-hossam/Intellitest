@@ -1,6 +1,7 @@
 @import '~bootstrap/dist/css/bootstrap.min.css';
 
 .App {
+   background-color: transparent;
     display: flex;
     flex-direction: column;
     min-height: 100vh;

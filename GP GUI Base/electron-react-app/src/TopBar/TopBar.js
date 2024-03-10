@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './TopBar.css';
 
@@ -31,7 +31,7 @@ export function Header({ visibleHyperlinks,activeLink  }) {
                     <div className="row">
                         {filteredHyperlinks.map((link, index) => (
                             <div key={index} className="col">
-                                <a href={link.url} className={`hyperpages mt-4 ${link.label === activeLink ? 'activeLink' : ''}`} >{link.label}</a>
+                               <a href={link.url} className={`hyperpages mt-4 ${link.label === activeLink ? 'activeLink' : ''}`} style={{ color: (activeLink === 'Home' || activeLink === 'AboutUs') ? 'white' : ' #092635' }}>{link.label}</a>
                             </div>
                         ))}
                     </div>

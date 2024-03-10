@@ -31,14 +31,35 @@ export function HomePage() {
     const visibleHyperlinks = ['Home', 'About Us', 'Import Project','Proceed With'];
     return (
       <div className="App">
+      <row>  
         <Header visibleHyperlinks={visibleHyperlinks} activeLink="Home" />
-        <div class="mt-5"></div>
+      </row>
+      <row >
         <PageTitle title={"Welcome to Intellitest"} />
+      </row>
+      
+      <row>
         <Message />
+      </row>
+      
+      <row   class="mt-5">
         <div class="mt-5"></div>
+      </row>
+      
+      <row   class="mt-5">
         <div class="mt-5"></div>
+      </row>
+      
+      <row   class="mt-5">
         <div class="mt-5"></div>
+      </row>
+      <row   class="mt-5">
+        <div class="mt-5"></div>
+      </row>
+      
+      <row  class="mt-5">
         <ButtonsMoving />
+      </row>
       </div>
     );
   }
