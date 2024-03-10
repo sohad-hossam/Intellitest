@@ -5,10 +5,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { ImportProject } from './ImportProject';
 import { MaintainabilityScore } from './MaintainabilityScores';
 import { HomePage } from './HomePage';
+import { AboutUs } from './AboutUs';
 function App() {
     return (
         <div className="App">
-          <HomePage />
+          <AboutUs />
         </div>
       );
 }

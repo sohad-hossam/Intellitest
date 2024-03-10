@@ -18,7 +18,7 @@ export function Header({ visibleHyperlinks,activeLink  }) {
         visibleHyperlinks.includes(link.label)
     );
 
-    const iconSource = activeLink === 'Home' ? require("../assets/searching1.png") : require("../assets/searching.png");
+    const iconSource =  (activeLink === 'Home' || activeLink === 'AboutUs')  ? require("../assets/searching1.png") : require("../assets/searching.png");
 
     return (
         <header className="header">
