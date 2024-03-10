@@ -13,12 +13,9 @@ function Message() {
     Bassant Hisham<br></br>
     Sohad Hossam <br></br>
     software Testing Platfrom with a Machine Learning Approach 
-        
       </div>
     );
   }
-
-
 
 export function AboutUs() {
     const visibleHyperlinks = ['Home', 'About Us', 'Import Project','Proceed With'];
@@ -29,7 +26,6 @@ export function AboutUs() {
         <PageTitle title={"Welcome to Intellitest"} />
         <div class="mt-5"></div>
         <div class="mt-5"></div>
-   
         <Message />
      
       </div>
