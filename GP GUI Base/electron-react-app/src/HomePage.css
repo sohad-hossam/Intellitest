@@ -1,0 +1,53 @@
+@import '~bootstrap/dist/css/bootstrap.min.css';
+
+.App {
+background-color:#092635;
+color:white !important;
+}
+.header{
+    background-color:#092635;
+    color:white !important;
+}
+.hyperpages{
+    color:white !important;
+}
+.PageTitle{
+    color:white !important;
+    font-weight: bold;
+}
+.Message{
+    color:white;
+    padding: 10px;
+    font-family: 'Oswald', sans-serif;
+    font-weight: bold;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 40px;
+}
+.thebuttons{
+    color : white !important;
+    top: 70%;
+}
+.btnImport {
+    background-color: #5c8374 ;
+    border-color: #5c8374;
+    color:white;
+   padding: 15px 50px 15px 50px;
+    width:300px;
+    border-radius: 20px;
+    text-decoration: none;
+    box-shadow: 0px 4px 8px rgb(0, 0, 0);
+}
+.btnProceed {
+    background-color: #1b4242;
+    border-color: #1b4242;
+    color:white;
+    padding: 15px 50px 15px 50px;
+    width:300px;
+    border-radius: 20px;
+    text-decoration: none;
+    box-shadow: 0px 4px 8px rgb(0, 0, 0);
+}
