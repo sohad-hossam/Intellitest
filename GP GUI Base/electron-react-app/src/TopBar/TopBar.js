@@ -22,21 +22,29 @@ export function Header({ visibleHyperlinks,activeLink  }) {
 
     return (
         <header className="header">
-            <div className="row align-items-center">
-                <div className="col-3">
-                    {/* Use the conditional icon source */}
+        <div className="container">
+            <div className="row">
+                <div className="col-auto">
                     <img src={iconSource} alt="Icon" />
                 </div>
-                <div className="col-6">
-                    <div className="row">
-                        {filteredHyperlinks.map((link, index) => (
-                            <div key={index} className="col">
-                               <a href={link.url} className={`hyperpages mt-4 ${link.label === activeLink ? 'activeLink' : ''}`} style={{ color: (activeLink === 'Home' || activeLink === 'AboutUs') ? 'white' : ' #092635' }}>{link.label}</a>
-                            </div>
-                        ))}
-                    </div>
+                <div className="col-md-10 d-flex justify-content-center align-items-center">
+                    {filteredHyperlinks.map(link => (
+                    <a
+                            className={`hyperpages mx-5`}
+                            key={link.label}
+                            href={link.url}
+                            style={{ 
+                            color: (activeLink === 'Home' || activeLink === 'AboutUs') ? 'white' : '#092635',
+                            textDecoration: activeLink === link.label ? 'underline' : 'none'  
+                            }}
+                        >
+                            {link.label}
+                  </a>
+                    ))}
                 </div>
             </div>
-        </header>
+        </div>
+    </header>
+    
     );
 }

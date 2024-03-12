@@ -23,7 +23,7 @@ export function AboutUs() {
       <div className="App">
         <Header visibleHyperlinks={visibleHyperlinks} activeLink="About Us" />
         <div class="mt-5"></div>
-        <PageTitle title={"Welcome to Intellitest"} />
+        <PageTitle title={"Welcome to Intellitest"}activeLink="About Us" />
         <div class="mt-5"></div>
         <div class="mt-5"></div>
         <Message />

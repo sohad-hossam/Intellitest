@@ -55,7 +55,7 @@ export function ImportProject() {
   return (
     <div className="ImportProject">
       <Header visibleHyperlinks={visibleHyperlinks} activeLink="Import Project" />
-      <PageTitle title={"EL PROJECT ELSOHADY"} />
+      <PageTitle title={"EL PROJECT ELSOHADY"}activeLink="Import Project"  />
       <ProcessingProject />
       <ProgressBar />
       <ThisMighTakeFew />

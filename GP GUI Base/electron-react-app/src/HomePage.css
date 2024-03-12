@@ -9,7 +9,6 @@
 }
 
 .PageTitle {
-  color: white !important;
   font-weight: bold;
 }
 .Message {
@@ -39,8 +38,8 @@
 .thebuttons {
   color: white !important;
   text-align: center;
-  position: relative;
-  top: 70%;
+  position: absolute;
+  bottom: 20%; 
   left: 50%;
   transform: translate(-50%, -50%);
 }

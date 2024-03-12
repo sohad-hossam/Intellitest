@@ -3,13 +3,16 @@
     padding: 40px;
     font-family: 'Oswald', sans-serif;
     font-weight: 500;
+    display: flex;
+    align-items: center;
 }
 .hyperpages{
     padding: 10px;
     font-family: 'Oswald', sans-serif;
     font-weight: 700;
     text-decoration: none;
-    white-space: nowrap; 
+    font-size: 20px;
+    margin-top: 5px;
 }
 .activeLink {
     text-decoration: underline !important;

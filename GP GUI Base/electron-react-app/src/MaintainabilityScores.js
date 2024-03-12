@@ -66,7 +66,7 @@ export function MaintainabilityScore() {
   return (
     <div className="App">
       <Header visibleHyperlinks={visibleHyperlinks} activeLink="Maintainability Scores" />
-      <PageTitle title={"Maintainability Scores"} />
+      <PageTitle title={"Maintainability Scores"} activeLink="Maintainability Scores" />
       <div class="mt-5"></div>
       <div class="mt-5"></div>
       <div className="container mt-5">

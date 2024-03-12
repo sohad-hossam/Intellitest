@@ -36,9 +36,9 @@ function Message() {
 function ButtonsMoving() {
   return (
     <div className="container mt-5">
-      <div className="row mt-5">
-        <div className="col-md-2 mt-5"></div>
-        <div className="col-md-8 text-center mt-5">
+      <div className="row">
+        <div className="col-md-2"></div>
+        <div className="col-md-8 text-center thebuttons">
           <Link to={"/ImportProject"} className="btnImport  m-5">
             Import Project
           </Link>
@@ -52,6 +52,7 @@ function ButtonsMoving() {
   );
 }
 
+
 export function HomePage() {
   const visibleHyperlinks = [
     "Home",
@@ -64,21 +65,17 @@ export function HomePage() {
   }, []);
   return (
     <div className="HomePage">
-      <div className="row">
-        <Header visibleHyperlinks={visibleHyperlinks} activeLink="Home" />
-      </div>
+      <Header visibleHyperlinks={visibleHyperlinks} activeLink="Home" />
 
-      <div className="row">
-        <PageTitle title={"Welcome to Intellitest"} />
-      </div>
+      <PageTitle title={"Welcome to Intellitest"} activeLink="Home" />
 
-      <div className="row">
-        <Message />
-      </div>
+      <Message />
 
-      <div className="row mt-5">
-        <ButtonsMoving />
-      </div>
+      <div className="mt-5"></div>
+      <div className="mt-5"></div>
+      <div className="mt-5"></div>
+
+      <ButtonsMoving />
     </div>
   );
 }
