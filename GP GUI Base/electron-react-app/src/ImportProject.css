@@ -1,10 +1,10 @@
 @import '~bootstrap/dist/css/bootstrap.min.css';
 
-/* .App {
+.App {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-} */
+}
 
 
 .main-content {
