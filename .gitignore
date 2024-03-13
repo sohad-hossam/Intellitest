@@ -20,3 +20,5 @@ __pycache__/imports.cpython-311.pyc
 tree-sitter-java/
 build/*
 tree-sitter-java/*
+GP GUI Base/electron-react-app/package-lock.json
+GP GUI Base/electron-react-app/package.json

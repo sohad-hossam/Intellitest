@@ -1,10 +1,10 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import { ImportProject } from "./ImportProject";
-import { MaintainabilityScore } from "./MaintainabilityScores";
-import { HomePage } from "./HomePage";
+import { ImportProject } from "./ImportProject/ImportProject.js";
+import { MaintainabilityScore } from "./MantainabilityScores/MaintainabilityScores.js";
+import { HomePage } from "./HomePage/HomePage.js";
 import { AboutUs } from "./AboutUs";
-import { TraceLinks } from "./TraceLinks";
+import { TraceLinks } from "./TraceLinks/TraceLinks.js";
 import { HashRouter, Route, Routes } from "react-router-dom";
 
 function App() {
@@ -13,10 +13,10 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" exact element={<HomePage />} />
-          <Route path="/AboutUs" component={AboutUs} />
+          <Route path="/AboutUs" element={<AboutUs />} />
           <Route
             path="/MaintainabilityScore"
-            component={MaintainabilityScore}
+            element={<MaintainabilityScore />}
           />
           <Route path="/ImportProject" element={<ImportProject />} />
           <Route path="/TraceLinks" element={<TraceLinks />} />

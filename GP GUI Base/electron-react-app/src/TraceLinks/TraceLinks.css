@@ -1,0 +1,44 @@
+.form-control {
+  width: 260px !important;
+  border: 3px solid #5c8374 !important;
+  margin-top: 20px;
+  border-radius: 12px;
+}
+
+.drops-label {
+  font-size: 25px;
+  font-weight: 500;
+  padding: 10px;
+}
+.process-btn {
+  font-size: 25px;
+  font-weight: 500;
+  background-color: #9ec8b9;
+  border-radius: 12px;
+  border-color: transparent;
+  color: #092635;
+  padding: 10px 20px;
+  box-shadow: 0px 4px 8px rgb(0, 0, 0);
+  transition-duration: 0.2s;
+}
+
+.process-btn:hover {
+  background-color: #5c8374;
+  color: #ffffff;
+}
+.warning-message {
+  display: none;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 300;
+  font-family: "Oswald", sans-serif;
+  color: #bd2929;
+}
+.tracelink-message {
+  display: none;
+  text-align: center;
+  font-size: 25px;
+  font-weight: 300;
+  font-family: "Oswald", sans-serif;
+  color: #5c8374;
+}

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './ImportProject.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Header } from './TopBar/TopBar';
-import { PageTitle } from './PageTitle/PageTitle';
+import { Header } from '../TopBar/TopBar';
+import { PageTitle } from '../PageTitle/PageTitle';
 
 
 function ProcessingProject() {

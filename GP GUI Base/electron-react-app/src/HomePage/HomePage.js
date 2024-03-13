@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "./HomePage.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Header } from "./TopBar/TopBar";
-import { PageTitle } from "./PageTitle/PageTitle";
+import { Header } from "../TopBar/TopBar";
+import { PageTitle } from "../PageTitle/PageTitle";
 import { Link } from "react-router-dom";
 
 let progress = -1;
@@ -66,15 +66,8 @@ export function HomePage() {
   return (
     <div className="HomePage">
       <Header visibleHyperlinks={visibleHyperlinks} activeLink="Home" />
-
       <PageTitle title={"Welcome to Intellitest"} activeLink="Home" />
-
       <Message />
-
-      <div className="mt-5"></div>
-      <div className="mt-5"></div>
-      <div className="mt-5"></div>
-
       <ButtonsMoving />
     </div>
   );
