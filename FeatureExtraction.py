@@ -5,7 +5,7 @@ class FeatureExtraction:
     def __init__(self, UCTokens: set) -> None:
         self.tfidf_vectorizer = TfidfVectorizer(vocabulary=UCTokens)
         self.count_vectorizer = CountVectorizer(vocabulary=UCTokens)
-        # self.vocab_index = {word: idx for idx, word in enumerate(self.count_vectorizer.get_feature_names_out())}
+        #self.vocab_index = {word: idx for idx, word in enumerate(self.count_vectorizer.get_feature_names_out())}
         # UC_count_matrix, code_count_matrix
 
     # Latent Semantic Analysis.
@@ -193,3 +193,53 @@ class FeatureExtraction:
 
         return num_terms_code, num_terms_UC, num_unique_terms_code, num_unique_terms_UC, num_overlapping_terms 
 
+
+    def _BM25(self, UC_documents, code_documents):
+        k = 1.2;b = 0.75
+
+        uc_avgdl = 0
+        code_avgdl = 0
+        
+        uc_sizes = list()
+        code_sizes = list()
+
+        BM25_code = np.zeros((len(code_documents),len(UC_documents)))
+        uc_sizes = np.array([len(doc.split()) for doc in UC_documents])
+        code_sizes = np.array([len(doc.split()) for doc in code_documents])
+
+        uc_avgdl = np.sum(uc_sizes)/len(uc_sizes)
+        code_avgdl = np.sum(code_sizes)/len(code_sizes)
+
+        for i, code_doc in enumerate(code_documents):
+            code_tokens = code_doc.split()
+            code_tokens = set(code_tokens)
+            #idf = TfidfVectorizer(vocabulary=code_tokens).fit(UC_documents).idf_.reshape(1,-1)
+            
+            vectorizer_tf = CountVectorizer(vocabulary=code_tokens)
+            tf = vectorizer_tf.fit_transform(UC_documents).toarray()
+            transformer = TfidfTransformer()
+            transformer.fit(tf)
+            idf = transformer.idf_.reshape(1,-1)
+            
+            for j, uc_doc in enumerate(UC_documents):
+                for cnt, token in enumerate(code_tokens):
+                    BM25_code[i][j] += idf[0][cnt] * (uc_doc.count(token) * (k + 1)) / (uc_doc.count(token) + k * (1 - b + b * (uc_sizes[j] / uc_avgdl)))
+        
+        BM25_uc = np.zeros((len(UC_documents),len(code_documents)))
+
+        for i, uc_doc in enumerate(UC_documents):
+            uc_tokens = uc_doc.split()
+            uc_tokens = set(uc_tokens)
+            #idf = TfidfVectorizer(vocabulary=uc_tokens).fit(code_documents).idf_.reshape(1,-1)
+            
+            vectorizer_tf = CountVectorizer(vocabulary=uc_tokens)
+            tf = vectorizer_tf.fit_transform(code_documents).toarray()
+            transformer = TfidfTransformer()
+            transformer.fit(tf)
+            idf = transformer.idf_.reshape(1,-1)
+
+            for j, code_doc in enumerate(code_documents):
+                for cnt, token in enumerate(uc_tokens):
+                    BM25_uc[i][j] += idf[0][cnt] * (code_doc.count(token) * (k + 1)) / (code_doc.count(token) + k * (1 - b + b * (code_sizes[j] / code_avgdl)))
+
+        return np.append(BM25_code,BM25_uc.transpose(),axis=0)

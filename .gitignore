@@ -7,7 +7,6 @@
 *.java
 *.xml
 *.md
-*.csv
 *.pdf
 *.sqlite3
 build/my-languages.so
