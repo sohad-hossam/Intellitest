@@ -1,23 +1,23 @@
-@import '~bootstrap/dist/css/bootstrap.min.css';
+@import "~bootstrap/dist/css/bootstrap.min.css";
 .header {
-    padding: 40px;
-    font-family: 'Oswald', sans-serif;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
+  padding: 40px;
+  font-family: "Oswald", sans-serif;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
 }
-.hyperpages{
-    padding: 10px;
-    font-family: 'Oswald', sans-serif;
-    font-weight: 400;
-    text-decoration: none;
-    font-size: 25px;
-    margin-top: 5px;
+.hyperpages {
+  padding: 10px;
+  font-family: "Oswald", sans-serif;
+  font-weight: 400;
+  text-decoration: none;
+  font-size: 20px;
+  margin-top: 5px;
+  transition-duration: 0.2s;
 }
-.hyperpages:hover{
- text-decoration: underline !important;
+.hyperpages:hover {
+  text-decoration: underline !important;
 }
 .activeLink {
-    text-decoration: underline !important;
-  }
-  
+  text-decoration: underline !important;
+}

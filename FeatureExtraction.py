@@ -84,9 +84,10 @@ class FeatureExtraction:
         # print(JS_matrix.shape) => (58,116)
 
         return JS_matrix
+    
     def TFIDFVectorizer(self, UC_documents: list, code_documents: list
     ) :
-        	
+
         # create the transform
         self.tfidf_matrix_uc = self.tfidf_vectorizer.fit_transform(UC_documents)
         self.tfidf_matrix_code = self.tfidf_vectorizer.fit_transform(code_documents)
