@@ -1,4 +1,4 @@
-@import '~bootstrap/dist/css/bootstrap.min.css';
+@import "~bootstrap/dist/css/bootstrap.min.css";
 
 /* .App {
     display: flex;
@@ -6,51 +6,48 @@
     min-height: 100vh;
 } */
 
-
 .main-content {
-    display: flex;
+  display: flex;
 }
 
-.ProcessingProject{
-    color: #092635;
-    padding: 10px;
-    font-family: 'Oswald', sans-serif;
-    font-weight: 600;
-    text-align: center;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 20px;
+.ProcessingProject {
+  color: #092635;
+  padding: 10px;
+  font-family: "Oswald", sans-serif;
+  font-weight: 600;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20px;
 }
 .progress-container {
-    width: 60%;
-    background-color: #5c8374;
-    position: absolute;
-    top: 60%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 10px;
+  width: 60%;
+  background-color: #5c8374;
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 10px;
+}
 
-  }
-  
-  .progress-bar {
-    width: 0%;
-    height: 15px;
-    transition: width 1s ease-in-out;
-    border-radius: 10px;
-  }
+.progress-bar {
+  width: 0%;
+  height: 15px;
+  transition: width 1s ease-in-out;
+  border-radius: 10px;
+}
 
-  .ThisMighTakeFew{
-    color: #092635;
-    padding: 10px;
-    font-family: 'Oswald', sans-serif;
-    font-weight: 400;
-    text-align: center;
-    position: absolute;
-    top: 70%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 15px;
-  }
-  
+.ThisMighTakeFew {
+  color: #092635;
+  padding: 10px;
+  font-family: "Oswald", sans-serif;
+  font-weight: 400;
+  text-align: center;
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 15px;
+}

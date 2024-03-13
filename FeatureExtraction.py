@@ -94,20 +94,20 @@ class FeatureExtraction:
         return  self.tfidf_matrix_uc,self.tfidf_matrix_code
 
     def VectorSpaceModel(
-        self, tfidf_matrix_uc: np.ndarray, tfidf_matrix_code: np.ndarray , code_documents
+        self, tfidf_matrix_uc: np.ndarray, tfidf_matrix_code: np.ndarray
     ) -> np.ndarray:
 
         # cosine similarity
         cosine_similarities = cosine_similarity(tfidf_matrix_uc, tfidf_matrix_code)
 
-        similarity_list = []
-        for i in range(cosine_similarities.shape[0]):
-            similarity_dict = {}
-            for j in range(cosine_similarities.shape[1]):
-                similarity_dict[code_documents[j]] = cosine_similarities[i][j]
-            similarity_list.append(similarity_dict)
+        # similarity_list = []
+        # for i in range(cosine_similarities.shape[0]):
+        #     similarity_dict = {}
+        #     for j in range(cosine_similarities.shape[1]):
+        #         similarity_dict[code_documents[j]] = cosine_similarities[i][j]
+        #     similarity_list.append(similarity_dict)
 
-        return similarity_list
+        return cosine_similarities
     
     def _getOverlap(self, query_term_list: np.ndarray, total_query_set: set) -> int:
         query_term_set = set(np.argpartition(query_term_list, -10)[-10:])
@@ -153,3 +153,43 @@ class FeatureExtraction:
 
         overall_queries_score = vSubqueryOverlapCode(query_tuples[:,0], query_tuples[:,1])
         return overall_queries_score
+    
+    def DocumentStatistics(self, UC_documents: list, code_documents:list):
+        num_terms_code =[]
+        for document in code_documents:
+            num_terms_code.append(len(document.split()))
+
+        # 1st feature
+        num_terms_code=np.array(num_terms_code)
+
+        num_terms_UC =[]
+        for document in UC_documents:
+            num_terms_UC.append(len(document.split()))
+        
+        # 2nd feature
+        num_terms_UC=np.array(num_terms_UC)
+
+        num_unique_terms_code =[]
+        for document in code_documents:
+            num_unique_terms_code.append(len(set(document.split())))
+
+        # 3rd feature
+        num_unique_terms_code=np.array(num_unique_terms_code)
+
+        num_unique_terms_UC =[]
+        for document in UC_documents:
+            num_unique_terms_UC.append(len(set(document.split())))
+
+        # 4th feature
+        num_unique_terms_UC=np.array(num_unique_terms_UC)
+
+        # each column represent D1 intersect with all usecases, then column2= D2 intersect with all usescases....
+        #if want to access the intesection between a specific usecase and all coressponding documents you will access the row index coressponding to this usecase 
+        # 5th feature
+        num_overlapping_terms =np.zeros((len(UC_documents),len(code_documents)))
+        for uc_index,uc in enumerate(UC_documents):
+            for code_index,code in enumerate(code_documents):
+                num_overlapping_terms[uc_index][code_index] = 100*(len(set(uc.split()).intersection(set(code.split()))))/(num_unique_terms_UC[uc_index]+num_unique_terms_code[code_index])
+
+        return num_terms_code, num_terms_UC, num_unique_terms_code, num_unique_terms_UC, num_overlapping_terms 
+

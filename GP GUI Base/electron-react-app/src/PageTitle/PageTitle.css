@@ -1,10 +1,10 @@
-@import '~bootstrap/dist/css/bootstrap.min.css';
-.PageTitle{
-    color: #092635;
-    padding: 10px;
-    font-family: 'Oswald', sans-serif;
-    font-weight: 550;
-    text-align: center;
-    left: 50%;
-    font-size: 35px;
+@import "~bootstrap/dist/css/bootstrap.min.css";
+.PageTitle {
+  color: #092635;
+  padding: 10px;
+  font-family: "Oswald", sans-serif;
+  font-weight: 550;
+  text-align: center;
+  left: 50%;
+  font-size: 35px;
 }

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import './MaintainabilityScores.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Header } from '../TopBar/TopBar';
-import { PageTitle } from '../PageTitle/PageTitle';
+import React, { useState } from "react";
+import "./MaintainabilityScores.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Header } from "../TopBar/TopBar";
+import { PageTitle } from "../PageTitle/PageTitle";
 
 const ProgressBar = ({ label, score }) => {
   return (
@@ -29,7 +29,12 @@ const ProgressBar = ({ label, score }) => {
 };
 
 export function MaintainabilityScore() {
-  const visibleHyperlinks = ['Home', 'About Us', 'Maintainability Scores', 'Trace Links'];
+  const visibleHyperlinks = [
+    "Home",
+    "About Us",
+    "Maintainability Scores",
+    "Trace Links",
+  ];
   const scores = {
     "FileYasmina.java": 30,
     "FileYasmina1.java": 80,
@@ -65,22 +70,38 @@ export function MaintainabilityScore() {
 
   return (
     <div className="App">
-      <Header visibleHyperlinks={visibleHyperlinks} activeLink="Maintainability Scores" />
-      <PageTitle title={"Maintainability Scores"} activeLink="Maintainability Scores" />
+      <Header
+        visibleHyperlinks={visibleHyperlinks}
+        activeLink="Maintainability Scores"
+      />
+      <PageTitle
+        title={"Maintainability Scores"}
+        activeLink="Maintainability Scores"
+      />
       <div class="mt-5"></div>
       <div class="mt-5"></div>
       <div className="container mt-5">
         <div className="row justify-content-center">
-          <div className="col-md-9">
-            {renderScores()}
-          </div>
+          <div className="col-md-9">{renderScores()}</div>
         </div>
         <nav aria-label="Page navigation example">
           <ul className="pagination justify-content-center mt-3 ">
             {[...Array(totalPages).keys()].map((page) => (
-              <li key={page} className={`page-item ${currentPage === page + 1 ? 'active' : ''}`}>
-              <button className={`page-link ${currentPage === page + 1 ? 'btn-primary' : ''}`} onClick={() => handlePageChange(page + 1)}>{page + 1}</button>
-            </li>
+              <li
+                key={page}
+                className={`page-item ${
+                  currentPage === page + 1 ? "active" : ""
+                }`}
+              >
+                <button
+                  className={`page-link ${
+                    currentPage === page + 1 ? "btn-primary" : ""
+                  }`}
+                  onClick={() => handlePageChange(page + 1)}
+                >
+                  {page + 1}
+                </button>
+              </li>
             ))}
           </ul>
         </nav>

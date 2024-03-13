@@ -1,24 +1,21 @@
-@import '~bootstrap/dist/css/bootstrap.min.css';
-.progress{
+@import "~bootstrap/dist/css/bootstrap.min.css";
+.progress {
   background-color: #5c8374;
   font-size: 25px;
   font-weight: 500;
 }
-.progress-bar{
+.progress-bar {
   background-color: #092635;
 }
-.progress-label
-{
+.progress-label {
   font-size: 25px;
   font-weight: 500;
 }
-.btn-primary
-{
+.btn-primary {
   background-color: #092635 !important;
   border-color: #092635 !important;
   color: white !important;
 }
-.page-link{
+.page-link {
   color: #092635;
- 
 }

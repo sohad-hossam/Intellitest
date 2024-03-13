@@ -52,7 +52,6 @@ function ButtonsMoving() {
   );
 }
 
-
 export function HomePage() {
   const visibleHyperlinks = [
     "Home",
