@@ -105,7 +105,7 @@ function DropDowns() {
             </div>
         </div>
     
-        <div className="row justify-content-center mt-5">
+        <div className="row justify-content-center mt-3">
             <div className="col-md-4">
                 <div className="warning-message text-danger">
                     Please select a Use Case and a Code Document to process.
@@ -135,8 +135,6 @@ export function TraceLinks() {
         <div className="App">
             <Header visibleHyperlinks={visibleHyperlinks} activeLink="Trace Links" />
             <PageTitle title={"Trace Links"} activeLink="Trace Links" />
-            <div className="mt-5"></div>
-            <div className="mt-5"></div>
             <DropDowns />
         </div>
     );
