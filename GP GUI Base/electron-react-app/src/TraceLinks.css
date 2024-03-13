@@ -1,0 +1,27 @@
+.form-control {
+    width:260px !important;
+    border: 3px solid #5c8374 !important;
+    margin-top: 20px;
+    border-radius: 12px;
+}
+
+.drops-label
+{
+  font-size: 25px;
+  font-weight: 500;
+}
+.process-btn
+{
+    font-size: 25px;
+  font-weight: 500;
+  background-color: #9ec8b9;
+  border-radius: 12px;
+  border-color: #9ec8b9;
+  text-align: center;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding:10px 20px 10px 20px;
+
+
+}

@@ -4,6 +4,7 @@ import { ImportProject } from "./ImportProject";
 import { MaintainabilityScore } from "./MaintainabilityScores";
 import { HomePage } from "./HomePage";
 import { AboutUs } from "./AboutUs";
+import { TraceLinks } from "./TraceLinks";
 import { HashRouter, Route, Routes } from "react-router-dom";
 
 function App() {
@@ -17,7 +18,8 @@ function App() {
             path="/MaintainabilityScore"
             component={MaintainabilityScore}
           />
-          <Route path="/ImportProject" element={<ImportProject />} />
+          <Route path="/ImportProject" element={<TraceLinks />} />
+          <Route path="/TraceLinks" element={<TraceLinks />} />
         </Routes>
       </div>
     </HashRouter>
