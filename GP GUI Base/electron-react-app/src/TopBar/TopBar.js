@@ -6,7 +6,7 @@ import './TopBar.css';
 export function Header({ visibleHyperlinks,activeLink  }) {
     const allHyperlinks = [
         { url: '/', label: 'Home' }, 
-        { url: '../AboutUs', label: 'About Us' },
+        { url: './AboutUs', label: 'About Us' },
         { url: '/ImportProject', label: 'Import Project' },
         { url: '/ProceedWith', label: 'Proceed With' },
         { url: '/MaintainbiltyScores', label: 'Maintainability Scores' },
