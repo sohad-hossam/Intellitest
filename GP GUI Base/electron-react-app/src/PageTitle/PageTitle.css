@@ -3,11 +3,11 @@
     color: #092635;
     padding: 10px;
     font-family: 'Oswald', sans-serif;
-    font-weight: 400;
+    font-weight: 550;
     text-align: center;
     position: absolute;
     top: 30%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 30px;
+    font-size: 35px;
 }
