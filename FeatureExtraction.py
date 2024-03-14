@@ -99,6 +99,10 @@ class FeatureExtraction:
         tf_uc_dict = {feature_names_uc[i]: tf_uc_array[i] for i in range(len(feature_names_uc))}
 
 
+        df_uc_array = np.sum(self.tfidf_matrix_uc > 0, axis=0).A1
+        df_uc_dict = {feature_names_uc[i]: df_uc_array[i] for i in range(len(feature_names_uc))}
+
+
         self.tfidf_matrix_code = self.tfidf_vectorizer.fit_transform(code_documents)
         idf_code = self.tfidf_vectorizer.idf_
 
@@ -108,7 +112,11 @@ class FeatureExtraction:
         tf_code_array = self.tfidf_matrix_code.toarray().sum(axis=0)
         tf_code_dict = {feature_names_code[i]: tf_code_array[i] for i in range(len(feature_names_code))}
 
-        return  self.tfidf_matrix_uc,self.tfidf_matrix_code,idf_uc_dict,tf_uc_dict,idf_code_dict,tf_code_dict,feature_names_uc,feature_names_code
+        df_code_array = np.sum(self.tfidf_matrix_code > 0, axis=0).A1
+        df_code_dict = {feature_names_code[i]: df_code_array[i] for i in range(len(feature_names_code))}
+
+
+        return  self.tfidf_matrix_uc,self.tfidf_matrix_code,idf_uc_dict,tf_uc_dict,idf_code_dict,tf_code_dict,feature_names_uc,feature_names_code,df_uc_dict,df_code_dict
 
 
 
@@ -443,29 +451,34 @@ class FeatureExtraction:
             QSdocs.append(percentage)
         return np.array(QSdocs)
     
-    def EntropyPreProcessing(self,tf_matrix_uc:np.ndarray,UC_documents:list,tf_matrix_code:np.ndarray,code_documents:list,feature_names_uc:list,feature_names_code:list):
+    def EntropyPreProcessing(self,UC_documents:list,code_documents:list,df_uc_dict:dict,df_code_dict:dict):
         entropy_uc = [] 
+        for query in UC_documents:
+            tokens = query.split()
+            query_entropy = []  
+            for term in tokens:
+                term_entropy =0
+                for doc in code_documents:
+                    tf_term_doc = doc.count(term)+1
+                    tf_term_collection = df_code_dict[term] +1
+                    term_entropy+=((tf_term_doc / tf_term_collection) * np.log((tf_term_doc / tf_term_collection) + 1))
+                query_entropy.append(term_entropy)
+            entropy_uc.append(query_entropy)  
 
-        df_uc = np.sum(tf_matrix_uc > 0, axis=0).A1
-        entropy_code= []
 
-        df_code = np.sum(tf_matrix_code > 0, axis=0).A1
+        entropy_code = []
+        for query in code_documents:
+            tokens = query.split()
+            query_entropy = []  
+            for term in tokens:
+                term_entropy =0
+                for doc in UC_documents:
+                    tf_term_doc = doc.count(term)+1
+                    tf_term_collection = df_uc_dict[term] +1
+                    term_entropy+=((tf_term_doc / tf_term_collection) * np.log((tf_term_doc / tf_term_collection) + 1))
+                query_entropy.append(term_entropy)
+            entropy_code.append(query_entropy)
 
-        for term_index, term in enumerate(feature_names_uc):
-            term_entropy = []
-            for doc in UC_documents:
-                tf_term_doc = doc.count(term) + 1 
-                tf_term_collection = df_code[term_index] + 1 
-                term_entropy.append((tf_term_doc / tf_term_collection) * np.log((tf_term_doc / tf_term_collection) + 1))
-            entropy_uc.append(term_entropy)
-
-        for term_index, term in enumerate(feature_names_code):
-            term_entropy = []
-            for doc in code_documents:
-                tf_term_doc = doc.count(term) + 1 
-                tf_term_collection = df_uc[term_index] + 1 
-                term_entropy.append((tf_term_doc / tf_term_collection) * np.log((tf_term_doc / tf_term_collection) + 1))
-            entropy_code.append(term_entropy)
 
         return entropy_uc,entropy_code
     
@@ -487,13 +500,58 @@ class FeatureExtraction:
             medentropy.append(np.median(query))
         return np.array(medentropy)
 
+        
     def DevEntropy(self,entropy_values:list):
         deventropy=[]
         avgentropy = self.AvgEntropy(entropy_values)
         for query_entropy in entropy_values:
-            deviation = np.sqrt(sum([abs(entropy - avgentropy[i]) for i, entropy in enumerate(query_entropy)]) / len(entropy_values))
+            deviation = np.sqrt(sum([abs(entropy - avg) for entropy, avg in zip(query_entropy,avgentropy)]) / len(entropy_values))
             deventropy.append(deviation)
         return np.array(deventropy)
+    
+    def SCQPreProcessing(self,UC_documents:list,code_documents:list,tf_uc_dict:dict,tf_code_dict:dict,idf_uc_dict:dict,idf_code_dict:dict):
+        SCQ_uc = []  
+        for query in UC_documents:
+            tokens = query.split()
+            query_scq = []  
+            for term in tokens:
+                if term in tf_code_dict.keys() and term in idf_code_dict.keys():
+                   query_scq.append((1 + np.log((tf_code_dict[term])+1) * idf_code_dict[term]))
+                else:
+                    query_scq.append(0)  
+            SCQ_uc.append(query_scq)
+
+
+        SCQ_code = []
+
+        for query in code_documents:
+            tokens = query.split()
+            query_scq = []  
+            for term in tokens:
+                if term in tf_uc_dict.keys() and term in idf_uc_dict.keys():
+                    query_scq.append((1 + np.log((tf_uc_dict[term])+1) * idf_uc_dict[term])+1)
+                else:
+                    query_scq.append(0)
+            SCQ_code.append(query_scq)
+        return SCQ_uc,SCQ_code
+    
+    def AvgSCQ(self,SCQ_values:list):
+        avgscq=[]
+        for query in SCQ_values:
+            avgscq.append(sum(query) / len(SCQ_values))
+        return np.array(avgscq)
+
+    def MaxSCQ(self,SCQ_values:list):
+        maxscq=[]
+        for query in SCQ_values:
+            maxscq.append(max(query))
+        return np.array(maxscq)
+
+    def SumSCQ(self,SCQ_values:list):
+        sumscq=[]
+        for query in SCQ_values:
+            sumscq.append(sum(query))
+        return np.array(sumscq)
 
     def _BM25(self, UC_documents, code_documents):
         k = 1.2;b = 0.75
