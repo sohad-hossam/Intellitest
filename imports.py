@@ -10,7 +10,7 @@ from scipy.stats import spearmanr, pearsonr
 
 from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
-from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer, TfidfTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 from scipy.spatial.distance import jensenshannon
 
@@ -22,7 +22,7 @@ import random
 
 from typing import Callable
 
-import pandas as pd
+#import pandas as pd
 from statistics import stdev
 # from dask.distributed import Client, progress
 

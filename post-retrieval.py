@@ -11,10 +11,13 @@ UC_documents, code_documents, UCTokens, CodeTokens = _PreProcessor.setup("./UC",
 UCTokens.update(CodeTokens)
 
 # (1) Run the original query q, and obtain the result list R
-R = FeatureExtraction(UCTokens).VectorSpaceModel(UC_documents, code_documents)
+#R = FeatureExtraction(UCTokens).VectorSpaceModel(UC_documents, code_documents)
+
+#print (len(UC_documents), len(code_documents))
+R = FeatureExtraction(UCTokens)._BM25(UC_documents, code_documents)
 
 # (2) Take the top documents in R and consider them as ranked list L
-query = PreProcessor().UCPreProcessor("./UC/UC1.TXT")
+#query = PreProcessor().UCPreProcessor("./UC/UC1.TXT")
 
 """
 (3) For each document d in L, get a perturbed document d	 from d in the following way:
@@ -244,5 +247,40 @@ def SpatialAutoCorrelation(UniqueTokens,R,query):
     correlation, _ = pearsonr([score for _,score in L], [score for _,score in L_])
     return correlation
 
-#print(SpatialAutoCorrelation(UCTokens,R,query))
-print(ClusterTendency(list(UCTokens),R,query))
+# Weighted Information Gain
+def WeightedInformationGain(R,query):
+    '''
+    q,query
+    t, a term in the query q
+    D, set of all documents in corpus
+    Dq, the set of documents in the result set to query q
+    Dqk,thetopkdocuments in the result list
+    k, the number of top documents to consider
+    |q|, number of terms in the query q
+    λ(t) = 1/√|q|
+    Pr(t|D) is the probability of term t occurring in the entire collection D.
+    Pr(t|d) is the probability of term t occurring in the specific document d.
+    
+    WIG(q) = (1/k)*sum_over_top_K_docs_in_L(sum_over_terms_in_query(λ(t)*log2(Pr(t|Dqk)/Pr(t|D))))
+    
+    '''
+    L = [(code, score) for code, score in sorted(R[0].items(), key=lambda item: item[1], reverse=True)][:10]
+    query_list = query.split()
+    query_len = len(query_list)
+    _lambda = 1/np.sqrt(query_len)
+    WIG = 0
+    for doc,_ in L:
+        for term in query_list:
+            Pr_t_Dqk = doc.count(term)/len(doc)
+            Pr_t_D = sum([code.count(term) for code,_ in L])/len(L)
+            WIG += _lambda * np.log2(Pr_t_Dqk/Pr_t_D)
+    WIG = WIG/10
+    return WIG
+
+def NormalizedQueryCommitment(R,query):
+    '''
+    NCQ = sqrt((1/k)*sum_over_top_K_docs_in_L())
+    '''
+    pass
+
+print(R)
