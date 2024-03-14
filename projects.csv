@@ -1,0 +1,34 @@
+Number;Project Name;Project Description;Project Website;Repository File Name
+1;Archiva;Repository Management Software;https://bit.ly/1SrxIep;archiva.sqlite3.bz2
+2;Axis2;Core engine for web services;https://bit.ly/2ErkluJ;axis2.sqlite3.bz2
+3;Cassandra;Distributed, NoSQL Database;https://bit.ly/1enu7Mp;cassandra.sqlite3.bz2
+4;Derby;Relational Database Management System (RDBMS);https://bit.ly/1OueC5N;derby.sqlite3.bz2
+5;Drools;Business Rules Management System (BRMS);https://bit.ly/2sUHywo;drools.sqlite3.bz2
+6;Errai;Framework for building rich web applications;https://bit.ly/2EgEB1s;errai.sqlite3.bz2
+7;Flink;Stream processing Framework;https://bit.ly/1PI0V2G;flink.sqlite3.bz2
+8;Groovy;Dynamic language for the Java platform;https://bit.ly/2UHnNX6;groovy.sqlite3.bz2
+9;Hadoop;Framework for the distributed large data processing;https://bit.ly/1et1FmS;hadoop.sqlite3.bz2
+10;HBase;Distributed, scalable, big data store;https://bit.ly/1PaPTEY;hbase.sqlite3.bz2
+11;Hibernate;Object/Relational Mapping (ORM) framework;https://bit.ly/1WkK0Gn;hibernate.sqlite3.bz2
+12;Hive;Data Warehouse Software;https://bit.ly/1m89RCC;hive.sqlite3.bz2
+13;HornetQ;Multi-protocol, asynchronous messaging system;https://red.ht/2Egeac9;hornetq.sqlite3.bz2
+14;Infinispan;Distributed in-memory key/value data store;https://bit.ly/1RlWiwU;infinispan.sqlite3.bz2
+15;IZPack;Packaging software for the Java platform;https://bit.ly/1D5eOQ0;izpack.sqlite3.bz2
+16;JBehave;Framework for Behaviour-Driven Development (BDD);https://bit.ly/2QxSFL9;jbehave.sqlite3
+17;JBoss Transaction Manager / Narayana;Transaction manager;https://bit.ly/2UHpmUY;jboss-transaction-manager.sqlite3.bz2
+18;JBPM;Business Process Management (BPM);https://bit.ly/2ry1xBA;jbpm.sqlite3.bz2
+19;Kafka;Platform for building real-time data pipelines;https://bit.ly/1MeMpdQ;kafka.sqlite3.bz2
+20;Keycloak;Identity and Access Management;https://bit.ly/2ryV1KR;keycloak.sqlite3.bz2
+21;Log4J;Logging and tracing API for the Java platform;https://bit.ly/2QOO6eF;log4j2.sqlite3.bz2
+22;Lucene;High-performance, full-featured text search engine;https://bit.ly/2rBuwog;lucene.sqlite3.bz2
+23;Maven;Software project management and comprehension tool;https://bit.ly/1GrcsdA;maven.sqlite3.bz2
+24;Pig;Platform for analyzing large data sets;https://bit.ly/2ISkryk;pig.sqlite3.bz2
+25;Railo;ColdFusion Markup Language (CFLM) engine;https://bit.ly/2Ek4BZO;railo.sqlite3.bz2
+26;Resteacy;Frameworks to build RESTful Web Services;https://bit.ly/2UGNMOs;resteasy.sqlite3.bz2
+27;Seam2;Platform for building rich Internet applications in Java;https://bit.ly/2GfmHPg;seam2.sqlite3.bz2
+28;Spark;Engine for large-scale data processing;https://bit.ly/11QkY9q;spark.sqlite3.bz2
+29;Switchyard;Framework for service-oriented applications (SOA);https://red.ht/2LeVqLD;switchyard.sqlite3.bz2
+30;Teiid;Data virtualization system;https://red.ht/2zZGyfD;teiid.sqlite3.bz2
+31;Weld;Dependency Injection for the Java Platform;https://bit.ly/2LcCX26;weld.sqlite3.bz2
+32;Wildfly;Application Server;https://bit.ly/2cGl2AD;wildfly.sqlite3.bz2
+33;Zookeeper;Distributed hierarchical key/value data store;https://bit.ly/2Ek5gKM;zookeeper.sqlite3.bz2

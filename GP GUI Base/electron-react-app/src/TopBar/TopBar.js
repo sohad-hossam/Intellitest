@@ -24,7 +24,7 @@ export function Header({ visibleHyperlinks, activeLink }) {
   return (
     <header className="header">
       <div className="container">
-        <div className="row">
+        <div className="row d-flex justify-content-center align-items-center">
           <div className="col-auto">
             <img src={iconSource} alt="Icon" />
           </div>

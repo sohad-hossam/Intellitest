@@ -50,7 +50,7 @@ export function AboutUs() {
   return (
     <div className="HomePage">
       <Header visibleHyperlinks={visibleHyperlinks} activeLink="About Us" />
-      <div class="mt-5"></div>
+      <div className="mt-5"></div>
       <PageTitle title={"Welcome to Intellitest"} activeLink="About Us" />
 
       <Message />

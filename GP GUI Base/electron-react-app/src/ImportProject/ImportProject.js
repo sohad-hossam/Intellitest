@@ -24,9 +24,9 @@ function ProgressBar() {
   }, [progress]);
 
   return (
-    <div class="progress-container">
+    <div className="progress-container">
       <div
-        class="progress-bar"
+        className="progress-bar"
         style={{
           width: `${progress}%`,
           backgroundColor: "#092635",
@@ -55,10 +55,19 @@ export function ImportProject() {
         visibleHyperlinks={visibleHyperlinks}
         activeLink="Import Project"
       />
-      <PageTitle title={"EL PROJECT ELSOHADY"} activeLink="Import Project" />
-      <ProcessingProject />
-      <ProgressBar />
-      <ThisMighTakeFew />
+      <div className="LoadingText">
+        <PageTitle title={"EL PROJECT ELSOHADY"} activeLink="Import Project" />
+        <svg viewBox="0 0 1320 300">
+          <text x="50%" y="50%" dy=".35em" text-anchor="middle">
+            Intellitest
+          </text>
+        </svg>
+      </div>
+      <div className="LoadingBar">
+        <ProcessingProject />
+        <ProgressBar />
+        <ThisMighTakeFew />
+      </div>
     </div>
   );
 }
