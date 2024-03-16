@@ -13,7 +13,7 @@ class FeatureExtraction:
         self,
         tfidf_matrix_uc: np.ndarray,
         tfidf_matrix_code: np.ndarray,
-        train_or_test: str,
+        train_or_test: str = 'train',
     ) -> np.ndarray:
         num_components = min(tfidf_matrix_uc.shape[0], tfidf_matrix_code.shape[1])
         num_components = min(num_components, 100)
