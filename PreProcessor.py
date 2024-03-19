@@ -93,6 +93,9 @@ class PreProcessor:
             "Returns",
         }
 
+        self.UC_to_index = dict()
+        self.CC_to_index = dict()
+
     def CodePreProcessor(self, filepath):
         dataset_txt = open(filepath, "r", encoding="utf-8").read()
         # 1) All the interpunction was removed.
@@ -170,13 +173,15 @@ class PreProcessor:
         UC_documents = list()
         code_documents = list()
 
-        for filename in os.listdir(UC_path):
+        for i, filename in enumerate(os.listdir(UC_path)):
+            self.UC_to_index[filename.lower()] = i
             filepath = os.path.join(UC_path, filename)
             tokens = self.UCPreProcessor(filepath)
             UC_documents.append(tokens)
             UCTokens.update(tokens.split())
 
-        for filename in os.listdir(code_path):
+        for i, filename in enumerate(os.listdir(code_path)):
+            self.CC_to_index[filename.lower()] = i
             filepath = os.path.join(code_path, filename)
             tokens = self.CodePreProcessor(filepath)
             code_documents.append(tokens)
