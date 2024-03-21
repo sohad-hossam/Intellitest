@@ -1,83 +1,56 @@
-package unisa.gps.etour.control.GestioneBeniCulturali.test.stub;
+package unisa.gps.etour.control.CulturalHeritageManagement.test.stub;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
-import unisa.gps.etour.bean.BeanTurista;
-import unisa.gps.etour.repository.IDBTurista;
+import unisa.gps.etour.bean.BeanTourist;
+import unisa.gps.etour.repository.IDBTourist;
 
-public class DBTurista implements IDBTurista
-(
+public class DBTourist implements IDBTourist {
 
-public boolean cancellaBeneCulturalePreferito (int pIdTurista,
-pIdBeneCulturale int) throws SQLException
-(
-return false;
-)
+    public boolean deletePreferredCulturalAsset(int touristId, int culturalAssetId) throws SQLException {
+        return false;
+    }
 
-public boolean cancellaPuntoDiRistoroPreferito (int pIdTurista,
-pIdPuntoDiRistoro int) throws SQLException
-(
-return false;
-)
+    public boolean deletePreferredRestaurantPoint(int touristId, int restaurantPointId) throws SQLException {
+        return false;
+    }
 
-public boolean delete (int pIdTurista) throws SQLException
-(
-return false;
-)
+    public boolean deleteTourist(int touristId) throws SQLException {
+        return false;
+    }
 
-public boolean inserisciBeneCulturalePreferito (int pIdTurista,
-pIdBeneCulturale int) throws SQLException
-(
-return false;
-)
+    public boolean insertPreferredCulturalAsset(int touristId, int culturalAssetId) throws SQLException {
+        return false;
+    }
 
-public boolean inserisciPuntoDiRistoroPreferito (int pIdTurista,
-pIdPuntoDiRistoro int) throws SQLException
-(
-return false;
-)
+    public boolean insertPreferredRestaurantPoint(int touristId, int restaurantPointId) throws SQLException {
+        return false;
+    }
 
-public boolean inserisciTurista (BeanTurista pTurista) throws SQLException
-(
-return false;
-)
+    public boolean insertTourist(BeanTourist tourist) throws SQLException {
+        return false;
+    }
 
-public boolean modificaTurista (BeanTurista pTurista) throws SQLException
-(
-return false;
-)
+    public boolean updateTourist(BeanTourist tourist) throws SQLException {
+        return false;
+    }
 
-public BeanTurista ottieniTurista (String pUsername) throws SQLException
-(
-return null;
-)
+    public BeanTourist getTourist(String username) throws SQLException {
+        return null;
+    }
 
-public BeanTurista ottieniTurista (int pIdTurista) throws SQLException
-(
-/ / ArrayList <BeanTurista> t = new ArrayList <BeanTurista> (0);
-/ / T.add (New BeanTurista (1, "username", "Astrubale", "Silberschatz", "Naples", "Naples", "0111111", "80100th", "Way of the systems, 1", "NA" ,
-/ / "Trapano@solitario.it", "passwordsolomia", new Date (), new Date (), true));
-/ /
-/ / T.add (new BeanTurista (1, "username", "Astrubale", "Silberschatz", "Naples", "Naples", "0111111", "80100th", "Way of the systems, 1", "NA" ,
-/ / "Trapano@solitario.it", "passwordsolomia", new Date (), new Date (), true));
-/ /
-/ / Return t;
+    public BeanTourist getTourist(int touristId) throws SQLException {
+        return new BeanTourist(1, "username", "Astrubale", "Silberschatz", "Naples", "Naples", "0111111", "80100th", "Way of the systems, 1", "NA",
+                "trapano@solitario.it", "passwordsolomia", new Date(), new Date(), true);
+    }
 
-return (new BeanTurista (1, "username", "Astrubale", "Silberschatz", "Naples", "Naples", "0111111", "80100th", "Way of the systems, 1", "NA",
-"trapano@solitario.it", "passwordsolomia", new Date (), new Date (), true));
-)
+    public ArrayList<BeanTourist> getTourists(String touristUsername) throws SQLException {
+        return null;
+    }
 
-public ArrayList <BeanTurista> ottieniTuristi (String pUsernameTurista)
-throws SQLException
-(
-return null;
-)
-
-public ArrayList <BeanTurista> ottieniTuristi (boolean condition)
-throws SQLException
-(
-return null;
-)
-)
+    public ArrayList<BeanTourist> getTourists(boolean condition) throws SQLException {
+        return null;
+    }
+}

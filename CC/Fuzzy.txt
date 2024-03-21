@@ -1,4 +1,5 @@
-﻿package unisa.gps.etour.control.fuzzy;
+﻿
+package unisa.gps.etour.control.fuzzy;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,543 +14,421 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Scanner;
 
-public class Fuzzy
-(
-/ **
-* Class that implements the methods used to calculate the Fuzzy
-* Category of membership of a refreshment or a cultural property.
-* /
+public class Fuzzy {
 
-/ **
-* Method for calculating the relevance of a term.
-*
-* @ Param distance: Contains the distance of the term from category
-* Analyzed
-* @ Param pMaxDist: Contains distaza maximum of all terms in all
-* Categories.
-* @ Return Returns the relevance of the term in the category.
-* /
-private static float relevance (float distance, float pMaxDist)
-(
-return (distance / pMaxDist);
+    /**
+     * Class that implements the methods used to calculate the Fuzzy
+     * Category of membership of a refreshment or a cultural property.
+     */
 
-)
+    /**
+     * Method for calculating the relevance of a term.
+     *
+     * @param distance: Contains the distance of the term from category Analyzed
+     * @param pMaxDist: Contains the maximum distance of all terms in all Categories.
+     * @return Returns the relevance of the term in the category.
+     */
+    private static float relevance(float distance, float pMaxDist) {
+        return (distance / pMaxDist);
+    }
 
-/ **
-* Method for calculating the distance between a term and a category
-*
-* @ Param pTermine: Contains the period analyzed
-* @ Param pTotTermini: Tables of the total frequency of terms.
-* @ Param frequenzaTesto: Table of the terms of the text analyzed.
-* @ Param pCategoria: Category analyzed.
-* @ Return Returns the distance of the term pTermine by category
-* PCategoria
-* /
-private static float distance (String pTermine,
-Hashtable <string, float[]> pTotTermini, float frequenzaTesto,
-Category pCategoria)
-(
+    /**
+     * Method for calculating the distance between a term and a category.
+     *
+     * @param pTerm:         Contains the term analyzed
+     * @param pTotalTerms:     Tables of the total frequency of terms.
+     * @param textFrequency:   Table of the terms of the text analyzed.
+     * @param pCategory:       Category analyzed.
+     * @return Returns the distance of the term pTerm by category PCategoria
+     */
+    private static float distance(String pTerm, Hashtable<String, float[]> pTotalTerms, float textFrequency, Category pCategory) {
 
-/ / The first variable tracks the frequency of a term
-/ / Relating to a category
-/ / The second keeps track of fraquenza a deadline for all
-/ / Categories
-float [] frequenzaCategoria = new float [3], frequenzaTotale = new float [3];
+        // The first variable tracks the frequency of a term
+        // Relating to a category
+        // The second keeps track of frequency of a term for all
+        // Categories
+        float[] categoryFrequency = new float[3], textFrequency = new float[3];
 
-if (pCategoria.esisteTermine (pTermine)) / / if the term is
-/ / In category
-(
-/ / Its frequency in this category is equal to the frequency
-/ / KnowledgeBase
-/ / More frequency in the search text
-frequenzaCategoria = pCategoria.getVal (pTermine);
-frequenzaCategoria [0] + = frequenzaTesto;
-)
-else
-(
+        if (pCategory.existsTerm(pTerm)) { // if the term is in category
+            // Its frequency in this category is equal to the frequency
+            // KnowledgeBase
+            // Plus frequency in the search text
+            categoryFrequency = pCategory.getVal(pTerm);
+            categoryFrequency[0] += textFrequency;
+        } else {
 
-/ / Otherwise it is equal to the frequency of the term in the text
-/ / Analyzed
-frequenzaCategoria [0] = frequenzaTesto;
-)
-if (pTotTermini.get (pTermine)! = null) / / if the term exists in
-/ / Table of the total time
-frequenzaTotale = pTotTermini.get (pTermine) / / Get the value
+            // Otherwise it is equal to the frequency of the term in the text
+            // Analyzed
+            categoryFrequency[0] = textFrequency;
+        }
+        if (PTotalTerms.get(pTerm) != null) { // if the term exists in
+            // Table of the total frequency
+            textFrequency = PTotalTerms.get(pTerm); // Get the value
 
-frequenzaTotale [0] + = frequenzaTesto, / / the total frequency is given
-/ / Frequency in the text
-/ / Analizzatp
-/ / Plus any frequency stored in memory in the table
-/ / Total time
+            textFrequency[0] += textFrequency; // the total frequency is given
+            // Frequency in the text
+            // Analyzed
+            // Plus any frequency stored in memory in the table
+            // Total frequency
 
-return (frequenzaCategoria [0] / frequenzaTotale [0 ]);// distance is
-/ / Equal to
-/ / Frequency in
-/ / Category
-/ / The total frequency Fratto
+            return (categoryFrequency[0] / textFrequency[0]); // distance is
+            // Equal to
+            // Frequency in
+            // Category
+            // The total frequency divided by
+        }
+        return 0;
+    }
 
-)
+    /**
+     * Method for calculating the distance of a term from a category.
+     * Used for training
+     *
+     * @param pTerm term to analyze
+     * @param pCategory category from which you must calculate the distance
+     * @param PTotalTerms total frequency table
+     * @return Returns the distance of a term from a category
+     */
+    private static float distance(String pTerm, Category pCategory, Hashtable<String, float[]> PTotalTerms) {
+        return ((pCategory.getVal(pTerm))[0] / (PTotalTerms.get(pTerm))[0]);
+    }
+}
+/**
+ * Implementation of a T-Norm function
+ *
+ * @param a first value
+ * @param b the second value
+ * @return returns the value calculated using a T-Norm function
+ */
+private static float tNorm(float a, float b) {
+    return ((a * b) / ((2 - ((a + b) - (a * b)))));
+    // Return Math.min(a, b);
+    // Return a * b;
+    // Return Math.max(0, a + b - 1);
+}
 
-/ **
-* Method for calculating the distance of a term from one category.
-* Used for training
-*
-* @ Param pTermine period to analyze
-* @ Param pCategoria category from which you must calculate the distance
-* @ Param table pTotTermini total time
-* @ Return Returns the distance of a term from one category
-* /
-private static float distance (String pTermine, star pCategoria,
-Hashtable <string, float[]> pTotTermini)
-(
-return ((pCategoria.getVal (pTermine)) [0] / (pTotTermini.get (pTermine)) [0]);
-)
+/**
+ * Implementation of an S-Norm function
+ *
+ * @param a first value
+ * @param b the second value
+ * @return returns the value calculated using an S-Norm function
+ */
+private static float sNorm(float a, float b) {
+    return ((a + b) / (1 + a * b));
+    // Return Math.max(a, b);
+    // Return (a + b - (a * b));
+    // Return Math.min(1, 1 + b);
+}
 
-/ **
-* Implementation of a function T-Norm
-*
-* @ Param a first value
-* @ Param b the second value
-* @ Return returns the value calculated using a function T-Norm
-* /
-private static float tNorm (float a, float b)
-(
-return ((a * b) / ((2 - ((a + b) - (a * b )))));
-/ / Return Math.min (a, b);
-/ / Return a * b;
-/ / Return Math.max (0, a + b-1);
-)
+/**
+ * Calculation of similarity between a category and a given text input
+ *
+ * @param pTerm a Hashtable containing words. It must contain for each term values of importance and membership situated in a float Vector at positions 1 and 2.
+ * @return returns a numeric value that indicates the similarity of a text with the category on which importance and membership values have been calculated
+ */
+private static float similarity(Hashtable<String, float[]> pTerm) {
+    float sum = 0; // return value
 
-/ **
-* Implementation of a function S-Norm
-*
-* @ Param a first value
-* @ Param b the second value
-* @ Return returns the value calculated using a function S-Norm
-* /
-private static float sNorm (float a, float b)
-(
-return ((a + b) / (1 + a * b));
-/ / Return Math.max (a, b);
-/ / Return (a + b-(a * b));
-/ / Return Math.min (1.1 + b);
-)
+    for (float[] val : pTerm.values()) { // for all elements of the table
+        sum += (tNorm(val[1], val[0])) / (sNorm(val[1], val[0])); // performs sum of the values given by the division of T-Norm function with the S-Norm function made between relevance and membership
+    }
 
-/ **
-* Calculation of similarity between a category and a given text input
-*
-* @ Param table pTermini worded. It must contain to
-* Pgni term values of importance and belonging situated in
-Vector float * in positions 1 and 2.
-* @ Return returns a numeric value that indicates the similarity of a
-* Text with the category on which one has calculated the values of
-Importance and belonging *
-* /
-private static float similarity (Hashtable <string, float[]> pTermini)
-(
-float sum = 0, / / return value
+    return sum;
+}
 
-for (float [] val: pTermini.values ())// for all elements of
-/ / Table
-(
-sum + = (tNorm (val [1], val [0])) / (sNorm (val [1], val [0 ]));// performs
-/ / Sum of the values given by the division of function T-Norm
-/ / With the function S-Norm made
-/ / Between relevance and belonging
-)
+/**
+ * Method for the calculation of membership of a text to a category
+ *
+ * @param val the similarity of a text with a category
+ * @param maxSimilarity the maximum similarity found
+ * @return returns a value in the interval [0,1] that indicates the degree of membership of the text to the category
+ */
+private static float membership(float val, float maxSimilarity) {
+    return (val / maxSimilarity);
+}
 
-return sum;
-)
+/**
+ * Method to remove special characters and convert all uppercase characters to lowercase
+ *
+ * @param pStr string to transform
+ * @return returns the text in lowercase without special characters
+ */
+private static String replaceAndLower(String pStr) {
+    pStr = pStr.toLowerCase();
+    pStr = pStr.replace(",", "");
+    pStr = pStr.replace(".", "");
+    pStr = pStr.replace("!", "");
+    pStr = pStr.replace("?", "");
+    pStr = pStr.replace("'", "");
 
-/ **
-* Method for the calculation of membership of a text to a category
-*
-* @ Param val indicates the similarity of a text with a category
-* @ Param maxSimilarity indicates the maximum similarity found
-* @ Return restiuisce a value in the interval [0,1] that indicates the degree of
-* Membership of the text to the category x
-* /
-private static float membership (float val, float maxSimilarity)
-(
-return (val / maxSimilarity);
+    return pStr;
+}
+/**
+ * Method for retrieving the category to which a text belongs
+ *
+ * @param pDescription text to analyze
+ * @return a string indicating the category
+ * @throws RemoteException
+ */
+public static String calculateCategory(String pDescription) throws RemoteException {
+    if (pDescription == null || pDescription.equals("")) return "NULL";
+    String text = pDescription;
+    // Hashtable of terms associated with the text portion. Will contain values of frequency, relevance, membership for each term
+    Hashtable<String, float[]> textData = new Hashtable<>();
+    // Hashtable of categories, each category will contain the value of similarity and text membership
+    Hashtable<String, float[]> textCategory = new Hashtable<>();
+    text = replaceAndLower(text); // delete special characters and convert uppercase to lowercase
+    String[] textSplit = text.split(" ");
+    for (int i = 0; i < textSplit.length; i++) { // for each word of the text
+        float[] toPut = new float[3]; // value to assign to the string in the hash table
+        float[] tmpVal; // temporary variable containing the values associated with the string if it already exists in the hash table
+        if (textSplit[i].length() <= 3) continue; // delete undefined terms such as articles, prepositions, etc.
+        if (exists(textSplit[i], textData)) { // if the term analyzed is present in the table of terms of the analyzed text
+            // We get the value of frequency in the table and increment it by one
+            tmpVal = textData.get(textSplit[i]);
+            toPut[0] = tmpVal[0];
+            toPut[0] += (float) 1 / textSplit.length;
+        } else {
+            // Otherwise initialize the frequency value to 1 over the total number of terms (relative frequency)
+            toPut[0] = (float) 1 / textSplit.length;
+        }
+        // Insert the new entry in the table
+        textData.put(textSplit[i], toPut);
+    }
+    
+    // Attempt to open the knowledge base
+    CategoryList list;
+    try {
+        list = openList();
+    } catch (ClassNotFoundException e) { // error opening kb.sbt file
+        throw new RemoteException("The knowledge base is missing or corrupt");
+    } catch (Exception e) {
+        throw new RemoteException("The knowledge base is missing or corrupt");
+    }
 
-)
+    // Take from the knowledge base to the table of total term frequencies
+    Hashtable<String, Float[]> termTotals = list.getTotalTerms();
+    float maxSimilarity = -1; // holds the value of maximum similarity
+    for (String categoryName : list.getCategories()) { // for all categories in the knowledge base
+        float[] toPut = new float[3]; // value to assign to the string in the hash table
+        for (Enumeration<String> val = textData.keys(); val.hasMoreElements();) { // for all elements of the table of terms of the text
+            String term = val.nextElement(); // get the value of a term
+            float[] tmp = textData.get(term);
+            // Calculate distance and relevance
+            tmp[1] = distance(term, termTotals, tmp[0], list.getCategory(categoryName));
+            tmp[2] = relevance(tmp[1], list.getMaxDist());
+            textData.put(term, tmp);
+        }
+        // Calculate the similarity after analyzing all the terms in a category
+        toPut[0] = similarity(textData);
+        textCategory.put(categoryName, toPut);
+        // Update the value of maximum similarity if necessary
+        if (maxSimilarity < toPut[0]) {
+            maxSimilarity = toPut[0];
+        }
+    }
 
-/ **
-* Method to delete a tense special characters and to bring
-* All uppercase to lowercase
-*
-* @ Param string pStr transform
-* @ Return restiuisce the text to lowercase characters and no special
-* /
-private static String replaceAndLower (String pStr)
-(
-pStr pStr.toLowerCase = ();
-pstr = pStr.replace (",", "");
-pstr = pStr.replace (".", "");
-pStr pStr.replace ("!", = "");
-pStr pStr.replace ("?", = "");
-pStr pStr.replace ("'", = "");
+    for (String categoryName : list.getCategories()) { // for each category
+        // Get the value of text similarity with the analyzed category
+        float[] tmp = textCategory.get(categoryName);
+        // Calculate text membership to the similarity
+        tmp[1] = membership(tmp[0], maxSimilarity);
+        // Save everything in the category table
+        textCategory.put(categoryName, tmp);
+    }
 
-pStr return;
-)
+    return maxMembership(textCategory); // returns the name of the output category with the maximum membership degree
+}
 
-/ **
-* Method of retrieving the category you belong to a text
-*
-* @ Param pDescrizione text to analyze
-Restu * @ return a string indicating the category
-* @ Throws RemoteException
-* /
-public static String calcolaCategoria (String pDescrizione)
-throws RemoteException
-(
-if ((pDescrizione == null) | | (pDescrizione.equals ("")))
-return "NULL";
-String text = pDescrizione;
-/ / Table of terms associated with the text portion. Will contain
-/ / Values of frequency, rilevamza, membership for each term
-Hashtable <string, float[]> datiTesto <string, float[]> = new Hashtable ();
-/ / Table of categories, each category will contain the value of
-/ / Similarity and belonging Text
-Hashtable <string, float[]> testoCategoria <string, float[]> = new Hashtable ();
-replaceAndLower text = (text) / / delete characters and spaeciali
-/ / Returns the text by replacing
-/ / Uppercase with lowercase
-String [] testoSplit = testo.split ( "");
-for (int i = 0; i <testoSplit.length i + +)
-(/ / For each end of the text
-float [] toPut = new float [3], / / value to assign to the string
-/ / In the hash table
-float [] valTmp / / temporary variable containing the values
-/ / Associated with the string if it already exists in the hash table
-/ / If the string is present in the table picks up the values
-/ / And an increase in saving them in to put
-/ / Otherwise initialize the new string with frequency = 1
-if (testoSplit [i]. length () <= 3) / / delete undefined terms
-/ / As important, the inter ...
-continue;
-if (exists (testoSplit [i], datiTesto)) / / if the time analyzed
-/ / Is present in tebella the terms of the analyzed text
-(
-/ / We get the value of frequency in the table and there
-/ / Adds one
-valTmp = datiTesto.get (testoSplit [i]);
-toPut [0] = valTmp [0];
-toPut [0] + = (float) 1 / testoSplit.length;
+/**
+ * Method to find the category with which the text has the highest degree of
+ * Membership
+ *
+ * @param pTextCategory table of categories for the text
+ * @return a string indicating the name of the category with which
+ * the text has the highest degree of membership
+ */
+private static String maxMembership(Hashtable<String, float[]> pTextCategory) {
+    String toReturn = null; // return value
+    float max = -1; // Maximum value of membership
 
-)
-else
-(
-toPut [0] = (float) 1 / testoSplit.length;
-/ / Otherwise initialize the value of frequency to a
-/ / Fratto, the total number of terms (relative frequency)
-)
-/ / Insert the new entry in the table
-/ / System.out.println (toPut [0]);
-datiTesto.put (testoSplit [i], toPut);
-)
+    for (Enumeration<String> keys = pTextCategory.keys(); keys.hasMoreElements();) {
+        // For all categories in the table of categories for the text
+        String category = keys.nextElement();
+        // Get the values of similarity and membership associated with the category
+        float[] tmp = pTextCategory.get(category);
+        if (tmp[1] > max) {
+            // If the degree of membership just updated is greater than the previous one, update max and toReturn
+            toReturn = category;
+            max = tmp[1];
+        }
+    }
+    return toReturn;
+}
 
-/ / You try to open the knowledge base
-ElencoCategorie list;
-TRY
-(
-apriElenco list = ();
-)
-catch (ClassNotFoundException e) / / error opening file kb.sbt
-(
-throw new RemoteException (
-"The knowledge base is missing or corrupt");
-)
-catch (Exception e)
-(
-throw new RemoteException (
-"The knowledge base is missing or corrupt");
-)
+/**
+ * Method used to check whether a term is present in the table
+ * of terms for the text
+ *
+ * @param pStr term to analyze
+ * @param pTable table of terms for the text
+ * @return true if the term exists, false otherwise
+ */
+private static boolean exists(String pStr, Hashtable<String, float[]> pTable) {
+    try {
+        if (pTable.get(pStr) != null) return true;
+    } catch (NullPointerException e) {
+        return false;
+    }
+    return false;
+}
 
-/ / Is taken from the base of knowledge to the table of total time
-<string, Float[]> totTermini = elenco.getTotTermini Hashtable ();
-float maxSimilarity = -1, / / holds the value of maximum similarity
-for (String CategoryName: elenco.Categorie ())
-(/ / For all the categories in the knowledge base
-float [] toPut = new float [3], / / value to assign to the string
-/ / In the hash table
-for (Enumeration <String> datiTesto.keys val = (); val
-. hasMoreElements ();)
-(/ / For all elements of the table of the terms of the text
-String term = val.nextElement ();
-/ / We get the value of a term
-float [] tmp = datiTesto.get (term);
-/ / Calculate range and bearing
-tmp [1] = distance (term totTermini, tmp [0], list
-. getCategoria (CategoryName));
-tmp [2] = importance (tmp [1], elenco.getMaxDist ());
-datiTesto.put (term, tmp);
-)
-/ / We calculate the similarity Once the analysis
-/ / All the terms in a category
-toPut [0] = similarity (datiTesto);
-testoCategoria.put (CategoryName, toPut);
-if (maxSimilarity <toPut [0]) / / we update the value of maximum
-/ / If necessary similarity
-(
-maxSimilarity = toPut [0];
-)
-)
+/**
+ * Method used to retrieve the knowledge base
+ *
+ * @return an object representing the CategoryList type knowledge base
+ * @throws IOException
+ * @throws ClassNotFoundException
+ */
+private static CategoryList openList() throws IOException, ClassNotFoundException {
+    File file = new File("kb.sbt"); // open the kb.sbt file
+    FileInputStream kBaseStream = new FileInputStream(file); // creates a stream with the file
+    ObjectInputStream kBaseObj = new ObjectInputStream(kBaseStream); // create a stream object with the file
+    CategoryList toReturn;
+    toReturn = (CategoryList) kBaseObj.readObject();
+    // Extract the object and save it in the returned file
+    return toReturn;
+}
+/**
+ * Method used to create a file. Used in training.
+ *
+ * @param path string indicating the path in which to create the file
+ * @return returns an ObjectOutputStream to the created file
+ * @throws IOException
+ */
+private static ObjectOutputStream createFile(String path) throws IOException {
+    ObjectOutputStream toReturn;
+    File f = new File(path); // file is created
+    if (f.exists()) f.delete();
 
-for (String CategoryName: elenco.Categorie ())
-(/ / For each category
-/ / We get the value of similarity of the text with the category
-/ / Analyzed
-float [] tmp = testoCategoria.get (CategoryName);
-tmp [1] = membership (tmp [0], maxSimilarity), / / we calculate
-/ / Membership
-/ / Text to the similarity
-testoCategoria.put (CategoryName, tmp), / / save everything in
-/ / Category table
-)
+    FileOutputStream fout = new FileOutputStream(path);
+    toReturn = new ObjectOutputStream(fout); // create the stream
 
-return maxAppartenenza (testoCategoria) / / returns the name output
-/ / Category
-/ / With the maximum degree of membership
-)
+    return toReturn;
+}
 
-/ **
-* Method to find the category with which the text has the highest degree of
-* Membership
-*
-* @ Param pTestoCategoria table of categories to the text
-Restiuisce * @ return a string indicating the name of the category with which
-* The text has the highest degree of membership
-* /
-private static String maxAppartenenza (
-Hashtable <string, float[]> pTestoCategoria)
-(
-ToReturn String = null, / / return value
-float max = -1, / / Maximum value of membership
+/**
+ * Method used to create the knowledge base.
+ *
+ * @throws RemoteException
+ */
+public static void training() throws RemoteException {
+    String[] categoryList = new String[4]; // array containing category names for analysis
+    CategoryList list = new CategoryList();
 
-for (Enumeration <String> pTestoCategoria.keys elm = (); elm
-. hasMoreElements ();)
-(/ / For all categories of the table of categories of text
-String category = elm.nextElement ();
-/ / Values are taken of similarity and belonging associated with
-/ / Category
-float [] tmp = pTestoCategoria.get (category);
-if (tmp [1]> max)
-(/ / If the degree of membership affiliation just uploaded
-/ / Is greater than the previous update data max and toReturn
-toReturn = category;
-max = tmp [1];
-)
+    ObjectOutputStream listOut;
+    try {
+        // Try to create the file
+        listOut = createFile("kb.sbt");
+    } catch (Exception e) {
+        throw new RemoteException("Error creating file kb.sbt");
+    }
 
-)
-toReturn return;
-)
+    categoryList[0] = "art";
+    categoryList[1] = "cinema";
+    categoryList[2] = "sport";
 
-/ **
-* Method used to check whether a term is presented in table
-* The terms of the text
-*
-* @ Param pStr period to analyze
-* @ Param pTable tables in terms of the text
-* @ Return returns true if the term exists false otherwise
-* /
-private static boolean exists (String pStr, Hashtable <string, float[]> pTable)
-(
-TRY
-(
-if (pTable.get (pStr)! = null)
-return true;
-)
-catch (NullPointerException e)
-(
-return false;
-)
+    for (int i = 0; i < 3; i++) {
+        // for each category
+        // Create a new object of type Category, which will contain all
+        // Category data to be analyzed
+        Category category = new Category(categoryList[i]);
+        // If the inclusion of the category in the table of categories
+        // Is not successful, throw an exception
+        if (!list.addCategory(categoryList[i], category)) {
+            throw new RemoteException("Error creating category data for " + categoryList[i]);
+        }
 
-return false;
-)
+        // Try to read from the folder containing the texts of a category
+        // 100 sample tests
+        for (int j = 1; j <= 100; j++) {
+            // Path of the folder category
+            String path = "kb/" + categoryList[i] + "/" + j;
+            // Try to read the file j
+            FileReader textReader;
+            try {
+                textReader = new FileReader(path);
+            } catch (FileNotFoundException e) {
+                // If the file does not exist, continue execution from
+                // File j + 1
+                continue;
+            }
 
-/ **
-* Method used to retrieve the knowledge base
-*
-Restiuisce * @ return an object representing the type ElencoCategorie
-* KnowledgeBase
-* @ Throws IOException
-* @ Throws ClassNotFoundException
-* /
-private static ElencoCategorie apriElenco () throws IOException,
-ClassNotFoundException
-(
-KBase file = new File ( "kb.sbt ");// you open the file kb.sbt
-FileInputStream kBaseStream = new FileInputStream (KBase) / / creates
-/ / A stream with the file
-ObjectInputStream kBaseObj = new ObjectInputStream (kBaseStream), / / si
-/ / Create a stream object with the file
-ElencoCategorie toReturn;
+            Scanner scanner = new Scanner(textReader);
+            while (scanner.hasNextLine()) {
+                // Read the text file line by line
+                String text = scanner.nextLine();
+                text = replaceAndLower(text);
+                String[] toIterate = text.split(" ");
+                for (String term : toIterate) {
+                    // For each term of the line
+                    if (term.length() <= 3) continue; // remove undefined terms
+                    float[] termVal, totalTermVal;
+                    // If the term is present in the table of terms of the analyzed category
+                    if (list.getCategory(categoryList[i]).existsTerm(term)) {
+                        // Its frequency is equal to the value stored in
+                        // Table plus one divided by the total number of
+                        // Terms of the text
+                        termVal = list.getCategory(categoryList[i]).getValue(term);
+                        termVal[0] += (float) 1 / toIterate.length;
+                        totalTermVal = list.getTerm(term);
+                        totalTermVal[0] += (float) 1 / toIterate.length;
+                    } else {
+                        // Otherwise it is equal to one divided by the total number of words of text
+                        termVal = new float[3];
+                        totalTermVal = new float[1];
+                        termVal[0] = (float) 1 / toIterate.length;
+                        totalTermVal[0] = (float) 1 / toIterate.length;
+                    }
+                    // save the calculated values in the table of terms of the analyzed category
+                    list.setTerm(term, totalTermVal);
+                    list.getCategory(categoryList[i]).addTerm(term, termVal);
+                    if (list.getMaxDist() < totalTermVal[0]) list.setMaxDist(totalTermVal[0]);
+                }
+            }
+        }
+    }
 
-toReturn = (ElencoCategorie) kBaseObj.readObject ();
-/ / Object is extracted and saved in the file returned in output
-toReturn return;
-)
+    for (String categoryName : list.getCategories()) {
+        // for each category
+        // the table of terms is flushed
+        Hashtable<String, float[]> categoryTerms = list.getCategory(categoryName).getTerms();
 
-/ **
-* Method used to create the file. Used in training
-*
-* @ Param path string indicating the path in which to create the file
-* @ Return returns an ObjectOutputStream to the file created
-* @ Throws IOException
-* /
-private static ObjectOutputStream CreateFile (String path)
-throws IOException
-(
-ObjectOutputStream toReturn;
-File f = new File (path) / / file is created
-if (f.exists ())
-f.delete ();
+        // all the terms are analyzed in the loaded terms table
+        for (Enumeration<String> termEnum = categoryTerms.keys(); termEnum.hasMoreElements();) {
+            // is calculated distance and relevance
+            String term = termEnum.nextElement();
+            float[] val = categoryTerms.get(term);
+            val[1] = distance(term, list.getCategory(categoryName), list.getTermList());
+            val[2] = relevance(val[1], list.getMaxDist());
+        }
+        // data is stored in the table of terms of the category
+        list.getCategory(categoryName).setTerms(categoryTerms);
+    }
 
-FileOutputStream fout = new FileOutputStream (path);
-toReturn = new ObjectOutputStream (fOut), / / create the stream
+    try {
+        // writing the results of operations to files
+        listOut.writeObject(list);
+    } catch (Exception e) {
+        throw new RemoteException("Error writing file");
+    }
+}
 
-toReturn return;
-)
 
-/ **
-* Method used to create the knowledge base
-*
-* @ Throws RemoteException
-* /
-public static void training () throws RemoteException
-(
 
-String [] elencoCategorie = new String [4] / / array contenentei names
-/ / Of categrie be analyzed
-/ / Knowledge base
-ElencoCategorie list = new ElencoCategorie ();
 
-ObjectOutputStream elencoOut;
-TRY
-(
-/ / Try to create the file
-elencoOut = CreateFile ( "kb.sbt");
-)
-catch (Exception e)
-(
-throw new RemoteException ( "Error creating file kb.sbt");
-)
 
-elencoCategorie [0] = "art";
-elencoCategorie [1] = "cinema";
-elencoCategorie [2] = "sport";
-/ / ElencoCategorie [3 ]="";
 
-for (int i = 0; i <3; the ++)// for each category
-(
-/ / Create a new object of type Category, which will contain all
-/ / Category data to be analyzed
-ToPutCat category = new Category (elencoCategorie [i]);
-/ / If the inclusion of the category in the table of categories
-/ / Not successful
-/ / We throw an exception
-if (! elenco.addCategoria (elencoCategorie [i], toPutCat))
-(
-throw new RemoteException (
-"Error creating data of category"
-+ ElencoCategorie [i]);
-)
-/ / You try to read from the folder containing the lyrics of a
-/ / Category
-/ / 100 sample test
-for (Integer j = new Integer (1), j <= 100; j + +)
-(
-/ / Path of the folder categria
-String path = "kb /" + elencoCategorie [i] + "/" + j.ToString ();
-/ / Try to read the file ith
-FileReader testoReader;
-TRY
-(
-testoReader = new FileReader (path);
-)
-catch (FileNotFoundException e)
-(
-/ / If the file does not exist it continues execution from
-/ / File i +1
-/ / System.out.println ( "Error on file" + path);
-continue;
-)
-TestoScanner scanner = new Scanner (testoReader);
-while (testoScanner.hasNextLine ())
-(
-/ / Read the text file line by line
-TestoScanner.nextLine txt = String ();
-txt = replaceAndLower (txt);
-String [] toIterate = txt.split ( "");
-for (int k = 0 k <toIterate.length k + +)
-(/ / For each end of the line
-if (toIterate [k]. length () <= 3) / / remove the effect
-/ / Undefined terms
-/ / Relevant
-continue;
-float [] valTerm, valTotTerm;
-/ / If the term is present in the table of terms
-/ / The class analyzed
-if (elenco.getCategoria (elencoCategorie [i])
-. esisteTermine (toIterate [k]))
-(
-/ / Its frequency is equal to the value stored in
-/ / Table plus one fratto the total number of
-/ / Terms of the text
-valTerm = elenco.getCategoria (elencoCategorie [i])
-. getval (toIterate [k]);
-valTerm [0] + = (float) 1 / toIterate.length;
-valTotTerm = elenco.getTermine (toIterate [k]);
-valTotTerm [0] + = (float) 1 / toIterate.length;
-)
-else
-(
-/ / otherwise it is equal to one fratto the total number of words of text
-valTerm = new float [3];
-valTotTerm = new float [1];
-valTerm [0] = (float) 1 / toIterate.length;
-valTotTerm [0] = (float) 1 / toIterate.length;
-)
-/ / save the values calculated in the table of terms of the category analyzed
-elenco.setTermine (toIterate [k], valTotTerm);
-elenco.getCategoria (elencoCategorie [i]). addTermine (
-toIterate [k], valTerm);
-if (elenco.getMaxDist () <valTotTerm [0])
-elenco.setMaxDist (valTotTerm [0]);
-)
-)
 
-)
-)
-for (String CategoryName: elenco.Categorie ())
-(/ / for each category
-/ / is preflushed the table of terms
-Hashtable elenco.getCategoria <string, float[]> terminiCategoria = (
-CategoryName). getTermini ();
 
-/ / all the terms are analyzed in the table of loaded terms
-for (Enumeration enumTerm <String> terminiCategoria.keys = (); enumTerm
-. hasMoreElements ();)
-(
-/ / is effattuato calculating bearing and distance
-String term = enumTerm.nextElement ();
-float [] val = terminiCategoria.get (term);
-val [1] = distance (term elenco.getCategoria (CategoryName)
-elenco.getTotTermini ());
-val [2] = importance (val [1], elenco.getMaxDist ());
-)
-/ / data is stored in the table of the terms of the class
-elenco.getCategoria (CategoryName). setTermini (terminiCategoria);
-)
-TRY
-(/ / writing the results of operations on files
-elencoOut.writeObject (list);
-)
-catch (Exception e)
-(
-throw new RemoteException ( "Error writing file");
-)
-)
-) 

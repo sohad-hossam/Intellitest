@@ -1,4 +1,4 @@
-﻿package unisa.gps.etour.control.GestioneBeniCulturali;
+﻿package unisa.gps.etour.control.CulturalHeritageManagement;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -6,24 +6,24 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import unisa.gps.etour.bean.BeanBeneCulturale;
+import unisa.gps.etour.bean.BeanGoodCultural;
 import unisa.gps.etour.bean.BeanTag;
-import unisa.gps.etour.bean.BeanVisitaBC;
+import unisa.gps.etour.bean.BeanVisitBC;
 import unisa.gps.etour.repository.DBTag;
-/ / import unisa.gps.etour.repository.DBBeneCulturale;
-/ / import unisa.gps.etour.repository.DBTurista;
-/ / import unisa.gps.etour.repository.DBVisitaBC;
-import unisa.gps.etour.repository.IDBBeneCulturale;
+/ / import unisa.gps.etour.repository.DBGoodCultural;
+/ / import unisa.gps.etour.repository.DBTourist;
+/ / import unisa.gps.etour.repository.DBVisitBC;
+import unisa.gps.etour.repository.IDBGoodCultural;
 import unisa.gps.etour.repository.IDBTag;
-import unisa.gps.etour.repository.IDBTurista;
-import unisa.gps.etour.repository.IDBVisitaBC;
-import unisa.gps.etour.util.CostantiGlobali;
-import unisa.gps.etour.util.MessaggiErrore;
+import unisa.gps.etour.repository.IDBTourist;
+import unisa.gps.etour.repository.IDBVisitBC;
+import unisa.gps.etour.util.GlobalConstants;
+import unisa.gps.etour.util.MessageError;
 
 / / Stub
-import unisa.gps.etour.control.GestioneBeniCulturali.test.stub.DBBeneCulturale / / ***
-import unisa.gps.etour.control.GestioneBeniCulturali.test.stub.DBTurista / / ***
-import unisa.gps.etour.control.GestioneBeniCulturali.test.stub.DBVisitaBC / / ***
+import unisa.gps.etour.control.CulturalHeritageManagement.test.stub.DBGoodCultural / / ***
+import unisa.gps.etour.control.CulturalHeritageManagement.test.stub.DBTourist / / ***
+import unisa.gps.etour.control.CulturalHeritageManagement.test.stub.DBVisitBC / / ***
 
 / **
   * Class management of cultural heritage for operations common to all actors
@@ -36,20 +36,20 @@ import unisa.gps.etour.control.GestioneBeniCulturali.test.stub.DBVisitaBC / / **
 / **
   *
   * /
-GestioneBeniCulturaliComune UnicastRemoteObject public class extends implements
-IGestioneBeniCulturaliComune
+CulturalHeritageManagementCommune UnicastRemoteObject public class extends implements
+ICulturalHeritageManagementCommune
 (
 / / Connect to DB for Cultural Heritage
-protected IDBBeneCulturale dbbc;
+protected IDBGoodCultural dbbc;
 
 / / Connect to DB Tag
 protected IDBTag dbtag;
 
 / / Connect to DB for the Feedback / Visits
-protected IDBVisitaBC dbvisita;
+protected IDBVisitBC dbVisit;
 
 / / Connect to DB for Tourists
-protected IDBTurista dbturista;
+protected IDBTourist dbTourist;
 
 / **
   * Constructor; you instantiate all fields relevant to data management;
@@ -57,48 +57,48 @@ protected IDBTurista dbturista;
 *
 * @ Throws RemoteException Exception flow
 * /
-public GestioneBeniCulturaliComune () throws RemoteException
+public CulturalHeritageManagementCommune () throws RemoteException
 (
-/ / Class Supercostruttore UnicastRemoteObject
+/ / Class Superconstructor UnicastRemoteObject
 super ();
 
 / / We instantiate objects
 TRY
 (
-dbbc = new DBBeneCulturale ();
+dbbc = new DBGoodCultural ();
 dbtag = new DBTag ();
-dbvisita = new DBVisitaBC ();
-dbturista = new DBTurista ();
+dbVisit = new DBVisitBC ();
+dbTourist = new DBTourist ();
 )
 catch (Exception e)
 (
-throw new RemoteException (MessaggiErrore.ERRORE_SCONOSCIUTO);
+throw new RemoteException (MessageError."Error_UNKNOWN);
 )
 )
 
 / *
 * Implements the method for obtaining a cultural object by Id
 *
-* @ See unisa.gps.etour.control.GestioneBeniCulturali.IGestioneBeniCulturaliComune # ottieniBeneCulturale (int)
+* @ See unisa.gps.etour.control.CulturalHeritageManagement.ICulturalHeritageManagementCommune # getGoodCultural (int)
 * /
-public BeanBeneCulturale ottieniBeneCulturale (int pBeneCulturaleID) throws RemoteException
+public BeanGoodCultural getGoodCultural (int pGoodCulturalID) throws RemoteException
 (
-if (! ControlloBeniCulturali.controllaIdBeneCulturale (pBeneCulturaleID))
-throw new RemoteException (MessaggiErrore.ERRORE_DATI);
+if (! ControlloBeniCulturali.checkIdGoodCultural (pGoodCulturalID))
+throw new RemoteException (MessageError.Error_DATA);
 
-BBC BeanBeneCulturale = null;
+BBC BeanGoodCultural = null;
 
 TRY
 (
-bbc = dbbc.ottieniBeneCulturale (pBeneCulturaleID);
+bbc = dbbc.getGoodCultural (pGoodCulturalID);
 )
 catch (SQLException e)
 (
-throw new RemoteException (MessaggiErrore.ERRORE_DBMS);
+throw new RemoteException (MessageError.Error_DBMS);
 )
 catch (Exception e)
 (
-throw new RemoteException (MessaggiErrore.ERRORE_SCONOSCIUTO);
+throw new RemoteException (MessageError."Error_UNKNOWN);
 )
 
 bbc return;
@@ -107,26 +107,26 @@ bbc return;
 / *
 * Implements the method for obtaining all the tags of a cultural object.
 *
-* @ See unisa.gps.etour.control.GestioneBeniCulturali.IGestioneBeniCulturaliComune # ottieniTagBeneCulturale (int)
+* @ See unisa.gps.etour.control.CulturalHeritageManagement.ICulturalHeritageManagementCommune # getTagGoodCultural (int)
 * /
-<BeanTag> ottieniTagBeneCulturale public ArrayList (int pBeneCulturaleID) throws RemoteException
+<BeanTag> getTagGoodCultural public ArrayList (int pGoodCulturalID) throws RemoteException
 (
-if (! ControlloBeniCulturali.controllaIdBeneCulturale (pBeneCulturaleID))
-throw new RemoteException (MessaggiErrore.ERRORE_DATI);
+if (! ControlloBeniCulturali.checkIdGoodCultural (pGoodCulturalID))
+throw new RemoteException (MessageError.Error_DATA);
 
 ArrayList <BeanTag> btag = null;
 
 TRY
 (
-btag = dbtag.ottieniTagBeneCulturale (pBeneCulturaleID);
+btag = dbtag.getTagGoodCultural (pGoodCulturalID);
 )
 catch (SQLException e)
 (
-throw new RemoteException (MessaggiErrore.ERRORE_DBMS);
+throw new RemoteException (MessageError.Error_DBMS);
 )
 catch (Exception e)
 (
-throw new RemoteException (MessaggiErrore.ERRORE_SCONOSCIUTO);
+throw new RemoteException (MessageError."Error_UNKNOWN);
 )
 
 btag return;
@@ -136,45 +136,45 @@ btag return;
 * Implements the method to obtain the list of feedback and their username on a property
 * Cultural specified by Id
 *
-* @ See unisa.gps.etour.control.GestioneBeniCulturali.IGestioneBeniCulturaliComune # ottieniFeedbackBeneCulturale (int)
+* @ See unisa.gps.etour.control.CulturalHeritageManagement.ICulturalHeritageManagementCommune # getFeedbackGoodCultural (int)
 * /
-<BeanVisitaBC, String> ottieniFeedbackBeneCulturale public HashMap (int pBeneCulturaleID) throws RemoteException
+<BeanVisitBC, String> getFeedbackGoodCultural public HashMap (int pGoodCulturalID) throws RemoteException
 (
-if (! ControlloBeniCulturali.controllaIdBeneCulturale (pBeneCulturaleID))
-throw new RemoteException (MessaggiErrore.ERRORE_DATI);
+if (! ControlloBeniCulturali.checkIdGoodCultural (pGoodCulturalID))
+throw new RemoteException (MessageError.Error_DATA);
 
-HashMap <BeanVisitaBC, String> mappaRitorno;
+HashMap <BeanVisitBC, String> mapReturn;
 
 TRY
 (
-/ / Instantiate the map of the same size as the list of BeanVisitaBC
-mappaRitorno = new HashMap <BeanVisitaBC, String> (dbvisita.ottieniListaVisitaBC (pBeneCulturaleID). size ());
+/ / Instantiate the map of the same size as the list of BeanVisitBC
+mapReturn = new HashMap <BeanVisitBC, String> (dbVisit.getListVisitBC (pGoodCulturalID). size ());
 
 / / For each visit by adding their username
 / / Here we begin to iterate to add to any visit their username
-for (BeanVisitaBC b: dbvisita.ottieniListaVisitaBC (pBeneCulturaleID))
-mappaRitorno.put (b, dbturista.ottieniTurista (b.getIdTurista ()). GetUserName ());
+for (BeanVisitBC b: dbVisit.getListVisitBC (pGoodCulturalID))
+mapReturn.put (b, dbTourist.getTourist (b.getIdTourist ()). GetUserName ());
 
 )
 catch (SQLException e)
 (
-throw new RemoteException (MessaggiErrore.ERRORE_DBMS);
+throw new RemoteException (MessageError.Error_DBMS);
 )
 catch (Exception e)
 (
-throw new RemoteException (MessaggiErrore.ERRORE_SCONOSCIUTO);
+throw new RemoteException (MessageError."Error_UNKNOWN);
 )
 
-mappaRitorno return;
+mapReturn return;
 )
 
 / *
 * Implements the method to obtain statistics about a cultural past
 * Through Id
 *
-* @ See unisa.gps.etour.control.GestioneBeniCulturali.IGestioneBeniCulturaliComune # ottieniStatisticheBeneCulturale (int)
+* @ See unisa.gps.etour.control.CulturalHeritageManagement.ICulturalHeritageManagementCommune # getStatisticsGoodCultural (int)
 * /
-<Integer> ottieniStatisticheBeneCulturale public ArrayList (int pBeneCulturaleID) throws RemoteException
+<Integer> getStatisticsGoodCultural public ArrayList (int pGoodCulturalID) throws RemoteException
 (
 / *
 * This method returns an ArrayList containing 5 elements (0 .. 4).
@@ -184,85 +184,85 @@ mappaRitorno return;
 * Fine.
 * /
 
-if (! ControlloBeniCulturali.controllaIdBeneCulturale (pBeneCulturaleID))
-throw new RemoteException (MessaggiErrore.ERRORE_DATI);
+if (! CulturalAssetsControl.checkIdGoodCultural (pGoodCulturalID))
+throw new RemoteException (MessageError.Error_DATA);
 
-ArrayList <Integer> listaRisultati <Integer> = new ArrayList (5);
+ArrayList <Integer> resultList <Integer> = new ArrayList (5);
 
 / / Set all the indices to 0
 for (int i = 0; i <5; i + +)
-listaRisultati.add (i, Integer.valueOf (0));
+resultList.add (i, Integer.valueOf (0));
 
 / / Calculate the date for the last thirty days
-Date ultimiTrentaGiorni = new Date (new Date (). GetTime () - CostantiGlobali.TRENTA_GIORNI);
+Date lastThirtyDays = new Date (new Date (). GetTime () - GlobalConstants.THIRTY_DAYS);
 
 TRY
 (
 / / Get all visits of a certain cultural
 / / Loop looking for the requests / feedback obtained within the last thirty days
-for (BeanVisitaBC b: dbvisita.ottieniListaVisitaBC (pBeneCulturaleID))
-if (b.getDataVisita (). after (ultimiTrentaGiorni))
-listaRisultati.set (b.getVoto () - 1, Integer.valueOf (listaRisultati.get (b.getVoto () - 1). intValue () + 1));
+for (BeanVisitBC b: dbVisit.getListVisitBC (pGoodCulturalID))
+if (b.getDataVisit (). after (lastThirtyDays))
+resultList.set (b.getVote () - 1, Integer.valueOf (resultList.get (b.getVote () - 1). intValue () + 1));
 )
 catch (SQLException e)
 (
-throw new RemoteException (MessaggiErrore.ERRORE_DBMS);
+throw new RemoteException (MessageError.Error_DBMS);
 )
 catch (Exception e)
 (
-throw new RemoteException (MessaggiErrore.ERRORE_SCONOSCIUTO);
+throw new RemoteException (MessageError."Error_UNKNOWN);
 )
 
-listaRisultati return;
+resultList return;
 )
 
 / *
 * Implement the method for changing a feedback on a cultural past
 * Through Id
 *
-* @ See unisa.gps.etour.control.GestioneBeniCulturali.IGestioneBeniCulturaliComune # modificaFeedbackBeneCulturale (int, unisa.gps.etour.bean.BeanVisitaBC)
+* @ See unisa.gps.etour.control.CulturalHeritageManagement.ICulturalHeritageManagementCommune # modificationFeedbackGoodCultural (int, unisa.gps.etour.bean.BeanVisitBC)
 * /
-public boolean modificaFeedbackBeneCulturale (int pBeneCulturaleID, BeanVisitaBC pBeanVisitaBC) throws RemoteException
+public boolean modificationFeedbackGoodCultural (int pGoodCulturalID, BeanVisitBC pBeanVisitBC) throws RemoteException
 (
-if (! ControlloBeniCulturali.controllaIdBeneCulturale (pBeneCulturaleID) | |
-! ControlloVisiteBeniCulturali.controllaDatiVisitaBeneCulturale (pBeanVisitaBC))
-throw new RemoteException (MessaggiErrore.ERRORE_DATI);
+if (! CulturalHeritageControl.checkIdGoodCultural (pGoodCulturalID) | |
+! CulturalSitesVisitControl.controlDataVisitGoodCultural (pBeanVisitBC))
+throw new RemoteException (MessageError.Error_DATA);
 
 / *
 * Please check that the vote has not changed.
 * If the vote is changed to an exception is raised
 * /
-votoOk boolean = true;
+voteOk boolean = true;
 
 TRY
 (
-votoOk = dbvisita.ottieniVisitaBC (pBeneCulturaleID, pBeanVisitaBC.getIdTurista ()). getVoto () == pBeanVisitaBC.getVoto ();
+voteOk = dbVisit.getVisitBC (pGoodCulturalID, pBeanVisitBC.getIdTourist ()). getVote () == pBeanVisitBC.getVoto ();
 )
 catch (SQLException e)
 (
-throw new RemoteException (MessaggiErrore.ERRORE_DBMS);
+throw new RemoteException (MessageError.Error_DBMS);
 )
 catch (Exception e)
 (
-throw new RemoteException (MessaggiErrore.ERRORE_SCONOSCIUTO);
+throw new RemoteException (MessageError."Error_UNKNOWN);
 )
 
 / *
 * If the vote is not changed we proceed to send the message to the method of
 * Change the layer's database.
 * /
-if (votoOk)
+if (voteOk)
 TRY
 (
-return (dbvisita.modificaVisitaBC (pBeanVisitaBC));
+return (dbVisit.modificationVisitBC (pBeanVisitBC));
 )
 catch (SQLException e)
 (
-throw new RemoteException (MessaggiErrore.ERRORE_DBMS);
+throw new RemoteException (MessageError.Error_DBMS);
 )
 catch (Exception e)
 (
-throw new RemoteException (MessaggiErrore.ERRORE_SCONOSCIUTO);
+throw new RemoteException (MessageError."Error_UNKNOWN);
 )
 
 return false;

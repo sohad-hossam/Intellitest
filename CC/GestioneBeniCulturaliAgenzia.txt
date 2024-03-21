@@ -1,236 +1,177 @@
-package unisa.gps.etour.control.GestioneBeniCulturali;
+package unisa.gps.etour.control.ManagementCulturalHeritage;
 
 import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import unisa.gps.etour.bean.BeanBeneCulturale;
-import unisa.gps.etour.bean.BeanTag;
-import unisa.gps.etour.bean.BeanVisitaBC;
-import unisa.gps.etour.util.MessaggiErrore;
+import unisa.gps.etour.bean.CulturalHeritageBean;
+import unisa.gps.etour.bean.TagBean;
+import unisa.gps.etour.bean.CulturalHeritageVisitBean;
+import unisa.gps.etour.util.ErrorMessages;
 
-/ **
-  * Class management of cultural heritage unique to Agency
-  *
-  * @ Author Michelangelo De Simone
-  * @ Version 0.1
-  *
-  *    2007 eTour Project - Copyright by DMI SE @ SA Lab - University of Salerno
-  * /
-public class GestioneBeniCulturaliAgenzia extends GestioneBeniCulturaliComune
-implements IGestioneBeniCulturaliAgenzia
-(
-/ *
-* Constructor of class, richicama and initializes the class of common management
-* /
-public GestioneBeniCulturaliAgenzia () throws RemoteException
-(
-super ();
-)
+/**
+ * Class managing cultural heritage specific to the agency.
+ *
+ * @Author Michelangelo De Simone
+ * @Version 0.1
+ *
+ * 2007 eTour Project - Copyright by DMI SE @ SA Lab - University of Salerno
+ */
+public class AgencyCulturalHeritageManagement extends CommonCulturalHeritageManagement implements IAgencyCulturalHeritageManagement {
 
-/ *
-* Implements the method for the elimination of a cultural system.
-*
-* @ See unisa.gps.etour.control.GestioneBeniCulturali.IGestioneBeniCulturaliAgenzia # cancellaBeneCulturale (int)
-* /
-public boolean cancellaBeneCulturale (int pBeneCulturaleID)
-throws RemoteException
-(
-if (! ControlloBeniCulturali.controllaIdBeneCulturale (pBeneCulturaleID))
-throw new RemoteException (MessaggiErrore.ERRORE_DATI);
+    /**
+     * Constructor of the class, invokes and initializes the common management class.
+     */
+    public AgencyCulturalHeritageManagement() throws RemoteException {
+        super();
+    }
 
-TRY
-(
-return (dbbc.cancellaBeneCulturale (pBeneCulturaleID));
-)
-catch (SQLException e)
-(
-throw new RemoteException (MessaggiErrore.ERRORE_DBMS);
-)
-catch (Exception e)
-(
-throw new RemoteException (MessaggiErrore.ERRORE_SCONOSCIUTO);
-)
-)
+    /**
+     * Implements the method for deleting a cultural asset.
+     *
+     * @see unisa.gps.etour.control.ManagementCulturalHeritage.IAgencyCulturalHeritageManagement#deleteCulturalHeritage(int)
+     */
+    public boolean deleteCulturalHeritage(int culturalHeritageID) throws RemoteException {
+        if (!CulturalHeritageControl.checkCulturalHeritageID(culturalHeritageID))
+            throw new RemoteException(ErrorMessages.DATA_ERROR);
 
-/ *
-* Implement the method for the insertion of a new cultural object.
-*
-* @ See unisa.gps.etour.control.GestioneBeniCulturali.IGestioneBeniCulturaliAgenzia # inserisciBeneCulturale (unisa.gps.etour.bean.BeanBeneCulturale)
-* /
-public boolean inserisciBeneCulturale (BeanBeneCulturale pBeneCulturale)
-throws RemoteException
-(
-if (! ControlloBeniCulturali.controllaDatiBeneCulturale (pBeneCulturale))
-throw new RemoteException (MessaggiErrore.ERRORE_FORMATO_BEAN);
+        try {
+            return dbbc.deleteCulturalHeritage(culturalHeritageID);
+        } catch (SQLException e) {
+            throw new RemoteException(ErrorMessages.DBMS_ERROR);
+        } catch (Exception e) {
+            throw new RemoteException(ErrorMessages.UNKNOWN_ERROR);
+        }
+    }
 
-TRY
-(
-return (dbbc.inserisciBeneCulturale (pBeneCulturale));
-)
-catch (SQLException e)
-(
-throw new RemoteException (MessaggiErrore.ERRORE_DBMS);
-)
-catch (Exception e)
-(
-throw new RemoteException (MessaggiErrore.ERRORE_SCONOSCIUTO);
-)
-)
+    /**
+     * Implements the method for inserting a new cultural asset.
+     *
+     * @see unisa.gps.etour.control.ManagementCulturalHeritage.IAgencyCulturalHeritageManagement#insertCulturalHeritage(unisa.gps.etour.bean.CulturalHeritageBean)
+     */
+    public boolean insertCulturalHeritage(CulturalHeritageBean culturalHeritage) throws RemoteException {
+        if (!CulturalHeritageControl.checkCulturalHeritageData(culturalHeritage))
+            throw new RemoteException(ErrorMessages.BEAN_FORMAT_ERROR);
 
-/ *
-* Implements the method for obtaining all the cultural assets currently in the system.
-*
-* @ See unisa.gps.etour.control.GestioneBeniCulturali.IGestioneBeniCulturaliAgenzia # ottieniBeniCulturali ()
-* /
-<BeanBeneCulturale> ottieniBeniCulturali public ArrayList () throws RemoteException
-(
-TRY
-(
-return (dbbc.ottieniListaBC ());
-)
-catch (SQLException e)
-(
-throw new RemoteException (MessaggiErrore.ERRORE_DBMS);
-)
-catch (Exception e)
-(
-throw new RemoteException (MessaggiErrore.ERRORE_SCONOSCIUTO);
-)
-)
+        try {
+            return dbbc.insertCulturalHeritage(culturalHeritage);
+        } catch (SQLException e) {
+            throw new RemoteException(ErrorMessages.DBMS_ERROR);
+        } catch (Exception e) {
+            throw new RemoteException(ErrorMessages.UNKNOWN_ERROR);
+        }
+    }
 
-/ *
-* Implement the method for changing a cultural asset in the system.
-*
-* @ See unisa.gps.etour.control.GestioneBeniCulturali.IGestioneBeniCulturaliAgenzia # modificaBeneCulturale (unisa.gps.etour.bean.BeanBeneCulturale)
-* /
-public boolean modificaBeneCulturale (BeanBeneCulturale pBeneCulturale)
-throws RemoteException
-(
-if (! ControlloBeniCulturali.controllaDatiBeneCulturale (pBeneCulturale))
-throw new RemoteException (MessaggiErrore.ERRORE_FORMATO_BEAN);
+    /**
+     * Implements the method for obtaining all the cultural assets currently in the system.
+     *
+     * @see unisa.gps.etour.control.ManagementCulturalHeritage.IAgencyCulturalHeritageManagement#getCulturalHeritages()
+     */
+    public ArrayList<CulturalHeritageBean> getCulturalHeritages() throws RemoteException {
+        try {
+            return dbbc.getCulturalHeritageList();
+        } catch (SQLException e) {
+            throw new RemoteException(ErrorMessages.DBMS_ERROR);
+        } catch (Exception e) {
+            throw new RemoteException(ErrorMessages.UNKNOWN_ERROR);
+        }
+    }
 
-TRY
-(
-return (dbbc.modificaBeneCulturale (pBeneCulturale));
-)
-catch (SQLException e)
-(
-throw new RemoteException (MessaggiErrore.ERRORE_DBMS);
-)
-catch (Exception e)
-(
-throw new RemoteException (MessaggiErrore.ERRORE_SCONOSCIUTO);
-)
-)
+    /**
+     * Implements the method for modifying a cultural asset in the system.
+     *
+     * @see unisa.gps.etour.control.ManagementCulturalHeritage.IAgencyCulturalHeritageManagement#modifyCulturalHeritage(unisa.gps.etour.bean.CulturalHeritageBean)
+     */
+    public boolean modifyCulturalHeritage(CulturalHeritageBean culturalHeritage) throws RemoteException {
+        if (!CulturalHeritageControl.checkCulturalHeritageData(culturalHeritage))
+            throw new RemoteException(ErrorMessages.BEAN_FORMAT_ERROR);
 
-/ *
-* Implements the method for adding a tag to a cultural object.
-*
-* @ See unisa.gps.etour.control.GestioneBeniCulturali.IGestioneBeniCulturaliAgenzia # aggiungiTagBeneCulturale (int, int)
-* /
-public boolean aggiungiTagBeneCulturale (pBeneCulturaleID int, int pTagID) throws RemoteException
-(
-if (! ControlloBeniCulturali.controllaIdBeneCulturale (pBeneCulturaleID) | |! (pTagID> 0))
-throw new RemoteException (MessaggiErrore.ERRORE_DATI);
+        try {
+            return dbbc.modifyCulturalHeritage(culturalHeritage);
+        } catch (SQLException e) {
+            throw new RemoteException(ErrorMessages.DBMS_ERROR);
+        } catch (Exception e) {
+            throw new RemoteException(ErrorMessages.UNKNOWN_ERROR);
+        }
+    }
+}
 
-/ *
-* This segment of code that actually controls the cultural speficiato
-* Have the tag defined.
-* /
 
-/ *
-* Get all tags to the cultural past for parameter
-* /
-ArrayList <BeanTag> tempTag = null;
+/**
+ * Implements the method for adding a tag to a cultural object.
+ *
+ * @See unisa.gps.etour.control.ManagementCulturalHeritage.IAgencyCulturalHeritageManagement#addCulturalHeritageTag(int, int)
+ */
+public boolean addCulturalHeritageTag(int culturalHeritageID, int tagID) throws RemoteException {
+    if (!CulturalHeritageControl.checkCulturalHeritageID(culturalHeritageID) || !(tagID > 0))
+        throw new RemoteException(ErrorMessages.DATA_ERROR);
 
-contieneTag boolean = false;
+    // This section of code actually verifies if the specified cultural heritage
+    // already has the defined tag.
+    
+    // Get all tags for the specified cultural heritage
+    ArrayList<TagBean> tempTags = null;
+    boolean containsTag = false;
+    
+    try {
+        tempTags = dbtag.getCulturalHeritageTags(culturalHeritageID);
+    } catch (SQLException e) {
+        throw new RemoteException(ErrorMessages.DBMS_ERROR);
+    }
 
-TRY
-(
-tempTag = dbtag.ottieniTagBeneCulturale (pBeneCulturaleID);
-)
-catch (SQLException e)
-(
-throw new RemoteException (MessaggiErrore.ERRORE_DBMS);
-)
+    // Here we iterate to find the specified tag, if found, a flag is set
+    // to avoid adding a tag twice to the same cultural object.
+    for (TagBean tag : tempTags) {
+        if (tag.getId() == tagID)
+            containsTag = true;
+    }
 
-/ *
-* Here we iterate to find the tag that speficiato, if it is you set a sentry
-* In order not to add a tag twice for the same cultural object.
-* /
-for (t BeanTag: tempTag)
-if (t.getId () == pTagID)
-contieneTag = true;
+    if (!containsTag) {
+        try {
+            return dbtag.addCulturalHeritageTag(culturalHeritageID, tagID);
+        } catch (SQLException e) {
+            throw new RemoteException(ErrorMessages.DBMS_ERROR);
+        } catch (Exception e) {
+            throw new RemoteException(ErrorMessages.UNKNOWN_ERROR);
+        }
+    }
 
-if (! contieneTag)
-TRY
-(
-return (dbtag.aggiungeTagBeneCulturale (pBeneCulturaleID, pTagID));
-)
-catch (SQLException e)
-(
-throw new RemoteException (MessaggiErrore.ERRORE_DBMS);
-)
-catch (Exception e)
-(
-throw new RemoteException (MessaggiErrore.ERRORE_SCONOSCIUTO);
-)
+    return false;
+}
 
-return false;
-)
+/**
+ * Implement the method for removing a tag from a cultural object.
+ *
+ * @See unisa.gps.etour.control.ManagementCulturalHeritage.IAgencyCulturalHeritageManagement#removeCulturalHeritageTag(int, int)
+ */
+public boolean removeCulturalHeritageTag(int culturalHeritageID, int tagID) throws RemoteException {
+    if (!CulturalHeritageControl.checkCulturalHeritageID(culturalHeritageID) || !(tagID > 0))
+        throw new RemoteException(ErrorMessages.DATA_ERROR);
 
-/ *
-* Implement the method for removing a tag from a cultural object.
-*
-* @ See unisa.gps.etour.control.GestioneBeniCulturali.IGestioneBeniCulturaliAgenzia # rimuoviTagBeneCulturale (int, int)
-* /
-public boolean rimuoviTagBeneCulturale (pBeneCulturaleID int, int pTagID) throws RemoteException
-(
-if (! ControlloBeniCulturali.controllaIdBeneCulturale (pBeneCulturaleID) | |! (pTagID> 0))
-throw new RemoteException (MessaggiErrore.ERRORE_DATI);
+    // This section of code actually verifies if the specified cultural heritage
+    // has the specified tag.
 
-/ *
-* This segment of code that actually controls the cultural speficiato
-* Has the specified tag.
-* /
+    // Get all tags for the specified cultural heritage
+    ArrayList<TagBean> tempTags = null;
 
-/ *
-* Get all tags to the cultural past for parameter
-* /
-ArrayList <BeanTag> tempTag = null;
+    try {
+        tempTags = dbtag.getCulturalHeritageTags(culturalHeritageID);
+    } catch (SQLException e) {
+        throw new RemoteException(ErrorMessages.DBMS_ERROR);
+    }
 
-TRY
-(
-tempTag = dbtag.ottieniTagBeneCulturale (pBeneCulturaleID);
-)
-catch (SQLException e)
-(
-throw new RemoteException (MessaggiErrore.ERRORE_DBMS);
-)
+    // Here we iterate to find the specified tag, if found, the transaction is made
+    // for removal of the tag and control is returned.
+    for (TagBean tag : tempTags) {
+        if (tag.getId() == tagID) {
+            try {
+                return dbtag.removeCulturalHeritageTag(culturalHeritageID, tagID);
+            } catch (SQLException e) {
+                throw new RemoteException(ErrorMessages.DBMS_ERROR);
+            } catch (Exception e) {
+                throw new RemoteException(ErrorMessages.UNKNOWN_ERROR);
+            }
+        }
+    }
 
-/ *
-* Here we iterate to find the tag that speficiato, if you found the transaction is made
-* Removal of the tag and returns control
-* /
-for (t BeanTag: tempTag)
-(
-if (t.getId () == pTagID)
-(
-TRY
-(
-return (dbtag.cancellaTagBeneCulturale (pBeneCulturaleID, pTagID));
-)
-catch (SQLException e)
-(
-throw new RemoteException (MessaggiErrore.ERRORE_DBMS);
-)
-catch (Exception e)
-(
-throw new RemoteException (MessaggiErrore.ERRORE_SCONOSCIUTO);
-)
-)
-)
-
-return false;
-)
-) 
+    return false;
+}
