@@ -99,7 +99,7 @@ public class CulturalHeritageBean implements Serializable {
     public void setClosingDay(String pClosingDay) {
         closingDay = pClosingDay;
     }
-}
+
 
 /**
  * Returns the value of postalCode
@@ -370,4 +370,5 @@ public int getId() {
  */
 public void setId(int pId) {
     id = pId;
+}
 }
