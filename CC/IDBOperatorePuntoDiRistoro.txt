@@ -2,53 +2,49 @@
 
 import java.sql.SQLException;
 
-import unisa.gps.etour.bean.BeanOperatorePuntoDiRistoro;
+import unisa.gps.etour.bean.RestaurantOperatorBean;
 
-/ **
-  * Interface for the operator to the point of comfort in the database
-  *
-  * @ Author Joseph Martone
-  * @ Version 0.1 2007 eTour Project - Copyright by SE @ SA Lab DMI University
-  * Of Salerno
-  * /
-public interface IDBOperatorePuntoDiRistoro
-(
-/ **
-* Adds an operator refreshment
-*
-* @ Param popera Additional operating
-* @ Throws SQLException
-* /
-public boolean inserisciOperatorePuntoDiRistoro (
-BeanOperatorePuntoDiRistoro popera) throws SQLException;
+/**
+ * Interface for the operator to the point of comfort in the database
+ *
+ * @ Author Joseph Martone
+ * @ Version 0.1 2007 eTour Project - Copyright by SE @ SA Lab DMI University
+ * Of Salerno
+ */
+public interface RestaurantOperatorDBInterface {
 
-/ **
-* Modify an operator in the database
-*
-* @ Param popera New data Operator
-* @ Throws SQLException
-* @ Return True if there 'was a modified false otherwise
-* /
-public boolean modificaOperatorePuntoDiRistoro (
-BeanOperatorePuntoDiRistoro popera) throws SQLException;
+    /**
+     * Adds a restaurant operator
+     *
+     * @ Param operator Restaurant operator to add
+     * @ Throws SQLException
+     */
+    public boolean addRestaurantOperator(RestaurantOperatorBean operator) throws SQLException;
 
-/ **
-* Delete an operator
-*
-* @ Param pIdOperatore Operator ID to delete
-* @ Throws SQLException
-* @ Return True if and 'was deleted false otherwise
-* /
-public boolean cancellaOperatorePuntoDiRistoro (int pIdOperatore)
-throws SQLException;
+    /**
+     * Modify a restaurant operator in the database
+     *
+     * @ Param operator New data of the operator
+     * @ Throws SQLException
+     * @ Return True if there 'was a modified false otherwise
+     */
+    public boolean modifyRestaurantOperator(RestaurantOperatorBean operator) throws SQLException;
 
-/ **
-Returns data operator
-*
-* @ Param pIdOperatore Operation ID
-* @ Throws SQLException
-* @ Return Operator refreshment
-* /
-public BeanOperatorePuntoDiRistoro ottieniOperatorePuntoDiRistoro (
-pIdOperatore int) throws SQLException;
-) 
+    /**
+     * Delete a restaurant operator
+     *
+     * @ Param operatorId Operator ID to delete
+     * @ Throws SQLException
+     * @ Return True if and 'was deleted false otherwise
+     */
+    public boolean deleteRestaurantOperator(int operatorId) throws SQLException;
+
+    /**
+     * Returns data of a restaurant operator
+     *
+     * @ Param operatorId Operator ID
+     * @ Throws SQLException
+     * @ Return Restaurant operator
+     */
+    public RestaurantOperatorBean getRestaurantOperator(int operatorId) throws SQLException;
+}
