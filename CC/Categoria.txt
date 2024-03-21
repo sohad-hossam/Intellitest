@@ -3,119 +3,96 @@
 import java.io.Serializable;
 import java.util.Hashtable;
 
-public class Category implements Serializable
-(
+public class Category implements Serializable {
 
-/ **
-* Class that describes the characteristics of a Category
-* Contains a Hashtable that represents the dictionary on
-* The category that contains and for each term associated
-* In the category values of frequency, distance and relevance.
-* Provides methods to access, modify and auxiliary methods.
-* /
-private static final long serialVersionUID =-8652232946927756089L;
-private String name; / / name of the category
-private Hashtable <string, float[]> terms, / / list of terms and their frequencies and distance rilavanza
+    /**
+     * Class that describes the characteristics of a Category
+     * Contains a Hashtable that represents the dictionary on
+     * The category that contains and for each term associated
+     * In the category values of frequency, distance and relevance.
+     * Provides methods to access, modify and auxiliary methods.
+     */
+    private static final long serialVersionUID = -8652232946927756089L;
+    private String name; // name of the category
+    private Hashtable<String, float[]> terms; // list of terms and their frequencies and distance relevance
 
-/ *
-* Manufacturer:
-* Get the category name as a parameter to create
-* /
-public Category (String Pnom)
-(
-name = Pnom;
-terms <String,float[]> = new Hashtable ();
-)
+    /**
+     * Constructor:
+     * Get the category name as a parameter to create
+     */
+    public Category(String name) {
+        this.name = name;
+        terms = new Hashtable<>();
+    }
 
-/ *
-* Returns the output Hashtable containing the terms
-* With the respective values of frequency, relevance and distance
-* /
-<string, float[]> getTermini public Hashtable ()
-(
-return terms;
-)
+    /**
+     * Returns the Hashtable containing the terms
+     * With the respective values of frequency, relevance and distance
+     */
+    public Hashtable<String, float[]> getTerms() {
+        return terms;
+    }
 
-/ *
-* Returns the name of the output category
-* /
-public String getName ()
-(
-return name;
-)
+    /**
+     * Returns the name of the category
+     */
+    public String getName() {
+        return name;
+    }
 
-/ *
-* Get the string as a parameter representing the term
-* Of which you want to pick the values of frequency, range and bearing
-* /
-public float [] getval (pTermine String) throws NullPointerException
-(
-if (esisteTermine (pTermine))
-return termini.get (pTermine);
+    /**
+     * Get the string representing the term as a parameter
+     * Of which you want to get the values of frequency, range, and bearing
+     */
+    public float[] getValue(String term) throws NullPointerException {
+        if (termExists(term))
+            return terms.get(term);
+        return null;
+    }
 
-return null;
-)
+    /**
+     * Adds a term to the category's dictionary
+     */
+    public void addTerm(String term) {
+        terms.put(term, new float[3]);
+    }
 
-/ *
-* Agiunge an end to dizinario category
-* /
-public void addTermine (String pTermine)
-(
-termini.put (pTermine, new float [3]);
-)
+    /**
+     * Adds a term to the category's dictionary
+     * Also sets the values of frequency, distance, and relevance
+     */
+    public boolean addTerm(String term, float[] val) {
+        if (val == null || term.equals(""))
+            return false;
+        terms.put(term, val);
+        return true;
+    }
 
-/ *
-* Agiunge an end to dizinario category
-* Seven also the values of frequency, distance and rilavanza
-* /
-public boolean addTermine (String pTermine, float [] pVal)
-(
-if ((pVal == null) | | (pTermine.equals ("")))
-return false;
-termini.put (pTermine, pVal);
+    /**
+     * Sets the values for the term
+     */
+    public boolean setTermValue(String term, float[] val) throws NullPointerException {
+        if (termExists(term)) {
+            terms.put(term, val);
+            return true;
+        }
+        return false;
+    }
 
-return true;
-)
+    public void setTerms(Hashtable<String, float[]> terms) {
+        this.terms = terms;
+    }
 
-/ *
-* Set the values for the period pTermine
-* /
-public boolean setValTermine (String pTermine, float [] pVal)
-throws NullPointerException
-(
-if (esisteTermine (pTermine))
-(
-termini.put (pTermine, pVal);
-return true;
-)
-
-return false;
-)
-
-
-public void setTermini (Hashtable <String,float[]> pTermini)
-(
-Term = pTermini;
-)
-
-/ *
-* Returns True if the term is present in
-* Dictionary of Category False otherwise
-* /
-public boolean esisteTermine (String pTermine)
-(
-TRY
-(
-float [] ret = termini.get (pTermine);
-if (ret! = null)
-return true;
-)
-catch (NullPointerException e)
-(
-return false;
-)
-
-return false;
-)
-
-) 
+    /**
+     * Returns True if the term is present in
+     * Dictionary of Category, False otherwise
+     */
+    public boolean termExists(String term) {
+        try {
+            float[] ret = terms.get(term);
+            return ret != null;
+        } catch (NullPointerException e) {
+            return false;
+        }
+    }
+}

@@ -32,6 +32,30 @@ class FeatureExtraction:
             # print(LSA_similraity_matrix)
             return LSA_similraity_matrix
 
+    def LDA(self,UC_documents:list,code_documents:list,TotalTokens:set):
+
+
+        id2word = corpora.Dictionary([list(TotalTokens)])
+        corpus_uc = [id2word.doc2bow(doc.split()) for doc in UC_documents]
+        corpus_code = [id2word.doc2bow(doc.split()) for doc in code_documents]
+
+        num_topics = 58
+        lda_model_uc = LdaMulticore(corpus=corpus_uc, id2word=id2word, num_topics=num_topics)
+        lda_model_code = LdaMulticore(corpus=corpus_code, id2word=id2word, num_topics=num_topics)
+
+        DocumentTopicDisUC = lda_model_uc[corpus_uc]
+        DocumentTopicDisCode = lda_model_code[corpus_code]
+
+        DocumentTopicDisUC_dense = gensim.matutils.corpus2dense(DocumentTopicDisUC, num_terms=num_topics).T
+        DocumentTopicDisCode_dense = gensim.matutils.corpus2dense(DocumentTopicDisCode, num_terms=num_topics).T
+
+        cosine_similarities = cosine_similarity(DocumentTopicDisUC_dense, DocumentTopicDisCode_dense)
+
+        return DocumentTopicDisUC_dense, DocumentTopicDisCode_dense, cosine_similarities
+
+
+
+
     def CountVectorizerModel(
         self, UC_documents: list, code_documents: list, train_or_test: str
     ):

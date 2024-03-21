@@ -1,116 +1,89 @@
-﻿package unisa.gps.etour.control.GestioneUtentiRegistrati;
+﻿package unisa.gps.etour.control.UserManagement;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
 
-import unisa.gps.etour.bean.BeanTurista;
-import unisa.gps.etour.repository.DBTurista;
-import unisa.gps.etour.repository.IDBTurista;
-import unisa.gps.etour.util.MessaggiErrore;
+import unisa.gps.etour.bean.TouristBean;
+import unisa.gps.etour.repository.TouristDB;
+import unisa.gps.etour.repository.ITouristDB;
+import unisa.gps.etour.util.ErrorMessages;
 
-/ **
-  * Class that implements the common tasks for Operators and Tourist Agency
-  * Ie modificaTurista and ottieniTurista
-  *
-  * @ Author Joseph Morelli
-  * @ Version 0.1 2007 eTour Project - Copyright by SE @ SA Lab DMI University
-  * Of Salerno
-  * /
-GestioneTuristaComune UnicastRemoteObject public class extends implements
-IGestioneTuristaComune
-(
+/**
+ * Class that implements the common tasks for Operators and Tourist Agency
+ * such as modifyTourist and getTourist
+ *
+ * @Author Joseph Morelli
+ * @Version 0.1 2007 eTour Project - Copyright by SE @ SA Lab DMI University
+ * Of Salerno
+ */
+public class CommonTouristManagement extends UnicastRemoteObject implements ICommonTouristManagement {
 
-protected IDBTurista tourist;
+    protected ITouristDB tourist;
 
-/ / Constructor that richama turn the class constructor
-/ / UnicastRemoteObject to connect via RMI
-/ / Instantiate and connect to the database
-public GestioneTuristaComune () throws RemoteException
-(
-super ();
-/ / Connect to the Database
-TRY
-(
-Tourists DBTurista = new ();
-)
-/ / Exception in the database connection
-catch (Exception e)
-(
-throw new RemoteException (MessaggiErrore.ERRORE_SCONOSCIUTO);
-)
-)
+    // Constructor that invokes the superclass constructor
+    // UnicastRemoteObject to connect via RMI
+    // Instantiate and connect to the database
+    public CommonTouristManagement() throws RemoteException {
+        super();
+        // Connect to the Database
+        try {
+            tourist = new TouristDB();
+        } catch (Exception e) {
+            throw new RemoteException(ErrorMessages.UNKNOWN_ERROR);
+        }
+    }
 
-/ / Method that allows you to change the data of a tourist through its
-/ / Data
-public boolean modificaTurista (BeanTurista pProfiloTurista)
-throws RemoteException
-(
-/ / Check the validity of past data
-if ((pProfiloTurista == null)
-| | (! (PProfiloTurista instanceof BeanTurista)))
-throw new RemoteException (MessaggiErrore.ERRORE_FORMATO_BEAN);
-/ / Execution of the amendment
-TRY
-(
-/ / If the changes were made returns true
-if (turista.modificaTurista (pProfiloTurista))
-return true;
-)
-/ / Exception in operations on database
-catch (SQLException e)
-(
-/ / If the data layer sends an exception is throws the exception remote
-System.out.println ( "Error in method modificaTurista"
-+ E.toString ());
-throw new RemoteException (MessaggiErrore.ERRORE_DBMS);
-)
-/ / Unexpected exception caused by other factors
-catch (Exception ee)
-(
-System.out.println ( "Error in method modificaTurista"
-Ee.toString + ());
-throw new RemoteException (MessaggiErrore.ERRORE_SCONOSCIUTO);
-)
-/ / If there were no exceptions but the changes are not
-/ / Returns false were made
-return false;
-)
+    // Method that allows you to change the data of a tourist through its data
+    public boolean modifyTourist(TouristBean profile) throws RemoteException {
+        // Check the validity of passed data
+        if (profile == null || !(profile instanceof TouristBean)) {
+            throw new RemoteException(ErrorMessages.BEAN_FORMAT_ERROR);
+        }
+        // Execution of the amendment
+        try {
+            // If the changes were made, return true
+            if (tourist.modifyTourist(profile)) {
+                return true;
+            }
+        } catch (SQLException e) {
+            // If the data layer sends an exception, throw the remote exception
+            System.out.println("Error in method modifyTourist: " + e.toString());
+            throw new RemoteException(ErrorMessages.DB_ERROR);
+        } catch (Exception ee) {
+            System.out.println("Error in method modifyTourist: " + ee.toString());
+            // Unexpected exception caused by other factors
+            throw new RemoteException(ErrorMessages.UNKNOWN_ERROR);
+        }
+        // If there were no exceptions but the changes were not made, return false
+        return false;
+    }
 
-/ / Method to obtain the bean with data from the Tourist
-/ / Identified by
-/ / The parameter passed
-public BeanTurista ottieniTurista (int pIdTurista) throws RemoteException
-(
-/ / Check the validity identifier
-if (pIdTurista <0)
-throw new RemoteException (MessaggiErrore.ERRORE_DATI);
-BeanTurista toReturn = null, / / variable return
-/ / Retrieve data
-TRY
-(
-/ / Are requested to return the bean layer on the tourist
-/ / With id equal to pIdTurista
-toReturn = turista.ottieniTurista (pIdTurista);
-if (null == toReturn)
-throw new RemoteException (MessaggiErrore.ERRORE_DBMS);
-)
-/ / Exception in database operations
-catch (SQLException e)
-(
-/ / If the data layer sends an exception is throws the exception remote
-System.out.println ( "Error in method ottieniTurista"
-+ E.toString ());
-throw new RemoteException (MessaggiErrore.ERRORE_DBMS);
-)
-/ / Unexpected exceptions caused by other factors
-catch (Exception ee)
-(
-System.out.println ( "Error in method ottieniTurista"
-Ee.toString + ());
-throw new RemoteException (MessaggiErrore.ERRORE_SCONOSCIUTO);
-)
-/ / Return the result
-toReturn return;
-)
-) 
+    // Method to obtain the bean with data from the Tourist identified by the passed parameter
+    public TouristBean getTourist(int touristId) throws RemoteException {
+        // Check the validity of the identifier
+        if (touristId < 0) {
+            throw new RemoteException(ErrorMessages.DATA_ERROR);
+        }
+        TouristBean toReturn = null; // variable return
+        // Retrieve data
+        try {
+            // Request the bean layer to return the tourist bean
+            // With id equal to touristId
+            toReturn = tourist.getTourist(touristId);
+            if (toReturn == null) {
+                throw new RemoteException(ErrorMessages.DB_ERROR);
+            }
+        } catch (SQLException e) {
+            // If the data layer sends an exception, throw the remote exception
+            System.out.println("Error in method getTourist: " + e.toString());
+            throw new RemoteException(ErrorMessages.DB_ERROR);
+        } catch (Exception ee) {
+            System.out.println("Error in method getTourist: " + ee.toString());
+            // Unexpected exceptions caused by other factors
+            throw new RemoteException(ErrorMessages.UNKNOWN_ERROR);
+        }
+        // Return the result
+        return toReturn;
+    }
+}

@@ -1,407 +1,366 @@
 ﻿package unisa.gps.etour.bean;
+
 import java.io.Serializable;
 import java.util.Date;
 
-import unisa.gps.etour.util.Punto3D;
-/ **
-  * Bean for the storage of data refreshment
-  *
-  * @ Author Joseph Martone
-  * @ Version 0.1 2007 eTour Project - Copyright by SE @ SA Lab DMI University
-  * Of Salerno
-  * /
+import unisa.gps.etour.util.Point3D;
 
-public class BeanPuntoDiRistoro implements Serializable
-(
-private static final long serialVersionUID = 8417686685147484931L;
-private int id;
-private int numeroVoti;
-private double mediaVoti;
-private String name;
-private String description;
-private String phone;
-private String location;
-private String city;
-private String street;
-private String cap;
-private String province;
-private String PartitaIva;
-Private Punto3D position;
-private Date orarioApertura;
-private Date orarioChiusura;
-private String giornoChiusura;
+/**
+ * Bean for storing refreshment data.
+ *
+ * @ Author Joseph Martone
+ * @ Version 0.1 2007 eTour Project - Copyright by SE @ SA Lab DMI University Of Salerno
+ */
+public class RefreshmentPointBean implements Serializable {
+    private static final long serialVersionUID = 8417686685147484931L;
+    private int id;
+    private int numberOfVotes;
+    private double averageVotes;
+    private String name;
+    private String description;
+    private String phone;
+    private String location;
+    private String city;
+    private String street;
+    private String postalCode;
+    private String province;
+    private String vatNumber;
+    private Point3D position;
+    private Date openingTime;
+    private Date closingTime;
+    private String closingDay;
 
-/ **
-* Parameterized constructor
-*
-* @ Param pId
-* @ Param pNumeroVoti
-* @ Param pMediaVoti
-* @ Param Pnom
-* @ Param pDescrizione
-* @ Param pTelefono
-* @ Param pLocalita
-* @ Param pCitta
-* @ Param pVia
-* @ Param pcap
-* @ Param pProvincia
-* @ Param pPartitaIva
-* @ Param pPosizione
-* @ Param pOrarioApertura
-* @ Param pOrarioChiusura
-* @ Param pGiornoChiusura
-* /
-public BeanPuntoDiRistoro (int pid, int pNumeroVoti, double pMediaVoti,
-Phnom String, String pDescrizione, String pTelefono,
-PLocalita String, String pCitta, pVia String, String pcap,
-PProvincia String, String pPartitaIva, Punto3D pPosizione,
-Date pOrarioApertura, Date pOrarioChiusura, String pGiornoChiusura)
-(
-setId (PID);
-setNumeroVoti (pNumeroVoti);
-setMediaVoti (pMediaVoti);
-setNome (Phnom);
-setDescrizione (pDescrizione);
-setTelefono (pTelefono);
-setlocale (pLocalita);
-setCitta (pCitta);
-setvar (pVia);
-setCap (PCAP);
-setProvincia (pProvincia);
-setPartitaIva (pPartitaIva);
-setPosizione (pPosizione);
-setOrarioApertura (pOrarioApertura);
-setOrarioChiusura (pOrarioChiusura);
-setGiornoChiusura (pGiornoChiusura);
-)
+    /**
+     * Parameterized constructor.
+     *
+     * @param id
+     * @param numberOfVotes
+     * @param averageVotes
+     * @param name
+     * @param description
+     * @param phone
+     * @param location
+     * @param city
+     * @param street
+     * @param postalCode
+     * @param province
+     * @param vatNumber
+     * @param position
+     * @param openingTime
+     * @param closingTime
+     * @param closingDay
+     */
+    public RefreshmentPointBean(int id, int numberOfVotes, double averageVotes, String name, String description,
+                                String phone, String location, String city, String street, String postalCode,
+                                String province, String vatNumber, Point3D position, Date openingTime,
+                                Date closingTime, String closingDay) {
+        setId(id);
+        setNumberOfVotes(numberOfVotes);
+        setAverageVotes(averageVotes);
+        setName(name);
+        setDescription(description);
+        setPhone(phone);
+        setLocation(location);
+        setCity(city);
+        setStreet(street);
+        setPostalCode(postalCode);
+        setProvince(province);
+        setVatNumber(vatNumber);
+        setPosition(position);
+        setOpeningTime(openingTime);
+        setClosingTime(closingTime);
+        setClosingDay(closingDay);
+    }
 
-/ **
-* Empty Constructor
-*
-* /
-public BeanPuntoDiRistoro ()
-(
+    /**
+     * Empty Constructor.
+     */
+    public RefreshmentPointBean() {
+    }
 
-)
+    /**
+     * Returns the value of postalCode.
+     *
+     * @return postalCode value.
+     */
+    public String getPostalCode() {
+        return postalCode;
+    }
 
-/ **
-* Returns the value of cap
-*
-* @ Return value cap.
-* /
-public String getCap ()
-(
-return cap;
-)
+    /**
+     * Sets the new value of postalCode.
+     *
+     * @param postalCode New postalCode value.
+     */
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
 
-/ **
-* Sets the new value of cap
-*
-New pcap * @ param value cap.
-* /
-public void setCap (String PCAP)
-(
-ch = pcap;
-)
+/**
+ * Returns the value of city.
+ *
+ * @return City value.
+ */
+public String getCity() {
+    return city;
+}
 
-/ **
-* Returns the value of city
-*
-* @ Return Value of city.
-* /
-public String getCitta ()
-(
-return city;
-)
+/**
+ * Sets the new value of city.
+ *
+ * @param city New city value.
+ */
+public void setCity(String city) {
+    this.city = city;
+}
 
-/ **
-* Sets the new value of city
-*
-* @ Param value New pCitta city.
-* /
-public void setCitta (String pCitta)
-(
-City = pCitta;
-)
+/**
+ * Returns the value of description.
+ *
+ * @return Description value.
+ */
+public String getDescription() {
+    return description;
+}
 
-/ **
-* Returns the value of description
-*
-* @ Return value of description.
-* /
-public String getDescrizione ()
-(
-return description;
-)
+/**
+ * Sets the new value of description.
+ *
+ * @param description New description value.
+ */
+public void setDescription(String description) {
+    this.description = description;
+}
 
-/ **
-* Sets the new value of description
-*
-* @ Param pDescrizione New value of description.
-* /
-public void setDescrizione (String pDescrizione)
-(
-description = pDescrizione;
-)
+/**
+ * Returns the value of closingDay.
+ *
+ * @return Closing day value.
+ */
+public String getClosingDay() {
+    return closingDay;
+}
 
-/ **
-* Returns the value of giornoChiusura
-*
-* @ Return value giornoChiusura.
-* /
-public String getGiornoChiusura ()
-(
-giornoChiusura return;
-)
+/**
+ * Sets the new value of closingDay.
+ *
+ * @param closingDay New closing day value.
+ */
+public void setClosingDay(String closingDay) {
+    this.closingDay = closingDay;
+}
 
-/ **
-* Sets the new value of giornoChiusura
-*
-* @ Param value pGiornoChiusura New giornoChiusura.
-* /
-public void setGiornoChiusura (String pGiornoChiusura)
-(
-giornoChiusura = pGiornoChiusura;
-)
+/**
+ * Returns the value of location.
+ *
+ * @return Location value.
+ */
+public String getLocation() {
+    return location;
+}
 
-/ **
-* Returns the value of location
-*
-* @ Return locale values.
-* /
-public String getLocal ()
-(
-return location;
-)
+/**
+ * Sets the new value of location.
+ *
+ * @param location New location value.
+ */
+public void setLocation(String location) {
+    this.location = location;
+}
 
-/ **
-* Sets the new value of location
-*
-* @ Param pLocalita New locale values.
-* /
-public void setLocale (String pLocalita)
-(
-location = pLocalita;
-)
+/**
+ * Returns the value of averageVotes.
+ *
+ * @return Average votes value.
+ */
+public double getAverageVotes() {
+    return averageVotes;
+}
 
-/ **
-* Returns the value of mediaVoti
-*
-* @ Return value mediaVoti.
-* /
-public double getMediaVoti ()
-(
-mediaVoti return;
-)
+/**
+ * Sets the new value of averageVotes.
+ *
+ * @param averageVotes New average votes value.
+ */
+public void setAverageVotes(double averageVotes) {
+    this.averageVotes = averageVotes;
+}
+/**
+ * Returns the value of name.
+ *
+ * @return Name value.
+ */
+public String getName() {
+    return name;
+}
 
-/ **
-* Sets the new value of mediaVoti
-*
-* @ Param value pMediaVoti New mediaVoti.
-* /
-public void setMediaVoti (double pMediaVoti)
-(
-mediaVoti = pMediaVoti;
-)
+/**
+ * Sets the new name value.
+ *
+ * @param name New name value.
+ */
+public void setName(String name) {
+    this.name = name;
+}
 
-/ **
-* Returns the value of name
-*
-* @ Return value of name.
-* /
-public String getName ()
-(
-return name;
-)
+/**
+ * Returns the value of numberOfVotes.
+ *
+ * @return Number of votes value.
+ */
+public int getNumberOfVotes() {
+    return numberOfVotes;
+}
 
-/ **
-* Sets the new name value
-*
-* @ Param name New value Pnom.
-* /
-public void setNome (String Pnom)
-(
-name = Pnom;
-)
+/**
+ * Sets the new value of numberOfVotes.
+ *
+ * @param numberOfVotes New number of votes value.
+ */
+public void setNumberOfVotes(int numberOfVotes) {
+    this.numberOfVotes = numberOfVotes;
+}
 
-/ **
-* Returns the value of numeroVoti
-*
-* @ Return value numeroVoti.
-* /
-public int getNumeroVoti ()
-(
-numeroVoti return;
-)
+/**
+ * Returns the value of openingTime.
+ *
+ * @return Opening time value.
+ */
+public Date getOpeningTime() {
+    return openingTime;
+}
 
-/ **
-* Sets the new value of numeroVoti
-*
-* @ Param value pNumeroVoti New numeroVoti.
-* /
-public void setNumeroVoti (int pNumeroVoti)
-(
-numeroVoti = pNumeroVoti;
-)
+/**
+ * Sets the new value of openingTime.
+ *
+ * @param openingTime New opening time value.
+ */
+public void setOpeningTime(Date openingTime) {
+    this.openingTime = openingTime;
+}
 
-/ **
-* Returns the value of orarioApertura
-*
-* @ Return value orarioApertura.
-* /
-public Date getOrarioApertura ()
-(
-orarioApertura return;
-)
+/**
+ * Returns the value of closingTime.
+ *
+ * @return Closing time value.
+ */
+public Date getClosingTime() {
+    return closingTime;
+}
 
-/ **
-* Sets the new value of orarioApertura
-*
-* @ Param value pOrarioApertura New orarioApertura.
-* /
-public void setOrarioApertura (Date pOrarioApertura)
-(
-orarioApertura = pOrarioApertura;
-)
+/**
+ * Sets the new value of closingTime.
+ *
+ * @param closingTime New closing time value.
+ */
+public void setClosingTime(Date closingTime) {
+    this.closingTime = closingTime;
+}
 
-/ **
-* Returns the value of orarioChiusura
-*
-* @ Return value orarioChiusura.
-* /
-public Date getOrarioChiusura ()
-(
-orarioChiusura return;
-)
+/**
+ * Returns the value of vatNumber.
+ *
+ * @return VAT number value.
+ */
+public String getVatNumber() {
+    return vatNumber;
+}
 
-/ **
-* Sets the new value of orarioChiusura
-*
-* @ Param value pOrarioChiusura New orarioChiusura.
-* /
-public void setOrarioChiusura (Date pOrarioChiusura)
-(
-orarioChiusura = pOrarioChiusura;
-)
+/**
+ * Sets the new value of vatNumber.
+ *
+ * @param vatNumber New VAT number value.
+ */
+public void setVatNumber(String vatNumber) {
+    this.vatNumber = vatNumber;
+}
 
-/ **
-* Returns the value of PartitaIva
-*
-* @ Return value of a political party.
-* /
-public String getPartitaIva ()
-(
-PartitaIva return;
-)
+/**
+ * Returns the value of position.
+ *
+ * @return Position value.
+ */
+public Point3D getPosition() {
+    return position;
+}
+/**
+ * Sets the new position value.
+ *
+ * @param newPosition New position value.
+ */
+public void setPosition(Point3D newPosition) {
+    position = newPosition;
+}
 
-/ **
-* Sets the new value of PartitaIva
-*
-* @ Param pPartitaIva New value of political parties.
-* /
-public void setPartitaIva (String pPartitaIva)
-(
-PartitaIva = pPartitaIva;
-)
+/**
+ * Returns the value of province.
+ *
+ * @return Province value.
+ */
+public String getProvince() {
+    return province;
+}
 
-/ **
-* Returns the value of position
-*
-* @ Return value of position.
-* /
-public Punto3D getPosizione ()
-(
-return position;
-)
+/**
+ * Sets the new value of province.
+ *
+ * @param newProvince New value for the province.
+ */
+public void setProvince(String newProvince) {
+    province = newProvince;
+}
 
-/ **
-* Sets the new position value
-*
-* @ Param pPosizione New position value.
-* /
-public void setPosizione (Punto3D pPosizione)
-(
-position = pPosizione;
-)
+/**
+ * Returns the value of telephone.
+ *
+ * @return Telephone value.
+ */
+public String getTelephone() {
+    return telephone;
+}
 
-/ **
-* Returns the value of the province
-*
-* @ Return value of the province.
-* /
-public String getProvincia ()
-(
-return province;
-)
+/**
+ * Sets the new value of telephone.
+ *
+ * @param newTelephone New telephone value.
+ */
+public void setTelephone(String newTelephone) {
+    telephone = newTelephone;
+}
 
-/ **
-* Sets the new value of the province
-*
-* @ Param pProvincia New value for the province.
-* /
-public void setProvincia (String pProvincia)
-(
-province = pProvincia;
-)
+/**
+ * Returns the value of street.
+ *
+ * @return Street value.
+ */
+public String getStreet() {
+    return street;
+}
 
-/ **
-* Returns the value of telephone
-*
-* @ Return Value of the phone.
-* /
-public String getTelefono ()
-(
-return phone;
-)
+/**
+ * Sets the new value of street.
+ *
+ * @param newStreet New street value.
+ */
+public void setStreet(String newStreet) {
+    street = newStreet;
+}
 
-/ **
-* Sets the new value of telephone
-*
-* @ Param value New pTelefono phone.
-* /
-public void setTelefono (String pTelefono)
-(
-phone = pTelefono;
-)
+/**
+ * Returns the value of ID.
+ *
+ * @return ID value.
+ */
+public int getId() {
+    return id;
+}
 
-/ **
-* Returns the value of street
-*
-* @ Return value on.
-* /
-public String getVar ()
-(
-return path;
-)
-
-/ **
-* Sets the new value via
-*
-* @ Param value New pVia on.
-* /
-public void setvar (String pVia)
-(
-via = pVia;
-)
-
-/ **
-* Returns the value of id
-*
-* @ Return value id.
-* /
-public int getId ()
-(
-return id;
-)
-
-/ **
-* Sets the new value of id
-*
-* @ Param pId New value for id.
-* /
-public void setId (int pid)
-(
-id = pid;
-)
-
-) 
+/**
+ * Sets the new value of ID.
+ *
+ * @param newId New value for ID.
+ */
+public void setId(int newId) {
+    id = newId;
+}
+}

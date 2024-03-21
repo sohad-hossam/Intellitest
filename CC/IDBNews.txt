@@ -3,48 +3,48 @@
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import unisa.gps.etour.bean.BeanNews;
+import unisa.gps.etour.bean.NewsBean;
 
-/ **
-  * Interface for the management of news in the Database
-  *
-  * @ Author Mauro Miranda
-  * @ Version 0.1 2007 eTour Project - Copyright by SE @ SA Lab DMI University
-  * Of Salerno
-  * /
-public interface IDBNews
-(
-/ **
-* Add a news database
-*
-* @ Param Pnews News to add
-* @ Throws SQLException
-* /
-public boolean inserisciNews (BeanNews Pnews) throws SQLException;
+/**
+ * Interface for the management of news in the Database
+ *
+ * @ Author Mauro Miranda
+ * @ Version 0.1 2007 eTour Project - Copyright by SE @ SA Lab DMI University
+ * Of Salerno
+ */
+public interface NewsDBInterface {
 
-/ **
-* Modify a news database
-*
-* @ Param Pnews News to change with the new data
-* @ Throws SQLException
-* @ Return True if there 'was a modified false otherwise
-* /
-public boolean modificaNews (BeanNews Pnews) throws SQLException;
+    /**
+     * Add a news to the database
+     *
+     * @ Param news News to add
+     * @ Throws SQLException
+     */
+    public boolean addNews(NewsBean news) throws SQLException;
 
-/ **
-* Delete a database from news
-*
-* @ Param ID pIdNews News to eliminate
-* @ Throws SQLException
-* @ Return True if and 'have been deleted false otherwise
-* /
-public boolean cancellaNews (int pIdNews) throws SQLException;
+    /**
+     * Modify a news in the database
+     *
+     * @ Param news News to change with the new data
+     * @ Throws SQLException
+     * @ Return True if there 'was a modified false otherwise
+     */
+    public boolean modifyNews(NewsBean news) throws SQLException;
 
-/ **
-* Returns the active news
-*
-* @ Throws SQLException
-* @ Return list of active news
-* /
-<BeanNews> ottieniNews public ArrayList () throws SQLException;
-)
+    /**
+     * Delete a news from the database
+     *
+     * @ Param ID newsId News to eliminate
+     * @ Throws SQLException
+     * @ Return True if and 'have been deleted false otherwise
+     */
+    public boolean deleteNews(int newsId) throws SQLException;
+
+    /**
+     * Returns the active news
+     *
+     * @ Throws SQLException
+     * @ Return list of active news
+     */
+    public ArrayList<NewsBean> getActiveNews() throws SQLException;
+}
