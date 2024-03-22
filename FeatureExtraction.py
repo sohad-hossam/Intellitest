@@ -2,19 +2,14 @@ from imports import *
 
 
 class FeatureExtraction:
-    def __init__(self, UCTokens: set) -> None:
-        self.tfidf_vectorizer = TfidfVectorizer(vocabulary=UCTokens)
-        self.count_vectorizer = CountVectorizer(vocabulary=UCTokens)
+    def __init__(self, Tokens: set) -> None:
+        self.tfidf_vectorizer = TfidfVectorizer(vocabulary=Tokens)
+        self.count_vectorizer = CountVectorizer(vocabulary=Tokens)
         #self.vocab_index = {word: idx for idx, word in enumerate(self.count_vectorizer.get_feature_names_out())}
         # UC_count_matrix, code_count_matrix
 
     # Latent Semantic Analysis.
-    def LSA(
-        self,
-        tfidf_matrix_uc: np.ndarray,
-        tfidf_matrix_code: np.ndarray,
-        train_or_test: str = 'train',
-    ) -> np.ndarray:
+    def LSA(self,tfidf_matrix_uc: np.ndarray,tfidf_matrix_code: np.ndarray,train_or_test: str = 'train') -> np.ndarray:
         num_components = min(tfidf_matrix_uc.shape[0], tfidf_matrix_code.shape[1])
         num_components = min(num_components, 100)
         LSA_model = TruncatedSVD(n_components=num_components)
@@ -577,52 +572,34 @@ class FeatureExtraction:
             sumscq.append(sum(query))
         return np.array(sumscq)
 
-    def _BM25(self, UC_documents, code_documents):
+    '''
+        given query Q -> words: q1, q2, q3, q4, q5 the score of a document D is calculated as follows:
+        for each word in query
+        idf* tf(qi,D)* k1+1 / tf(qi,D) + k1 * (1 - b + b * |D| / avgdl)
+        |D| length of the document
+        avgdl average length of the documents
+        idf of query term qi in all documents D
+    '''
+    
+    def _BM25Calculate(self,idf:np.float16,tf:np.float16,doc_len:int,avgdl:int) -> np.float16:
         k = 1.2;b = 0.75
+        return idf * (tf * (k + 1)) / (tf + k * (1 - b + b * (doc_len / avgdl)))
+                                                                       
+    def _BM25PerQuery(self,tokens:list,idf:np.array,tf:np.array,doc_len:int,avgdl:int) -> np.float16:
+        token_index = {word: indx for indx, word in enumerate(tokens)}
+        return np.sum(np.vectorize(lambda token: self._BM25Calculate(idf[0][token_index[token]],tf[token_index[token]],doc_len,avgdl), otypes=[np.float16])(tokens))
 
-        uc_avgdl = 0
-        code_avgdl = 0
-        
-        uc_sizes = list()
-        code_sizes = list()
+    def BM25(self,UC_documents:list,code_documents:list,) -> np.ndarray:
+        doc_index = {doc: indx for indx, doc in enumerate(documents)}
+        doc_lens = np.array([len(doc.split()) for doc in documents])
+        avgdl = np.sum(doc_lens)/len(doc_lens)
 
-        BM25_code = np.zeros((len(code_documents),len(UC_documents)))
-        uc_sizes = np.array([len(doc.split()) for doc in UC_documents])
-        code_sizes = np.array([len(doc.split()) for doc in code_documents])
+        tokens = list(set(query.split()))
+        vectorizer_tf = CountVectorizer(vocabulary=tokens)
+        tf = vectorizer_tf.fit_transform(documents).toarray()
+        transformer = TfidfTransformer()
+        transformer.fit(tf)
+        idf = transformer.idf_.reshape(1,-1)
 
-        uc_avgdl = np.sum(uc_sizes)/len(uc_sizes)
-        code_avgdl = np.sum(code_sizes)/len(code_sizes)
+        return np.vectorize(lambda doc: self._BM25PerQuery(tokens,idf,tf[doc_index[doc]],len(doc),avgdl))(documents)
 
-        for i, code_doc in enumerate(code_documents):
-            code_tokens = code_doc.split()
-            code_tokens = set(code_tokens)
-            #idf = TfidfVectorizer(vocabulary=code_tokens).fit(UC_documents).idf_.reshape(1,-1)
-            
-            vectorizer_tf = CountVectorizer(vocabulary=code_tokens)
-            tf = vectorizer_tf.fit_transform(UC_documents).toarray()
-            transformer = TfidfTransformer()
-            transformer.fit(tf)
-            idf = transformer.idf_.reshape(1,-1)
-            
-            for j, uc_doc in enumerate(UC_documents):
-                for cnt, token in enumerate(code_tokens):
-                    BM25_code[i][j] += idf[0][cnt] * (uc_doc.count(token) * (k + 1)) / (uc_doc.count(token) + k * (1 - b + b * (uc_sizes[j] / uc_avgdl)))
-        
-        BM25_uc = np.zeros((len(UC_documents),len(code_documents)))
-
-        for i, uc_doc in enumerate(UC_documents):
-            uc_tokens = uc_doc.split()
-            uc_tokens = set(uc_tokens)
-            #idf = TfidfVectorizer(vocabulary=uc_tokens).fit(code_documents).idf_.reshape(1,-1)
-            
-            vectorizer_tf = CountVectorizer(vocabulary=uc_tokens)
-            tf = vectorizer_tf.fit_transform(code_documents).toarray()
-            transformer = TfidfTransformer()
-            transformer.fit(tf)
-            idf = transformer.idf_.reshape(1,-1)
-
-            for j, code_doc in enumerate(code_documents):
-                for cnt, token in enumerate(uc_tokens):
-                    BM25_uc[i][j] += idf[0][cnt] * (code_doc.count(token) * (k + 1)) / (code_doc.count(token) + k * (1 - b + b * (code_sizes[j] / code_avgdl)))
-
-        return np.append(BM25_code,BM25_uc.transpose(),axis=0)
