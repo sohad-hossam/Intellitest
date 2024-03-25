@@ -49,11 +49,7 @@ class FeatureExtraction:
         return DocumentTopicDisUC_dense, DocumentTopicDisCode_dense, cosine_similarities
 
 
-
-
-    def CountVectorizerModel(
-        self, UC_documents: list, code_documents: list, train_or_test: str
-    ):
+    def CountVectorizerModel(self, UC_documents: list, code_documents: list, train_or_test: str = "train"):
 
         self.code_count_matrix = np.zeros((len(code_documents), len(code_documents[0])))
         self.UC_count_matrix = np.zeros((len(UC_documents), len(UC_documents[0])))
@@ -61,10 +57,11 @@ class FeatureExtraction:
         if train_or_test == "train":
             self.UC_count_matrix = self.count_vectorizer.fit_transform(UC_documents)
             self.code_count_matrix = self.count_vectorizer.fit_transform(code_documents)
-            self.code_vocab_index = self.count_vectorizer.vocabulary_
         else:
             self.UC_count_matrix = self.count_vectorizer.transform(UC_documents)
             self.code_count_matrix = self.count_vectorizer.transform(code_documents)
+
+        self.code_vocab_index = self.count_vectorizer.vocabulary_
 
         UC_words_count = self.UC_count_matrix.sum(axis=1)
         code_words_count = self.code_count_matrix.sum(axis=1)
@@ -74,6 +71,7 @@ class FeatureExtraction:
 
         self.UC_count_matrix = self.UC_count_matrix.toarray()
         self.code_count_matrix = self.code_count_matrix.toarray()
+        
         return self.UC_count_matrix, self.code_count_matrix
 
     # Jensen-Shannon.
@@ -104,8 +102,7 @@ class FeatureExtraction:
 
         return JS_matrix
     
-    def TFIDFVectorizer(self, UC_documents: list, code_documents: list
-    ) :
+    def TFIDFVectorizer(self, UC_documents: list, code_documents: list) :
 
         # create the transform
         self.tfidf_matrix_uc = self.tfidf_vectorizer.fit_transform(UC_documents)
@@ -114,10 +111,10 @@ class FeatureExtraction:
         feature_names_uc = self.tfidf_vectorizer.get_feature_names_out() 
         idf_uc_dict = {feature_names_uc[i]: idf_uc[i] for i in range(len(feature_names_uc))}  #this is the idf dictionary for the whole vocab that i acsess later doing whatever
 
-        tf_uc_array = self.tfidf_matrix_uc .toarray().sum(axis=0)
-        tf_uc_dict = {feature_names_uc[i]: tf_uc_array[i] for i in range(len(feature_names_uc))}
+        # tf_uc_array = self.tfidf_matrix_uc .toarray().sum(axis=0)
+        # tf_uc_dict = {feature_names_uc[i]: tf_uc_array[i] for i in range(len(feature_names_uc))}
 
-
+        print(self.tfidf_matrix_uc.shape)
         df_uc_array = np.sum(self.tfidf_matrix_uc > 0, axis=0).A1
         df_uc_dict = {feature_names_uc[i]: df_uc_array[i] for i in range(len(feature_names_uc))}
 
@@ -128,14 +125,14 @@ class FeatureExtraction:
         feature_names_code = self.tfidf_vectorizer.get_feature_names_out() 
         idf_code_dict = {feature_names_code[i]: idf_code[i] for i in range(len(feature_names_code))}
 
-        tf_code_array = self.tfidf_matrix_code.toarray().sum(axis=0)
-        tf_code_dict = {feature_names_code[i]: tf_code_array[i] for i in range(len(feature_names_code))}
+        # tf_code_array = self.tfidf_matrix_code.toarray().sum(axis=0)
+        # tf_code_dict = {feature_names_code[i]: tf_code_array[i] for i in range(len(feature_names_code))}
 
         df_code_array = np.sum(self.tfidf_matrix_code > 0, axis=0).A1
         df_code_dict = {feature_names_code[i]: df_code_array[i] for i in range(len(feature_names_code))}
 
 
-        return  self.tfidf_matrix_uc,self.tfidf_matrix_code,idf_uc_dict,tf_uc_dict,idf_code_dict,tf_code_dict,feature_names_uc,feature_names_code,df_uc_dict,df_code_dict
+        return  self.tfidf_matrix_uc,self.tfidf_matrix_code,idf_uc_dict,idf_code_dict,feature_names_uc,feature_names_code,df_uc_dict,df_code_dict
 
 
 
@@ -581,25 +578,21 @@ class FeatureExtraction:
         idf of query term qi in all documents D
     '''
     
-    def _BM25Calculate(self,idf:np.float16,tf:np.float16,doc_len:int,avgdl:int) -> np.float16:
-        k = 1.2;b = 0.75
-        return idf * (tf * (k + 1)) / (tf + k * (1 - b + b * (doc_len / avgdl)))
-                                                                       
-    def _BM25PerQuery(self,tokens:list,idf:np.array,tf:np.array,doc_len:int,avgdl:int) -> np.float16:
-        token_index = {word: indx for indx, word in enumerate(tokens)}
-        return np.sum(np.vectorize(lambda token: self._BM25Calculate(idf[0][token_index[token]],tf[token_index[token]],doc_len,avgdl), otypes=[np.float16])(tokens))
+    def _BM25PerToken(self,tokens:list,idf:np.array,tf:np.array,doc_len:int,avgdl:int) -> np.float16:
+        
+        return np.sum(np.vectorize(lambda token: idf[token] * (tf[self.code_vocab_index.get(token)] * (1.2 + 1)) / (tf[self.code_vocab_index.get(token)] + 1.2 * (1 - 0.75 + 0.75 * (doc_len / avgdl))) , otypes=[np.float16])(tokens))
 
-    def BM25(self,UC_documents:list,code_documents:list,) -> np.ndarray:
-        doc_index = {doc: indx for indx, doc in enumerate(documents)}
-        doc_lens = np.array([len(doc.split()) for doc in documents])
-        avgdl = np.sum(doc_lens)/len(doc_lens)
+    def _BM25PerQuery(self,queries:list,idf_dict:dict,tf:np.array,doc_len:int,avgdl:int):
+        return np.vectorize(lambda query: self._BM25PerToken(query.split(),idf_dict,tf,doc_len,avgdl))(queries)
 
-        tokens = list(set(query.split()))
-        vectorizer_tf = CountVectorizer(vocabulary=tokens)
-        tf = vectorizer_tf.fit_transform(documents).toarray()
-        transformer = TfidfTransformer()
-        transformer.fit(tf)
-        idf = transformer.idf_.reshape(1,-1)
+    def BM25(self,UC_documents:list,code_documents:list,idf_uc_dict:dict,UC_count_matrix:np.array,idf_code_dict:dict,code_count_matrix:np.array) -> np.ndarray:
+        uc_doc_index = {doc: indx for indx, doc in enumerate(UC_documents)}
+        code_doc_index = {doc: indx for indx, doc in enumerate(code_documents)}
 
-        return np.vectorize(lambda doc: self._BM25PerQuery(tokens,idf,tf[doc_index[doc]],len(doc),avgdl))(documents)
+        UC_avgdl = np.mean([len(doc.split()) for doc in UC_documents])
+        code_avgdl = np.mean([len(doc.split()) for doc in code_documents])
 
+        BM25_UC = np.array([self._BM25PerQuery(code_documents, idf_uc_dict, UC_count_matrix[uc_doc_index[doc]], len(doc.split()), UC_avgdl) for doc in UC_documents])
+        BM25_code = np.array([self._BM25PerQuery(UC_documents, idf_code_dict, code_count_matrix[code_doc_index[doc]], len(doc.split()), code_avgdl) for doc in code_documents])
+
+        return np.vstack((BM25_UC.T, BM25_code))
