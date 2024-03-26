@@ -63,6 +63,13 @@ class FeatureExtraction:
 
         self.code_vocab_index = self.count_vectorizer.vocabulary_
 
+        UC_total_number_of_occurences_in_corpus = np.sum(self.UC_count_matrix, axis=0)
+        code_total_number_of_occurences_in_corpus = np.sum(self.code_count_matrix, axis=0)
+        
+        # dict of word: # of occurences in the corpus
+        tf_uc_dict = {word: UC_total_number_of_occurences_in_corpus[0,i] for word,i in self.code_vocab_index.items()}
+        tf_code_dict = {word: code_total_number_of_occurences_in_corpus[0,i] for word,i in self.code_vocab_index.items()}
+
         UC_words_count = self.UC_count_matrix.sum(axis=1)
         code_words_count = self.code_count_matrix.sum(axis=1)
 
@@ -72,7 +79,7 @@ class FeatureExtraction:
         self.UC_count_matrix = self.UC_count_matrix.toarray()
         self.code_count_matrix = self.code_count_matrix.toarray()
         
-        return self.UC_count_matrix, self.code_count_matrix
+        return self.UC_count_matrix, self.code_count_matrix,tf_uc_dict,tf_code_dict
 
     # Jensen-Shannon.
     def JensenShannon(self, UC_count_matrix, code_count_matrix) -> np.ndarray:
@@ -114,7 +121,6 @@ class FeatureExtraction:
         # tf_uc_array = self.tfidf_matrix_uc .toarray().sum(axis=0)
         # tf_uc_dict = {feature_names_uc[i]: tf_uc_array[i] for i in range(len(feature_names_uc))}
 
-        print(self.tfidf_matrix_uc.shape)
         df_uc_array = np.sum(self.tfidf_matrix_uc > 0, axis=0).A1
         df_uc_dict = {feature_names_uc[i]: df_uc_array[i] for i in range(len(feature_names_uc))}
 
@@ -596,3 +602,54 @@ class FeatureExtraction:
         BM25_code = np.array([self._BM25PerQuery(UC_documents, idf_code_dict, code_count_matrix[code_doc_index[doc]], len(doc.split()), code_avgdl) for doc in code_documents])
 
         return np.vstack((BM25_UC.T, BM25_code))
+
+    def SmoothingMethods(self,UC_documents:list,code_documents:list,UC_count_matrix:np.array,code_count_matrix:np.array,tf_uc_dict:dict,tf_code_dict:dict)->np.ndarray:
+        # JM -> (1-lambda) * P(w|d) + lambda * P(w|C) , P(w|d) = c(w;d) / |d| , P(w|C) = c(w;C) / |C|
+        # DP -> (c(w;d) + mu * P(w|C)) / (|d| + mu)
+        
+        # |C|
+        UC_total_terms_in_corpus = np.sum([len(doc.split()) for doc in UC_documents])
+        code_total_terms_in_corpus = np.sum([len(doc.split()) for doc in code_documents])
+        
+        # to use for count_matrices
+        uc_doc_index = {doc: indx for indx, doc in enumerate(UC_documents)}
+        code_doc_index = {doc: indx for indx, doc in enumerate(code_documents)}
+        
+        # Per Document
+        JM_score_code = np.array([self._SmoothingMethodsPerQuery(UC_documents,doc,code_count_matrix[code_doc_index[doc]],code_total_terms_in_corpus,tf_code_dict,True) for doc in code_documents])
+        JM_score_uc = np.array([self._SmoothingMethodsPerQuery(code_documents,doc,UC_count_matrix[uc_doc_index[doc]],UC_total_terms_in_corpus,tf_uc_dict,True) for doc in UC_documents])
+
+        DP_score_code = np.array([self._SmoothingMethodsPerQuery(UC_documents,doc,code_count_matrix[code_doc_index[doc]],code_total_terms_in_corpus,tf_code_dict,False) for doc in code_documents])
+        DP_score_uc = np.array([self._SmoothingMethodsPerQuery(code_documents,doc,UC_count_matrix[uc_doc_index[doc]],UC_total_terms_in_corpus,tf_uc_dict,False) for doc in UC_documents])
+
+        return np.vstack((JM_score_uc.T, JM_score_code)), np.vstack((DP_score_uc.T, DP_score_code))
+    
+    # Per Query
+    def _SmoothingMethodsPerQuery(self,queries:list,doc:str,tf_matrix:np.array,total_terms_in_corpus:int,tf_corpus:dict,JM_or_DP:bool)->np.ndarray:
+        return np.vectorize(lambda query: self._SmoothingMethodsPerToken(query.split(),doc,tf_matrix,total_terms_in_corpus,tf_corpus,JM_or_DP))(queries)
+    
+    def _SmoothingMethodsPerToken(self,tokens:list,doc:str,tf_matrix:np.array,total_terms_in_corpus:int,tf_corpus:dict,JM_or_DP)->np.float16:
+        _lambda = 0.7;mu = 2000
+        # |d|
+        doc_len = len(doc.split())
+        # P(w|d) = c(w;d) / |d| , P(w|C) = c(w;C) / |C|
+        # c(w;d)
+        term_count_in_document = np.array([tf_matrix[self.code_vocab_index.get(token)] for token in tokens])
+        # c(w;C)
+        term_count_in_corpus = np.array([tf_corpus.get(token,0) for token in tokens])
+        # P(w|d)
+        P_w_d = term_count_in_document / doc_len
+        # P(w|C)
+        P_w_C = term_count_in_corpus / total_terms_in_corpus
+        if JM_or_DP:
+            # JM -> (1-lambda) * P(w|d) + lambda * P(w|C)
+            return np.sum((1 - _lambda) * P_w_d + _lambda * P_w_C)
+        else:
+            # DP -> (c(w;d) + mu * P(w|C)) / (|d| + mu)
+            return np.sum((term_count_in_document + mu * P_w_C) / (doc_len + mu))
+
+
+    
+
+
+        

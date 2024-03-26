@@ -46,8 +46,9 @@ featureExtraction = FeatureExtraction(UCTokens)
 
 ###### used for all ######
 tfidf_matrix_uc, tfidf_matrix_code,idf_uc_dict,idf_code_dict,feature_names_uc,feature_names_code ,df_uc_dict,df_code_dict= featureExtraction.TFIDFVectorizer(UC_documents, code_documents)
-UC_count_matrix, code_count_matrix = featureExtraction.CountVectorizerModel(UC_documents, code_documents, 'train')
-idf_uc_q,idf_code_q= featureExtraction.IDFPreProcessing(UC_documents,idf_code_dict,code_documents,idf_uc_dict)
+UC_count_matrix, code_count_matrix,tf_uc_dict,tf_code_dict = featureExtraction.CountVectorizerModel(UC_documents, code_documents, 'train')
+
+# idf_uc_q,idf_code_q= featureExtraction.IDFPreProcessing(UC_documents,idf_code_dict,code_documents,idf_uc_dict)
 # ictf_uc_q,ictf_code_q=featureExtraction.ICTFPreProcessing(UC_documents,tf_code_dict,code_documents,tf_uc_dict)
 # entropy_uc,entropy_code=featureExtraction.EntropyPreProcessing(UC_documents,code_documents,df_uc_dict,df_code_dict)
 # variance_uc,variance_code= featureExtraction.VarPreProcessing(UC_documents,code_documents,idf_uc_dict,idf_code_dict)
@@ -96,11 +97,13 @@ idf_uc_q,idf_code_q= featureExtraction.IDFPreProcessing(UC_documents,idf_code_di
 # print('JS_CC', JS_CC.shape)
 
 # # 5)  Okapi BM25
-BM25_feature = featureExtraction.BM25(UC_documents,code_documents,idf_uc_dict,UC_count_matrix,idf_code_dict,code_count_matrix)
-print("BM25_feature", BM25_feature.shape)
+# BM25_feature = featureExtraction.BM25(UC_documents,code_documents,idf_uc_dict,UC_count_matrix,idf_code_dict,code_count_matrix)
+# print("BM25_feature", BM25_feature.shape)
 
 # # 6) Language Model with Dirichlet
-
+JM_feature,DP_feature = featureExtraction.SmoothingMethods(UC_documents,code_documents,UC_count_matrix,code_count_matrix,tf_uc_dict,tf_code_dict)
+print("JM_feature", JM_feature.shape)
+print("DP_feature", DP_feature.shape)
 
 # # ------------------------pre-retrieval (21 metrics)--------------------------#
 # # 1) IDF Features
