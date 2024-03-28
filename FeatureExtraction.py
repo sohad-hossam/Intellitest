@@ -654,10 +654,13 @@ class FeatureExtraction:
         pass
     # Weighted Information Gain
     def _WeightedInformationGainPerToken(self,token:str,document:str,tf_dict:dict,total_corpus_size:int,_lambda:np.float16)->np.float16:
+
         term_count = document.count(token); doc_len = len(document); tf = tf_dict.get(token, 1)
         if term_count == 0 or doc_len == 0 or tf == 0 or total_corpus_size == 0:
             return 0
-        ratio = (term_count / doc_len) / (tf / total_corpus_size)
+        print(total_corpus_size)
+
+        ratio =  (term_count / doc_len)/ (tf / total_corpus_size)
         if ratio <= 0:
             return 0
         return _lambda * np.log2(ratio)
@@ -671,10 +674,13 @@ class FeatureExtraction:
         L = np.array(documents)[top10]
         _lambda = 1/np.sqrt(len(query.split()))
         # per document
+        print(total_corpus_size)
+
         return (1/10)*np.sum(np.vectorize(lambda doc: self._WeightedInformationGainPerDocument(query,doc,tf_dict,total_corpus_size,_lambda))(L))
     
     def WeightedInformationGain(self,queries:list,documents:list,Results:np.array,tf_dict:dict,total_corpus_size:int)->np.ndarray:
         # per query
+        print(total_corpus_size)
         return np.vectorize(lambda i,query: self._WeightedInformationGainPerQuery(query,documents,Results[:,i],tf_dict,total_corpus_size))(range(len(queries)),queries).reshape(-1,1)
     
     # Normalized Query Commitment
