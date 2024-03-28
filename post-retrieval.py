@@ -5,16 +5,19 @@ from FeatureExtraction import *
 _PreProcessor = PreProcessor()
 UC_documents, code_documents, UCTokens, CodeTokens = _PreProcessor.setup("./UC", "./CC")
 
+intersection = set(UC_documents[2].split()).intersection(set(code_documents[0].split()))
+print(intersection)
+print(np.vectorize(lambda term: code_documents[0].split().count(term))(list(intersection)))
 # Robustness Score
 
 # Vector Space Model
-UCTokens.update(CodeTokens)
+# UCTokens.update(CodeTokens)
 
 # (1) Run the original query q, and obtain the result list R
 #R = FeatureExtraction(UCTokens).VectorSpaceModel(UC_documents, code_documents)
 
 #print (len(UC_documents), len(code_documents))
-R = FeatureExtraction(UCTokens)._BM25(UC_documents, code_documents)
+# R = FeatureExtraction(UCTokens)._BM25(UC_documents, code_documents)
 
 # (2) Take the top documents in R and consider them as ranked list L
 #query = PreProcessor().UCPreProcessor("./UC/UC1.TXT")
@@ -283,4 +286,4 @@ def NormalizedQueryCommitment(R,query):
     '''
     pass
 
-print(R)
+# print(R)

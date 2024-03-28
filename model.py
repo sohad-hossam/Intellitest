@@ -60,7 +60,7 @@ UC_count_matrix, code_count_matrix,tf_uc_dict,tf_code_dict = featureExtraction.C
 
 #-------------------------14 IR based features--------------------------#
 
-# # 1) Vector space model
+# 1) Vector space model
 # cosine_similarities_feature = featureExtraction.VectorSpaceModel(tfidf_matrix_uc, tfidf_matrix_code)
 # print("cosine_similarities_feature", cosine_similarities_feature.shape)
     
@@ -87,23 +87,86 @@ UC_count_matrix, code_count_matrix,tf_uc_dict,tf_code_dict = featureExtraction.C
 # LDA_similraities_CC = rankdata(-cosine_similarities_LDA, method='dense', axis=0)
 # print("LDA_similraities_CC", LDA_similraities_CC.shape)
 
-# # 4) Jensen-Shannon(JS)
+# 4) Jensen-Shannon(JS)
 # JS_features = featureExtraction.JensenShannon(UC_count_matrix, code_count_matrix)
 # print('JS', JS_features.shape)
-
 # JS_UC = rankdata(-JS_features, method='dense', axis=1)
 # print('JS_UC', JS_UC.shape)
 # JS_CC = rankdata(-JS_features, method='dense', axis=0)
 # print('JS_CC', JS_CC.shape)
 
-# # 5)  Okapi BM25
-# BM25_feature = featureExtraction.BM25(UC_documents,code_documents,idf_uc_dict,UC_count_matrix,idf_code_dict,code_count_matrix)
-# print("BM25_feature", BM25_feature.shape)
+# 5)  Okapi BM25
+# BM25_UC = featureExtraction.BM25(UC_documents,code_documents,idf_code_dict,code_count_matrix)
+# BM25_CC = featureExtraction.BM25(code_documents,UC_documents,idf_uc_dict,UC_count_matrix)
 
-# # 6) Language Model with Dirichlet
-JM_feature,DP_feature = featureExtraction.SmoothingMethods(UC_documents,code_documents,UC_count_matrix,code_count_matrix,tf_uc_dict,tf_code_dict)
-print("JM_feature", JM_feature.shape)
-print("DP_feature", DP_feature.shape)
+# BM25_UC = rankdata(-BM25_UC, method='dense', axis=0)
+# print("BM25_UC", BM25_UC.shape)
+# BM25_CC = rankdata(-BM25_CC, method='dense', axis=0)
+# print("BM25_CC", BM25_CC.shape)
+
+# 6.3) WIG Score using BM25
+# UC_WIG_score_BM25 = featureExtraction.WeightedInformationGain(UC_documents,code_documents,BM25_UC,tf_code_dict,np.sum(list(tf_code_dict.values())))
+# code_WIG_score_BM25 = featureExtraction.WeightedInformationGain(code_documents,UC_documents,BM25_CC,tf_uc_dict,np.sum(list(tf_uc_dict.values())))
+
+# print("UC_WIG_score_BM25",UC_WIG_score_BM25.shape)
+# print("code_WIG_score_BM25",code_WIG_score_BM25.shape)
+
+# UC_NQC_BM25 = featureExtraction.NormalizedQueryCommitment(BM25_UC)
+# code_NQC_BM25 = featureExtraction.NormalizedQueryCommitment(BM25_CC)
+
+# print("UC_NQC_BM25",UC_NQC_BM25.shape)
+# print("code_NQC_BM25",code_NQC_BM25.shape)
+
+# 1.1) Subquery overlap using jensenShannon
+# code_queries_score_JensenShannon = featureExtraction.SubqueryOverlap(code_documents, featureExtraction.JensenShannon,"JS", UC_count_matrix, code_count_matrix)
+# UC_queries_score_JensenShannon = featureExtraction.SubqueryOverlap(UC_documents, featureExtraction.JensenShannon,"JS",code_count_matrix, UC_count_matrix)
+
+# print('code_queries_score_JensenShannon', code_queries_score_JensenShannon.shape)
+# print('UC_queries_score_JensenShannon', UC_queries_score_JensenShannon.shape)
+
+# 1.2) Subquery overlap using VSM
+# code_queries_score_VSM = featureExtraction.SubqueryOverlap(code_documents, featureExtraction.VectorSpaceModel,"VSM", UC_count_matrix, code_count_matrix)
+# UC_queries_score_VSM = featureExtraction.SubqueryOverlap(UC_documents, featureExtraction.VectorSpaceModel,"VSM", code_count_matrix, UC_count_matrix)
+
+# print('code_queries_score_VSM', code_queries_score_VSM.shape)
+# print('UC_queries_score_VSM', UC_queries_score_VSM.shape)
+
+# 1.3) Subquery overlap using BM25
+# code_queries_score_BM25 = featureExtraction.SubqueryOverlap(code_documents, featureExtraction.BM25,"BM", UC_documents,idf_uc_dict,UC_count_matrix)
+# UC_queries_score_BM25 = featureExtraction.SubqueryOverlap(UC_documents, featureExtraction.BM25,"BM", code_documents,idf_code_dict, code_count_matrix)
+
+# print('code_queries_score_BM25', code_queries_score_BM25.shape)
+# print('UC_queries_score_BM25', UC_queries_score_BM25.shape)
+
+# 1.4) Subquery overlap using JM smoothing
+# code_queries_score_JM = featureExtraction.SubqueryOverlap(code_documents, featureExtraction.SmoothingMethods,"SM", UC_documents,UC_count_matrix,tf_uc_dict,True)
+# UC_queries_score_JM = featureExtraction.SubqueryOverlap(UC_documents, featureExtraction.SmoothingMethods,"SM", code_documents,code_count_matrix,tf_code_dict,True)
+
+# print('code_queries_score_JM', code_queries_score_JM.shape)
+# print('UC_queries_score_JM', UC_queries_score_JM.shape)
+
+# 1.5) Subquery overlap using DP smoothing
+code_queries_score_DP = featureExtraction.SubqueryOverlap(code_documents, featureExtraction.SmoothingMethods,"SM", UC_documents, UC_count_matrix,tf_uc_dict,False)
+UC_queries_score_DP = featureExtraction.SubqueryOverlap(UC_documents, featureExtraction.SmoothingMethods,"SM", code_documents, code_count_matrix,tf_code_dict,False)
+
+print('code_queries_score_DP', code_queries_score_DP.shape)
+print('UC_queries_score_DP', UC_queries_score_DP.shape)
+
+# 6) Language Model with Dirichlet
+# JM_UC = featureExtraction.SmoothingMethods(UC_documents,code_documents,code_count_matrix,tf_code_dict,JM_or_DP=True)
+# JM_CC = featureExtraction.SmoothingMethods(code_documents,UC_documents,UC_count_matrix,tf_uc_dict,True)
+
+# DP_UC = featureExtraction.SmoothingMethods(UC_documents,code_documents,code_count_matrix,tf_code_dict,JM_or_DP=False)
+# DP_CC = featureExtraction.SmoothingMethods(code_documents,UC_documents,UC_count_matrix,tf_uc_dict,False)
+
+# JM_UC = rankdata(-JM_UC, method='dense', axis=0)
+# print("JM_UC", JM_UC.shape)
+# JM_CC = rankdata(-JM_CC, method='dense', axis=0)
+# print("JM_CC", JM_CC.shape)
+# DP_UC = rankdata(-DP_UC, method='dense', axis=0)
+# print("DP_UC", DP_UC.shape)
+# DP_CC = rankdata(-DP_CC, method='dense', axis=0)
+# print("DP_CC", DP_CC.shape)
 
 # # ------------------------pre-retrieval (21 metrics)--------------------------#
 # # 1) IDF Features

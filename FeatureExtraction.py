@@ -82,7 +82,7 @@ class FeatureExtraction:
         return self.UC_count_matrix, self.code_count_matrix,tf_uc_dict,tf_code_dict
 
     # Jensen-Shannon.
-    def JensenShannon(self, UC_count_matrix, code_count_matrix) -> np.ndarray:
+    def JensenShannon(self,UC_count_matrix, code_count_matrix) -> np.ndarray:
 
         UC_count_matrix_repeated = np.repeat(
             UC_count_matrix, code_count_matrix.shape[0], axis=0
@@ -142,44 +142,42 @@ class FeatureExtraction:
 
 
 
-    def VectorSpaceModel(
-        self, tfidf_matrix_uc: np.ndarray, tfidf_matrix_code: np.ndarray
-    ) -> np.ndarray:
+    def VectorSpaceModel(self, tfidf_matrix_uc: np.ndarray, tfidf_matrix_code: np.ndarray) -> np.ndarray:
 
         # cosine similarity
         cosine_similarities = cosine_similarity(tfidf_matrix_uc, tfidf_matrix_code)
-
-        # similarity_list = []
-        # for i in range(cosine_similarities.shape[0]):
-        #     similarity_dict = {}
-        #     for j in range(cosine_similarities.shape[1]):
-        #         similarity_dict[code_documents[j]] = cosine_similarities[i][j]
-        #     similarity_list.append(similarity_dict)
-
         return cosine_similarities
     
     def _getOverlap(self, query_term_list: np.ndarray, total_query_set: set) -> int:
         query_term_set = set(np.argpartition(query_term_list, -10)[-10:])
         return len(query_term_set & total_query_set)
 
-    def _SubqueryOverlapTerms(self, query_term: str, code_idx: int, UC_count_matrix: np.ndarray, code_count_matrix: np.ndarray, feature_extraction: object,feature_extraction_method:Callable) -> np.ndarray:
+    def _SubqueryOverlapTerms(self, query_term: str, code_idx: int, feature_extraction_method:Callable,feature_extraction_type:str,*args) -> np.ndarray:
         
-        word_index = feature_extraction.code_vocab_index[query_term]
-        term_vector = np.zeros((1, UC_count_matrix.shape[1])) #1*
-        term_vector[:,word_index]=code_count_matrix[code_idx, word_index]
-
-        query_term_jensen_shannon = feature_extraction_method(UC_count_matrix, term_vector)
+        query_term_jensen_shannon = None
+        if feature_extraction_type == "JS" or feature_extraction_type == "VSM":
+            word_index = self.code_vocab_index[query_term]
+            term_vector = np.zeros((1, args[0].shape[1])) #1*
+            term_vector[:,word_index]=args[1][code_idx, word_index]
+            query_term_jensen_shannon = feature_extraction_method(args[0], term_vector)
+        elif feature_extraction_type == "BM":
+            # args[0] ->documents:list args[1]->idf_dict:dict args[2] -> count_matrix:np.array
+            query_term_jensen_shannon = feature_extraction_method(list(query_term),args[0],args[1],args[2])
+        elif feature_extraction_type == "SM":
+            # args[0] -> documents:list args[1]->count_matrix:np.array args[2]->tf_dict:dict args[3] -> JM_or_DP:bool
+            query_term_jensen_shannon = feature_extraction_method(list(query_term),args[0],args[1],args[2],args[3])
+       
         query_term_len = query_term_jensen_shannon.shape[0] * query_term_jensen_shannon.shape[1]
 
         query_term_jensen_shannon = query_term_jensen_shannon.reshape(query_term_len)
         return query_term_jensen_shannon
 
-    def _SubqueryOverlapCode(self, code_idx, code, UC_count_matrix: np.ndarray, code_count_matrix: np.ndarray, feature_extraction: object, total_query_list: np.ndarray,feature_extraction_method:Callable):
+    def _SubqueryOverlapCode(self, code_idx, code, total_query_list: np.ndarray,feature_extraction_method:Callable,feature_extraction_type:str,*args):
 
         code_idx = int(code_idx)
         code_words = code.split(" ")
         code_words = np.ascontiguousarray(code_words[0:-1])
-        vSubqueryOverlap = np.vectorize(lambda query_term: self._SubqueryOverlapTerms(query_term, code_idx, UC_count_matrix, code_count_matrix, feature_extraction,feature_extraction_method), otypes=[np.ndarray])
+        vSubqueryOverlap = np.vectorize(lambda query_term: self._SubqueryOverlapTerms(query_term, code_idx,feature_extraction_method,feature_extraction_type,*args), otypes=[np.ndarray])
         
         query_term_jensen_shannon = vSubqueryOverlap(code_words)
         total_query_set = set(np.argpartition(total_query_list[:, code_idx], -10)[-10:]) #should be edited
@@ -190,15 +188,19 @@ class FeatureExtraction:
         overall_queries_score = np.std(query_term_overlap)
         return overall_queries_score
     
-    def SubqueryOverlap(self, feature_extraction:object, query:list, feature_extraction_method:Callable, document_count_matrix:np.ndarray, query_count_matrix:np.ndarray) -> np.ndarray:
+    def SubqueryOverlap(self, query:list, feature_extraction_method:Callable,feature_extraction_type:str="JS",*args) -> np.ndarray:
     
         ### Run the original query q, and obtain the result list R 
-        total_score_query_feature_extraction = feature_extraction_method(document_count_matrix, query_count_matrix)
+        total_score_query_feature_extraction = None
+        if feature_extraction_type == "BM" or feature_extraction_type == "SM":
+            total_score_query_feature_extraction = feature_extraction_method(query,*args)
+        else:
+            total_score_query_feature_extraction = feature_extraction_method(*args)
 
         query_tuples =  np.ascontiguousarray(list(enumerate(query)))
         
         ### Run each individual query term qt in the original query as a separate query and obtain the result list Rt.
-        vSubqueryOverlapCode = np.vectorize(lambda code_idx, code_doc: self._SubqueryOverlapCode(code_idx, code_doc, document_count_matrix, query_count_matrix, feature_extraction, total_score_query_feature_extraction,feature_extraction_method), otypes=[np.float16])
+        vSubqueryOverlapCode = np.vectorize(lambda code_idx, code_doc: self._SubqueryOverlapCode(code_idx, code_doc, total_score_query_feature_extraction,feature_extraction_method,feature_extraction_type,*args), otypes=[np.float16])
 
         overall_queries_score = vSubqueryOverlapCode(query_tuples[:,0], query_tuples[:,1])
         return overall_queries_score
@@ -589,46 +591,29 @@ class FeatureExtraction:
         return np.sum(np.vectorize(lambda token: idf[token] * (tf[self.code_vocab_index.get(token)] * (1.2 + 1)) / (tf[self.code_vocab_index.get(token)] + 1.2 * (1 - 0.75 + 0.75 * (doc_len / avgdl))) , otypes=[np.float16])(tokens))
 
     def _BM25PerQuery(self,queries:list,idf_dict:dict,tf:np.array,doc_len:int,avgdl:int):
-        return np.vectorize(lambda query: self._BM25PerToken(query.split(),idf_dict,tf,doc_len,avgdl))(queries)
 
-    def BM25(self,UC_documents:list,code_documents:list,idf_uc_dict:dict,UC_count_matrix:np.array,idf_code_dict:dict,code_count_matrix:np.array) -> np.ndarray:
-        uc_doc_index = {doc: indx for indx, doc in enumerate(UC_documents)}
-        code_doc_index = {doc: indx for indx, doc in enumerate(code_documents)}
+        return np.vectorize(lambda query: self._BM25PerToken(query.split(" ")[0:-1],idf_dict,tf,doc_len,avgdl))(queries)
 
-        UC_avgdl = np.mean([len(doc.split()) for doc in UC_documents])
-        code_avgdl = np.mean([len(doc.split()) for doc in code_documents])
+    def BM25(self,queries:list,documents:list,idf_dict:dict,count_matrix:np.array) -> np.ndarray:
 
-        BM25_UC = np.array([self._BM25PerQuery(code_documents, idf_uc_dict, UC_count_matrix[uc_doc_index[doc]], len(doc.split()), UC_avgdl) for doc in UC_documents])
-        BM25_code = np.array([self._BM25PerQuery(UC_documents, idf_code_dict, code_count_matrix[code_doc_index[doc]], len(doc.split()), code_avgdl) for doc in code_documents])
+        avgdl = np.mean([len(doc.split()) for doc in documents])
 
-        return np.vstack((BM25_UC.T, BM25_code))
+        return np.array([self._BM25PerQuery(queries, idf_dict, count_matrix[i], len(doc.split()), avgdl) for i,doc in enumerate(documents)])
+        #BM25_UC = np.array([self._BM25PerQuery(UC_documents, idf_code_dict, code_count_matrix[i], len(doc.split()), code_avgdl) for i,doc in enumerate(code_documents)])
 
-    def SmoothingMethods(self,UC_documents:list,code_documents:list,UC_count_matrix:np.array,code_count_matrix:np.array,tf_uc_dict:dict,tf_code_dict:dict)->np.ndarray:
+    def SmoothingMethods(self,queries:list,documents:list,count_matrix:np.array,tf_dict:dict,JM_or_DP:bool)->np.ndarray:
         # JM -> (1-lambda) * P(w|d) + lambda * P(w|C) , P(w|d) = c(w;d) / |d| , P(w|C) = c(w;C) / |C|
         # DP -> (c(w;d) + mu * P(w|C)) / (|d| + mu)
-        
         # |C|
-        UC_total_terms_in_corpus = np.sum([len(doc.split()) for doc in UC_documents])
-        code_total_terms_in_corpus = np.sum([len(doc.split()) for doc in code_documents])
-        
-        # to use for count_matrices
-        uc_doc_index = {doc: indx for indx, doc in enumerate(UC_documents)}
-        code_doc_index = {doc: indx for indx, doc in enumerate(code_documents)}
-        
+        total_terms_in_corpus = np.sum([len(doc.split()) for doc in documents])
         # Per Document
-        JM_score_code = np.array([self._SmoothingMethodsPerQuery(UC_documents,doc,code_count_matrix[code_doc_index[doc]],code_total_terms_in_corpus,tf_code_dict,True) for doc in code_documents])
-        JM_score_uc = np.array([self._SmoothingMethodsPerQuery(code_documents,doc,UC_count_matrix[uc_doc_index[doc]],UC_total_terms_in_corpus,tf_uc_dict,True) for doc in UC_documents])
-
-        DP_score_code = np.array([self._SmoothingMethodsPerQuery(UC_documents,doc,code_count_matrix[code_doc_index[doc]],code_total_terms_in_corpus,tf_code_dict,False) for doc in code_documents])
-        DP_score_uc = np.array([self._SmoothingMethodsPerQuery(code_documents,doc,UC_count_matrix[uc_doc_index[doc]],UC_total_terms_in_corpus,tf_uc_dict,False) for doc in UC_documents])
-
-        return np.vstack((JM_score_uc.T, JM_score_code)), np.vstack((DP_score_uc.T, DP_score_code))
+        return np.array([self._SmoothingMethodsPerQuery(queries,doc,count_matrix[i],total_terms_in_corpus,tf_dict,JM_or_DP) for i,doc in enumerate(documents)])
     
     # Per Query
     def _SmoothingMethodsPerQuery(self,queries:list,doc:str,tf_matrix:np.array,total_terms_in_corpus:int,tf_corpus:dict,JM_or_DP:bool)->np.ndarray:
         return np.vectorize(lambda query: self._SmoothingMethodsPerToken(query.split(),doc,tf_matrix,total_terms_in_corpus,tf_corpus,JM_or_DP))(queries)
     
-    def _SmoothingMethodsPerToken(self,tokens:list,doc:str,tf_matrix:np.array,total_terms_in_corpus:int,tf_corpus:dict,JM_or_DP)->np.float16:
+    def _SmoothingMethodsPerToken(self,tokens:list,doc:str,tf_matrix:np.array,total_terms_in_corpus:int,tf_corpus:dict,JM_or_DP:bool)->np.float16:
         _lambda = 0.7;mu = 2000
         # |d|
         doc_len = len(doc.split())
@@ -648,8 +633,59 @@ class FeatureExtraction:
             # DP -> (c(w;d) + mu * P(w|C)) / (|d| + mu)
             return np.sum((term_count_in_document + mu * P_w_C) / (doc_len + mu))
 
-
+    def RobustnessScore(self,queries:list,documents:list,feature_extraction_method:Callable)->np.array:
+        Result = feature_extraction_method() # CC as query
+        #per query (doc# ,1)
+        np.vectorize(lambda i, query: self._RobustnessScorePerQuery(query,documents,Result[:,i],feature_extraction_method))(range(len(queries)), queries)
     
-
-
+    def _EditDocuments(self,query:str,documents:list)->list:
+        for doc in documents:
+            intersection = set(query.split()).intersection(set(doc.split()))
+            for term in intersection:
+                _lambda = doc.count(term) / len(doc)
+                doc.replace(term,"")
+                doc += " ".join([term] * np.random.poisson(_lambda))
+        return documents
         
+    # Clustering Tendency
+    def _SimQuery():
+        pass
+    def ClusteringTendency(self,queries:list,documents:list,Results:np.array)->np.ndarray:
+        pass
+    # Weighted Information Gain
+    def _WeightedInformationGainPerToken(self,token:str,document:str,tf_dict:dict,total_corpus_size:int,_lambda:np.float16)->np.float16:
+        term_count = document.count(token); doc_len = len(document); tf = tf_dict.get(token, 1)
+        if term_count == 0 or doc_len == 0 or tf == 0 or total_corpus_size == 0:
+            return 0
+        ratio = (term_count / doc_len) / (tf / total_corpus_size)
+        if ratio <= 0:
+            return 0
+        return _lambda * np.log2(ratio)
+    
+    def _WeightedInformationGainPerDocument(self,query:str,document:str,tf_dict:dict,total_corpus_size:int,_lambda:np.float16)->np.float16:
+        # per token
+        return np.sum(np.vectorize(lambda token:self._WeightedInformationGainPerToken(token,document,tf_dict,total_corpus_size,_lambda))(query.split()))
+
+    def _WeightedInformationGainPerQuery(self,query:str,documents:list,Results:np.array,tf_dict:dict,total_corpus_size:int)->np.float16:
+        top10 = np.argpartition(Results, -10)[-10:]
+        L = np.array(documents)[top10]
+        _lambda = 1/np.sqrt(len(query.split()))
+        # per document
+        return (1/10)*np.sum(np.vectorize(lambda doc: self._WeightedInformationGainPerDocument(query,doc,tf_dict,total_corpus_size,_lambda))(L))
+    
+    def WeightedInformationGain(self,queries:list,documents:list,Results:np.array,tf_dict:dict,total_corpus_size:int)->np.ndarray:
+        # per query
+        return np.vectorize(lambda i,query: self._WeightedInformationGainPerQuery(query,documents,Results[:,i],tf_dict,total_corpus_size))(range(len(queries)),queries).reshape(-1,1)
+    
+    # Normalized Query Commitment
+    
+    def _NormalizedQueryCommitmentPerQuery(self,Results:np.array)->np.float16:
+        top10 = np.argpartition(Results, -10)[-10:]
+        Score_Dq = np.sum(Results)
+        mu = (1/10)*np.sum(Results[top10])
+        # per document
+        return np.sqrt((1/10)*np.sum([pow(Results[i]-mu,2) for i in top10]))/Score_Dq
+    
+    def NormalizedQueryCommitment(self,Results:np.array)->np.ndarray:
+        # per query
+        return np.vectorize(lambda i,: self._NormalizedQueryCommitmentPerQuery(Results[:,i]))(range(Results.shape[1])).reshape(-1,1)
