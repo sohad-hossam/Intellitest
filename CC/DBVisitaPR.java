@@ -78,7 +78,7 @@ public class DBVisitPR implements IDBVisitPR {
             }
         }
     }
-}
+
 public boolean modificaVisitPR(BeanVisitPR PVIS) throws SQLException {
     // Variable for the connection
     Connection conn = null;
@@ -233,4 +233,5 @@ public BeanVisitPR getVisitPR(int pIdRefreshmentpoint, int pIdTourist) throws SQ
             DBConnectionPool.releaseConnection(conn);
         }
     }
+}
 }

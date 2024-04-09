@@ -102,9 +102,6 @@ public class DBSearchPreferences implements IDBSearchPreferences {
             }
         }
     }
-
-    // Other methods have similar translations...
-}
 public boolean insertPreferenceOfPR(int pIdRestaurant, int pIdSearchPreference) throws SQLException {
     // Variables for database connection
     Connection conn = null;
@@ -318,4 +315,5 @@ public ArrayList<SearchPreferenceBean> getSearchPreferences() throws SQLExceptio
             DBConnectionPool.releaseConnection(conn);
         }
     }
+}
 }

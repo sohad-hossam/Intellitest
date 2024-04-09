@@ -1,4 +1,4 @@
-﻿/*
+/*
 * TuristiTableModel.java
 *
 * 1.0

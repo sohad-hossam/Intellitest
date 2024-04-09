@@ -121,7 +121,7 @@ public class DeskManager extends DefaultDesktopManager {
             ex.printStackTrace();
         }
     }
-}
+
 /**
  * Restore the frame from the effect of minimizing, resetting the
  * position and size it had before.
@@ -436,4 +436,5 @@ public void initializeDeskMenu() {
     restoreAll.addActionListener(menuListener);
     restoreAll.addActionListener(menuListener);
     closeAll.addActionListener(menuListener);
+}
 }

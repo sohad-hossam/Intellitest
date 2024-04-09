@@ -148,7 +148,7 @@ public class DBMenu implements IDBMenu {
     public BeanMenu getDailyMenu(int pIdRestaurant, String pGiorno) throws SQLException {
         // Variables for database connection
     }
-}
+
 
 public boolean modifyMenu(BeanMenu pMenu) throws SQLException {
     // Variables for database connection
@@ -256,4 +256,5 @@ public BeanMenu getDailyMenu(int pIdRestaurant, String pDay) throws SQLException
             DBConnectionPool.releaseConnection(conn);
         }
     }
+}
 }

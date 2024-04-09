@@ -196,7 +196,7 @@ public class DBRefreshmentPoint implements IDBRefreshmentPoint {
         }
         return count;
     }
-}
+
 public int getNumberOfAdvancedSearchItems(int touristId, String keyword, ArrayList<BeanTag> tags, Point3D position, double maxDistance) throws SQLException {
     // Variables for database connection
     Connection conn = null;
@@ -555,4 +555,5 @@ public ArrayList<RestaurantPointBean> getListOfPR() throws SQLException {
             DBConnectionPool.releaseConnection(conn);
         }
     }
+}
 }
