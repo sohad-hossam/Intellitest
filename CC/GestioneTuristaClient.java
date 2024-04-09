@@ -133,7 +133,7 @@ public class TouristManagementClient extends CommonTouristManagement implements 
             throw new RemoteException(ErrorMessages.DB_ERROR);
         }
     }
-}
+
 
 
 catch (SQLException e) {
@@ -614,4 +614,5 @@ public BeanRefreshmentPoint[] obtainFavoriteRefreshmentPoints(int touristId) thr
         }
     }
     return null;
+}
 }

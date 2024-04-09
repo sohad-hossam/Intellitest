@@ -57,5 +57,4 @@ public class NewsTableModelTest extends TestCase {
         assertEquals(0, model.getRowCount());
     }
 
-    // Other test methods...
 }

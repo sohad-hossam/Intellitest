@@ -86,7 +86,7 @@ public class DBGenericPreferences implements IDBGenericPreferences {
             }
         }
     }
-}
+
 
 public boolean modifyGenericPreference(GenericPreferenceBean preference) throws SQLException {
     // Connect to database
@@ -166,4 +166,5 @@ public GenericPreferenceBean getGenericPreference(int touristId) throws SQLExcep
             DBConnectionPool.releaseConnection(conn);
         }
     }
+}
 }

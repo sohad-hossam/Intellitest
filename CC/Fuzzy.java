@@ -92,7 +92,7 @@ public class Fuzzy {
     private static float distance(String pTerm, Category pCategory, Hashtable<String, float[]> PTotalTerms) {
         return ((pCategory.getVal(pTerm))[0] / (PTotalTerms.get(pTerm))[0]);
     }
-}
+
 /**
  * Implementation of a T-Norm function
  *
@@ -423,6 +423,7 @@ public static void training() throws RemoteException {
     } catch (Exception e) {
         throw new RemoteException("Error writing file");
     }
+}
 }
 
 
