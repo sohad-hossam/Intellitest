@@ -327,7 +327,6 @@ UC1.TXT,BeanTag.java,0
 UC1.TXT,BeanTurista.java,0
 UC1.TXT,BeanVisitaBC.java,0
 UC1.TXT,BeanVisitaPR.java,0
-UC1.TXT,BeniCulturali.java,0
 UC1.TXT,Categoria.java,0
 UC1.TXT,ControlloBeniCulturali.java,0
 UC1.TXT,ControlloDati.java,0
@@ -336,7 +335,6 @@ UC1.TXT,ControlloVisiteBeniCulturali.java,0
 UC1.TXT,ControlServerLauncher.java,0
 UC1.TXT,CostantiGlobali.java,0
 UC1.TXT,DBBanner.java,0
-UC1.TXT,DBBeneCulturale.java,0
 UC1.TXT,DBConnectionPool.java,0
 UC1.TXT,DBConvenzione.java,0
 UC1.TXT,DBCulturalAsset.java,0
@@ -362,7 +360,6 @@ UC1.TXT,Fuzzy.java,0
 UC1.TXT,GestioneAdvertisement.java,0
 UC1.TXT,GestioneAdvertisementAgenzia.java,0
 UC1.TXT,GestioneAdvertisementPuntoDiRistoro.java,0
-UC1.TXT,GestioneBeniCulturaliAgenzia.java,0
 UC1.TXT,GestioneBeniCulturaliComune.java,0
 UC1.TXT,GestionePuntiDiRistoroComune.java,0
 UC1.TXT,GestioneTagComune.java,0
@@ -373,7 +370,6 @@ UC1.TXT,GestioneTuristiAgenzia.java,0
 UC1.TXT,HelpManager.java,0
 UC1.TXT,IAutenticazione.java,0
 UC1.TXT,IDBBanner.java,0
-UC1.TXT,IDBBeneCulturale.java,0
 UC1.TXT,IDBConvenzione.java,0
 UC1.TXT,IDBMenu.java,0
 UC1.TXT,IDBNews.java,0
@@ -413,10 +409,10 @@ UC1.TXT,Punto3DRenderer.java,0
 UC1.TXT,reportStatistici.java,0
 UC1.TXT,ReportTableModel.java,0
 UC1.TXT,Ricerca.java,0
-UC1.TXT,RicercaAvanzata.txt,0
+UC1.TXT,RicercaAvanzata.java,0
 UC1.TXT,RicercaStandard.java,0
 UC1.TXT,SchedaBC.java,0
-UC1.TXT,SchedaBC.txt,0
+UC1.TXT,SchedaBC.java,0
 UC1.TXT,SchedaPR.java,0
 UC1.TXT,SchedaTurista.java,0
 UC1.TXT,ScrollableTable.java,0
@@ -441,7 +437,6 @@ UC10.TXT,BeanOperatorePuntoDiRistoro.java,0
 UC10.TXT,BeanPiatto.java,0
 UC10.TXT,BeanPreferenzaDiRicerca.java,0
 UC10.TXT,BeanPreferenzeGeneriche.java,0
-UC10.TXT,BeanPuntoDiRistoro.java,0
 UC10.TXT,BeanTag.java,0
 UC10.TXT,BeanTurista.java,0
 UC10.TXT,BeanVisitaBC.java,0
@@ -466,7 +461,6 @@ UC10.TXT,DBOperatorAgency.java,0
 UC10.TXT,DBOperatoreRestaurant.java,0
 UC10.TXT,DBPiatto.java,0
 UC10.TXT,DBPreferenzeGeneriche.java,0
-UC10.TXT,DBPuntoDiRistoro.java,0
 UC10.TXT,DBSearchPreferences.java,0
 UC10.TXT,DBStatisticheLocalita.java,0
 UC10.TXT,DBTag.java,0
@@ -483,7 +477,6 @@ UC10.TXT,GestioneAdvertisementAgenzia.java,0
 UC10.TXT,GestioneAdvertisementPuntoDiRistoro.java,0
 UC10.TXT,GestioneBeniCulturaliAgenzia.java,0
 UC10.TXT,GestioneBeniCulturaliComune.java,0
-UC10.TXT,GestionePuntiDiRistoroComune.java,0
 UC10.TXT,GestioneTagComune.java,0
 UC10.TXT,GestioneTagOperatoreAgenzia.java,0
 UC10.TXT,GestioneTuristaClient.java,0
@@ -501,7 +494,6 @@ UC10.TXT,IDBOperatorePuntoDiRistoro.java,0
 UC10.TXT,IDBPiatto.java,0
 UC10.TXT,IDBPreferenzeDiRicerca.java,0
 UC10.TXT,IDBPreferenzeGeneriche.java,0
-UC10.TXT,IDBPuntoDiRistoro.java,0
 UC10.TXT,IDBTag.java,0
 UC10.TXT,IDBTurista.java,0
 UC10.TXT,IDBVisitaBC.java,0
@@ -511,8 +503,6 @@ UC10.TXT,IGestioneAdvertisementAgenzia.java,0
 UC10.TXT,IGestioneAdvertisementPuntoDiRistoro.java,0
 UC10.TXT,IGestioneBeniCulturaliAgenzia.java,0
 UC10.TXT,IGestioneBeniCulturaliComune.java,0
-UC10.TXT,IGestionePuntiDiRistoroAgenzia.java,0
-UC10.TXT,IGestionePuntiDiRistoroComune.java,0
 UC10.TXT,IGestioneTagComune.java,0
 UC10.TXT,IGestioneTagOperatoreAgenzia.java,0
 UC10.TXT,IGestioneTuristaClient.java,0
@@ -532,10 +522,10 @@ UC10.TXT,Punto3DRenderer.java,0
 UC10.TXT,reportStatistici.java,0
 UC10.TXT,ReportTableModel.java,0
 UC10.TXT,Ricerca.java,0
-UC10.TXT,RicercaAvanzata.txt,0
+UC10.TXT,RicercaAvanzata.java,0
 UC10.TXT,RicercaStandard.java,0
 UC10.TXT,SchedaBC.java,0
-UC10.TXT,SchedaBC.txt,0
+UC10.TXT,SchedaBC.java,0
 UC10.TXT,SchedaPR.java,0
 UC10.TXT,SchedaTurista.java,0
 UC10.TXT,ScrollableTable.java,0
@@ -552,7 +542,6 @@ UC11.TXT,BannerNode.java,0
 UC11.TXT,BannerRenderer.java,0
 UC11.TXT,BeanBanner.java,0
 UC11.TXT,BeanBeneCulturale.java,0
-UC11.TXT,BeanConvenzione.java,0
 UC11.TXT,BeanMenu.java,0
 UC11.TXT,BeanNews.java,0
 UC11.TXT,BeanOperatoreAgenzia.java,0
@@ -612,7 +601,6 @@ UC11.TXT,HelpManager.java,0
 UC11.TXT,IAutenticazione.java,0
 UC11.TXT,IDBBanner.java,0
 UC11.TXT,IDBBeneCulturale.java,0
-UC11.TXT,IDBConvenzione.java,0
 UC11.TXT,IDBMenu.java,0
 UC11.TXT,IDBNews.java,0
 UC11.TXT,IDBOperatoreAgenzia.java,0
@@ -651,10 +639,10 @@ UC11.TXT,Punto3DRenderer.java,0
 UC11.TXT,reportStatistici.java,0
 UC11.TXT,ReportTableModel.java,0
 UC11.TXT,Ricerca.java,0
-UC11.TXT,RicercaAvanzata.txt,0
+UC11.TXT,RicercaAvanzata.java,0
 UC11.TXT,RicercaStandard.java,0
 UC11.TXT,SchedaBC.java,0
-UC11.TXT,SchedaBC.txt,0
+UC11.TXT,SchedaBC.java,0
 UC11.TXT,SchedaPR.java,0
 UC11.TXT,SchedaTurista.java,0
 UC11.TXT,ScrollableTable.java,0
@@ -681,7 +669,6 @@ UC12.TXT,BeanPreferenzaDiRicerca.java,0
 UC12.TXT,BeanPreferenzeGeneriche.java,0
 UC12.TXT,BeanPuntoDiRistoro.java,0
 UC12.TXT,BeanTag.java,0
-UC12.TXT,BeanTurista.java,0
 UC12.TXT,BeanVisitaBC.java,0
 UC12.TXT,BeanVisitaPR.java,0
 UC12.TXT,BeniCulturali.java,0
@@ -725,7 +712,6 @@ UC12.TXT,GestionePuntiDiRistoroComune.java,0
 UC12.TXT,GestioneTagComune.java,0
 UC12.TXT,GestioneTagOperatoreAgenzia.java,0
 UC12.TXT,GestioneTuristaClient.java,0
-UC12.TXT,GestioneTuristaComune.java,0
 UC12.TXT,GestioneTuristiAgenzia.java,0
 UC12.TXT,HelpManager.java,0
 UC12.TXT,IAutenticazione.java,0
@@ -770,10 +756,10 @@ UC12.TXT,Punto3DRenderer.java,0
 UC12.TXT,reportStatistici.java,0
 UC12.TXT,ReportTableModel.java,0
 UC12.TXT,Ricerca.java,0
-UC12.TXT,RicercaAvanzata.txt,0
+UC12.TXT,RicercaAvanzata.java,0
 UC12.TXT,RicercaStandard.java,0
 UC12.TXT,SchedaBC.java,0
-UC12.TXT,SchedaBC.txt,0
+UC12.TXT,SchedaBC.java,0
 UC12.TXT,SchedaPR.java,0
 UC12.TXT,SchedaTurista.java,0
 UC12.TXT,ScrollableTable.java,0
@@ -781,8 +767,6 @@ UC12.TXT,SitoTableModel.java,0
 UC12.TXT,Tag.java,0
 UC12.TXT,TAGTableModel.java,0
 UC12.TXT,TestoNewsRendererTest.java,0
-UC12.TXT,Turisti.java,0
-UC12.TXT,TuristiTableModel.java,0
 UC13.TXT,Autenticazione.java,0
 UC13.TXT,Banner.java,0
 UC13.TXT,BannerDialog.java,0
@@ -800,7 +784,6 @@ UC13.TXT,BeanPreferenzaDiRicerca.java,0
 UC13.TXT,BeanPreferenzeGeneriche.java,0
 UC13.TXT,BeanPuntoDiRistoro.java,0
 UC13.TXT,BeanTag.java,0
-UC13.TXT,BeanTurista.java,0
 UC13.TXT,BeanVisitaBC.java,0
 UC13.TXT,BeanVisitaPR.java,0
 UC13.TXT,BeniCulturali.java,0
@@ -827,7 +810,6 @@ UC13.TXT,DBPuntoDiRistoro.java,0
 UC13.TXT,DBSearchPreferences.java,0
 UC13.TXT,DBStatisticheLocalita.java,0
 UC13.TXT,DBTag.java,0
-UC13.TXT,DBTurista.java,0
 UC13.TXT,DBVisitaBC.java,0
 UC13.TXT,DBVisitaPR.java,0
 UC13.TXT,DeskManager.java,0
@@ -860,7 +842,6 @@ UC13.TXT,IDBPreferenzeDiRicerca.java,0
 UC13.TXT,IDBPreferenzeGeneriche.java,0
 UC13.TXT,IDBPuntoDiRistoro.java,0
 UC13.TXT,IDBTag.java,0
-UC13.TXT,IDBTurista.java,0
 UC13.TXT,IDBVisitaBC.java,0
 UC13.TXT,IDBVisitaPR.java,0
 UC13.TXT,IGestioneAdvertisement.java,0
@@ -873,7 +854,6 @@ UC13.TXT,IGestionePuntiDiRistoroComune.java,0
 UC13.TXT,IGestioneTagComune.java,0
 UC13.TXT,IGestioneTagOperatoreAgenzia.java,0
 UC13.TXT,IGestioneTuristaClient.java,0
-UC13.TXT,IGestioneTuristiAgenzia.java,0
 UC13.TXT,IRicerca.java,0
 UC13.TXT,LimitedDocument.java,0
 UC13.TXT,MediaVotiRenderer.java,0
@@ -889,10 +869,10 @@ UC13.TXT,Punto3DRenderer.java,0
 UC13.TXT,reportStatistici.java,0
 UC13.TXT,ReportTableModel.java,0
 UC13.TXT,Ricerca.java,0
-UC13.TXT,RicercaAvanzata.txt,0
+UC13.TXT,RicercaAvanzata.java,0
 UC13.TXT,RicercaStandard.java,0
 UC13.TXT,SchedaBC.java,0
-UC13.TXT,SchedaBC.txt,0
+UC13.TXT,SchedaBC.java,0
 UC13.TXT,SchedaPR.java,0
 UC13.TXT,SchedaTurista.java,0
 UC13.TXT,ScrollableTable.java,0
@@ -900,7 +880,6 @@ UC13.TXT,SitoTableModel.java,0
 UC13.TXT,Tag.java,0
 UC13.TXT,TAGTableModel.java,0
 UC13.TXT,TestoNewsRendererTest.java,0
-UC13.TXT,Turisti.java,0
 UC13.TXT,TuristiTableModel.java,0
 UC14.TXT,Autenticazione.java,0
 UC14.TXT,Banner.java,0
@@ -919,7 +898,6 @@ UC14.TXT,BeanPreferenzaDiRicerca.java,0
 UC14.TXT,BeanPreferenzeGeneriche.java,0
 UC14.TXT,BeanPuntoDiRistoro.java,0
 UC14.TXT,BeanTag.java,0
-UC14.TXT,BeanTurista.java,0
 UC14.TXT,BeanVisitaBC.java,0
 UC14.TXT,BeanVisitaPR.java,0
 UC14.TXT,BeniCulturali.java,0
@@ -964,7 +942,6 @@ UC14.TXT,GestioneTagComune.java,0
 UC14.TXT,GestioneTagOperatoreAgenzia.java,0
 UC14.TXT,GestioneTuristaClient.java,0
 UC14.TXT,GestioneTuristaComune.java,0
-UC14.TXT,GestioneTuristiAgenzia.java,0
 UC14.TXT,HelpManager.java,0
 UC14.TXT,IAutenticazione.java,0
 UC14.TXT,IDBBanner.java,0
@@ -979,7 +956,6 @@ UC14.TXT,IDBPreferenzeDiRicerca.java,0
 UC14.TXT,IDBPreferenzeGeneriche.java,0
 UC14.TXT,IDBPuntoDiRistoro.java,0
 UC14.TXT,IDBTag.java,0
-UC14.TXT,IDBTurista.java,0
 UC14.TXT,IDBVisitaBC.java,0
 UC14.TXT,IDBVisitaPR.java,0
 UC14.TXT,IGestioneAdvertisement.java,0
@@ -992,7 +968,6 @@ UC14.TXT,IGestionePuntiDiRistoroComune.java,0
 UC14.TXT,IGestioneTagComune.java,0
 UC14.TXT,IGestioneTagOperatoreAgenzia.java,0
 UC14.TXT,IGestioneTuristaClient.java,0
-UC14.TXT,IGestioneTuristiAgenzia.java,0
 UC14.TXT,IRicerca.java,0
 UC14.TXT,LimitedDocument.java,0
 UC14.TXT,MediaVotiRenderer.java,0
@@ -1010,7 +985,7 @@ UC14.TXT,ReportTableModel.java,0
 UC14.TXT,Ricerca.java,0
 UC14.TXT,RicercaStandard.java,0
 UC14.TXT,SchedaBC.java,0
-UC14.TXT,SchedaBC.txt,0
+UC14.TXT,SchedaBC.java,0
 UC14.TXT,SchedaPR.java,0
 UC14.TXT,SchedaTurista.java,0
 UC14.TXT,ScrollableTable.java,0
@@ -1037,13 +1012,11 @@ UC15.TXT,BeanPreferenzaDiRicerca.java,0
 UC15.TXT,BeanPreferenzeGeneriche.java,0
 UC15.TXT,BeanPuntoDiRistoro.java,0
 UC15.TXT,BeanTag.java,0
-UC15.TXT,BeanTurista.java,0
 UC15.TXT,BeanVisitaBC.java,0
 UC15.TXT,BeanVisitaPR.java,0
 UC15.TXT,BeniCulturali.java,0
 UC15.TXT,Categoria.java,0
 UC15.TXT,ControlloBeniCulturali.java,0
-UC15.TXT,ControlloDati.java,0
 UC15.TXT,ControlloDatiAdvertisement.java,0
 UC15.TXT,ControlloVisiteBeniCulturali.java,0
 UC15.TXT,ControlServerLauncher.java,0
@@ -1081,8 +1054,6 @@ UC15.TXT,GestionePuntiDiRistoroComune.java,0
 UC15.TXT,GestioneTagComune.java,0
 UC15.TXT,GestioneTagOperatoreAgenzia.java,0
 UC15.TXT,GestioneTuristaClient.java,0
-UC15.TXT,GestioneTuristaComune.java,0
-UC15.TXT,GestioneTuristiAgenzia.java,0
 UC15.TXT,HelpManager.java,0
 UC15.TXT,IAutenticazione.java,0
 UC15.TXT,IDBBanner.java,0
@@ -1097,7 +1068,6 @@ UC15.TXT,IDBPreferenzeDiRicerca.java,0
 UC15.TXT,IDBPreferenzeGeneriche.java,0
 UC15.TXT,IDBPuntoDiRistoro.java,0
 UC15.TXT,IDBTag.java,0
-UC15.TXT,IDBTurista.java,0
 UC15.TXT,IDBVisitaBC.java,0
 UC15.TXT,IDBVisitaPR.java,0
 UC15.TXT,IGestioneAdvertisement.java,0
@@ -1110,7 +1080,6 @@ UC15.TXT,IGestionePuntiDiRistoroComune.java,0
 UC15.TXT,IGestioneTagComune.java,0
 UC15.TXT,IGestioneTagOperatoreAgenzia.java,0
 UC15.TXT,IGestioneTuristaClient.java,0
-UC15.TXT,IGestioneTuristiAgenzia.java,0
 UC15.TXT,IRicerca.java,0
 UC15.TXT,LimitedDocument.java,0
 UC15.TXT,MediaVotiRenderer.java,0
@@ -1126,10 +1095,10 @@ UC15.TXT,Punto3DRenderer.java,0
 UC15.TXT,reportStatistici.java,0
 UC15.TXT,ReportTableModel.java,0
 UC15.TXT,Ricerca.java,0
-UC15.TXT,RicercaAvanzata.txt,0
+UC15.TXT,RicercaAvanzata.java,0
 UC15.TXT,RicercaStandard.java,0
 UC15.TXT,SchedaBC.java,0
-UC15.TXT,SchedaBC.txt,0
+UC15.TXT,SchedaBC.java,0
 UC15.TXT,SchedaPR.java,0
 UC15.TXT,SchedaTurista.java,0
 UC15.TXT,ScrollableTable.java,0
@@ -1156,7 +1125,6 @@ UC16.TXT,BeanPreferenzaDiRicerca.java,0
 UC16.TXT,BeanPreferenzeGeneriche.java,0
 UC16.TXT,BeanPuntoDiRistoro.java,0
 UC16.TXT,BeanTag.java,0
-UC16.TXT,BeanTurista.java,0
 UC16.TXT,BeanVisitaBC.java,0
 UC16.TXT,BeanVisitaPR.java,0
 UC16.TXT,BeniCulturali.java,0
@@ -1201,7 +1169,6 @@ UC16.TXT,GestioneTagComune.java,0
 UC16.TXT,GestioneTagOperatoreAgenzia.java,0
 UC16.TXT,GestioneTuristaClient.java,0
 UC16.TXT,GestioneTuristaComune.java,0
-UC16.TXT,GestioneTuristiAgenzia.java,0
 UC16.TXT,HelpManager.java,0
 UC16.TXT,IAutenticazione.java,0
 UC16.TXT,IDBBanner.java,0
@@ -1216,7 +1183,6 @@ UC16.TXT,IDBPreferenzeDiRicerca.java,0
 UC16.TXT,IDBPreferenzeGeneriche.java,0
 UC16.TXT,IDBPuntoDiRistoro.java,0
 UC16.TXT,IDBTag.java,0
-UC16.TXT,IDBTurista.java,0
 UC16.TXT,IDBVisitaBC.java,0
 UC16.TXT,IDBVisitaPR.java,0
 UC16.TXT,IGestioneAdvertisement.java,0
@@ -1229,7 +1195,6 @@ UC16.TXT,IGestionePuntiDiRistoroComune.java,0
 UC16.TXT,IGestioneTagComune.java,0
 UC16.TXT,IGestioneTagOperatoreAgenzia.java,0
 UC16.TXT,IGestioneTuristaClient.java,0
-UC16.TXT,IGestioneTuristiAgenzia.java,0
 UC16.TXT,IRicerca.java,0
 UC16.TXT,LimitedDocument.java,0
 UC16.TXT,MediaVotiRenderer.java,0
@@ -1245,10 +1210,10 @@ UC16.TXT,Punto3DRenderer.java,0
 UC16.TXT,reportStatistici.java,0
 UC16.TXT,ReportTableModel.java,0
 UC16.TXT,Ricerca.java,0
-UC16.TXT,RicercaAvanzata.txt,0
+UC16.TXT,RicercaAvanzata.java,0
 UC16.TXT,RicercaStandard.java,0
 UC16.TXT,SchedaBC.java,0
-UC16.TXT,SchedaBC.txt,0
+UC16.TXT,SchedaBC.java,0
 UC16.TXT,SchedaPR.java,0
 UC16.TXT,SchedaTurista.java,0
 UC16.TXT,ScrollableTable.java,0
@@ -1259,11 +1224,8 @@ UC16.TXT,TestoNewsRendererTest.java,0
 UC16.TXT,Turisti.java,0
 UC16.TXT,TuristiTableModel.java,0
 UC17.TXT,Autenticazione.java,0
-UC17.TXT,Banner.java,0
 UC17.TXT,BannerDialog.java,0
-UC17.TXT,BannerNode.java,0
 UC17.TXT,BannerRenderer.java,0
-UC17.TXT,BeanBanner.java,0
 UC17.TXT,BeanBeneCulturale.java,0
 UC17.TXT,BeanConvenzione.java,0
 UC17.TXT,BeanMenu.java,0
@@ -1281,12 +1243,8 @@ UC17.TXT,BeanVisitaPR.java,0
 UC17.TXT,BeniCulturali.java,0
 UC17.TXT,Categoria.java,0
 UC17.TXT,ControlloBeniCulturali.java,0
-UC17.TXT,ControlloDati.java,0
-UC17.TXT,ControlloDatiAdvertisement.java,0
 UC17.TXT,ControlloVisiteBeniCulturali.java,0
 UC17.TXT,ControlServerLauncher.java,0
-UC17.TXT,CostantiGlobali.java,0
-UC17.TXT,DBBanner.java,0
 UC17.TXT,DBBeneCulturale.java,0
 UC17.TXT,DBConnectionPool.java,0
 UC17.TXT,DBConvenzione.java,0
@@ -1310,8 +1268,6 @@ UC17.TXT,ElencoCategorie.java,0
 UC17.TXT,ErrorMessages.java,0
 UC17.TXT,FeedBackTableModel.java,0
 UC17.TXT,Fuzzy.java,0
-UC17.TXT,GestioneAdvertisement.java,0
-UC17.TXT,GestioneAdvertisementAgenzia.java,0
 UC17.TXT,GestioneAdvertisementPuntoDiRistoro.java,0
 UC17.TXT,GestioneBeniCulturaliAgenzia.java,0
 UC17.TXT,GestioneBeniCulturaliComune.java,0
@@ -1323,7 +1279,6 @@ UC17.TXT,GestioneTuristaComune.java,0
 UC17.TXT,GestioneTuristiAgenzia.java,0
 UC17.TXT,HelpManager.java,0
 UC17.TXT,IAutenticazione.java,0
-UC17.TXT,IDBBanner.java,0
 UC17.TXT,IDBBeneCulturale.java,0
 UC17.TXT,IDBConvenzione.java,0
 UC17.TXT,IDBMenu.java,0
@@ -1338,8 +1293,6 @@ UC17.TXT,IDBTag.java,0
 UC17.TXT,IDBTurista.java,0
 UC17.TXT,IDBVisitaBC.java,0
 UC17.TXT,IDBVisitaPR.java,0
-UC17.TXT,IGestioneAdvertisement.java,0
-UC17.TXT,IGestioneAdvertisementAgenzia.java,0
 UC17.TXT,IGestioneAdvertisementPuntoDiRistoro.java,0
 UC17.TXT,IGestioneBeniCulturaliAgenzia.java,0
 UC17.TXT,IGestioneBeniCulturaliComune.java,0
@@ -1364,10 +1317,10 @@ UC17.TXT,Punto3DRenderer.java,0
 UC17.TXT,reportStatistici.java,0
 UC17.TXT,ReportTableModel.java,0
 UC17.TXT,Ricerca.java,0
-UC17.TXT,RicercaAvanzata.txt,0
+UC17.TXT,RicercaAvanzata.java,0
 UC17.TXT,RicercaStandard.java,0
 UC17.TXT,SchedaBC.java,0
-UC17.TXT,SchedaBC.txt,0
+UC17.TXT,SchedaBC.java,0
 UC17.TXT,SchedaPR.java,0
 UC17.TXT,SchedaTurista.java,0
 UC17.TXT,ScrollableTable.java,0
@@ -1382,7 +1335,6 @@ UC18.TXT,Banner.java,0
 UC18.TXT,BannerDialog.java,0
 UC18.TXT,BannerNode.java,0
 UC18.TXT,BannerRenderer.java,0
-UC18.TXT,BeanBanner.java,0
 UC18.TXT,BeanBeneCulturale.java,0
 UC18.TXT,BeanConvenzione.java,0
 UC18.TXT,BeanMenu.java,0
@@ -1405,7 +1357,6 @@ UC18.TXT,ControlloDatiAdvertisement.java,0
 UC18.TXT,ControlloVisiteBeniCulturali.java,0
 UC18.TXT,ControlServerLauncher.java,0
 UC18.TXT,CostantiGlobali.java,0
-UC18.TXT,DBBanner.java,0
 UC18.TXT,DBBeneCulturale.java,0
 UC18.TXT,DBConnectionPool.java,0
 UC18.TXT,DBConvenzione.java,0
@@ -1442,7 +1393,6 @@ UC18.TXT,GestioneTuristaComune.java,0
 UC18.TXT,GestioneTuristiAgenzia.java,0
 UC18.TXT,HelpManager.java,0
 UC18.TXT,IAutenticazione.java,0
-UC18.TXT,IDBBanner.java,0
 UC18.TXT,IDBBeneCulturale.java,0
 UC18.TXT,IDBConvenzione.java,0
 UC18.TXT,IDBMenu.java,0
@@ -1457,7 +1407,6 @@ UC18.TXT,IDBTag.java,0
 UC18.TXT,IDBTurista.java,0
 UC18.TXT,IDBVisitaBC.java,0
 UC18.TXT,IDBVisitaPR.java,0
-UC18.TXT,IGestioneAdvertisement.java,0
 UC18.TXT,IGestioneAdvertisementAgenzia.java,0
 UC18.TXT,IGestioneAdvertisementPuntoDiRistoro.java,0
 UC18.TXT,IGestioneBeniCulturaliAgenzia.java,0
@@ -1471,7 +1420,6 @@ UC18.TXT,IGestioneTuristiAgenzia.java,0
 UC18.TXT,IRicerca.java,0
 UC18.TXT,LimitedDocument.java,0
 UC18.TXT,MediaVotiRenderer.java,0
-UC18.TXT,MessaggiErrore.java,0
 UC18.TXT,News.java,0
 UC18.TXT,NewsTableModelTest.java,0
 UC18.TXT,OperatoreAgenzia.java,0
@@ -1483,10 +1431,10 @@ UC18.TXT,Punto3DRenderer.java,0
 UC18.TXT,reportStatistici.java,0
 UC18.TXT,ReportTableModel.java,0
 UC18.TXT,Ricerca.java,0
-UC18.TXT,RicercaAvanzata.txt,0
+UC18.TXT,RicercaAvanzata.java,0
 UC18.TXT,RicercaStandard.java,0
 UC18.TXT,SchedaBC.java,0
-UC18.TXT,SchedaBC.txt,0
+UC18.TXT,SchedaBC.java,0
 UC18.TXT,SchedaPR.java,0
 UC18.TXT,SchedaTurista.java,0
 UC18.TXT,ScrollableTable.java,0
@@ -1497,11 +1445,9 @@ UC18.TXT,TestoNewsRendererTest.java,0
 UC18.TXT,Turisti.java,0
 UC18.TXT,TuristiTableModel.java,0
 UC19.TXT,Autenticazione.java,0
-UC19.TXT,Banner.java,0
 UC19.TXT,BannerDialog.java,0
 UC19.TXT,BannerNode.java,0
 UC19.TXT,BannerRenderer.java,0
-UC19.TXT,BeanBanner.java,0
 UC19.TXT,BeanBeneCulturale.java,0
 UC19.TXT,BeanConvenzione.java,0
 UC19.TXT,BeanMenu.java,0
@@ -1520,11 +1466,8 @@ UC19.TXT,BeniCulturali.java,0
 UC19.TXT,Categoria.java,0
 UC19.TXT,ControlloBeniCulturali.java,0
 UC19.TXT,ControlloDati.java,0
-UC19.TXT,ControlloDatiAdvertisement.java,0
 UC19.TXT,ControlloVisiteBeniCulturali.java,0
 UC19.TXT,ControlServerLauncher.java,0
-UC19.TXT,CostantiGlobali.java,0
-UC19.TXT,DBBanner.java,0
 UC19.TXT,DBBeneCulturale.java,0
 UC19.TXT,DBConnectionPool.java,0
 UC19.TXT,DBConvenzione.java,0
@@ -1548,8 +1491,6 @@ UC19.TXT,ElencoCategorie.java,0
 UC19.TXT,ErrorMessages.java,0
 UC19.TXT,FeedBackTableModel.java,0
 UC19.TXT,Fuzzy.java,0
-UC19.TXT,GestioneAdvertisement.java,0
-UC19.TXT,GestioneAdvertisementAgenzia.java,0
 UC19.TXT,GestioneAdvertisementPuntoDiRistoro.java,0
 UC19.TXT,GestioneBeniCulturaliAgenzia.java,0
 UC19.TXT,GestioneBeniCulturaliComune.java,0
@@ -1576,8 +1517,6 @@ UC19.TXT,IDBTag.java,0
 UC19.TXT,IDBTurista.java,0
 UC19.TXT,IDBVisitaBC.java,0
 UC19.TXT,IDBVisitaPR.java,0
-UC19.TXT,IGestioneAdvertisement.java,0
-UC19.TXT,IGestioneAdvertisementAgenzia.java,0
 UC19.TXT,IGestioneAdvertisementPuntoDiRistoro.java,0
 UC19.TXT,IGestioneBeniCulturaliAgenzia.java,0
 UC19.TXT,IGestioneBeniCulturaliComune.java,0
@@ -1602,10 +1541,10 @@ UC19.TXT,Punto3DRenderer.java,0
 UC19.TXT,reportStatistici.java,0
 UC19.TXT,ReportTableModel.java,0
 UC19.TXT,Ricerca.java,0
-UC19.TXT,RicercaAvanzata.txt,0
+UC19.TXT,RicercaAvanzata.java,0
 UC19.TXT,RicercaStandard.java,0
 UC19.TXT,SchedaBC.java,0
-UC19.TXT,SchedaBC.txt,0
+UC19.TXT,SchedaBC.java,0
 UC19.TXT,SchedaPR.java,0
 UC19.TXT,SchedaTurista.java,0
 UC19.TXT,ScrollableTable.java,0
@@ -1621,7 +1560,6 @@ UC2.TXT,BannerDialog.java,0
 UC2.TXT,BannerNode.java,0
 UC2.TXT,BannerRenderer.java,0
 UC2.TXT,BeanBanner.java,0
-UC2.TXT,BeanBeneCulturale.java,0
 UC2.TXT,BeanConvenzione.java,0
 UC2.TXT,BeanMenu.java,0
 UC2.TXT,BeanNews.java,0
@@ -1635,16 +1573,13 @@ UC2.TXT,BeanTag.java,0
 UC2.TXT,BeanTurista.java,0
 UC2.TXT,BeanVisitaBC.java,0
 UC2.TXT,BeanVisitaPR.java,0
-UC2.TXT,BeniCulturali.java,0
 UC2.TXT,Categoria.java,0
-UC2.TXT,ControlloBeniCulturali.java,0
 UC2.TXT,ControlloDati.java,0
 UC2.TXT,ControlloDatiAdvertisement.java,0
 UC2.TXT,ControlloVisiteBeniCulturali.java,0
 UC2.TXT,ControlServerLauncher.java,0
 UC2.TXT,CostantiGlobali.java,0
 UC2.TXT,DBBanner.java,0
-UC2.TXT,DBBeneCulturale.java,0
 UC2.TXT,DBConnectionPool.java,0
 UC2.TXT,DBConvenzione.java,0
 UC2.TXT,DBCulturalAsset.java,0
@@ -1670,7 +1605,6 @@ UC2.TXT,Fuzzy.java,0
 UC2.TXT,GestioneAdvertisement.java,0
 UC2.TXT,GestioneAdvertisementAgenzia.java,0
 UC2.TXT,GestioneAdvertisementPuntoDiRistoro.java,0
-UC2.TXT,GestioneBeniCulturaliAgenzia.java,0
 UC2.TXT,GestioneBeniCulturaliComune.java,0
 UC2.TXT,GestionePuntiDiRistoroComune.java,0
 UC2.TXT,GestioneTagComune.java,0
@@ -1698,7 +1632,6 @@ UC2.TXT,IDBVisitaPR.java,0
 UC2.TXT,IGestioneAdvertisement.java,0
 UC2.TXT,IGestioneAdvertisementAgenzia.java,0
 UC2.TXT,IGestioneAdvertisementPuntoDiRistoro.java,0
-UC2.TXT,IGestioneBeniCulturaliAgenzia.java,0
 UC2.TXT,IGestioneBeniCulturaliComune.java,0
 UC2.TXT,IGestionePuntiDiRistoroAgenzia.java,0
 UC2.TXT,IGestionePuntiDiRistoroComune.java,0
@@ -1721,10 +1654,10 @@ UC2.TXT,Punto3DRenderer.java,0
 UC2.TXT,reportStatistici.java,0
 UC2.TXT,ReportTableModel.java,0
 UC2.TXT,Ricerca.java,0
-UC2.TXT,RicercaAvanzata.txt,0
+UC2.TXT,RicercaAvanzata.java,0
 UC2.TXT,RicercaStandard.java,0
 UC2.TXT,SchedaBC.java,0
-UC2.TXT,SchedaBC.txt,0
+UC2.TXT,SchedaBC.java,0
 UC2.TXT,SchedaPR.java,0
 UC2.TXT,SchedaTurista.java,0
 UC2.TXT,ScrollableTable.java,0
@@ -1735,11 +1668,8 @@ UC2.TXT,TestoNewsRendererTest.java,0
 UC2.TXT,Turisti.java,0
 UC2.TXT,TuristiTableModel.java,0
 UC20.TXT,Autenticazione.java,0
-UC20.TXT,Banner.java,0
 UC20.TXT,BannerDialog.java,0
-UC20.TXT,BannerNode.java,0
 UC20.TXT,BannerRenderer.java,0
-UC20.TXT,BeanBanner.java,0
 UC20.TXT,BeanBeneCulturale.java,0
 UC20.TXT,BeanConvenzione.java,0
 UC20.TXT,BeanMenu.java,0
@@ -1757,12 +1687,8 @@ UC20.TXT,BeanVisitaPR.java,0
 UC20.TXT,BeniCulturali.java,0
 UC20.TXT,Categoria.java,0
 UC20.TXT,ControlloBeniCulturali.java,0
-UC20.TXT,ControlloDati.java,0
-UC20.TXT,ControlloDatiAdvertisement.java,0
 UC20.TXT,ControlloVisiteBeniCulturali.java,0
 UC20.TXT,ControlServerLauncher.java,0
-UC20.TXT,CostantiGlobali.java,0
-UC20.TXT,DBBanner.java,0
 UC20.TXT,DBBeneCulturale.java,0
 UC20.TXT,DBConnectionPool.java,0
 UC20.TXT,DBConvenzione.java,0
@@ -1786,8 +1712,6 @@ UC20.TXT,ElencoCategorie.java,0
 UC20.TXT,ErrorMessages.java,0
 UC20.TXT,FeedBackTableModel.java,0
 UC20.TXT,Fuzzy.java,0
-UC20.TXT,GestioneAdvertisement.java,0
-UC20.TXT,GestioneAdvertisementAgenzia.java,0
 UC20.TXT,GestioneAdvertisementPuntoDiRistoro.java,0
 UC20.TXT,GestioneBeniCulturaliAgenzia.java,0
 UC20.TXT,GestioneBeniCulturaliComune.java,0
@@ -1799,7 +1723,6 @@ UC20.TXT,GestioneTuristaComune.java,0
 UC20.TXT,GestioneTuristiAgenzia.java,0
 UC20.TXT,HelpManager.java,0
 UC20.TXT,IAutenticazione.java,0
-UC20.TXT,IDBBanner.java,0
 UC20.TXT,IDBBeneCulturale.java,0
 UC20.TXT,IDBConvenzione.java,0
 UC20.TXT,IDBMenu.java,0
@@ -1814,8 +1737,6 @@ UC20.TXT,IDBTag.java,0
 UC20.TXT,IDBTurista.java,0
 UC20.TXT,IDBVisitaBC.java,0
 UC20.TXT,IDBVisitaPR.java,0
-UC20.TXT,IGestioneAdvertisement.java,0
-UC20.TXT,IGestioneAdvertisementAgenzia.java,0
 UC20.TXT,IGestioneAdvertisementPuntoDiRistoro.java,0
 UC20.TXT,IGestioneBeniCulturaliAgenzia.java,0
 UC20.TXT,IGestioneBeniCulturaliComune.java,0
@@ -1840,10 +1761,10 @@ UC20.TXT,Punto3DRenderer.java,0
 UC20.TXT,reportStatistici.java,0
 UC20.TXT,ReportTableModel.java,0
 UC20.TXT,Ricerca.java,0
-UC20.TXT,RicercaAvanzata.txt,0
+UC20.TXT,RicercaAvanzata.java,0
 UC20.TXT,RicercaStandard.java,0
 UC20.TXT,SchedaBC.java,0
-UC20.TXT,SchedaBC.txt,0
+UC20.TXT,SchedaBC.java,0
 UC20.TXT,SchedaPR.java,0
 UC20.TXT,SchedaTurista.java,0
 UC20.TXT,ScrollableTable.java,0
@@ -1862,7 +1783,6 @@ UC21.TXT,BeanBanner.java,0
 UC21.TXT,BeanBeneCulturale.java,0
 UC21.TXT,BeanConvenzione.java,0
 UC21.TXT,BeanMenu.java,0
-UC21.TXT,BeanNews.java,0
 UC21.TXT,BeanOperatoreAgenzia.java,0
 UC21.TXT,BeanOperatorePuntoDiRistoro.java,0
 UC21.TXT,BeanPiatto.java,0
@@ -1876,8 +1796,6 @@ UC21.TXT,BeanVisitaPR.java,0
 UC21.TXT,BeniCulturali.java,0
 UC21.TXT,Categoria.java,0
 UC21.TXT,ControlloBeniCulturali.java,0
-UC21.TXT,ControlloDati.java,0
-UC21.TXT,ControlloDatiAdvertisement.java,0
 UC21.TXT,ControlloVisiteBeniCulturali.java,0
 UC21.TXT,ControlServerLauncher.java,0
 UC21.TXT,CostantiGlobali.java,0
@@ -1906,7 +1824,6 @@ UC21.TXT,ErrorMessages.java,0
 UC21.TXT,FeedBackTableModel.java,0
 UC21.TXT,Fuzzy.java,0
 UC21.TXT,GestioneAdvertisement.java,0
-UC21.TXT,GestioneAdvertisementAgenzia.java,0
 UC21.TXT,GestioneAdvertisementPuntoDiRistoro.java,0
 UC21.TXT,GestioneBeniCulturaliAgenzia.java,0
 UC21.TXT,GestioneBeniCulturaliComune.java,0
@@ -1922,7 +1839,6 @@ UC21.TXT,IDBBanner.java,0
 UC21.TXT,IDBBeneCulturale.java,0
 UC21.TXT,IDBConvenzione.java,0
 UC21.TXT,IDBMenu.java,0
-UC21.TXT,IDBNews.java,0
 UC21.TXT,IDBOperatoreAgenzia.java,0
 UC21.TXT,IDBOperatorePuntoDiRistoro.java,0
 UC21.TXT,IDBPiatto.java,0
@@ -1934,7 +1850,6 @@ UC21.TXT,IDBTurista.java,0
 UC21.TXT,IDBVisitaBC.java,0
 UC21.TXT,IDBVisitaPR.java,0
 UC21.TXT,IGestioneAdvertisement.java,0
-UC21.TXT,IGestioneAdvertisementAgenzia.java,0
 UC21.TXT,IGestioneAdvertisementPuntoDiRistoro.java,0
 UC21.TXT,IGestioneBeniCulturaliAgenzia.java,0
 UC21.TXT,IGestioneBeniCulturaliComune.java,0
@@ -1948,7 +1863,6 @@ UC21.TXT,IRicerca.java,0
 UC21.TXT,LimitedDocument.java,0
 UC21.TXT,MediaVotiRenderer.java,0
 UC21.TXT,MessaggiErrore.java,0
-UC21.TXT,News.java,0
 UC21.TXT,NewsTableModelTest.java,0
 UC21.TXT,OperatoreAgenzia.java,0
 UC21.TXT,PrioritaRenderer.java,0
@@ -1959,10 +1873,10 @@ UC21.TXT,Punto3DRenderer.java,0
 UC21.TXT,reportStatistici.java,0
 UC21.TXT,ReportTableModel.java,0
 UC21.TXT,Ricerca.java,0
-UC21.TXT,RicercaAvanzata.txt,0
+UC21.TXT,RicercaAvanzata.java,0
 UC21.TXT,RicercaStandard.java,0
 UC21.TXT,SchedaBC.java,0
-UC21.TXT,SchedaBC.txt,0
+UC21.TXT,SchedaBC.java,0
 UC21.TXT,SchedaPR.java,0
 UC21.TXT,SchedaTurista.java,0
 UC21.TXT,ScrollableTable.java,0
@@ -1981,7 +1895,6 @@ UC22.TXT,BeanBanner.java,0
 UC22.TXT,BeanBeneCulturale.java,0
 UC22.TXT,BeanConvenzione.java,0
 UC22.TXT,BeanMenu.java,0
-UC22.TXT,BeanNews.java,0
 UC22.TXT,BeanOperatoreAgenzia.java,0
 UC22.TXT,BeanOperatorePuntoDiRistoro.java,0
 UC22.TXT,BeanPiatto.java,0
@@ -1996,7 +1909,6 @@ UC22.TXT,BeniCulturali.java,0
 UC22.TXT,Categoria.java,0
 UC22.TXT,ControlloBeniCulturali.java,0
 UC22.TXT,ControlloDati.java,0
-UC22.TXT,ControlloDatiAdvertisement.java,0
 UC22.TXT,ControlloVisiteBeniCulturali.java,0
 UC22.TXT,ControlServerLauncher.java,0
 UC22.TXT,CostantiGlobali.java,0
@@ -2025,7 +1937,6 @@ UC22.TXT,ErrorMessages.java,0
 UC22.TXT,FeedBackTableModel.java,0
 UC22.TXT,Fuzzy.java,0
 UC22.TXT,GestioneAdvertisement.java,0
-UC22.TXT,GestioneAdvertisementAgenzia.java,0
 UC22.TXT,GestioneAdvertisementPuntoDiRistoro.java,0
 UC22.TXT,GestioneBeniCulturaliAgenzia.java,0
 UC22.TXT,GestioneBeniCulturaliComune.java,0
@@ -2041,7 +1952,6 @@ UC22.TXT,IDBBanner.java,0
 UC22.TXT,IDBBeneCulturale.java,0
 UC22.TXT,IDBConvenzione.java,0
 UC22.TXT,IDBMenu.java,0
-UC22.TXT,IDBNews.java,0
 UC22.TXT,IDBOperatoreAgenzia.java,0
 UC22.TXT,IDBOperatorePuntoDiRistoro.java,0
 UC22.TXT,IDBPiatto.java,0
@@ -2053,7 +1963,6 @@ UC22.TXT,IDBTurista.java,0
 UC22.TXT,IDBVisitaBC.java,0
 UC22.TXT,IDBVisitaPR.java,0
 UC22.TXT,IGestioneAdvertisement.java,0
-UC22.TXT,IGestioneAdvertisementAgenzia.java,0
 UC22.TXT,IGestioneAdvertisementPuntoDiRistoro.java,0
 UC22.TXT,IGestioneBeniCulturaliAgenzia.java,0
 UC22.TXT,IGestioneBeniCulturaliComune.java,0
@@ -2078,10 +1987,10 @@ UC22.TXT,Punto3DRenderer.java,0
 UC22.TXT,reportStatistici.java,0
 UC22.TXT,ReportTableModel.java,0
 UC22.TXT,Ricerca.java,0
-UC22.TXT,RicercaAvanzata.txt,0
+UC22.TXT,RicercaAvanzata.java,0
 UC22.TXT,RicercaStandard.java,0
 UC22.TXT,SchedaBC.java,0
-UC22.TXT,SchedaBC.txt,0
+UC22.TXT,SchedaBC.java,0
 UC22.TXT,SchedaPR.java,0
 UC22.TXT,SchedaTurista.java,0
 UC22.TXT,ScrollableTable.java,0
@@ -2100,7 +2009,6 @@ UC23.TXT,BeanBanner.java,0
 UC23.TXT,BeanBeneCulturale.java,0
 UC23.TXT,BeanConvenzione.java,0
 UC23.TXT,BeanMenu.java,0
-UC23.TXT,BeanNews.java,0
 UC23.TXT,BeanOperatoreAgenzia.java,0
 UC23.TXT,BeanOperatorePuntoDiRistoro.java,0
 UC23.TXT,BeanPiatto.java,0
@@ -2114,8 +2022,6 @@ UC23.TXT,BeanVisitaPR.java,0
 UC23.TXT,BeniCulturali.java,0
 UC23.TXT,Categoria.java,0
 UC23.TXT,ControlloBeniCulturali.java,0
-UC23.TXT,ControlloDati.java,0
-UC23.TXT,ControlloDatiAdvertisement.java,0
 UC23.TXT,ControlloVisiteBeniCulturali.java,0
 UC23.TXT,ControlServerLauncher.java,0
 UC23.TXT,CostantiGlobali.java,0
@@ -2144,7 +2050,6 @@ UC23.TXT,ErrorMessages.java,0
 UC23.TXT,FeedBackTableModel.java,0
 UC23.TXT,Fuzzy.java,0
 UC23.TXT,GestioneAdvertisement.java,0
-UC23.TXT,GestioneAdvertisementAgenzia.java,0
 UC23.TXT,GestioneAdvertisementPuntoDiRistoro.java,0
 UC23.TXT,GestioneBeniCulturaliAgenzia.java,0
 UC23.TXT,GestioneBeniCulturaliComune.java,0
@@ -2160,7 +2065,6 @@ UC23.TXT,IDBBanner.java,0
 UC23.TXT,IDBBeneCulturale.java,0
 UC23.TXT,IDBConvenzione.java,0
 UC23.TXT,IDBMenu.java,0
-UC23.TXT,IDBNews.java,0
 UC23.TXT,IDBOperatoreAgenzia.java,0
 UC23.TXT,IDBOperatorePuntoDiRistoro.java,0
 UC23.TXT,IDBPiatto.java,0
@@ -2172,7 +2076,6 @@ UC23.TXT,IDBTurista.java,0
 UC23.TXT,IDBVisitaBC.java,0
 UC23.TXT,IDBVisitaPR.java,0
 UC23.TXT,IGestioneAdvertisement.java,0
-UC23.TXT,IGestioneAdvertisementAgenzia.java,0
 UC23.TXT,IGestioneAdvertisementPuntoDiRistoro.java,0
 UC23.TXT,IGestioneBeniCulturaliAgenzia.java,0
 UC23.TXT,IGestioneBeniCulturaliComune.java,0
@@ -2186,7 +2089,6 @@ UC23.TXT,IRicerca.java,0
 UC23.TXT,LimitedDocument.java,0
 UC23.TXT,MediaVotiRenderer.java,0
 UC23.TXT,MessaggiErrore.java,0
-UC23.TXT,News.java,0
 UC23.TXT,NewsTableModelTest.java,0
 UC23.TXT,OperatoreAgenzia.java,0
 UC23.TXT,PrioritaRenderer.java,0
@@ -2197,10 +2099,10 @@ UC23.TXT,Punto3DRenderer.java,0
 UC23.TXT,reportStatistici.java,0
 UC23.TXT,ReportTableModel.java,0
 UC23.TXT,Ricerca.java,0
-UC23.TXT,RicercaAvanzata.txt,0
+UC23.TXT,RicercaAvanzata.java,0
 UC23.TXT,RicercaStandard.java,0
 UC23.TXT,SchedaBC.java,0
-UC23.TXT,SchedaBC.txt,0
+UC23.TXT,SchedaBC.java,0
 UC23.TXT,SchedaPR.java,0
 UC23.TXT,SchedaTurista.java,0
 UC23.TXT,ScrollableTable.java,0
@@ -2260,19 +2162,15 @@ UC24.TXT,DBVisitaPR.java,0
 UC24.TXT,DeskManager.java,0
 UC24.TXT,ElencoCategorie.java,0
 UC24.TXT,ErrorMessages.java,0
-UC24.TXT,FeedBackTableModel.java,0
 UC24.TXT,Fuzzy.java,0
 UC24.TXT,GestioneAdvertisement.java,0
 UC24.TXT,GestioneAdvertisementAgenzia.java,0
 UC24.TXT,GestioneAdvertisementPuntoDiRistoro.java,0
 UC24.TXT,GestioneBeniCulturaliAgenzia.java,0
-UC24.TXT,GestioneBeniCulturaliComune.java,0
-UC24.TXT,GestionePuntiDiRistoroComune.java,0
 UC24.TXT,GestioneTagComune.java,0
 UC24.TXT,GestioneTagOperatoreAgenzia.java,0
 UC24.TXT,GestioneTuristaClient.java,0
 UC24.TXT,GestioneTuristaComune.java,0
-UC24.TXT,GestioneTuristiAgenzia.java,0
 UC24.TXT,HelpManager.java,0
 UC24.TXT,IAutenticazione.java,0
 UC24.TXT,IDBBanner.java,0
@@ -2293,14 +2191,9 @@ UC24.TXT,IDBVisitaPR.java,0
 UC24.TXT,IGestioneAdvertisement.java,0
 UC24.TXT,IGestioneAdvertisementAgenzia.java,0
 UC24.TXT,IGestioneAdvertisementPuntoDiRistoro.java,0
-UC24.TXT,IGestioneBeniCulturaliAgenzia.java,0
-UC24.TXT,IGestioneBeniCulturaliComune.java,0
-UC24.TXT,IGestionePuntiDiRistoroAgenzia.java,0
-UC24.TXT,IGestionePuntiDiRistoroComune.java,0
 UC24.TXT,IGestioneTagComune.java,0
 UC24.TXT,IGestioneTagOperatoreAgenzia.java,0
 UC24.TXT,IGestioneTuristaClient.java,0
-UC24.TXT,IGestioneTuristiAgenzia.java,0
 UC24.TXT,IRicerca.java,0
 UC24.TXT,LimitedDocument.java,0
 UC24.TXT,MediaVotiRenderer.java,0
@@ -2316,10 +2209,10 @@ UC24.TXT,Punto3DRenderer.java,0
 UC24.TXT,reportStatistici.java,0
 UC24.TXT,ReportTableModel.java,0
 UC24.TXT,Ricerca.java,0
-UC24.TXT,RicercaAvanzata.txt,0
+UC24.TXT,RicercaAvanzata.java,0
 UC24.TXT,RicercaStandard.java,0
 UC24.TXT,SchedaBC.java,0
-UC24.TXT,SchedaBC.txt,0
+UC24.TXT,SchedaBC.java,0
 UC24.TXT,SchedaPR.java,0
 UC24.TXT,SchedaTurista.java,0
 UC24.TXT,ScrollableTable.java,0
@@ -2384,9 +2277,7 @@ UC25.TXT,Fuzzy.java,0
 UC25.TXT,GestioneAdvertisement.java,0
 UC25.TXT,GestioneAdvertisementAgenzia.java,0
 UC25.TXT,GestioneAdvertisementPuntoDiRistoro.java,0
-UC25.TXT,GestioneBeniCulturaliAgenzia.java,0
 UC25.TXT,GestioneBeniCulturaliComune.java,0
-UC25.TXT,GestionePuntiDiRistoroComune.java,0
 UC25.TXT,GestioneTagComune.java,0
 UC25.TXT,GestioneTagOperatoreAgenzia.java,0
 UC25.TXT,GestioneTuristaClient.java,0
@@ -2413,7 +2304,6 @@ UC25.TXT,IGestioneAdvertisement.java,0
 UC25.TXT,IGestioneAdvertisementAgenzia.java,0
 UC25.TXT,IGestioneAdvertisementPuntoDiRistoro.java,0
 UC25.TXT,IGestioneBeniCulturaliAgenzia.java,0
-UC25.TXT,IGestioneBeniCulturaliComune.java,0
 UC25.TXT,IGestionePuntiDiRistoroAgenzia.java,0
 UC25.TXT,IGestionePuntiDiRistoroComune.java,0
 UC25.TXT,IGestioneTagComune.java,0
@@ -2435,10 +2325,10 @@ UC25.TXT,Punto3DRenderer.java,0
 UC25.TXT,reportStatistici.java,0
 UC25.TXT,ReportTableModel.java,0
 UC25.TXT,Ricerca.java,0
-UC25.TXT,RicercaAvanzata.txt,0
+UC25.TXT,RicercaAvanzata.java,0
 UC25.TXT,RicercaStandard.java,0
 UC25.TXT,SchedaBC.java,0
-UC25.TXT,SchedaBC.txt,0
+UC25.TXT,SchedaBC.java,0
 UC25.TXT,SchedaPR.java,0
 UC25.TXT,SchedaTurista.java,0
 UC25.TXT,ScrollableTable.java,0
@@ -2467,7 +2357,6 @@ UC26.TXT,BeanPuntoDiRistoro.java,0
 UC26.TXT,BeanTag.java,0
 UC26.TXT,BeanTurista.java,0
 UC26.TXT,BeanVisitaBC.java,0
-UC26.TXT,BeanVisitaPR.java,0
 UC26.TXT,BeniCulturali.java,0
 UC26.TXT,Categoria.java,0
 UC26.TXT,ControlloBeniCulturali.java,0
@@ -2498,7 +2387,6 @@ UC26.TXT,DBVisitaPR.java,0
 UC26.TXT,DeskManager.java,0
 UC26.TXT,ElencoCategorie.java,0
 UC26.TXT,ErrorMessages.java,0
-UC26.TXT,FeedBackTableModel.java,0
 UC26.TXT,Fuzzy.java,0
 UC26.TXT,GestioneAdvertisement.java,0
 UC26.TXT,GestioneAdvertisementAgenzia.java,0
@@ -2554,10 +2442,10 @@ UC26.TXT,Punto3DRenderer.java,0
 UC26.TXT,reportStatistici.java,0
 UC26.TXT,ReportTableModel.java,0
 UC26.TXT,Ricerca.java,0
-UC26.TXT,RicercaAvanzata.txt,0
+UC26.TXT,RicercaAvanzata.java,0
 UC26.TXT,RicercaStandard.java,0
 UC26.TXT,SchedaBC.java,0
-UC26.TXT,SchedaBC.txt,0
+UC26.TXT,SchedaBC.java,0
 UC26.TXT,SchedaPR.java,0
 UC26.TXT,SchedaTurista.java,0
 UC26.TXT,ScrollableTable.java,0
@@ -2658,7 +2546,6 @@ UC27.TXT,IGestioneTagComune.java,0
 UC27.TXT,IGestioneTagOperatoreAgenzia.java,0
 UC27.TXT,IGestioneTuristaClient.java,0
 UC27.TXT,IGestioneTuristiAgenzia.java,0
-UC27.TXT,IRicerca.java,0
 UC27.TXT,LimitedDocument.java,0
 UC27.TXT,MediaVotiRenderer.java,0
 UC27.TXT,MessaggiErrore.java,0
@@ -2673,10 +2560,10 @@ UC27.TXT,Punto3DRenderer.java,0
 UC27.TXT,reportStatistici.java,0
 UC27.TXT,ReportTableModel.java,0
 UC27.TXT,Ricerca.java,0
-UC27.TXT,RicercaAvanzata.txt,0
+UC27.TXT,RicercaAvanzata.java,0
 UC27.TXT,RicercaStandard.java,0
 UC27.TXT,SchedaBC.java,0
-UC27.TXT,SchedaBC.txt,0
+UC27.TXT,SchedaBC.java,0
 UC27.TXT,SchedaPR.java,0
 UC27.TXT,SchedaTurista.java,0
 UC27.TXT,ScrollableTable.java,0
@@ -2702,7 +2589,6 @@ UC28.TXT,BeanPiatto.java,0
 UC28.TXT,BeanPreferenzaDiRicerca.java,0
 UC28.TXT,BeanPreferenzeGeneriche.java,0
 UC28.TXT,BeanPuntoDiRistoro.java,0
-UC28.TXT,BeanTag.java,0
 UC28.TXT,BeanTurista.java,0
 UC28.TXT,BeanVisitaBC.java,0
 UC28.TXT,BeanVisitaPR.java,0
@@ -2745,7 +2631,6 @@ UC28.TXT,GestioneBeniCulturaliAgenzia.java,0
 UC28.TXT,GestioneBeniCulturaliComune.java,0
 UC28.TXT,GestionePuntiDiRistoroComune.java,0
 UC28.TXT,GestioneTagComune.java,0
-UC28.TXT,GestioneTagOperatoreAgenzia.java,0
 UC28.TXT,GestioneTuristaClient.java,0
 UC28.TXT,GestioneTuristaComune.java,0
 UC28.TXT,GestioneTuristiAgenzia.java,0
@@ -2762,7 +2647,6 @@ UC28.TXT,IDBPiatto.java,0
 UC28.TXT,IDBPreferenzeDiRicerca.java,0
 UC28.TXT,IDBPreferenzeGeneriche.java,0
 UC28.TXT,IDBPuntoDiRistoro.java,0
-UC28.TXT,IDBTag.java,0
 UC28.TXT,IDBTurista.java,0
 UC28.TXT,IDBVisitaBC.java,0
 UC28.TXT,IDBVisitaPR.java,0
@@ -2774,7 +2658,6 @@ UC28.TXT,IGestioneBeniCulturaliComune.java,0
 UC28.TXT,IGestionePuntiDiRistoroAgenzia.java,0
 UC28.TXT,IGestionePuntiDiRistoroComune.java,0
 UC28.TXT,IGestioneTagComune.java,0
-UC28.TXT,IGestioneTagOperatoreAgenzia.java,0
 UC28.TXT,IGestioneTuristaClient.java,0
 UC28.TXT,IGestioneTuristiAgenzia.java,0
 UC28.TXT,IRicerca.java,0
@@ -2792,16 +2675,15 @@ UC28.TXT,Punto3DRenderer.java,0
 UC28.TXT,reportStatistici.java,0
 UC28.TXT,ReportTableModel.java,0
 UC28.TXT,Ricerca.java,0
-UC28.TXT,RicercaAvanzata.txt,0
+UC28.TXT,RicercaAvanzata.java,0
 UC28.TXT,RicercaStandard.java,0
 UC28.TXT,SchedaBC.java,0
-UC28.TXT,SchedaBC.txt,0
+UC28.TXT,SchedaBC.java,0
 UC28.TXT,SchedaPR.java,0
 UC28.TXT,SchedaTurista.java,0
 UC28.TXT,ScrollableTable.java,0
 UC28.TXT,SitoTableModel.java,0
 UC28.TXT,Tag.java,0
-UC28.TXT,TAGTableModel.java,0
 UC28.TXT,TestoNewsRendererTest.java,0
 UC28.TXT,Turisti.java,0
 UC28.TXT,TuristiTableModel.java,0
@@ -2864,7 +2746,6 @@ UC29.TXT,GestioneBeniCulturaliAgenzia.java,0
 UC29.TXT,GestioneBeniCulturaliComune.java,0
 UC29.TXT,GestionePuntiDiRistoroComune.java,0
 UC29.TXT,GestioneTagComune.java,0
-UC29.TXT,GestioneTagOperatoreAgenzia.java,0
 UC29.TXT,GestioneTuristaClient.java,0
 UC29.TXT,GestioneTuristaComune.java,0
 UC29.TXT,GestioneTuristiAgenzia.java,0
@@ -2911,10 +2792,10 @@ UC29.TXT,Punto3DRenderer.java,0
 UC29.TXT,reportStatistici.java,0
 UC29.TXT,ReportTableModel.java,0
 UC29.TXT,Ricerca.java,0
-UC29.TXT,RicercaAvanzata.txt,0
+UC29.TXT,RicercaAvanzata.java,0
 UC29.TXT,RicercaStandard.java,0
 UC29.TXT,SchedaBC.java,0
-UC29.TXT,SchedaBC.txt,0
+UC29.TXT,SchedaBC.java,0
 UC29.TXT,SchedaPR.java,0
 UC29.TXT,SchedaTurista.java,0
 UC29.TXT,ScrollableTable.java,0
@@ -2930,7 +2811,6 @@ UC3.TXT,BannerDialog.java,0
 UC3.TXT,BannerNode.java,0
 UC3.TXT,BannerRenderer.java,0
 UC3.TXT,BeanBanner.java,0
-UC3.TXT,BeanBeneCulturale.java,0
 UC3.TXT,BeanConvenzione.java,0
 UC3.TXT,BeanMenu.java,0
 UC3.TXT,BeanNews.java,0
@@ -2944,16 +2824,13 @@ UC3.TXT,BeanTag.java,0
 UC3.TXT,BeanTurista.java,0
 UC3.TXT,BeanVisitaBC.java,0
 UC3.TXT,BeanVisitaPR.java,0
-UC3.TXT,BeniCulturali.java,0
 UC3.TXT,Categoria.java,0
-UC3.TXT,ControlloBeniCulturali.java,0
 UC3.TXT,ControlloDati.java,0
 UC3.TXT,ControlloDatiAdvertisement.java,0
 UC3.TXT,ControlloVisiteBeniCulturali.java,0
 UC3.TXT,ControlServerLauncher.java,0
 UC3.TXT,CostantiGlobali.java,0
 UC3.TXT,DBBanner.java,0
-UC3.TXT,DBBeneCulturale.java,0
 UC3.TXT,DBConnectionPool.java,0
 UC3.TXT,DBConvenzione.java,0
 UC3.TXT,DBCulturalAsset.java,0
@@ -2979,7 +2856,6 @@ UC3.TXT,Fuzzy.java,0
 UC3.TXT,GestioneAdvertisement.java,0
 UC3.TXT,GestioneAdvertisementAgenzia.java,0
 UC3.TXT,GestioneAdvertisementPuntoDiRistoro.java,0
-UC3.TXT,GestioneBeniCulturaliAgenzia.java,0
 UC3.TXT,GestioneBeniCulturaliComune.java,0
 UC3.TXT,GestionePuntiDiRistoroComune.java,0
 UC3.TXT,GestioneTagComune.java,0
@@ -3007,7 +2883,6 @@ UC3.TXT,IDBVisitaPR.java,0
 UC3.TXT,IGestioneAdvertisement.java,0
 UC3.TXT,IGestioneAdvertisementAgenzia.java,0
 UC3.TXT,IGestioneAdvertisementPuntoDiRistoro.java,0
-UC3.TXT,IGestioneBeniCulturaliAgenzia.java,0
 UC3.TXT,IGestioneBeniCulturaliComune.java,0
 UC3.TXT,IGestionePuntiDiRistoroAgenzia.java,0
 UC3.TXT,IGestionePuntiDiRistoroComune.java,0
@@ -3030,10 +2905,10 @@ UC3.TXT,Punto3DRenderer.java,0
 UC3.TXT,reportStatistici.java,0
 UC3.TXT,ReportTableModel.java,0
 UC3.TXT,Ricerca.java,0
-UC3.TXT,RicercaAvanzata.txt,0
+UC3.TXT,RicercaAvanzata.java,0
 UC3.TXT,RicercaStandard.java,0
 UC3.TXT,SchedaBC.java,0
-UC3.TXT,SchedaBC.txt,0
+UC3.TXT,SchedaBC.java,0
 UC3.TXT,SchedaPR.java,0
 UC3.TXT,SchedaTurista.java,0
 UC3.TXT,ScrollableTable.java,0
@@ -3059,7 +2934,6 @@ UC30.TXT,BeanPiatto.java,0
 UC30.TXT,BeanPreferenzaDiRicerca.java,0
 UC30.TXT,BeanPreferenzeGeneriche.java,0
 UC30.TXT,BeanPuntoDiRistoro.java,0
-UC30.TXT,BeanTag.java,0
 UC30.TXT,BeanTurista.java,0
 UC30.TXT,BeanVisitaBC.java,0
 UC30.TXT,BeanVisitaPR.java,0
@@ -3086,7 +2960,6 @@ UC30.TXT,DBPreferenzeGeneriche.java,0
 UC30.TXT,DBPuntoDiRistoro.java,0
 UC30.TXT,DBSearchPreferences.java,0
 UC30.TXT,DBStatisticheLocalita.java,0
-UC30.TXT,DBTag.java,0
 UC30.TXT,DBTurista.java,0
 UC30.TXT,DBVisitaBC.java,0
 UC30.TXT,DBVisitaPR.java,0
@@ -3102,7 +2975,6 @@ UC30.TXT,GestioneBeniCulturaliAgenzia.java,0
 UC30.TXT,GestioneBeniCulturaliComune.java,0
 UC30.TXT,GestionePuntiDiRistoroComune.java,0
 UC30.TXT,GestioneTagComune.java,0
-UC30.TXT,GestioneTagOperatoreAgenzia.java,0
 UC30.TXT,GestioneTuristaClient.java,0
 UC30.TXT,GestioneTuristaComune.java,0
 UC30.TXT,GestioneTuristiAgenzia.java,0
@@ -3119,7 +2991,6 @@ UC30.TXT,IDBPiatto.java,0
 UC30.TXT,IDBPreferenzeDiRicerca.java,0
 UC30.TXT,IDBPreferenzeGeneriche.java,0
 UC30.TXT,IDBPuntoDiRistoro.java,0
-UC30.TXT,IDBTag.java,0
 UC30.TXT,IDBTurista.java,0
 UC30.TXT,IDBVisitaBC.java,0
 UC30.TXT,IDBVisitaPR.java,0
@@ -3149,10 +3020,10 @@ UC30.TXT,Punto3DRenderer.java,0
 UC30.TXT,reportStatistici.java,0
 UC30.TXT,ReportTableModel.java,0
 UC30.TXT,Ricerca.java,0
-UC30.TXT,RicercaAvanzata.txt,0
+UC30.TXT,RicercaAvanzata.java,0
 UC30.TXT,RicercaStandard.java,0
 UC30.TXT,SchedaBC.java,0
-UC30.TXT,SchedaBC.txt,0
+UC30.TXT,SchedaBC.java,0
 UC30.TXT,SchedaPR.java,0
 UC30.TXT,SchedaTurista.java,0
 UC30.TXT,ScrollableTable.java,0
@@ -3232,7 +3103,6 @@ UC31.TXT,IDBBeneCulturale.java,0
 UC31.TXT,IDBConvenzione.java,0
 UC31.TXT,IDBMenu.java,0
 UC31.TXT,IDBNews.java,0
-UC31.TXT,IDBOperatoreAgenzia.java,0
 UC31.TXT,IDBOperatorePuntoDiRistoro.java,0
 UC31.TXT,IDBPiatto.java,0
 UC31.TXT,IDBPreferenzeDiRicerca.java,0
@@ -3259,7 +3129,6 @@ UC31.TXT,MediaVotiRenderer.java,0
 UC31.TXT,MessaggiErrore.java,0
 UC31.TXT,News.java,0
 UC31.TXT,NewsTableModelTest.java,0
-UC31.TXT,OperatoreAgenzia.java,0
 UC31.TXT,PrioritaRenderer.java,0
 UC31.TXT,PRNode.java,0
 UC31.TXT,PuntiDiRistoro.java,0
@@ -3268,10 +3137,10 @@ UC31.TXT,Punto3DRenderer.java,0
 UC31.TXT,reportStatistici.java,0
 UC31.TXT,ReportTableModel.java,0
 UC31.TXT,Ricerca.java,0
-UC31.TXT,RicercaAvanzata.txt,0
+UC31.TXT,RicercaAvanzata.java,0
 UC31.TXT,RicercaStandard.java,0
 UC31.TXT,SchedaBC.java,0
-UC31.TXT,SchedaBC.txt,0
+UC31.TXT,SchedaBC.java,0
 UC31.TXT,SchedaPR.java,0
 UC31.TXT,SchedaTurista.java,0
 UC31.TXT,ScrollableTable.java,0
@@ -3378,7 +3247,6 @@ UC32.TXT,MediaVotiRenderer.java,0
 UC32.TXT,MessaggiErrore.java,0
 UC32.TXT,News.java,0
 UC32.TXT,NewsTableModelTest.java,0
-UC32.TXT,OperatoreAgenzia.java,0
 UC32.TXT,PrioritaRenderer.java,0
 UC32.TXT,PRNode.java,0
 UC32.TXT,PuntiDiRistoro.java,0
@@ -3387,10 +3255,10 @@ UC32.TXT,Punto3DRenderer.java,0
 UC32.TXT,reportStatistici.java,0
 UC32.TXT,ReportTableModel.java,0
 UC32.TXT,Ricerca.java,0
-UC32.TXT,RicercaAvanzata.txt,0
+UC32.TXT,RicercaAvanzata.java,0
 UC32.TXT,RicercaStandard.java,0
 UC32.TXT,SchedaBC.java,0
-UC32.TXT,SchedaBC.txt,0
+UC32.TXT,SchedaBC.java,0
 UC32.TXT,SchedaPR.java,0
 UC32.TXT,SchedaTurista.java,0
 UC32.TXT,ScrollableTable.java,0
@@ -3423,7 +3291,6 @@ UC33.TXT,BeanVisitaPR.java,0
 UC33.TXT,BeniCulturali.java,0
 UC33.TXT,Categoria.java,0
 UC33.TXT,ControlloBeniCulturali.java,0
-UC33.TXT,ControlloDati.java,0
 UC33.TXT,ControlloDatiAdvertisement.java,0
 UC33.TXT,ControlloVisiteBeniCulturali.java,0
 UC33.TXT,ControlServerLauncher.java,0
@@ -3444,7 +3311,6 @@ UC33.TXT,DBPuntoDiRistoro.java,0
 UC33.TXT,DBSearchPreferences.java,0
 UC33.TXT,DBStatisticheLocalita.java,0
 UC33.TXT,DBTag.java,0
-UC33.TXT,DBTurista.java,0
 UC33.TXT,DBVisitaBC.java,0
 UC33.TXT,DBVisitaPR.java,0
 UC33.TXT,DeskManager.java,0
@@ -3460,7 +3326,6 @@ UC33.TXT,GestioneBeniCulturaliComune.java,0
 UC33.TXT,GestionePuntiDiRistoroComune.java,0
 UC33.TXT,GestioneTagComune.java,0
 UC33.TXT,GestioneTagOperatoreAgenzia.java,0
-UC33.TXT,GestioneTuristaClient.java,0
 UC33.TXT,GestioneTuristaComune.java,0
 UC33.TXT,GestioneTuristiAgenzia.java,0
 UC33.TXT,HelpManager.java,0
@@ -3477,7 +3342,6 @@ UC33.TXT,IDBPreferenzeDiRicerca.java,0
 UC33.TXT,IDBPreferenzeGeneriche.java,0
 UC33.TXT,IDBPuntoDiRistoro.java,0
 UC33.TXT,IDBTag.java,0
-UC33.TXT,IDBTurista.java,0
 UC33.TXT,IDBVisitaBC.java,0
 UC33.TXT,IDBVisitaPR.java,0
 UC33.TXT,IGestioneAdvertisement.java,0
@@ -3489,7 +3353,6 @@ UC33.TXT,IGestionePuntiDiRistoroAgenzia.java,0
 UC33.TXT,IGestionePuntiDiRistoroComune.java,0
 UC33.TXT,IGestioneTagComune.java,0
 UC33.TXT,IGestioneTagOperatoreAgenzia.java,0
-UC33.TXT,IGestioneTuristaClient.java,0
 UC33.TXT,IGestioneTuristiAgenzia.java,0
 UC33.TXT,IRicerca.java,0
 UC33.TXT,LimitedDocument.java,0
@@ -3506,12 +3369,11 @@ UC33.TXT,Punto3DRenderer.java,0
 UC33.TXT,reportStatistici.java,0
 UC33.TXT,ReportTableModel.java,0
 UC33.TXT,Ricerca.java,0
-UC33.TXT,RicercaAvanzata.txt,0
+UC33.TXT,RicercaAvanzata.java,0
 UC33.TXT,RicercaStandard.java,0
 UC33.TXT,SchedaBC.java,0
-UC33.TXT,SchedaBC.txt,0
+UC33.TXT,SchedaBC.java,0
 UC33.TXT,SchedaPR.java,0
-UC33.TXT,SchedaTurista.java,0
 UC33.TXT,ScrollableTable.java,0
 UC33.TXT,SitoTableModel.java,0
 UC33.TXT,Tag.java,0
@@ -3575,8 +3437,6 @@ UC34.TXT,GestioneAdvertisement.java,0
 UC34.TXT,GestioneAdvertisementAgenzia.java,0
 UC34.TXT,GestioneAdvertisementPuntoDiRistoro.java,0
 UC34.TXT,GestioneBeniCulturaliAgenzia.java,0
-UC34.TXT,GestioneBeniCulturaliComune.java,0
-UC34.TXT,GestionePuntiDiRistoroComune.java,0
 UC34.TXT,GestioneTagComune.java,0
 UC34.TXT,GestioneTagOperatoreAgenzia.java,0
 UC34.TXT,GestioneTuristaClient.java,0
@@ -3603,14 +3463,11 @@ UC34.TXT,IGestioneAdvertisement.java,0
 UC34.TXT,IGestioneAdvertisementAgenzia.java,0
 UC34.TXT,IGestioneAdvertisementPuntoDiRistoro.java,0
 UC34.TXT,IGestioneBeniCulturaliAgenzia.java,0
-UC34.TXT,IGestioneBeniCulturaliComune.java,0
 UC34.TXT,IGestionePuntiDiRistoroAgenzia.java,0
-UC34.TXT,IGestionePuntiDiRistoroComune.java,0
 UC34.TXT,IGestioneTagComune.java,0
 UC34.TXT,IGestioneTagOperatoreAgenzia.java,0
 UC34.TXT,IGestioneTuristaClient.java,0
 UC34.TXT,IGestioneTuristiAgenzia.java,0
-UC34.TXT,IRicerca.java,0
 UC34.TXT,LimitedDocument.java,0
 UC34.TXT,MediaVotiRenderer.java,0
 UC34.TXT,MessaggiErrore.java,0
@@ -3625,10 +3482,10 @@ UC34.TXT,Punto3DRenderer.java,0
 UC34.TXT,reportStatistici.java,0
 UC34.TXT,ReportTableModel.java,0
 UC34.TXT,Ricerca.java,0
-UC34.TXT,RicercaAvanzata.txt,0
+UC34.TXT,RicercaAvanzata.java,0
 UC34.TXT,RicercaStandard.java,0
 UC34.TXT,SchedaBC.java,0
-UC34.TXT,SchedaBC.txt,0
+UC34.TXT,SchedaBC.java,0
 UC34.TXT,SchedaPR.java,0
 UC34.TXT,SchedaTurista.java,0
 UC34.TXT,ScrollableTable.java,0
@@ -3649,19 +3506,16 @@ UC35.TXT,BeanConvenzione.java,0
 UC35.TXT,BeanMenu.java,0
 UC35.TXT,BeanNews.java,0
 UC35.TXT,BeanOperatoreAgenzia.java,0
-UC35.TXT,BeanOperatorePuntoDiRistoro.java,0
 UC35.TXT,BeanPiatto.java,0
 UC35.TXT,BeanPreferenzaDiRicerca.java,0
 UC35.TXT,BeanPreferenzeGeneriche.java,0
 UC35.TXT,BeanPuntoDiRistoro.java,0
 UC35.TXT,BeanTag.java,0
-UC35.TXT,BeanTurista.java,0
 UC35.TXT,BeanVisitaBC.java,0
 UC35.TXT,BeanVisitaPR.java,0
 UC35.TXT,BeniCulturali.java,0
 UC35.TXT,Categoria.java,0
 UC35.TXT,ControlloBeniCulturali.java,0
-UC35.TXT,ControlloDati.java,0
 UC35.TXT,ControlloDatiAdvertisement.java,0
 UC35.TXT,ControlloVisiteBeniCulturali.java,0
 UC35.TXT,ControlServerLauncher.java,0
@@ -3702,7 +3556,6 @@ UC35.TXT,GestioneTuristaClient.java,0
 UC35.TXT,GestioneTuristaComune.java,0
 UC35.TXT,GestioneTuristiAgenzia.java,0
 UC35.TXT,HelpManager.java,0
-UC35.TXT,IAutenticazione.java,0
 UC35.TXT,IDBBanner.java,0
 UC35.TXT,IDBBeneCulturale.java,0
 UC35.TXT,IDBConvenzione.java,0
@@ -3744,10 +3597,10 @@ UC35.TXT,Punto3DRenderer.java,0
 UC35.TXT,reportStatistici.java,0
 UC35.TXT,ReportTableModel.java,0
 UC35.TXT,Ricerca.java,0
-UC35.TXT,RicercaAvanzata.txt,0
+UC35.TXT,RicercaAvanzata.java,0
 UC35.TXT,RicercaStandard.java,0
 UC35.TXT,SchedaBC.java,0
-UC35.TXT,SchedaBC.txt,0
+UC35.TXT,SchedaBC.java,0
 UC35.TXT,SchedaPR.java,0
 UC35.TXT,SchedaTurista.java,0
 UC35.TXT,ScrollableTable.java,0
@@ -3780,7 +3633,6 @@ UC36.TXT,BeanVisitaPR.java,0
 UC36.TXT,BeniCulturali.java,0
 UC36.TXT,Categoria.java,0
 UC36.TXT,ControlloBeniCulturali.java,0
-UC36.TXT,ControlloDati.java,0
 UC36.TXT,ControlloDatiAdvertisement.java,0
 UC36.TXT,ControlloVisiteBeniCulturali.java,0
 UC36.TXT,ControlServerLauncher.java,0
@@ -3821,7 +3673,6 @@ UC36.TXT,GestioneTuristaClient.java,0
 UC36.TXT,GestioneTuristaComune.java,0
 UC36.TXT,GestioneTuristiAgenzia.java,0
 UC36.TXT,HelpManager.java,0
-UC36.TXT,IAutenticazione.java,0
 UC36.TXT,IDBBanner.java,0
 UC36.TXT,IDBBeneCulturale.java,0
 UC36.TXT,IDBConvenzione.java,0
@@ -3863,10 +3714,10 @@ UC36.TXT,Punto3DRenderer.java,0
 UC36.TXT,reportStatistici.java,0
 UC36.TXT,ReportTableModel.java,0
 UC36.TXT,Ricerca.java,0
-UC36.TXT,RicercaAvanzata.txt,0
+UC36.TXT,RicercaAvanzata.java,0
 UC36.TXT,RicercaStandard.java,0
 UC36.TXT,SchedaBC.java,0
-UC36.TXT,SchedaBC.txt,0
+UC36.TXT,SchedaBC.java,0
 UC36.TXT,SchedaPR.java,0
 UC36.TXT,SchedaTurista.java,0
 UC36.TXT,ScrollableTable.java,0
@@ -3982,10 +3833,10 @@ UC37.TXT,Punto3DRenderer.java,0
 UC37.TXT,reportStatistici.java,0
 UC37.TXT,ReportTableModel.java,0
 UC37.TXT,Ricerca.java,0
-UC37.TXT,RicercaAvanzata.txt,0
+UC37.TXT,RicercaAvanzata.java,0
 UC37.TXT,RicercaStandard.java,0
 UC37.TXT,SchedaBC.java,0
-UC37.TXT,SchedaBC.txt,0
+UC37.TXT,SchedaBC.java,0
 UC37.TXT,SchedaPR.java,0
 UC37.TXT,SchedaTurista.java,0
 UC37.TXT,ScrollableTable.java,0
@@ -3997,10 +3848,7 @@ UC37.TXT,Turisti.java,0
 UC37.TXT,TuristiTableModel.java,0
 UC38.TXT,Autenticazione.java,0
 UC38.TXT,Banner.java,0
-UC38.TXT,BannerDialog.java,0
-UC38.TXT,BannerNode.java,0
 UC38.TXT,BannerRenderer.java,0
-UC38.TXT,BeanBanner.java,0
 UC38.TXT,BeanBeneCulturale.java,0
 UC38.TXT,BeanConvenzione.java,0
 UC38.TXT,BeanMenu.java,0
@@ -4018,8 +3866,6 @@ UC38.TXT,BeanVisitaPR.java,0
 UC38.TXT,BeniCulturali.java,0
 UC38.TXT,Categoria.java,0
 UC38.TXT,ControlloBeniCulturali.java,0
-UC38.TXT,ControlloDati.java,0
-UC38.TXT,ControlloDatiAdvertisement.java,0
 UC38.TXT,ControlloVisiteBeniCulturali.java,0
 UC38.TXT,ControlServerLauncher.java,0
 UC38.TXT,CostantiGlobali.java,0
@@ -4047,9 +3893,7 @@ UC38.TXT,ElencoCategorie.java,0
 UC38.TXT,ErrorMessages.java,0
 UC38.TXT,FeedBackTableModel.java,0
 UC38.TXT,Fuzzy.java,0
-UC38.TXT,GestioneAdvertisement.java,0
 UC38.TXT,GestioneAdvertisementAgenzia.java,0
-UC38.TXT,GestioneAdvertisementPuntoDiRistoro.java,0
 UC38.TXT,GestioneBeniCulturaliAgenzia.java,0
 UC38.TXT,GestioneBeniCulturaliComune.java,0
 UC38.TXT,GestionePuntiDiRistoroComune.java,0
@@ -4060,7 +3904,6 @@ UC38.TXT,GestioneTuristaComune.java,0
 UC38.TXT,GestioneTuristiAgenzia.java,0
 UC38.TXT,HelpManager.java,0
 UC38.TXT,IAutenticazione.java,0
-UC38.TXT,IDBBanner.java,0
 UC38.TXT,IDBBeneCulturale.java,0
 UC38.TXT,IDBConvenzione.java,0
 UC38.TXT,IDBMenu.java,0
@@ -4075,9 +3918,7 @@ UC38.TXT,IDBTag.java,0
 UC38.TXT,IDBTurista.java,0
 UC38.TXT,IDBVisitaBC.java,0
 UC38.TXT,IDBVisitaPR.java,0
-UC38.TXT,IGestioneAdvertisement.java,0
 UC38.TXT,IGestioneAdvertisementAgenzia.java,0
-UC38.TXT,IGestioneAdvertisementPuntoDiRistoro.java,0
 UC38.TXT,IGestioneBeniCulturaliAgenzia.java,0
 UC38.TXT,IGestioneBeniCulturaliComune.java,0
 UC38.TXT,IGestionePuntiDiRistoroAgenzia.java,0
@@ -4101,10 +3942,10 @@ UC38.TXT,Punto3DRenderer.java,0
 UC38.TXT,reportStatistici.java,0
 UC38.TXT,ReportTableModel.java,0
 UC38.TXT,Ricerca.java,0
-UC38.TXT,RicercaAvanzata.txt,0
+UC38.TXT,RicercaAvanzata.java,0
 UC38.TXT,RicercaStandard.java,0
 UC38.TXT,SchedaBC.java,0
-UC38.TXT,SchedaBC.txt,0
+UC38.TXT,SchedaBC.java,0
 UC38.TXT,SchedaPR.java,0
 UC38.TXT,SchedaTurista.java,0
 UC38.TXT,ScrollableTable.java,0
@@ -4116,10 +3957,7 @@ UC38.TXT,Turisti.java,0
 UC38.TXT,TuristiTableModel.java,0
 UC39.TXT,Autenticazione.java,0
 UC39.TXT,Banner.java,0
-UC39.TXT,BannerDialog.java,0
-UC39.TXT,BannerNode.java,0
 UC39.TXT,BannerRenderer.java,0
-UC39.TXT,BeanBanner.java,0
 UC39.TXT,BeanBeneCulturale.java,0
 UC39.TXT,BeanConvenzione.java,0
 UC39.TXT,BeanMenu.java,0
@@ -4137,8 +3975,6 @@ UC39.TXT,BeanVisitaPR.java,0
 UC39.TXT,BeniCulturali.java,0
 UC39.TXT,Categoria.java,0
 UC39.TXT,ControlloBeniCulturali.java,0
-UC39.TXT,ControlloDati.java,0
-UC39.TXT,ControlloDatiAdvertisement.java,0
 UC39.TXT,ControlloVisiteBeniCulturali.java,0
 UC39.TXT,ControlServerLauncher.java,0
 UC39.TXT,CostantiGlobali.java,0
@@ -4166,9 +4002,7 @@ UC39.TXT,ElencoCategorie.java,0
 UC39.TXT,ErrorMessages.java,0
 UC39.TXT,FeedBackTableModel.java,0
 UC39.TXT,Fuzzy.java,0
-UC39.TXT,GestioneAdvertisement.java,0
 UC39.TXT,GestioneAdvertisementAgenzia.java,0
-UC39.TXT,GestioneAdvertisementPuntoDiRistoro.java,0
 UC39.TXT,GestioneBeniCulturaliAgenzia.java,0
 UC39.TXT,GestioneBeniCulturaliComune.java,0
 UC39.TXT,GestionePuntiDiRistoroComune.java,0
@@ -4179,7 +4013,6 @@ UC39.TXT,GestioneTuristaComune.java,0
 UC39.TXT,GestioneTuristiAgenzia.java,0
 UC39.TXT,HelpManager.java,0
 UC39.TXT,IAutenticazione.java,0
-UC39.TXT,IDBBanner.java,0
 UC39.TXT,IDBBeneCulturale.java,0
 UC39.TXT,IDBConvenzione.java,0
 UC39.TXT,IDBMenu.java,0
@@ -4194,9 +4027,7 @@ UC39.TXT,IDBTag.java,0
 UC39.TXT,IDBTurista.java,0
 UC39.TXT,IDBVisitaBC.java,0
 UC39.TXT,IDBVisitaPR.java,0
-UC39.TXT,IGestioneAdvertisement.java,0
 UC39.TXT,IGestioneAdvertisementAgenzia.java,0
-UC39.TXT,IGestioneAdvertisementPuntoDiRistoro.java,0
 UC39.TXT,IGestioneBeniCulturaliAgenzia.java,0
 UC39.TXT,IGestioneBeniCulturaliComune.java,0
 UC39.TXT,IGestionePuntiDiRistoroAgenzia.java,0
@@ -4220,10 +4051,10 @@ UC39.TXT,Punto3DRenderer.java,0
 UC39.TXT,reportStatistici.java,0
 UC39.TXT,ReportTableModel.java,0
 UC39.TXT,Ricerca.java,0
-UC39.TXT,RicercaAvanzata.txt,0
+UC39.TXT,RicercaAvanzata.java,0
 UC39.TXT,RicercaStandard.java,0
 UC39.TXT,SchedaBC.java,0
-UC39.TXT,SchedaBC.txt,0
+UC39.TXT,SchedaBC.java,0
 UC39.TXT,SchedaPR.java,0
 UC39.TXT,SchedaTurista.java,0
 UC39.TXT,ScrollableTable.java,0
@@ -4239,7 +4070,6 @@ UC4.TXT,BannerDialog.java,0
 UC4.TXT,BannerNode.java,0
 UC4.TXT,BannerRenderer.java,0
 UC4.TXT,BeanBanner.java,0
-UC4.TXT,BeanBeneCulturale.java,0
 UC4.TXT,BeanConvenzione.java,0
 UC4.TXT,BeanMenu.java,0
 UC4.TXT,BeanNews.java,0
@@ -4253,7 +4083,6 @@ UC4.TXT,BeanTag.java,0
 UC4.TXT,BeanTurista.java,0
 UC4.TXT,BeanVisitaBC.java,0
 UC4.TXT,BeanVisitaPR.java,0
-UC4.TXT,BeniCulturali.java,0
 UC4.TXT,Categoria.java,0
 UC4.TXT,ControlloBeniCulturali.java,0
 UC4.TXT,ControlloDati.java,0
@@ -4262,7 +4091,6 @@ UC4.TXT,ControlloVisiteBeniCulturali.java,0
 UC4.TXT,ControlServerLauncher.java,0
 UC4.TXT,CostantiGlobali.java,0
 UC4.TXT,DBBanner.java,0
-UC4.TXT,DBBeneCulturale.java,0
 UC4.TXT,DBConnectionPool.java,0
 UC4.TXT,DBConvenzione.java,0
 UC4.TXT,DBCulturalAsset.java,0
@@ -4288,7 +4116,6 @@ UC4.TXT,Fuzzy.java,0
 UC4.TXT,GestioneAdvertisement.java,0
 UC4.TXT,GestioneAdvertisementAgenzia.java,0
 UC4.TXT,GestioneAdvertisementPuntoDiRistoro.java,0
-UC4.TXT,GestioneBeniCulturaliAgenzia.java,0
 UC4.TXT,GestioneBeniCulturaliComune.java,0
 UC4.TXT,GestionePuntiDiRistoroComune.java,0
 UC4.TXT,GestioneTagComune.java,0
@@ -4316,7 +4143,6 @@ UC4.TXT,IDBVisitaPR.java,0
 UC4.TXT,IGestioneAdvertisement.java,0
 UC4.TXT,IGestioneAdvertisementAgenzia.java,0
 UC4.TXT,IGestioneAdvertisementPuntoDiRistoro.java,0
-UC4.TXT,IGestioneBeniCulturaliAgenzia.java,0
 UC4.TXT,IGestioneBeniCulturaliComune.java,0
 UC4.TXT,IGestionePuntiDiRistoroAgenzia.java,0
 UC4.TXT,IGestionePuntiDiRistoroComune.java,0
@@ -4324,7 +4150,6 @@ UC4.TXT,IGestioneTagComune.java,0
 UC4.TXT,IGestioneTagOperatoreAgenzia.java,0
 UC4.TXT,IGestioneTuristaClient.java,0
 UC4.TXT,IGestioneTuristiAgenzia.java,0
-UC4.TXT,IRicerca.java,0
 UC4.TXT,LimitedDocument.java,0
 UC4.TXT,MediaVotiRenderer.java,0
 UC4.TXT,MessaggiErrore.java,0
@@ -4338,10 +4163,8 @@ UC4.TXT,Punto3D.java,0
 UC4.TXT,Punto3DRenderer.java,0
 UC4.TXT,reportStatistici.java,0
 UC4.TXT,ReportTableModel.java,0
-UC4.TXT,Ricerca.java,0
-UC4.TXT,RicercaStandard.java,0
 UC4.TXT,SchedaBC.java,0
-UC4.TXT,SchedaBC.txt,0
+UC4.TXT,SchedaBC.java,0
 UC4.TXT,SchedaPR.java,0
 UC4.TXT,SchedaTurista.java,0
 UC4.TXT,ScrollableTable.java,0
@@ -4356,7 +4179,6 @@ UC40.TXT,Banner.java,0
 UC40.TXT,BannerDialog.java,0
 UC40.TXT,BannerNode.java,0
 UC40.TXT,BannerRenderer.java,0
-UC40.TXT,BeanBanner.java,0
 UC40.TXT,BeanBeneCulturale.java,0
 UC40.TXT,BeanConvenzione.java,0
 UC40.TXT,BeanMenu.java,0
@@ -4375,7 +4197,6 @@ UC40.TXT,BeniCulturali.java,0
 UC40.TXT,Categoria.java,0
 UC40.TXT,ControlloBeniCulturali.java,0
 UC40.TXT,ControlloDati.java,0
-UC40.TXT,ControlloDatiAdvertisement.java,0
 UC40.TXT,ControlloVisiteBeniCulturali.java,0
 UC40.TXT,ControlServerLauncher.java,0
 UC40.TXT,CostantiGlobali.java,0
@@ -4403,9 +4224,7 @@ UC40.TXT,ElencoCategorie.java,0
 UC40.TXT,ErrorMessages.java,0
 UC40.TXT,FeedBackTableModel.java,0
 UC40.TXT,Fuzzy.java,0
-UC40.TXT,GestioneAdvertisement.java,0
 UC40.TXT,GestioneAdvertisementAgenzia.java,0
-UC40.TXT,GestioneAdvertisementPuntoDiRistoro.java,0
 UC40.TXT,GestioneBeniCulturaliAgenzia.java,0
 UC40.TXT,GestioneBeniCulturaliComune.java,0
 UC40.TXT,GestionePuntiDiRistoroComune.java,0
@@ -4416,7 +4235,6 @@ UC40.TXT,GestioneTuristaComune.java,0
 UC40.TXT,GestioneTuristiAgenzia.java,0
 UC40.TXT,HelpManager.java,0
 UC40.TXT,IAutenticazione.java,0
-UC40.TXT,IDBBanner.java,0
 UC40.TXT,IDBBeneCulturale.java,0
 UC40.TXT,IDBConvenzione.java,0
 UC40.TXT,IDBMenu.java,0
@@ -4431,9 +4249,7 @@ UC40.TXT,IDBTag.java,0
 UC40.TXT,IDBTurista.java,0
 UC40.TXT,IDBVisitaBC.java,0
 UC40.TXT,IDBVisitaPR.java,0
-UC40.TXT,IGestioneAdvertisement.java,0
 UC40.TXT,IGestioneAdvertisementAgenzia.java,0
-UC40.TXT,IGestioneAdvertisementPuntoDiRistoro.java,0
 UC40.TXT,IGestioneBeniCulturaliAgenzia.java,0
 UC40.TXT,IGestioneBeniCulturaliComune.java,0
 UC40.TXT,IGestionePuntiDiRistoroAgenzia.java,0
@@ -4457,10 +4273,10 @@ UC40.TXT,Punto3DRenderer.java,0
 UC40.TXT,reportStatistici.java,0
 UC40.TXT,ReportTableModel.java,0
 UC40.TXT,Ricerca.java,0
-UC40.TXT,RicercaAvanzata.txt,0
+UC40.TXT,RicercaAvanzata.java,0
 UC40.TXT,RicercaStandard.java,0
 UC40.TXT,SchedaBC.java,0
-UC40.TXT,SchedaBC.txt,0
+UC40.TXT,SchedaBC.java,0
 UC40.TXT,SchedaPR.java,0
 UC40.TXT,SchedaTurista.java,0
 UC40.TXT,ScrollableTable.java,0
@@ -4478,11 +4294,9 @@ UC41.TXT,BannerRenderer.java,0
 UC41.TXT,BeanBanner.java,0
 UC41.TXT,BeanBeneCulturale.java,0
 UC41.TXT,BeanConvenzione.java,0
-UC41.TXT,BeanMenu.java,0
 UC41.TXT,BeanNews.java,0
 UC41.TXT,BeanOperatoreAgenzia.java,0
 UC41.TXT,BeanOperatorePuntoDiRistoro.java,0
-UC41.TXT,BeanPiatto.java,0
 UC41.TXT,BeanPreferenzaDiRicerca.java,0
 UC41.TXT,BeanPreferenzeGeneriche.java,0
 UC41.TXT,BeanPuntoDiRistoro.java,0
@@ -4504,11 +4318,9 @@ UC41.TXT,DBConnectionPool.java,0
 UC41.TXT,DBConvenzione.java,0
 UC41.TXT,DBCulturalAsset.java,0
 UC41.TXT,DBDish.java,0
-UC41.TXT,DBMenu.java,0
 UC41.TXT,DBNews.java,0
 UC41.TXT,DBOperatorAgency.java,0
 UC41.TXT,DBOperatoreRestaurant.java,0
-UC41.TXT,DBPiatto.java,0
 UC41.TXT,DBPreferenzeGeneriche.java,0
 UC41.TXT,DBPuntoDiRistoro.java,0
 UC41.TXT,DBSearchPreferences.java,0
@@ -4538,11 +4350,9 @@ UC41.TXT,IAutenticazione.java,0
 UC41.TXT,IDBBanner.java,0
 UC41.TXT,IDBBeneCulturale.java,0
 UC41.TXT,IDBConvenzione.java,0
-UC41.TXT,IDBMenu.java,0
 UC41.TXT,IDBNews.java,0
 UC41.TXT,IDBOperatoreAgenzia.java,0
 UC41.TXT,IDBOperatorePuntoDiRistoro.java,0
-UC41.TXT,IDBPiatto.java,0
 UC41.TXT,IDBPreferenzeDiRicerca.java,0
 UC41.TXT,IDBPreferenzeGeneriche.java,0
 UC41.TXT,IDBPuntoDiRistoro.java,0
@@ -4576,10 +4386,10 @@ UC41.TXT,Punto3DRenderer.java,0
 UC41.TXT,reportStatistici.java,0
 UC41.TXT,ReportTableModel.java,0
 UC41.TXT,Ricerca.java,0
-UC41.TXT,RicercaAvanzata.txt,0
+UC41.TXT,RicercaAvanzata.java,0
 UC41.TXT,RicercaStandard.java,0
 UC41.TXT,SchedaBC.java,0
-UC41.TXT,SchedaBC.txt,0
+UC41.TXT,SchedaBC.java,0
 UC41.TXT,SchedaPR.java,0
 UC41.TXT,SchedaTurista.java,0
 UC41.TXT,ScrollableTable.java,0
@@ -4597,11 +4407,9 @@ UC42.TXT,BannerRenderer.java,0
 UC42.TXT,BeanBanner.java,0
 UC42.TXT,BeanBeneCulturale.java,0
 UC42.TXT,BeanConvenzione.java,0
-UC42.TXT,BeanMenu.java,0
 UC42.TXT,BeanNews.java,0
 UC42.TXT,BeanOperatoreAgenzia.java,0
 UC42.TXT,BeanOperatorePuntoDiRistoro.java,0
-UC42.TXT,BeanPiatto.java,0
 UC42.TXT,BeanPreferenzaDiRicerca.java,0
 UC42.TXT,BeanPreferenzeGeneriche.java,0
 UC42.TXT,BeanPuntoDiRistoro.java,0
@@ -4623,11 +4431,9 @@ UC42.TXT,DBConnectionPool.java,0
 UC42.TXT,DBConvenzione.java,0
 UC42.TXT,DBCulturalAsset.java,0
 UC42.TXT,DBDish.java,0
-UC42.TXT,DBMenu.java,0
 UC42.TXT,DBNews.java,0
 UC42.TXT,DBOperatorAgency.java,0
 UC42.TXT,DBOperatoreRestaurant.java,0
-UC42.TXT,DBPiatto.java,0
 UC42.TXT,DBPreferenzeGeneriche.java,0
 UC42.TXT,DBPuntoDiRistoro.java,0
 UC42.TXT,DBSearchPreferences.java,0
@@ -4657,11 +4463,9 @@ UC42.TXT,IAutenticazione.java,0
 UC42.TXT,IDBBanner.java,0
 UC42.TXT,IDBBeneCulturale.java,0
 UC42.TXT,IDBConvenzione.java,0
-UC42.TXT,IDBMenu.java,0
 UC42.TXT,IDBNews.java,0
 UC42.TXT,IDBOperatoreAgenzia.java,0
 UC42.TXT,IDBOperatorePuntoDiRistoro.java,0
-UC42.TXT,IDBPiatto.java,0
 UC42.TXT,IDBPreferenzeDiRicerca.java,0
 UC42.TXT,IDBPreferenzeGeneriche.java,0
 UC42.TXT,IDBPuntoDiRistoro.java,0
@@ -4695,10 +4499,10 @@ UC42.TXT,Punto3DRenderer.java,0
 UC42.TXT,reportStatistici.java,0
 UC42.TXT,ReportTableModel.java,0
 UC42.TXT,Ricerca.java,0
-UC42.TXT,RicercaAvanzata.txt,0
+UC42.TXT,RicercaAvanzata.java,0
 UC42.TXT,RicercaStandard.java,0
 UC42.TXT,SchedaBC.java,0
-UC42.TXT,SchedaBC.txt,0
+UC42.TXT,SchedaBC.java,0
 UC42.TXT,SchedaPR.java,0
 UC42.TXT,SchedaTurista.java,0
 UC42.TXT,ScrollableTable.java,0
@@ -4723,7 +4527,6 @@ UC43.TXT,BeanOperatorePuntoDiRistoro.java,0
 UC43.TXT,BeanPiatto.java,0
 UC43.TXT,BeanPreferenzaDiRicerca.java,0
 UC43.TXT,BeanPreferenzeGeneriche.java,0
-UC43.TXT,BeanPuntoDiRistoro.java,0
 UC43.TXT,BeanTag.java,0
 UC43.TXT,BeanTurista.java,0
 UC43.TXT,BeanVisitaBC.java,0
@@ -4731,7 +4534,6 @@ UC43.TXT,BeanVisitaPR.java,0
 UC43.TXT,BeniCulturali.java,0
 UC43.TXT,Categoria.java,0
 UC43.TXT,ControlloBeniCulturali.java,0
-UC43.TXT,ControlloDati.java,0
 UC43.TXT,ControlloDatiAdvertisement.java,0
 UC43.TXT,ControlloVisiteBeniCulturali.java,0
 UC43.TXT,ControlServerLauncher.java,0
@@ -4765,7 +4567,6 @@ UC43.TXT,GestioneAdvertisementAgenzia.java,0
 UC43.TXT,GestioneAdvertisementPuntoDiRistoro.java,0
 UC43.TXT,GestioneBeniCulturaliAgenzia.java,0
 UC43.TXT,GestioneBeniCulturaliComune.java,0
-UC43.TXT,GestionePuntiDiRistoroComune.java,0
 UC43.TXT,GestioneTagComune.java,0
 UC43.TXT,GestioneTagOperatoreAgenzia.java,0
 UC43.TXT,GestioneTuristaClient.java,0
@@ -4783,7 +4584,6 @@ UC43.TXT,IDBOperatorePuntoDiRistoro.java,0
 UC43.TXT,IDBPiatto.java,0
 UC43.TXT,IDBPreferenzeDiRicerca.java,0
 UC43.TXT,IDBPreferenzeGeneriche.java,0
-UC43.TXT,IDBPuntoDiRistoro.java,0
 UC43.TXT,IDBTag.java,0
 UC43.TXT,IDBTurista.java,0
 UC43.TXT,IDBVisitaBC.java,0
@@ -4794,7 +4594,6 @@ UC43.TXT,IGestioneAdvertisementPuntoDiRistoro.java,0
 UC43.TXT,IGestioneBeniCulturaliAgenzia.java,0
 UC43.TXT,IGestioneBeniCulturaliComune.java,0
 UC43.TXT,IGestionePuntiDiRistoroAgenzia.java,0
-UC43.TXT,IGestionePuntiDiRistoroComune.java,0
 UC43.TXT,IGestioneTagComune.java,0
 UC43.TXT,IGestioneTagOperatoreAgenzia.java,0
 UC43.TXT,IGestioneTuristaClient.java,0
@@ -4807,17 +4606,15 @@ UC43.TXT,News.java,0
 UC43.TXT,NewsTableModelTest.java,0
 UC43.TXT,OperatoreAgenzia.java,0
 UC43.TXT,PrioritaRenderer.java,0
-UC43.TXT,PRNode.java,0
-UC43.TXT,PuntiDiRistoro.java,0
 UC43.TXT,Punto3D.java,0
 UC43.TXT,Punto3DRenderer.java,0
 UC43.TXT,reportStatistici.java,0
 UC43.TXT,ReportTableModel.java,0
 UC43.TXT,Ricerca.java,0
-UC43.TXT,RicercaAvanzata.txt,0
+UC43.TXT,RicercaAvanzata.java,0
 UC43.TXT,RicercaStandard.java,0
 UC43.TXT,SchedaBC.java,0
-UC43.TXT,SchedaBC.txt,0
+UC43.TXT,SchedaBC.java,0
 UC43.TXT,SchedaPR.java,0
 UC43.TXT,SchedaTurista.java,0
 UC43.TXT,ScrollableTable.java,0
@@ -4834,7 +4631,6 @@ UC44.TXT,BannerNode.java,0
 UC44.TXT,BannerRenderer.java,0
 UC44.TXT,BeanBanner.java,0
 UC44.TXT,BeanBeneCulturale.java,0
-UC44.TXT,BeanConvenzione.java,0
 UC44.TXT,BeanMenu.java,0
 UC44.TXT,BeanNews.java,0
 UC44.TXT,BeanOperatoreAgenzia.java,0
@@ -4850,7 +4646,6 @@ UC44.TXT,BeanVisitaPR.java,0
 UC44.TXT,BeniCulturali.java,0
 UC44.TXT,Categoria.java,0
 UC44.TXT,ControlloBeniCulturali.java,0
-UC44.TXT,ControlloDati.java,0
 UC44.TXT,ControlloDatiAdvertisement.java,0
 UC44.TXT,ControlloVisiteBeniCulturali.java,0
 UC44.TXT,ControlServerLauncher.java,0
@@ -4894,7 +4689,6 @@ UC44.TXT,HelpManager.java,0
 UC44.TXT,IAutenticazione.java,0
 UC44.TXT,IDBBanner.java,0
 UC44.TXT,IDBBeneCulturale.java,0
-UC44.TXT,IDBConvenzione.java,0
 UC44.TXT,IDBMenu.java,0
 UC44.TXT,IDBNews.java,0
 UC44.TXT,IDBOperatoreAgenzia.java,0
@@ -4933,10 +4727,10 @@ UC44.TXT,Punto3DRenderer.java,0
 UC44.TXT,reportStatistici.java,0
 UC44.TXT,ReportTableModel.java,0
 UC44.TXT,Ricerca.java,0
-UC44.TXT,RicercaAvanzata.txt,0
+UC44.TXT,RicercaAvanzata.java,0
 UC44.TXT,RicercaStandard.java,0
 UC44.TXT,SchedaBC.java,0
-UC44.TXT,SchedaBC.txt,0
+UC44.TXT,SchedaBC.java,0
 UC44.TXT,SchedaPR.java,0
 UC44.TXT,SchedaTurista.java,0
 UC44.TXT,ScrollableTable.java,0
@@ -4952,7 +4746,6 @@ UC45.TXT,BannerDialog.java,0
 UC45.TXT,BannerNode.java,0
 UC45.TXT,BannerRenderer.java,0
 UC45.TXT,BeanBanner.java,0
-UC45.TXT,BeanBeneCulturale.java,0
 UC45.TXT,BeanConvenzione.java,0
 UC45.TXT,BeanMenu.java,0
 UC45.TXT,BeanNews.java,0
@@ -4961,7 +4754,6 @@ UC45.TXT,BeanOperatorePuntoDiRistoro.java,0
 UC45.TXT,BeanPiatto.java,0
 UC45.TXT,BeanPreferenzaDiRicerca.java,0
 UC45.TXT,BeanPreferenzeGeneriche.java,0
-UC45.TXT,BeanPuntoDiRistoro.java,0
 UC45.TXT,BeanTag.java,0
 UC45.TXT,BeanTurista.java,0
 UC45.TXT,BeanVisitaBC.java,0
@@ -5003,7 +4795,6 @@ UC45.TXT,GestioneAdvertisementAgenzia.java,0
 UC45.TXT,GestioneAdvertisementPuntoDiRistoro.java,0
 UC45.TXT,GestioneBeniCulturaliAgenzia.java,0
 UC45.TXT,GestioneBeniCulturaliComune.java,0
-UC45.TXT,GestionePuntiDiRistoroComune.java,0
 UC45.TXT,GestioneTagComune.java,0
 UC45.TXT,GestioneTagOperatoreAgenzia.java,0
 UC45.TXT,GestioneTuristaClient.java,0
@@ -5032,7 +4823,6 @@ UC45.TXT,IGestioneAdvertisementPuntoDiRistoro.java,0
 UC45.TXT,IGestioneBeniCulturaliAgenzia.java,0
 UC45.TXT,IGestioneBeniCulturaliComune.java,0
 UC45.TXT,IGestionePuntiDiRistoroAgenzia.java,0
-UC45.TXT,IGestionePuntiDiRistoroComune.java,0
 UC45.TXT,IGestioneTagComune.java,0
 UC45.TXT,IGestioneTagOperatoreAgenzia.java,0
 UC45.TXT,IGestioneTuristaClient.java,0
@@ -5052,10 +4842,10 @@ UC45.TXT,Punto3DRenderer.java,0
 UC45.TXT,reportStatistici.java,0
 UC45.TXT,ReportTableModel.java,0
 UC45.TXT,Ricerca.java,0
-UC45.TXT,RicercaAvanzata.txt,0
+UC45.TXT,RicercaAvanzata.java,0
 UC45.TXT,RicercaStandard.java,0
 UC45.TXT,SchedaBC.java,0
-UC45.TXT,SchedaBC.txt,0
+UC45.TXT,SchedaBC.java,0
 UC45.TXT,SchedaPR.java,0
 UC45.TXT,SchedaTurista.java,0
 UC45.TXT,ScrollableTable.java,0
@@ -5078,7 +4868,6 @@ UC46.TXT,BeanNews.java,0
 UC46.TXT,BeanOperatoreAgenzia.java,0
 UC46.TXT,BeanOperatorePuntoDiRistoro.java,0
 UC46.TXT,BeanPiatto.java,0
-UC46.TXT,BeanPreferenzaDiRicerca.java,0
 UC46.TXT,BeanPreferenzeGeneriche.java,0
 UC46.TXT,BeanPuntoDiRistoro.java,0
 UC46.TXT,BeanTag.java,0
@@ -5104,7 +4893,6 @@ UC46.TXT,DBNews.java,0
 UC46.TXT,DBOperatorAgency.java,0
 UC46.TXT,DBOperatoreRestaurant.java,0
 UC46.TXT,DBPiatto.java,0
-UC46.TXT,DBPreferenzeGeneriche.java,0
 UC46.TXT,DBPuntoDiRistoro.java,0
 UC46.TXT,DBSearchPreferences.java,0
 UC46.TXT,DBStatisticheLocalita.java,0
@@ -5126,7 +4914,6 @@ UC46.TXT,GestionePuntiDiRistoroComune.java,0
 UC46.TXT,GestioneTagComune.java,0
 UC46.TXT,GestioneTagOperatoreAgenzia.java,0
 UC46.TXT,GestioneTuristaClient.java,0
-UC46.TXT,GestioneTuristaComune.java,0
 UC46.TXT,GestioneTuristiAgenzia.java,0
 UC46.TXT,HelpManager.java,0
 UC46.TXT,IAutenticazione.java,0
@@ -5138,8 +4925,6 @@ UC46.TXT,IDBNews.java,0
 UC46.TXT,IDBOperatoreAgenzia.java,0
 UC46.TXT,IDBOperatorePuntoDiRistoro.java,0
 UC46.TXT,IDBPiatto.java,0
-UC46.TXT,IDBPreferenzeDiRicerca.java,0
-UC46.TXT,IDBPreferenzeGeneriche.java,0
 UC46.TXT,IDBPuntoDiRistoro.java,0
 UC46.TXT,IDBTag.java,0
 UC46.TXT,IDBTurista.java,0
@@ -5171,10 +4956,10 @@ UC46.TXT,Punto3DRenderer.java,0
 UC46.TXT,reportStatistici.java,0
 UC46.TXT,ReportTableModel.java,0
 UC46.TXT,Ricerca.java,0
-UC46.TXT,RicercaAvanzata.txt,0
+UC46.TXT,RicercaAvanzata.java,0
 UC46.TXT,RicercaStandard.java,0
 UC46.TXT,SchedaBC.java,0
-UC46.TXT,SchedaBC.txt,0
+UC46.TXT,SchedaBC.java,0
 UC46.TXT,SchedaPR.java,0
 UC46.TXT,SchedaTurista.java,0
 UC46.TXT,ScrollableTable.java,0
@@ -5201,7 +4986,6 @@ UC47.TXT,BeanPreferenzaDiRicerca.java,0
 UC47.TXT,BeanPreferenzeGeneriche.java,0
 UC47.TXT,BeanPuntoDiRistoro.java,0
 UC47.TXT,BeanTag.java,0
-UC47.TXT,BeanTurista.java,0
 UC47.TXT,BeanVisitaBC.java,0
 UC47.TXT,BeanVisitaPR.java,0
 UC47.TXT,BeniCulturali.java,0
@@ -5228,7 +5012,6 @@ UC47.TXT,DBPuntoDiRistoro.java,0
 UC47.TXT,DBSearchPreferences.java,0
 UC47.TXT,DBStatisticheLocalita.java,0
 UC47.TXT,DBTag.java,0
-UC47.TXT,DBTurista.java,0
 UC47.TXT,DBVisitaBC.java,0
 UC47.TXT,DBVisitaPR.java,0
 UC47.TXT,DeskManager.java,0
@@ -5244,8 +5027,6 @@ UC47.TXT,GestioneBeniCulturaliComune.java,0
 UC47.TXT,GestionePuntiDiRistoroComune.java,0
 UC47.TXT,GestioneTagComune.java,0
 UC47.TXT,GestioneTagOperatoreAgenzia.java,0
-UC47.TXT,GestioneTuristaClient.java,0
-UC47.TXT,GestioneTuristaComune.java,0
 UC47.TXT,GestioneTuristiAgenzia.java,0
 UC47.TXT,HelpManager.java,0
 UC47.TXT,IAutenticazione.java,0
@@ -5261,7 +5042,6 @@ UC47.TXT,IDBPreferenzeDiRicerca.java,0
 UC47.TXT,IDBPreferenzeGeneriche.java,0
 UC47.TXT,IDBPuntoDiRistoro.java,0
 UC47.TXT,IDBTag.java,0
-UC47.TXT,IDBTurista.java,0
 UC47.TXT,IDBVisitaBC.java,0
 UC47.TXT,IDBVisitaPR.java,0
 UC47.TXT,IGestioneAdvertisement.java,0
@@ -5273,7 +5053,6 @@ UC47.TXT,IGestionePuntiDiRistoroAgenzia.java,0
 UC47.TXT,IGestionePuntiDiRistoroComune.java,0
 UC47.TXT,IGestioneTagComune.java,0
 UC47.TXT,IGestioneTagOperatoreAgenzia.java,0
-UC47.TXT,IGestioneTuristaClient.java,0
 UC47.TXT,IGestioneTuristiAgenzia.java,0
 UC47.TXT,IRicerca.java,0
 UC47.TXT,LimitedDocument.java,0
@@ -5290,12 +5069,11 @@ UC47.TXT,Punto3DRenderer.java,0
 UC47.TXT,reportStatistici.java,0
 UC47.TXT,ReportTableModel.java,0
 UC47.TXT,Ricerca.java,0
-UC47.TXT,RicercaAvanzata.txt,0
+UC47.TXT,RicercaAvanzata.java,0
 UC47.TXT,RicercaStandard.java,0
 UC47.TXT,SchedaBC.java,0
-UC47.TXT,SchedaBC.txt,0
+UC47.TXT,SchedaBC.java,0
 UC47.TXT,SchedaPR.java,0
-UC47.TXT,SchedaTurista.java,0
 UC47.TXT,ScrollableTable.java,0
 UC47.TXT,SitoTableModel.java,0
 UC47.TXT,Tag.java,0
@@ -5317,7 +5095,6 @@ UC48.TXT,BeanOperatoreAgenzia.java,0
 UC48.TXT,BeanOperatorePuntoDiRistoro.java,0
 UC48.TXT,BeanPiatto.java,0
 UC48.TXT,BeanPreferenzaDiRicerca.java,0
-UC48.TXT,BeanPreferenzeGeneriche.java,0
 UC48.TXT,BeanPuntoDiRistoro.java,0
 UC48.TXT,BeanTag.java,0
 UC48.TXT,BeanTurista.java,0
@@ -5342,7 +5119,6 @@ UC48.TXT,DBNews.java,0
 UC48.TXT,DBOperatorAgency.java,0
 UC48.TXT,DBOperatoreRestaurant.java,0
 UC48.TXT,DBPiatto.java,0
-UC48.TXT,DBPreferenzeGeneriche.java,0
 UC48.TXT,DBPuntoDiRistoro.java,0
 UC48.TXT,DBSearchPreferences.java,0
 UC48.TXT,DBStatisticheLocalita.java,0
@@ -5363,7 +5139,6 @@ UC48.TXT,GestioneBeniCulturaliComune.java,0
 UC48.TXT,GestionePuntiDiRistoroComune.java,0
 UC48.TXT,GestioneTagComune.java,0
 UC48.TXT,GestioneTagOperatoreAgenzia.java,0
-UC48.TXT,GestioneTuristaClient.java,0
 UC48.TXT,GestioneTuristaComune.java,0
 UC48.TXT,GestioneTuristiAgenzia.java,0
 UC48.TXT,HelpManager.java,0
@@ -5377,7 +5152,6 @@ UC48.TXT,IDBOperatoreAgenzia.java,0
 UC48.TXT,IDBOperatorePuntoDiRistoro.java,0
 UC48.TXT,IDBPiatto.java,0
 UC48.TXT,IDBPreferenzeDiRicerca.java,0
-UC48.TXT,IDBPreferenzeGeneriche.java,0
 UC48.TXT,IDBPuntoDiRistoro.java,0
 UC48.TXT,IDBTag.java,0
 UC48.TXT,IDBTurista.java,0
@@ -5392,7 +5166,6 @@ UC48.TXT,IGestionePuntiDiRistoroAgenzia.java,0
 UC48.TXT,IGestionePuntiDiRistoroComune.java,0
 UC48.TXT,IGestioneTagComune.java,0
 UC48.TXT,IGestioneTagOperatoreAgenzia.java,0
-UC48.TXT,IGestioneTuristaClient.java,0
 UC48.TXT,IGestioneTuristiAgenzia.java,0
 UC48.TXT,IRicerca.java,0
 UC48.TXT,LimitedDocument.java,0
@@ -5409,10 +5182,10 @@ UC48.TXT,Punto3DRenderer.java,0
 UC48.TXT,reportStatistici.java,0
 UC48.TXT,ReportTableModel.java,0
 UC48.TXT,Ricerca.java,0
-UC48.TXT,RicercaAvanzata.txt,0
+UC48.TXT,RicercaAvanzata.java,0
 UC48.TXT,RicercaStandard.java,0
 UC48.TXT,SchedaBC.java,0
-UC48.TXT,SchedaBC.txt,0
+UC48.TXT,SchedaBC.java,0
 UC48.TXT,SchedaPR.java,0
 UC48.TXT,SchedaTurista.java,0
 UC48.TXT,ScrollableTable.java,0
@@ -5478,11 +5251,8 @@ UC49.TXT,GestioneAdvertisement.java,0
 UC49.TXT,GestioneAdvertisementAgenzia.java,0
 UC49.TXT,GestioneAdvertisementPuntoDiRistoro.java,0
 UC49.TXT,GestioneBeniCulturaliAgenzia.java,0
-UC49.TXT,GestioneBeniCulturaliComune.java,0
-UC49.TXT,GestionePuntiDiRistoroComune.java,0
 UC49.TXT,GestioneTagComune.java,0
 UC49.TXT,GestioneTagOperatoreAgenzia.java,0
-UC49.TXT,GestioneTuristaClient.java,0
 UC49.TXT,GestioneTuristaComune.java,0
 UC49.TXT,GestioneTuristiAgenzia.java,0
 UC49.TXT,HelpManager.java,0
@@ -5506,12 +5276,9 @@ UC49.TXT,IGestioneAdvertisement.java,0
 UC49.TXT,IGestioneAdvertisementAgenzia.java,0
 UC49.TXT,IGestioneAdvertisementPuntoDiRistoro.java,0
 UC49.TXT,IGestioneBeniCulturaliAgenzia.java,0
-UC49.TXT,IGestioneBeniCulturaliComune.java,0
 UC49.TXT,IGestionePuntiDiRistoroAgenzia.java,0
-UC49.TXT,IGestionePuntiDiRistoroComune.java,0
 UC49.TXT,IGestioneTagComune.java,0
 UC49.TXT,IGestioneTagOperatoreAgenzia.java,0
-UC49.TXT,IGestioneTuristaClient.java,0
 UC49.TXT,IGestioneTuristiAgenzia.java,0
 UC49.TXT,IRicerca.java,0
 UC49.TXT,LimitedDocument.java,0
@@ -5528,10 +5295,10 @@ UC49.TXT,Punto3DRenderer.java,0
 UC49.TXT,reportStatistici.java,0
 UC49.TXT,ReportTableModel.java,0
 UC49.TXT,Ricerca.java,0
-UC49.TXT,RicercaAvanzata.txt,0
+UC49.TXT,RicercaAvanzata.java,0
 UC49.TXT,RicercaStandard.java,0
 UC49.TXT,SchedaBC.java,0
-UC49.TXT,SchedaBC.txt,0
+UC49.TXT,SchedaBC.java,0
 UC49.TXT,SchedaPR.java,0
 UC49.TXT,SchedaTurista.java,0
 UC49.TXT,ScrollableTable.java,0
@@ -5547,7 +5314,6 @@ UC5.TXT,BannerDialog.java,0
 UC5.TXT,BannerNode.java,0
 UC5.TXT,BannerRenderer.java,0
 UC5.TXT,BeanBanner.java,0
-UC5.TXT,BeanBeneCulturale.java,0
 UC5.TXT,BeanConvenzione.java,0
 UC5.TXT,BeanMenu.java,0
 UC5.TXT,BeanNews.java,0
@@ -5561,7 +5327,6 @@ UC5.TXT,BeanTag.java,0
 UC5.TXT,BeanTurista.java,0
 UC5.TXT,BeanVisitaBC.java,0
 UC5.TXT,BeanVisitaPR.java,0
-UC5.TXT,BeniCulturali.java,0
 UC5.TXT,Categoria.java,0
 UC5.TXT,ControlloBeniCulturali.java,0
 UC5.TXT,ControlloDati.java,0
@@ -5597,7 +5362,6 @@ UC5.TXT,GestioneAdvertisement.java,0
 UC5.TXT,GestioneAdvertisementAgenzia.java,0
 UC5.TXT,GestioneAdvertisementPuntoDiRistoro.java,0
 UC5.TXT,GestioneBeniCulturaliAgenzia.java,0
-UC5.TXT,GestioneBeniCulturaliComune.java,0
 UC5.TXT,GestionePuntiDiRistoroComune.java,0
 UC5.TXT,GestioneTagComune.java,0
 UC5.TXT,GestioneTagOperatoreAgenzia.java,0
@@ -5625,7 +5389,6 @@ UC5.TXT,IGestioneAdvertisement.java,0
 UC5.TXT,IGestioneAdvertisementAgenzia.java,0
 UC5.TXT,IGestioneAdvertisementPuntoDiRistoro.java,0
 UC5.TXT,IGestioneBeniCulturaliAgenzia.java,0
-UC5.TXT,IGestioneBeniCulturaliComune.java,0
 UC5.TXT,IGestionePuntiDiRistoroAgenzia.java,0
 UC5.TXT,IGestionePuntiDiRistoroComune.java,0
 UC5.TXT,IGestioneTagComune.java,0
@@ -5647,10 +5410,10 @@ UC5.TXT,Punto3DRenderer.java,0
 UC5.TXT,reportStatistici.java,0
 UC5.TXT,ReportTableModel.java,0
 UC5.TXT,Ricerca.java,0
-UC5.TXT,RicercaAvanzata.txt,0
+UC5.TXT,RicercaAvanzata.java,0
 UC5.TXT,RicercaStandard.java,0
 UC5.TXT,SchedaBC.java,0
-UC5.TXT,SchedaBC.txt,0
+UC5.TXT,SchedaBC.java,0
 UC5.TXT,SchedaPR.java,0
 UC5.TXT,SchedaTurista.java,0
 UC5.TXT,ScrollableTable.java,0
@@ -5678,14 +5441,11 @@ UC50.TXT,BeanPreferenzeGeneriche.java,0
 UC50.TXT,BeanPuntoDiRistoro.java,0
 UC50.TXT,BeanTag.java,0
 UC50.TXT,BeanTurista.java,0
-UC50.TXT,BeanVisitaBC.java,0
 UC50.TXT,BeanVisitaPR.java,0
 UC50.TXT,BeniCulturali.java,0
 UC50.TXT,Categoria.java,0
 UC50.TXT,ControlloBeniCulturali.java,0
-UC50.TXT,ControlloDati.java,0
 UC50.TXT,ControlloDatiAdvertisement.java,0
-UC50.TXT,ControlloVisiteBeniCulturali.java,0
 UC50.TXT,ControlServerLauncher.java,0
 UC50.TXT,CostantiGlobali.java,0
 UC50.TXT,DBBanner.java,0
@@ -5706,7 +5466,6 @@ UC50.TXT,DBStatisticheLocalita.java,0
 UC50.TXT,DBTag.java,0
 UC50.TXT,DBTurista.java,0
 UC50.TXT,DBVisitaBC.java,0
-UC50.TXT,DBVisitaPR.java,0
 UC50.TXT,DeskManager.java,0
 UC50.TXT,ElencoCategorie.java,0
 UC50.TXT,ErrorMessages.java,0
@@ -5738,8 +5497,6 @@ UC50.TXT,IDBPreferenzeGeneriche.java,0
 UC50.TXT,IDBPuntoDiRistoro.java,0
 UC50.TXT,IDBTag.java,0
 UC50.TXT,IDBTurista.java,0
-UC50.TXT,IDBVisitaBC.java,0
-UC50.TXT,IDBVisitaPR.java,0
 UC50.TXT,IGestioneAdvertisement.java,0
 UC50.TXT,IGestioneAdvertisementAgenzia.java,0
 UC50.TXT,IGestioneAdvertisementPuntoDiRistoro.java,0
@@ -5766,14 +5523,13 @@ UC50.TXT,Punto3DRenderer.java,0
 UC50.TXT,reportStatistici.java,0
 UC50.TXT,ReportTableModel.java,0
 UC50.TXT,Ricerca.java,0
-UC50.TXT,RicercaAvanzata.txt,0
+UC50.TXT,RicercaAvanzata.java,0
 UC50.TXT,RicercaStandard.java,0
 UC50.TXT,SchedaBC.java,0
-UC50.TXT,SchedaBC.txt,0
+UC50.TXT,SchedaBC.java,0
 UC50.TXT,SchedaPR.java,0
 UC50.TXT,SchedaTurista.java,0
 UC50.TXT,ScrollableTable.java,0
-UC50.TXT,SitoTableModel.java,0
 UC50.TXT,Tag.java,0
 UC50.TXT,TAGTableModel.java,0
 UC50.TXT,TestoNewsRendererTest.java,0
@@ -5793,7 +5549,6 @@ UC51.TXT,BeanOperatoreAgenzia.java,0
 UC51.TXT,BeanOperatorePuntoDiRistoro.java,0
 UC51.TXT,BeanPiatto.java,0
 UC51.TXT,BeanPreferenzaDiRicerca.java,0
-UC51.TXT,BeanPreferenzeGeneriche.java,0
 UC51.TXT,BeanPuntoDiRistoro.java,0
 UC51.TXT,BeanTag.java,0
 UC51.TXT,BeanTurista.java,0
@@ -5802,7 +5557,6 @@ UC51.TXT,BeanVisitaPR.java,0
 UC51.TXT,BeniCulturali.java,0
 UC51.TXT,Categoria.java,0
 UC51.TXT,ControlloBeniCulturali.java,0
-UC51.TXT,ControlloDati.java,0
 UC51.TXT,ControlloDatiAdvertisement.java,0
 UC51.TXT,ControlloVisiteBeniCulturali.java,0
 UC51.TXT,ControlServerLauncher.java,0
@@ -5840,7 +5594,6 @@ UC51.TXT,GestionePuntiDiRistoroComune.java,0
 UC51.TXT,GestioneTagComune.java,0
 UC51.TXT,GestioneTagOperatoreAgenzia.java,0
 UC51.TXT,GestioneTuristaClient.java,0
-UC51.TXT,GestioneTuristaComune.java,0
 UC51.TXT,GestioneTuristiAgenzia.java,0
 UC51.TXT,HelpManager.java,0
 UC51.TXT,IAutenticazione.java,0
@@ -5853,7 +5606,6 @@ UC51.TXT,IDBOperatoreAgenzia.java,0
 UC51.TXT,IDBOperatorePuntoDiRistoro.java,0
 UC51.TXT,IDBPiatto.java,0
 UC51.TXT,IDBPreferenzeDiRicerca.java,0
-UC51.TXT,IDBPreferenzeGeneriche.java,0
 UC51.TXT,IDBPuntoDiRistoro.java,0
 UC51.TXT,IDBTag.java,0
 UC51.TXT,IDBTurista.java,0
@@ -5868,7 +5620,6 @@ UC51.TXT,IGestionePuntiDiRistoroAgenzia.java,0
 UC51.TXT,IGestionePuntiDiRistoroComune.java,0
 UC51.TXT,IGestioneTagComune.java,0
 UC51.TXT,IGestioneTagOperatoreAgenzia.java,0
-UC51.TXT,IGestioneTuristaClient.java,0
 UC51.TXT,IGestioneTuristiAgenzia.java,0
 UC51.TXT,IRicerca.java,0
 UC51.TXT,LimitedDocument.java,0
@@ -5885,10 +5636,10 @@ UC51.TXT,Punto3DRenderer.java,0
 UC51.TXT,reportStatistici.java,0
 UC51.TXT,ReportTableModel.java,0
 UC51.TXT,Ricerca.java,0
-UC51.TXT,RicercaAvanzata.txt,0
+UC51.TXT,RicercaAvanzata.java,0
 UC51.TXT,RicercaStandard.java,0
 UC51.TXT,SchedaBC.java,0
-UC51.TXT,SchedaBC.txt,0
+UC51.TXT,SchedaBC.java,0
 UC51.TXT,SchedaPR.java,0
 UC51.TXT,SchedaTurista.java,0
 UC51.TXT,ScrollableTable.java,0
@@ -5912,7 +5663,6 @@ UC52.TXT,BeanOperatoreAgenzia.java,0
 UC52.TXT,BeanOperatorePuntoDiRistoro.java,0
 UC52.TXT,BeanPiatto.java,0
 UC52.TXT,BeanPreferenzaDiRicerca.java,0
-UC52.TXT,BeanPreferenzeGeneriche.java,0
 UC52.TXT,BeanPuntoDiRistoro.java,0
 UC52.TXT,BeanTag.java,0
 UC52.TXT,BeanTurista.java,0
@@ -5942,7 +5692,6 @@ UC52.TXT,DBPuntoDiRistoro.java,0
 UC52.TXT,DBSearchPreferences.java,0
 UC52.TXT,DBStatisticheLocalita.java,0
 UC52.TXT,DBTag.java,0
-UC52.TXT,DBTurista.java,0
 UC52.TXT,DBVisitaBC.java,0
 UC52.TXT,DBVisitaPR.java,0
 UC52.TXT,DeskManager.java,0
@@ -5959,7 +5708,6 @@ UC52.TXT,GestionePuntiDiRistoroComune.java,0
 UC52.TXT,GestioneTagComune.java,0
 UC52.TXT,GestioneTagOperatoreAgenzia.java,0
 UC52.TXT,GestioneTuristaClient.java,0
-UC52.TXT,GestioneTuristaComune.java,0
 UC52.TXT,GestioneTuristiAgenzia.java,0
 UC52.TXT,HelpManager.java,0
 UC52.TXT,IAutenticazione.java,0
@@ -5972,10 +5720,8 @@ UC52.TXT,IDBOperatoreAgenzia.java,0
 UC52.TXT,IDBOperatorePuntoDiRistoro.java,0
 UC52.TXT,IDBPiatto.java,0
 UC52.TXT,IDBPreferenzeDiRicerca.java,0
-UC52.TXT,IDBPreferenzeGeneriche.java,0
 UC52.TXT,IDBPuntoDiRistoro.java,0
 UC52.TXT,IDBTag.java,0
-UC52.TXT,IDBTurista.java,0
 UC52.TXT,IDBVisitaBC.java,0
 UC52.TXT,IDBVisitaPR.java,0
 UC52.TXT,IGestioneAdvertisement.java,0
@@ -5987,7 +5733,6 @@ UC52.TXT,IGestionePuntiDiRistoroAgenzia.java,0
 UC52.TXT,IGestionePuntiDiRistoroComune.java,0
 UC52.TXT,IGestioneTagComune.java,0
 UC52.TXT,IGestioneTagOperatoreAgenzia.java,0
-UC52.TXT,IGestioneTuristaClient.java,0
 UC52.TXT,IGestioneTuristiAgenzia.java,0
 UC52.TXT,IRicerca.java,0
 UC52.TXT,LimitedDocument.java,0
@@ -6004,10 +5749,10 @@ UC52.TXT,Punto3DRenderer.java,0
 UC52.TXT,reportStatistici.java,0
 UC52.TXT,ReportTableModel.java,0
 UC52.TXT,Ricerca.java,0
-UC52.TXT,RicercaAvanzata.txt,0
+UC52.TXT,RicercaAvanzata.java,0
 UC52.TXT,RicercaStandard.java,0
 UC52.TXT,SchedaBC.java,0
-UC52.TXT,SchedaBC.txt,0
+UC52.TXT,SchedaBC.java,0
 UC52.TXT,SchedaPR.java,0
 UC52.TXT,SchedaTurista.java,0
 UC52.TXT,ScrollableTable.java,0
@@ -6040,9 +5785,7 @@ UC53.TXT,BeanVisitaPR.java,0
 UC53.TXT,BeniCulturali.java,0
 UC53.TXT,Categoria.java,0
 UC53.TXT,ControlloBeniCulturali.java,0
-UC53.TXT,ControlloDati.java,0
 UC53.TXT,ControlloDatiAdvertisement.java,0
-UC53.TXT,ControlloVisiteBeniCulturali.java,0
 UC53.TXT,ControlServerLauncher.java,0
 UC53.TXT,CostantiGlobali.java,0
 UC53.TXT,DBBanner.java,0
@@ -6063,7 +5806,6 @@ UC53.TXT,DBStatisticheLocalita.java,0
 UC53.TXT,DBTag.java,0
 UC53.TXT,DBTurista.java,0
 UC53.TXT,DBVisitaBC.java,0
-UC53.TXT,DBVisitaPR.java,0
 UC53.TXT,DeskManager.java,0
 UC53.TXT,ElencoCategorie.java,0
 UC53.TXT,ErrorMessages.java,0
@@ -6095,8 +5837,6 @@ UC53.TXT,IDBPreferenzeGeneriche.java,0
 UC53.TXT,IDBPuntoDiRistoro.java,0
 UC53.TXT,IDBTag.java,0
 UC53.TXT,IDBTurista.java,0
-UC53.TXT,IDBVisitaBC.java,0
-UC53.TXT,IDBVisitaPR.java,0
 UC53.TXT,IGestioneAdvertisement.java,0
 UC53.TXT,IGestioneAdvertisementAgenzia.java,0
 UC53.TXT,IGestioneAdvertisementPuntoDiRistoro.java,0
@@ -6123,14 +5863,13 @@ UC53.TXT,Punto3DRenderer.java,0
 UC53.TXT,reportStatistici.java,0
 UC53.TXT,ReportTableModel.java,0
 UC53.TXT,Ricerca.java,0
-UC53.TXT,RicercaAvanzata.txt,0
+UC53.TXT,RicercaAvanzata.java,0
 UC53.TXT,RicercaStandard.java,0
 UC53.TXT,SchedaBC.java,0
-UC53.TXT,SchedaBC.txt,0
+UC53.TXT,SchedaBC.java,0
 UC53.TXT,SchedaPR.java,0
 UC53.TXT,SchedaTurista.java,0
 UC53.TXT,ScrollableTable.java,0
-UC53.TXT,SitoTableModel.java,0
 UC53.TXT,Tag.java,0
 UC53.TXT,TAGTableModel.java,0
 UC53.TXT,TestoNewsRendererTest.java,0
@@ -6155,13 +5894,10 @@ UC54.TXT,BeanPuntoDiRistoro.java,0
 UC54.TXT,BeanTag.java,0
 UC54.TXT,BeanTurista.java,0
 UC54.TXT,BeanVisitaBC.java,0
-UC54.TXT,BeanVisitaPR.java,0
 UC54.TXT,BeniCulturali.java,0
 UC54.TXT,Categoria.java,0
 UC54.TXT,ControlloBeniCulturali.java,0
-UC54.TXT,ControlloDati.java,0
 UC54.TXT,ControlloDatiAdvertisement.java,0
-UC54.TXT,ControlloVisiteBeniCulturali.java,0
 UC54.TXT,ControlServerLauncher.java,0
 UC54.TXT,CostantiGlobali.java,0
 UC54.TXT,DBBanner.java,0
@@ -6181,8 +5917,6 @@ UC54.TXT,DBSearchPreferences.java,0
 UC54.TXT,DBStatisticheLocalita.java,0
 UC54.TXT,DBTag.java,0
 UC54.TXT,DBTurista.java,0
-UC54.TXT,DBVisitaBC.java,0
-UC54.TXT,DBVisitaPR.java,0
 UC54.TXT,DeskManager.java,0
 UC54.TXT,ElencoCategorie.java,0
 UC54.TXT,ErrorMessages.java,0
@@ -6214,8 +5948,6 @@ UC54.TXT,IDBPreferenzeGeneriche.java,0
 UC54.TXT,IDBPuntoDiRistoro.java,0
 UC54.TXT,IDBTag.java,0
 UC54.TXT,IDBTurista.java,0
-UC54.TXT,IDBVisitaBC.java,0
-UC54.TXT,IDBVisitaPR.java,0
 UC54.TXT,IGestioneAdvertisement.java,0
 UC54.TXT,IGestioneAdvertisementAgenzia.java,0
 UC54.TXT,IGestioneAdvertisementPuntoDiRistoro.java,0
@@ -6242,14 +5974,13 @@ UC54.TXT,Punto3DRenderer.java,0
 UC54.TXT,reportStatistici.java,0
 UC54.TXT,ReportTableModel.java,0
 UC54.TXT,Ricerca.java,0
-UC54.TXT,RicercaAvanzata.txt,0
+UC54.TXT,RicercaAvanzata.java,0
 UC54.TXT,RicercaStandard.java,0
 UC54.TXT,SchedaBC.java,0
-UC54.TXT,SchedaBC.txt,0
+UC54.TXT,SchedaBC.java,0
 UC54.TXT,SchedaPR.java,0
 UC54.TXT,SchedaTurista.java,0
 UC54.TXT,ScrollableTable.java,0
-UC54.TXT,SitoTableModel.java,0
 UC54.TXT,Tag.java,0
 UC54.TXT,TAGTableModel.java,0
 UC54.TXT,TestoNewsRendererTest.java,0
@@ -6273,12 +6004,9 @@ UC55.TXT,BeanPreferenzeGeneriche.java,0
 UC55.TXT,BeanPuntoDiRistoro.java,0
 UC55.TXT,BeanTag.java,0
 UC55.TXT,BeanTurista.java,0
-UC55.TXT,BeanVisitaBC.java,0
-UC55.TXT,BeanVisitaPR.java,0
 UC55.TXT,BeniCulturali.java,0
 UC55.TXT,Categoria.java,0
 UC55.TXT,ControlloBeniCulturali.java,0
-UC55.TXT,ControlloDati.java,0
 UC55.TXT,ControlloDatiAdvertisement.java,0
 UC55.TXT,ControlloVisiteBeniCulturali.java,0
 UC55.TXT,ControlServerLauncher.java,0
@@ -6361,10 +6089,10 @@ UC55.TXT,Punto3DRenderer.java,0
 UC55.TXT,reportStatistici.java,0
 UC55.TXT,ReportTableModel.java,0
 UC55.TXT,Ricerca.java,0
-UC55.TXT,RicercaAvanzata.txt,0
+UC55.TXT,RicercaAvanzata.java,0
 UC55.TXT,RicercaStandard.java,0
 UC55.TXT,SchedaBC.java,0
-UC55.TXT,SchedaBC.txt,0
+UC55.TXT,SchedaBC.java,0
 UC55.TXT,SchedaPR.java,0
 UC55.TXT,SchedaTurista.java,0
 UC55.TXT,ScrollableTable.java,0
@@ -6465,7 +6193,6 @@ UC56.TXT,IGestioneTagComune.java,0
 UC56.TXT,IGestioneTagOperatoreAgenzia.java,0
 UC56.TXT,IGestioneTuristaClient.java,0
 UC56.TXT,IGestioneTuristiAgenzia.java,0
-UC56.TXT,IRicerca.java,0
 UC56.TXT,LimitedDocument.java,0
 UC56.TXT,MediaVotiRenderer.java,0
 UC56.TXT,MessaggiErrore.java,0
@@ -6476,14 +6203,11 @@ UC56.TXT,PrioritaRenderer.java,0
 UC56.TXT,PRNode.java,0
 UC56.TXT,PuntiDiRistoro.java,0
 UC56.TXT,Punto3D.java,0
-UC56.TXT,Punto3DRenderer.java,0
 UC56.TXT,reportStatistici.java,0
 UC56.TXT,ReportTableModel.java,0
-UC56.TXT,Ricerca.java,0
-UC56.TXT,RicercaAvanzata.txt,0
-UC56.TXT,RicercaStandard.java,0
+UC56.TXT,RicercaAvanzata.java,0
 UC56.TXT,SchedaBC.java,0
-UC56.TXT,SchedaBC.txt,0
+UC56.TXT,SchedaBC.java,0
 UC56.TXT,SchedaPR.java,0
 UC56.TXT,SchedaTurista.java,0
 UC56.TXT,ScrollableTable.java,0
@@ -6584,7 +6308,6 @@ UC57.TXT,IGestioneTagComune.java,0
 UC57.TXT,IGestioneTagOperatoreAgenzia.java,0
 UC57.TXT,IGestioneTuristaClient.java,0
 UC57.TXT,IGestioneTuristiAgenzia.java,0
-UC57.TXT,IRicerca.java,0
 UC57.TXT,LimitedDocument.java,0
 UC57.TXT,MediaVotiRenderer.java,0
 UC57.TXT,MessaggiErrore.java,0
@@ -6599,10 +6322,10 @@ UC57.TXT,Punto3DRenderer.java,0
 UC57.TXT,reportStatistici.java,0
 UC57.TXT,ReportTableModel.java,0
 UC57.TXT,Ricerca.java,0
-UC57.TXT,RicercaAvanzata.txt,0
+UC57.TXT,RicercaAvanzata.java,0
 UC57.TXT,RicercaStandard.java,0
 UC57.TXT,SchedaBC.java,0
-UC57.TXT,SchedaBC.txt,0
+UC57.TXT,SchedaBC.java,0
 UC57.TXT,SchedaPR.java,0
 UC57.TXT,SchedaTurista.java,0
 UC57.TXT,ScrollableTable.java,0
@@ -6618,7 +6341,6 @@ UC58.TXT,BannerDialog.java,0
 UC58.TXT,BannerNode.java,0
 UC58.TXT,BannerRenderer.java,0
 UC58.TXT,BeanBanner.java,0
-UC58.TXT,BeanBeneCulturale.java,0
 UC58.TXT,BeanConvenzione.java,0
 UC58.TXT,BeanMenu.java,0
 UC58.TXT,BeanNews.java,0
@@ -6627,7 +6349,6 @@ UC58.TXT,BeanOperatorePuntoDiRistoro.java,0
 UC58.TXT,BeanPiatto.java,0
 UC58.TXT,BeanPreferenzaDiRicerca.java,0
 UC58.TXT,BeanPreferenzeGeneriche.java,0
-UC58.TXT,BeanPuntoDiRistoro.java,0
 UC58.TXT,BeanTag.java,0
 UC58.TXT,BeanTurista.java,0
 UC58.TXT,BeanVisitaBC.java,0
@@ -6718,10 +6439,8 @@ UC58.TXT,Punto3DRenderer.java,0
 UC58.TXT,reportStatistici.java,0
 UC58.TXT,ReportTableModel.java,0
 UC58.TXT,Ricerca.java,0
-UC58.TXT,RicercaAvanzata.txt,0
+UC58.TXT,RicercaAvanzata.java,0
 UC58.TXT,RicercaStandard.java,0
-UC58.TXT,SchedaBC.java,0
-UC58.TXT,SchedaPR.java,0
 UC58.TXT,SchedaTurista.java,0
 UC58.TXT,ScrollableTable.java,0
 UC58.TXT,SitoTableModel.java,0
@@ -6770,7 +6489,6 @@ UC6.TXT,DBOperatorAgency.java,0
 UC6.TXT,DBOperatoreRestaurant.java,0
 UC6.TXT,DBPiatto.java,0
 UC6.TXT,DBPreferenzeGeneriche.java,0
-UC6.TXT,DBPuntoDiRistoro.java,0
 UC6.TXT,DBSearchPreferences.java,0
 UC6.TXT,DBStatisticheLocalita.java,0
 UC6.TXT,DBTag.java,0
@@ -6815,7 +6533,6 @@ UC6.TXT,IGestioneAdvertisementAgenzia.java,0
 UC6.TXT,IGestioneAdvertisementPuntoDiRistoro.java,0
 UC6.TXT,IGestioneBeniCulturaliAgenzia.java,0
 UC6.TXT,IGestioneBeniCulturaliComune.java,0
-UC6.TXT,IGestionePuntiDiRistoroAgenzia.java,0
 UC6.TXT,IGestionePuntiDiRistoroComune.java,0
 UC6.TXT,IGestioneTagComune.java,0
 UC6.TXT,IGestioneTagOperatoreAgenzia.java,0
@@ -6836,10 +6553,10 @@ UC6.TXT,Punto3DRenderer.java,0
 UC6.TXT,reportStatistici.java,0
 UC6.TXT,ReportTableModel.java,0
 UC6.TXT,Ricerca.java,0
-UC6.TXT,RicercaAvanzata.txt,0
+UC6.TXT,RicercaAvanzata.java,0
 UC6.TXT,RicercaStandard.java,0
 UC6.TXT,SchedaBC.java,0
-UC6.TXT,SchedaBC.txt,0
+UC6.TXT,SchedaBC.java,0
 UC6.TXT,SchedaPR.java,0
 UC6.TXT,SchedaTurista.java,0
 UC6.TXT,ScrollableTable.java,0
@@ -6856,7 +6573,6 @@ UC7.TXT,BannerNode.java,0
 UC7.TXT,BannerRenderer.java,0
 UC7.TXT,BeanBanner.java,0
 UC7.TXT,BeanBeneCulturale.java,0
-UC7.TXT,BeanConvenzione.java,0
 UC7.TXT,BeanMenu.java,0
 UC7.TXT,BeanNews.java,0
 UC7.TXT,BeanOperatoreAgenzia.java,0
@@ -6916,7 +6632,6 @@ UC7.TXT,HelpManager.java,0
 UC7.TXT,IAutenticazione.java,0
 UC7.TXT,IDBBanner.java,0
 UC7.TXT,IDBBeneCulturale.java,0
-UC7.TXT,IDBConvenzione.java,0
 UC7.TXT,IDBMenu.java,0
 UC7.TXT,IDBNews.java,0
 UC7.TXT,IDBOperatoreAgenzia.java,0
@@ -6934,7 +6649,6 @@ UC7.TXT,IGestioneAdvertisementAgenzia.java,0
 UC7.TXT,IGestioneAdvertisementPuntoDiRistoro.java,0
 UC7.TXT,IGestioneBeniCulturaliAgenzia.java,0
 UC7.TXT,IGestioneBeniCulturaliComune.java,0
-UC7.TXT,IGestionePuntiDiRistoroAgenzia.java,0
 UC7.TXT,IGestionePuntiDiRistoroComune.java,0
 UC7.TXT,IGestioneTagComune.java,0
 UC7.TXT,IGestioneTagOperatoreAgenzia.java,0
@@ -6955,10 +6669,10 @@ UC7.TXT,Punto3DRenderer.java,0
 UC7.TXT,reportStatistici.java,0
 UC7.TXT,ReportTableModel.java,0
 UC7.TXT,Ricerca.java,0
-UC7.TXT,RicercaAvanzata.txt,0
+UC7.TXT,RicercaAvanzata.java,0
 UC7.TXT,RicercaStandard.java,0
 UC7.TXT,SchedaBC.java,0
-UC7.TXT,SchedaBC.txt,0
+UC7.TXT,SchedaBC.java,0
 UC7.TXT,SchedaPR.java,0
 UC7.TXT,SchedaTurista.java,0
 UC7.TXT,ScrollableTable.java,0
@@ -6983,7 +6697,6 @@ UC8.TXT,BeanOperatorePuntoDiRistoro.java,0
 UC8.TXT,BeanPiatto.java,0
 UC8.TXT,BeanPreferenzaDiRicerca.java,0
 UC8.TXT,BeanPreferenzeGeneriche.java,0
-UC8.TXT,BeanPuntoDiRistoro.java,0
 UC8.TXT,BeanTag.java,0
 UC8.TXT,BeanTurista.java,0
 UC8.TXT,BeanVisitaBC.java,0
@@ -6991,7 +6704,6 @@ UC8.TXT,BeanVisitaPR.java,0
 UC8.TXT,BeniCulturali.java,0
 UC8.TXT,Categoria.java,0
 UC8.TXT,ControlloBeniCulturali.java,0
-UC8.TXT,ControlloDati.java,0
 UC8.TXT,ControlloDatiAdvertisement.java,0
 UC8.TXT,ControlloVisiteBeniCulturali.java,0
 UC8.TXT,ControlServerLauncher.java,0
@@ -7008,7 +6720,6 @@ UC8.TXT,DBOperatorAgency.java,0
 UC8.TXT,DBOperatoreRestaurant.java,0
 UC8.TXT,DBPiatto.java,0
 UC8.TXT,DBPreferenzeGeneriche.java,0
-UC8.TXT,DBPuntoDiRistoro.java,0
 UC8.TXT,DBSearchPreferences.java,0
 UC8.TXT,DBStatisticheLocalita.java,0
 UC8.TXT,DBTag.java,0
@@ -7053,7 +6764,6 @@ UC8.TXT,IGestioneAdvertisementAgenzia.java,0
 UC8.TXT,IGestioneAdvertisementPuntoDiRistoro.java,0
 UC8.TXT,IGestioneBeniCulturaliAgenzia.java,0
 UC8.TXT,IGestioneBeniCulturaliComune.java,0
-UC8.TXT,IGestionePuntiDiRistoroAgenzia.java,0
 UC8.TXT,IGestionePuntiDiRistoroComune.java,0
 UC8.TXT,IGestioneTagComune.java,0
 UC8.TXT,IGestioneTagOperatoreAgenzia.java,0
@@ -7074,10 +6784,10 @@ UC8.TXT,Punto3DRenderer.java,0
 UC8.TXT,reportStatistici.java,0
 UC8.TXT,ReportTableModel.java,0
 UC8.TXT,Ricerca.java,0
-UC8.TXT,RicercaAvanzata.txt,0
+UC8.TXT,RicercaAvanzata.java,0
 UC8.TXT,RicercaStandard.java,0
 UC8.TXT,SchedaBC.java,0
-UC8.TXT,SchedaBC.txt,0
+UC8.TXT,SchedaBC.java,0
 UC8.TXT,SchedaPR.java,0
 UC8.TXT,SchedaTurista.java,0
 UC8.TXT,ScrollableTable.java,0
@@ -7102,7 +6812,6 @@ UC9.TXT,BeanOperatorePuntoDiRistoro.java,0
 UC9.TXT,BeanPiatto.java,0
 UC9.TXT,BeanPreferenzaDiRicerca.java,0
 UC9.TXT,BeanPreferenzeGeneriche.java,0
-UC9.TXT,BeanPuntoDiRistoro.java,0
 UC9.TXT,BeanTag.java,0
 UC9.TXT,BeanTurista.java,0
 UC9.TXT,BeanVisitaBC.java,0
@@ -7127,7 +6836,6 @@ UC9.TXT,DBOperatorAgency.java,0
 UC9.TXT,DBOperatoreRestaurant.java,0
 UC9.TXT,DBPiatto.java,0
 UC9.TXT,DBPreferenzeGeneriche.java,0
-UC9.TXT,DBPuntoDiRistoro.java,0
 UC9.TXT,DBSearchPreferences.java,0
 UC9.TXT,DBStatisticheLocalita.java,0
 UC9.TXT,DBTag.java,0
@@ -7172,13 +6880,11 @@ UC9.TXT,IGestioneAdvertisementAgenzia.java,0
 UC9.TXT,IGestioneAdvertisementPuntoDiRistoro.java,0
 UC9.TXT,IGestioneBeniCulturaliAgenzia.java,0
 UC9.TXT,IGestioneBeniCulturaliComune.java,0
-UC9.TXT,IGestionePuntiDiRistoroAgenzia.java,0
 UC9.TXT,IGestionePuntiDiRistoroComune.java,0
 UC9.TXT,IGestioneTagComune.java,0
 UC9.TXT,IGestioneTagOperatoreAgenzia.java,0
 UC9.TXT,IGestioneTuristaClient.java,0
 UC9.TXT,IGestioneTuristiAgenzia.java,0
-UC9.TXT,IRicerca.java,0
 UC9.TXT,LimitedDocument.java,0
 UC9.TXT,MediaVotiRenderer.java,0
 UC9.TXT,MessaggiErrore.java,0
@@ -7192,10 +6898,8 @@ UC9.TXT,Punto3D.java,0
 UC9.TXT,Punto3DRenderer.java,0
 UC9.TXT,reportStatistici.java,0
 UC9.TXT,ReportTableModel.java,0
-UC9.TXT,Ricerca.java,0
-UC9.TXT,RicercaStandard.java,0
 UC9.TXT,SchedaBC.java,0
-UC9.TXT,SchedaBC.txt,0
+UC9.TXT,SchedaBC.java,0
 UC9.TXT,SchedaPR.java,0
 UC9.TXT,SchedaTurista.java,0
 UC9.TXT,ScrollableTable.java,0
