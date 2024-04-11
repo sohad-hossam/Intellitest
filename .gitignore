@@ -20,3 +20,4 @@ build/*
 tree-sitter-java/*
 GP GUI Base/electron-react-app/package-lock.json
 GP GUI Base/electron-react-app/package.json
+/.ipynb_checkpoints

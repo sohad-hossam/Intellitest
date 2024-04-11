@@ -18,13 +18,11 @@ class FeatureExtraction:
             LSA_data_useCases = LSA_model.fit_transform(tfidf_matrix_uc)
             LSA_data_codes = LSA_model.fit_transform(tfidf_matrix_code)
             LSA_similraity_matrix = cosine_similarity(LSA_data_useCases, LSA_data_codes)
-            # print(LSA_similraity_matrix)
             return LSA_similraity_matrix
         else:
             LSA_data_useCases = LSA_model.transform(tfidf_matrix_uc)
             LSA_data_codes = LSA_model.transform(tfidf_matrix_code)
             LSA_similraity_matrix = cosine_similarity(LSA_data_useCases, LSA_data_codes)
-            # print(LSA_similraity_matrix)
             return LSA_similraity_matrix
 
     def LDA(self,UC_documents:list,code_documents:list,TotalTokens:set):
@@ -61,14 +59,14 @@ class FeatureExtraction:
             self.UC_count_matrix = self.count_vectorizer.transform(UC_documents)
             self.code_count_matrix = self.count_vectorizer.transform(code_documents)
 
-        self.code_vocab_index = self.count_vectorizer.vocabulary_
+        self.count_vocab_index = self.count_vectorizer.vocabulary_
 
         UC_total_number_of_occurences_in_corpus = np.sum(self.UC_count_matrix, axis=0)
         code_total_number_of_occurences_in_corpus = np.sum(self.code_count_matrix, axis=0)
         
         # dict of word: # of occurences in the corpus
-        tf_uc_dict = {word: UC_total_number_of_occurences_in_corpus[0,i] for word,i in self.code_vocab_index.items()}
-        tf_code_dict = {word: code_total_number_of_occurences_in_corpus[0,i] for word,i in self.code_vocab_index.items()}
+        tf_uc_dict = {word: UC_total_number_of_occurences_in_corpus[0,i] for word,i in self.count_vocab_index.items()}
+        tf_code_dict = {word: code_total_number_of_occurences_in_corpus[0,i] for word,i in self.count_vocab_index.items()}
 
         UC_words_count = self.UC_count_matrix.sum(axis=1)
         code_words_count = self.code_count_matrix.sum(axis=1)
@@ -113,7 +111,7 @@ class FeatureExtraction:
 
         # create the transform
         self.tfidf_matrix_uc = self.tfidf_vectorizer.fit_transform(UC_documents)
-        idf_uc = self.tfidf_vectorizer.idf_
+        idf_uc = self.tfidf_vectorizer.idf_ 
         
         feature_names_uc = self.tfidf_vectorizer.get_feature_names_out() 
         idf_uc_dict = {feature_names_uc[i]: idf_uc[i] for i in range(len(feature_names_uc))}  #this is the idf dictionary for the whole vocab that i acsess later doing whatever
@@ -137,13 +135,11 @@ class FeatureExtraction:
         df_code_array = np.sum(self.tfidf_matrix_code > 0, axis=0).A1
         df_code_dict = {feature_names_code[i]: df_code_array[i] for i in range(len(feature_names_code))}
 
+        self.tf_idf_vocab_index = self.tfidf_vectorizer.vocabulary_
 
         return  self.tfidf_matrix_uc,self.tfidf_matrix_code,idf_uc_dict,idf_code_dict,feature_names_uc,feature_names_code,df_uc_dict,df_code_dict
 
-
-
     def VectorSpaceModel(self, tfidf_matrix_uc: np.ndarray, tfidf_matrix_code: np.ndarray) -> np.ndarray:
-
         # cosine similarity
         cosine_similarities = cosine_similarity(tfidf_matrix_uc, tfidf_matrix_code)
         return cosine_similarities
@@ -156,7 +152,7 @@ class FeatureExtraction:
         
         query_term_jensen_shannon = None
         if feature_extraction_type == "JS" or feature_extraction_type == "VSM":
-            word_index = self.code_vocab_index[query_term]
+            word_index = self.count_vocab_index[query_term]
             term_vector = np.zeros((1, args[0].shape[1])) #1*
             term_vector[:,word_index]=args[1][code_idx, word_index]
             query_term_jensen_shannon = feature_extraction_method(args[0], term_vector)
@@ -588,7 +584,7 @@ class FeatureExtraction:
     
     def _BM25PerToken(self,tokens:list,idf:np.array,tf:np.array,doc_len:int,avgdl:int) -> np.float16:
         
-        return np.sum(np.vectorize(lambda token: idf[token] * (tf[self.code_vocab_index.get(token)] * (1.2 + 1)) / (tf[self.code_vocab_index.get(token)] + 1.2 * (1 - 0.75 + 0.75 * (doc_len / avgdl))) , otypes=[np.float16])(tokens))
+        return np.sum(np.vectorize(lambda token: idf[token] * (tf[self.count_vocab_index.get(token)] * (1.2 + 1)) / (tf[self.count_vocab_index.get(token)] + 1.2 * (1 - 0.75 + 0.75 * (doc_len / avgdl))) , otypes=[np.float16])(tokens))
 
     def _BM25PerQuery(self,queries:list,idf_dict:dict,tf:np.array,doc_len:int,avgdl:int):
 
@@ -619,7 +615,7 @@ class FeatureExtraction:
         doc_len = len(doc.split())
         # P(w|d) = c(w;d) / |d| , P(w|C) = c(w;C) / |C|
         # c(w;d)
-        term_count_in_document = np.array([tf_matrix[self.code_vocab_index.get(token)] for token in tokens])
+        term_count_in_document = np.array([tf_matrix[self.count_vocab_index.get(token)] for token in tokens])
         # c(w;C)
         term_count_in_corpus = np.array([tf_corpus.get(token,0) for token in tokens])
         # P(w|d)
@@ -633,32 +629,140 @@ class FeatureExtraction:
             # DP -> (c(w;d) + mu * P(w|C)) / (|d| + mu)
             return np.sum((term_count_in_document + mu * P_w_C) / (doc_len + mu))
 
-    def RobustnessScore(self,queries:list,documents:list,feature_extraction_method:Callable)->np.array:
-        Result = feature_extraction_method() # CC as query
-        #per query (doc# ,1)
-        np.vectorize(lambda i, query: self._RobustnessScorePerQuery(query,documents,Result[:,i],feature_extraction_method))(range(len(queries)), queries)
+    def _EditDocuments(self,query:str,doc:str)->str:
+        intersection = set(query.split()).intersection(set(doc.split()))
+        for term in intersection:
+            _lambda = doc.count(term) / len(doc)
+            doc.replace(term,"")
+            doc += " ".join([term] * np.random.poisson(_lambda))
+        return doc
     
-    def _EditDocuments(self,query:str,documents:list)->list:
-        for doc in documents:
-            intersection = set(query.split()).intersection(set(doc.split()))
-            for term in intersection:
-                _lambda = doc.count(term) / len(doc)
-                doc.replace(term,"")
-                doc += " ".join([term] * np.random.poisson(_lambda))
-        return documents
+    def _RobustnessScorePerQuery(self,query:str,documents:list,feature_extraction_type,Results,Robust_or_First_Rank)->np.ndarray:
+        top20 = np.argsort(Results)[::-1][:20] # arrange in descending order
+        L = np.array(documents)[top20]
+        new_L = np.vectorize(lambda doc: self._EditDocuments(query,doc))(L)
+
+        query_count_matrix, doc_count_matrix,_,tf_doc_dict = self.CountVectorizerModel([query], new_L, 'test')
+        tfidf_matrix_query, tfidf_matrix_doc,_,idf_doc_dict,_,_ ,_,_= self.TFIDFVectorizer([query], new_L)
+
+        new_Results = None
+        if feature_extraction_type == "BM":
+            new_Results = self.BM25([query],new_L,idf_doc_dict,doc_count_matrix)
+        elif feature_extraction_type == "JM":
+            new_Results = self.SmoothingMethods([query],new_L,doc_count_matrix,tf_doc_dict,JM_or_DP=True)
+        elif feature_extraction_type == "DP":
+            new_Results = self.SmoothingMethods([query],new_L,doc_count_matrix,tf_doc_dict,JM_or_DP=False)
+        elif feature_extraction_type == "JS" :
+            new_Results = self.JensenShannon(query_count_matrix, doc_count_matrix)
+        else: # VSM
+            new_Results = self.VectorSpaceModel(tfidf_matrix_query, tfidf_matrix_doc)
+
+        new_top20 = np.argsort(new_Results)[::-1][:20] # arrange in descending order
         
+        # (5) Compute the Spearman rank correlation between the positions of the 50 documents in L and the positions of their corresponding perturbed documents in new_L
+        if Robust_or_First_Rank:
+            _,new_L_ranks  = np.unique(new_L, return_inverse=True)
+            _,new_L_top20_ranks = np.unique(new_L[new_top20].flatten(), return_inverse=True)
+            return spearmanr(new_L_ranks,new_L_top20_ranks).correlation if (np.std(new_L_ranks) != 0 and np.std(new_L_top20_ranks) != 0) else 0
+        else: # First Rank Change
+            return 1 if new_L[0] == new_L[new_top20].flatten()[0] else 0
+
+
+
+    def RobustnessScore(self,queries:list,documents:list,feature_extraction_type:str="JS",Robust_or_First_Rank=True)->np.array:
+        Results = None
+        query_count_matrix, doc_count_matrix,_,tf_doc_dict = self.CountVectorizerModel(queries, documents, 'train')
+        tfidf_matrix_query, tfidf_matrix_doc,_,idf_doc_dict,_,_ ,_,_= self.TFIDFVectorizer(queries, documents)
+
+        if feature_extraction_type == "BM":
+            Results = self.BM25(queries,documents,idf_doc_dict,doc_count_matrix)
+        elif feature_extraction_type == "JM":
+            Results = self.SmoothingMethods(queries,documents,doc_count_matrix,tf_doc_dict,JM_or_DP=True)
+        elif feature_extraction_type == "DP":
+            Results = self.SmoothingMethods(queries,documents,doc_count_matrix,tf_doc_dict,JM_or_DP=False)
+        elif feature_extraction_type == "JS" :
+            Results = self.JensenShannon(query_count_matrix, doc_count_matrix)
+        else: # VSM
+            Results = self.VectorSpaceModel(tfidf_matrix_query, tfidf_matrix_doc)
+
+        if Results.shape[0] != len(documents):
+            Results = Results.T
+
+        return np.vectorize(lambda i: self._RobustnessScorePerQuery(queries[i],documents,feature_extraction_type,Results[:,i],Robust_or_First_Rank))(range(len(queries))).reshape(-1,1)
+
+
+
     # Clustering Tendency
-    def _SimQuery():
-        pass
-    def ClusteringTendency(self,queries:list,documents:list,Results:np.array)->np.ndarray:
-        pass
+    def _SimQuery(self,d_i:int,d_j:int,query_tf_idf_vector:np.array,doc_tf_idf_matrix:np.array,c:np.array)->np.float16:
+
+        term1 = cosine_similarity(doc_tf_idf_matrix[d_i,:],doc_tf_idf_matrix[d_j,:])
+        term2 = cosine_similarity(query_tf_idf_vector,c.A)
+        
+        return term1 * term2
+
+    def _getNN(self,d_mp:int,top20:np.array,Results:np.array)->np.int16:
+        top20 = top20.tolist()
+        if top20.index(d_mp) == 0:
+            return top20[top20.index(d_mp) + 1]
+        elif top20.index(d_mp) == 19:
+            return top20[top20.index(d_mp) - 1]
+        elif abs(Results[top20[top20.index(d_mp) - 1]] - Results[d_mp]) < abs(Results[top20[top20.index(d_mp) + 1]] - Results[d_mp]) :
+            return top20[top20.index(d_mp) - 1]
+        else:
+            return top20[top20.index(d_mp) + 1]
+    
+    def _getTermOne(self,i:int,top20:np.array,top20_excluded:np.array,cosineSimilarity:np.array,doc_tf_idf_matrix:np.array,query_tf_idf_matrix,Results:np.array)->np.float16:
+        p_sp = np.random.choice(top20_excluded)
+        d_mp = top20[np.argmax([cosineSimilarity[p_sp, col] for col in top20])] # most similar document to p_sp in terms of cosine similarity
+        d_nn = self._getNN(d_mp,top20,Results)
+
+        c = (doc_tf_idf_matrix[d_mp,:].todense()  + doc_tf_idf_matrix[d_nn,:].todense() ) / 2        
+
+        num = self._SimQuery(d_mp,d_nn,query_tf_idf_matrix,doc_tf_idf_matrix,c)
+        den = self._SimQuery(p_sp,d_mp,query_tf_idf_matrix,doc_tf_idf_matrix,c)
+
+        return num/den if den != 0 else 0
+
+
+    def _ClusteringTendencyPerQuery(self,Results:np.array,query_tf_idf_matrix:np.array,doc_tf_idf_matrix:np.array)->np.float16:
+        """
+            Results: (D,1) , query_tf_idf_matrix: (D,1) , doc_tf_idf_matrix: (D,1)
+        """
+        Ordered_Results_Index = np.argsort(Results)[::-1] # arrange in descending order 
+        top20 = Ordered_Results_Index[:20]
+        top20_excluded = Ordered_Results_Index[20:]
+        cosineSimilarity = cosine_similarity(doc_tf_idf_matrix)
+        
+        term_1 = np.mean(np.vectorize(lambda i :self._getTermOne(i,top20,top20_excluded,cosineSimilarity,doc_tf_idf_matrix,query_tf_idf_matrix,Results))(np.arange(100)))
+        
+        #x_i and y_i
+        x_i = np.max(doc_tf_idf_matrix[top20, :], axis=0)
+        y_i = np.min(doc_tf_idf_matrix[top20, :], axis=0)
+        term_2 = np.mean(x_i - y_i)
+
+        return term_1 * term_2
+    
+    def ClusteringTendency(self,Results:np.array,query_tf_idf_matrix:np.array,doc_tf_idf_matrix:np.array)->np.ndarray:
+        return np.vectorize(lambda i: self._ClusteringTendencyPerQuery(Results[:,i],query_tf_idf_matrix[i,:],doc_tf_idf_matrix))(range(Results.shape[1])).reshape(-1,1)
+    
+    # Spatial Auto correlation
+    def _SpatialAutoCorrelationPerQuery(self,Results:np.array,doc_tf_idf_matrix:np.array)->np.ndarray:
+        top20 = np.argpartition(Results, -20)[-20:]
+        L = Results[top20]
+        cosineSimilarity = cosine_similarity(doc_tf_idf_matrix[top20,:])
+        L_new = np.vectorize(lambda i : np.mean(L[np.argsort(cosineSimilarity[i,:])[-6:-1]]))(range(20)) # remove the document itself
+        return pearsonr(L,L_new)[0] if np.std(L) != 0 and np.std(L_new) != 0 else 0
+
+    def SpatialAutoCorrelation(self,Results:np.array,doc_tf_idf_matrix:np.array)->np.ndarray:
+        return np.vectorize(lambda i: self._SpatialAutoCorrelationPerQuery(Results[:,i],doc_tf_idf_matrix))(range(Results.shape[1])).reshape(-1,1)
+    
     # Weighted Information Gain
+    
     def _WeightedInformationGainPerToken(self,token:str,document:str,tf_dict:dict,total_corpus_size:int,_lambda:np.float16)->np.float16:
 
         term_count = document.count(token); doc_len = len(document); tf = tf_dict.get(token, 1)
         if term_count == 0 or doc_len == 0 or tf == 0 or total_corpus_size == 0:
             return 0
-        print(total_corpus_size)
 
         ratio =  (term_count / doc_len)/ (tf / total_corpus_size)
         if ratio <= 0:
@@ -674,15 +778,12 @@ class FeatureExtraction:
         L = np.array(documents)[top10]
         _lambda = 1/np.sqrt(len(query.split()))
         # per document
-        print(total_corpus_size)
-
         return (1/10)*np.sum(np.vectorize(lambda doc: self._WeightedInformationGainPerDocument(query,doc,tf_dict,total_corpus_size,_lambda))(L))
     
     def WeightedInformationGain(self,queries:list,documents:list,Results:np.array,tf_dict:dict,total_corpus_size:int)->np.ndarray:
         # per query
-        print(total_corpus_size)
         return np.vectorize(lambda i,query: self._WeightedInformationGainPerQuery(query,documents,Results[:,i],tf_dict,total_corpus_size))(range(len(queries)),queries).reshape(-1,1)
-    
+
     # Normalized Query Commitment
     
     def _NormalizedQueryCommitmentPerQuery(self,Results:np.array)->np.float16:
@@ -695,3 +796,6 @@ class FeatureExtraction:
     def NormalizedQueryCommitment(self,Results:np.array)->np.ndarray:
         # per query
         return np.vectorize(lambda i,: self._NormalizedQueryCommitmentPerQuery(Results[:,i]))(range(Results.shape[1])).reshape(-1,1)
+
+
+    
