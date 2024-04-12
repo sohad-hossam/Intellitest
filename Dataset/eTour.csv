@@ -163,10 +163,10 @@ UC30.txt,GestioneTagOperatoreAgenzia.txt
 UC30.txt,DBTag.txt
 UC30.txt,IDBTag.txt
 UC30.txt,BeanTag.txt
-UC31.txt,DBOperatoreAgenzia.txt
+UC31.txt,DBOperatorAgency.txt
 UC31.txt,OperatoreAgenzia.txt
 UC31.txt,IDBOperatoreAgenzia.txt
-UC32.txt,DBOperatoreAgenzia.txt
+UC32.txt,DBOperatorAgency.txt
 UC32.txt,OperatoreAgenzia.txt
 UC33.txt,ControlloDati.txt
 UC33.txt,IDBTurista.txt
@@ -238,7 +238,7 @@ UC45.txt,GestionePuntiDiRistoroComune.txt
 UC45.txt,IGestionePuntiDiRistoroComune.txt
 UC45.txt,BeanPuntoDiRistoro.txt
 UC45.txt,BeanBeneCulturale.txt
-UC46.txt,DBPreferenzeDiRicerca.txt
+UC46.txt,DBSearchPreferences.txt
 UC46.txt,IDBPreferenzeDiRicerca.txt
 UC46.txt,GestioneTuristaComune.txt
 UC46.txt,BeanPreferenzaDiRicerca.txt
