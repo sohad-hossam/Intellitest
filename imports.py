@@ -14,7 +14,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer, Tf
 from sklearn.metrics.pairwise import cosine_similarity
 from scipy.spatial.distance import jensenshannon
 
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import LabelEncoder,normalize,MinMaxScaler
 from sklearn.decomposition import TruncatedSVD
 import numpy as np
 from numpy import ndarray

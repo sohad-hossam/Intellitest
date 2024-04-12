@@ -397,7 +397,14 @@ class FeatureExtraction:
         doc_tf = np.vectorize(lambda term: doc_dict[term])(list(query_terms))
         doc_tf = doc_tf / np.sum(list(doc_dict.values()))
 
-        return np.sum(query_tf * np.log(query_tf / doc_tf))
+        mask = doc_tf != 0
+        score = np.zeros_like(query_tf)
+        score[mask] = query_tf[mask] / doc_tf[mask]
+
+        log_score = np.zeros_like(score)
+        log_score[score != 0] = np.log(score[score != 0])
+        
+        return np.sum(query_tf * log_score)
 
 
 
@@ -408,6 +415,8 @@ class FeatureExtraction:
         cosineSimilarity = cosine_similarity(doc_tfidf_matrix)
         # return a list of indicies of documents that contain the term based on the value in the doc_tfidf_matrix
         indices = np.where(doc_tfidf_matrix.toarray() > 0)
+        if len(indices[0]) < 2:
+            return 0
         # get all possible pairs of indices to access cosine similarity matrix and get the sum of all values returned
         return np.sum([cosineSimilarity[i,j] for i,j in zip(indices[0],indices[1])])/(len(indices[0])*(len(indices[0]) - 1))
 

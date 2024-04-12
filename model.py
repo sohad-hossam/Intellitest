@@ -50,14 +50,22 @@ UC_count_matrix, code_count_matrix,tf_uc_dict,tf_code_dict = featureExtraction.C
 UC_SCS = featureExtraction.simplifiedClarityScore(UC_documents,UC_count_matrix,tf_code_dict)
 CC_SCS = featureExtraction.simplifiedClarityScore(code_documents,code_count_matrix,tf_uc_dict)
 
-print("UC_SCS", UC_SCS.shape)
-print("CC_SCS", CC_SCS.shape)
-
 UC_CoherenceScore = featureExtraction.CoherenceScore(UC_documents,tfidf_matrix_code)
 CC_CoherenceScore = featureExtraction.CoherenceScore(code_documents,tfidf_matrix_uc)
 
-print("UC_CS", UC_CoherenceScore.shape)
-print("CC_CS", CC_CoherenceScore.shape)
+# print("UC_CS", UC_CoherenceScore)
+# print("CC_CS", CC_CoherenceScore)
+
+print("UC_SCS", UC_SCS)
+scaler = MinMaxScaler()
+normalized_arr = scaler.fit_transform(UC_SCS)
+print("normalized: ",normalized_arr)
+print("#####################")
+print("UC_CoherenceScore", UC_CoherenceScore)
+normalized_arr = scaler.fit_transform(UC_CoherenceScore)
+print("normalized: ",normalized_arr)
+# print("CC_SCS", CC_SCS)
+
 
 # idf_uc_q,idf_code_q= featureExtraction.IDFPreProcessing(UC_documents,idf_code_dict,code_documents,idf_uc_dict)
 # ictf_uc_q,ictf_code_q=featureExtraction.ICTFPreProcessing(UC_documents,tf_code_dict,code_documents,tf_uc_dict)
