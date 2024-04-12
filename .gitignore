@@ -7,6 +7,7 @@
 *.xml
 *.md
 *.pdf
+*.java
 *.sqlite3
 build/my-languages.so
 build/my-languages.lib
