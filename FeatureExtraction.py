@@ -387,6 +387,23 @@ class FeatureExtraction:
             sumvariance.append(sum(query))
         return np.array(sumvariance)
     
+    def _simplifiedClarityScorePerQuery(self,query:str,query_tf_matrix:np.array,doc_dict:dict)->np.float16:
+        # lw 3ndna dict ndelo el term ydena el tf bt3o fy el document  ndivide by length el query * log ( nfs el value el fat / m7tgen dict tany w dh ashel shwya ndelo el term ydelna el freq bt3to fy kol el documents(uc/code) / a3tked 3dad el docuemtns)  
+        query_terms = set(query.split())
+        # PoQ
+        query_tf = np.vectorize(lambda term: query_tf_matrix[self.count_vocab_index.get(term)])(list(query_terms)) # array of tf for all tokens in the query
+        query_tf = query_tf / len(query.split())
+
+        doc_tf = np.vectorize(lambda term: doc_dict[term])(list(query_terms))
+        doc_tf = doc_tf / np.sum(list(doc_dict.values()))
+
+        return np.sum(query_tf * np.log(query_tf / doc_tf))
+
+
+
+    def simplifiedClarityScore(self,queries,query_tf_matrix,doc_dict):
+        return np.vectorize(lambda i: self._simplifiedClarityScorePerQuery(queries[i],query_tf_matrix[i,:],doc_dict))(range(len(queries))).reshape(-1,1)
+
     def PMIPreProcessing(self,code_documents:list,UC_documents:list):
         PMI_code = [] 
 

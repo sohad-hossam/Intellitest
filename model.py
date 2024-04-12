@@ -1,29 +1,28 @@
 from imports import *
 from FeatureExtraction import *
-from VSM import *
-
+from PreProcessor import *
 _PreProcessor = PreProcessor()
 UC_documents, code_documents, UCTokens, CodeTokens = _PreProcessor.setup(
-            "./UC", "./CC"
+            "./Dataset/UC", "./Dataset/CC"
         )
 UCTokens.update(CodeTokens)
 
 
-DataSet = pd.read_csv("eTour.csv", names=['UC', 'CC'])
+DataSet = pd.read_csv("./Dataset/eTour.csv", names=['UC', 'CC'])
 temp = set()
 for row in DataSet.itertuples(index=False, name=None):
     temp.add((row[0].lower(), row[1].lower()))
 
 DataSet['Labels'] = np.ones(len(DataSet), np.uint16)
 
-for filename_UC in os.listdir("./UC"):
-    for filename_CC in os.listdir("./CC"):
+for filename_UC in os.listdir("./Dataset/UC"):
+    for filename_CC in os.listdir("./Dataset/CC"):
         if (filename_UC.lower(), filename_CC.lower()) not in temp:
             DataSet.loc[len(DataSet)] = [filename_UC, filename_CC, 0]
 
-DataSet.to_csv('eTourModified.csv', index = False)             
+DataSet.to_csv('./Dataset/eTourModified.csv', index = False)             
 
-DataSet = pd.read_csv("eTourModified.csv")
+DataSet = pd.read_csv("./Dataset/eTourModified.csv")
 
 # print(DataSet)
 ##### incorrect data / duplicated data / NA 
@@ -48,6 +47,10 @@ featureExtraction = FeatureExtraction(UCTokens)
 tfidf_matrix_uc, tfidf_matrix_code,idf_uc_dict,idf_code_dict,feature_names_uc,feature_names_code ,df_uc_dict,df_code_dict= featureExtraction.TFIDFVectorizer(UC_documents, code_documents)
 UC_count_matrix, code_count_matrix,tf_uc_dict,tf_code_dict = featureExtraction.CountVectorizerModel(UC_documents, code_documents, 'train')
 
+UC_SCS = featureExtraction.simplifiedClarityScore(UC_documents,UC_count_matrix,tf_code_dict)
+print("UC_SCS", UC_SCS.shape)
+CC_SCS = featureExtraction.simplifiedClarityScore(code_documents,code_count_matrix,tf_uc_dict)
+print("CC_SCS", CC_SCS.shape)
 # idf_uc_q,idf_code_q= featureExtraction.IDFPreProcessing(UC_documents,idf_code_dict,code_documents,idf_uc_dict)
 # ictf_uc_q,ictf_code_q=featureExtraction.ICTFPreProcessing(UC_documents,tf_code_dict,code_documents,tf_uc_dict)
 # entropy_uc,entropy_code=featureExtraction.EntropyPreProcessing(UC_documents,code_documents,df_uc_dict,df_code_dict)
@@ -146,11 +149,11 @@ UC_count_matrix, code_count_matrix,tf_uc_dict,tf_code_dict = featureExtraction.C
 # print('UC_queries_score_JM', UC_queries_score_JM.shape)
 
 # 1.5) Subquery overlap using DP smoothing
-code_queries_score_DP = featureExtraction.SubqueryOverlap(code_documents, featureExtraction.SmoothingMethods,"SM", UC_documents, UC_count_matrix,tf_uc_dict,False)
-UC_queries_score_DP = featureExtraction.SubqueryOverlap(UC_documents, featureExtraction.SmoothingMethods,"SM", code_documents, code_count_matrix,tf_code_dict,False)
+# code_queries_score_DP = featureExtraction.SubqueryOverlap(code_documents, featureExtraction.SmoothingMethods,"SM", UC_documents, UC_count_matrix,tf_uc_dict,False)
+# UC_queries_score_DP = featureExtraction.SubqueryOverlap(UC_documents, featureExtraction.SmoothingMethods,"SM", code_documents, code_count_matrix,tf_code_dict,False)
 
-print('code_queries_score_DP', code_queries_score_DP.shape)
-print('UC_queries_score_DP', UC_queries_score_DP.shape)
+# print('code_queries_score_DP', code_queries_score_DP.shape)
+# print('UC_queries_score_DP', UC_queries_score_DP.shape)
 
 # 6) Language Model with Dirichlet
 # JM_UC = featureExtraction.SmoothingMethods(UC_documents,code_documents,code_count_matrix,tf_code_dict,JM_or_DP=True)
