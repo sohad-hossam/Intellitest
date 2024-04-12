@@ -404,6 +404,21 @@ class FeatureExtraction:
     def simplifiedClarityScore(self,queries,query_tf_matrix,doc_dict):
         return np.vectorize(lambda i: self._simplifiedClarityScorePerQuery(queries[i],query_tf_matrix[i,:],doc_dict))(range(len(queries))).reshape(-1,1)
 
+    def _CoherenceScorePerTerm(self,doc_tfidf_matrix:np.array)->np.float16:
+        cosineSimilarity = cosine_similarity(doc_tfidf_matrix)
+        # return a list of indicies of documents that contain the term based on the value in the doc_tfidf_matrix
+        indices = np.where(doc_tfidf_matrix.toarray() > 0)
+        # get all possible pairs of indices to access cosine similarity matrix and get the sum of all values returned
+        return np.sum([cosineSimilarity[i,j] for i,j in zip(indices[0],indices[1])])/(len(indices[0])*(len(indices[0]) - 1))
+
+    def _CoherenceScorePerQuery(self,query:str,doc_tfidf_matrix:np.array)->np.float16:
+        query_terms = set(query.split())
+        return 1/len(query_terms) * np.sum(np.vectorize(lambda term: self._CoherenceScorePerTerm(doc_tfidf_matrix[:,self.count_vocab_index.get(term)]))(list(query_terms)))
+
+    def CoherenceScore(self,queries:list,doc_tfidf_matrix:np.array):
+        return np.vectorize(lambda i: self._CoherenceScorePerQuery(queries[i],doc_tfidf_matrix))(range(len(queries))).reshape(-1,1)
+
+
     def PMIPreProcessing(self,code_documents:list,UC_documents:list):
         PMI_code = [] 
 
