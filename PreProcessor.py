@@ -167,11 +167,29 @@ class PreProcessor:
         return words_tokenized
 
     # setup documents and tokens
-    def setup(self, UC_path: str, code_path: str) -> tuple:
+    def setupCC(self, code_path: str)->tuple:
         CodeTokens = set()
+        code_documents = list()
+        code_file_index = 0
+        file_stack = list()
+        file_stack.append(code_path)
+        while len(file_stack) > 0:
+            filepath = file_stack.pop()
+            for filename in os.listdir(filepath):
+                filepath = os.path.join(filepath, filename)
+                if os.path.isdir(filepath):
+                        file_stack.append(filepath)
+                elif filename.endswith(".java"):
+                    self.CC_to_index[filename.lower()] = code_file_index
+                    code_file_index += 1
+                    tokens = self.CodePreProcessor(filepath)
+                    code_documents.append(tokens)
+                    CodeTokens.update(tokens.split())
+        return code_documents, CodeTokens
+    
+    def setupUC(self, UC_path: str)->tuple:
         UCTokens = set()
         UC_documents = list()
-        code_documents = list()
 
         for i, filename in enumerate(os.listdir(UC_path)):
             self.UC_to_index[filename.lower()] = i
@@ -180,12 +198,7 @@ class PreProcessor:
             UC_documents.append(tokens)
             UCTokens.update(tokens.split())
 
-        for i, filename in enumerate(os.listdir(code_path)):
-            self.CC_to_index[filename.lower()] = i
-            filepath = os.path.join(code_path, filename)
-            tokens = self.CodePreProcessor(filepath)
-            code_documents.append(tokens)
-            CodeTokens.update(tokens.split())
+
         # UC_documents=dask.array.from_array(UC_documents)
         # code_documents=dask.array.from_array(code_documents)
-        return UC_documents, code_documents, UCTokens, CodeTokens
+        return UC_documents, UCTokens
