@@ -210,16 +210,18 @@ class PreProcessor:
         DataSet = pd.read_csv(csv_dir, names=['UC', 'CC'])
         artifacts_done = set() 
         dataset_modified = pd.DataFrame(columns=['UC', 'CC','Labels'])
+        DataSet['Labels'] = DataSet['CC'].str.lower().str.endswith('.java').astype(int)
+        artifacts_done = set(zip(DataSet['UC'].str.lower(), DataSet['CC'].str.lower()))
+        
 
-        for row in DataSet.itertuples(index=False, name=None):
-            artifacts_done.add((row[0].lower(), row[1].lower()))
-            if row[1].lower().endswith(".java"):
-                dataset_modified.loc[len(dataset_modified)] = [row[0].lower(), row[1].lower(), 1]
-       
+        artifacts_not_done = []
         for filename_UC in filenames_UC:
             for filename_CC in filenames_CC:
                 if (filename_UC.lower(), filename_CC.lower()) not in artifacts_done:
-                    dataset_modified.loc[len(dataset_modified)] = [filename_UC, filename_CC, 0]
-            print("finished")
-        DataSet.to_csv(modified_csv_dir, index = False)    
+                    artifacts_not_done.append((filename_UC.lower(), filename_CC.lower(), 0))
+
+            
+        dataset_modified = pd.concat([DataSet, pd.DataFrame(artifacts_not_done, columns=['UC', 'CC', 'Labels'])])
+
+        dataset_modified.to_csv(modified_csv_dir, index = False)    
         print(DataSet)
