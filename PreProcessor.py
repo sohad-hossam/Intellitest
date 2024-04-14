@@ -176,15 +176,17 @@ class PreProcessor:
         while len(file_stack) > 0:
             filepath = file_stack.pop()
             for filename in os.listdir(filepath):
-                filepath = os.path.join(filepath, filename)
-                if os.path.isdir(filepath):
-                        file_stack.append(filepath)
+                filepath_integrated = filepath+"/"+filename
+                if os.path.isdir(filepath_integrated):
+                    file_stack.append(filepath_integrated)
+
                 elif filename.endswith(".java"):
-                    self.CC_to_index[filename.lower()] = code_file_index
-                    code_file_index += 1
-                    tokens = self.CodePreProcessor(filepath)
+                    tokens = self.CodePreProcessor(filepath_integrated)
                     code_documents.append(tokens)
                     CodeTokens.update(tokens.split())
+                    filepath_integrated.replace(code_path, "")
+                    self.CC_to_index[filepath_integrated.lower()] = code_file_index
+                    code_file_index += 1
         return code_documents, CodeTokens
     
     def setupUC(self, UC_path: str)->tuple:
@@ -202,3 +204,22 @@ class PreProcessor:
         # UC_documents=dask.array.from_array(UC_documents)
         # code_documents=dask.array.from_array(code_documents)
         return UC_documents, UCTokens
+    def setupCSV(self, csv_dir: str, modified_csv_dir: str) -> None:
+        filenames_CC = self.CC_to_index.keys()
+        filenames_UC = self.UC_to_index.keys()
+        DataSet = pd.read_csv(csv_dir, names=['UC', 'CC'])
+        artifacts_done = set() 
+        dataset_modified = pd.DataFrame(columns=['UC', 'CC','Labels'])
+
+        for row in DataSet.itertuples(index=False, name=None):
+            artifacts_done.add((row[0].lower(), row[1].lower()))
+            if row[1].lower().endswith(".java"):
+                dataset_modified.loc[len(dataset_modified)] = [row[0].lower(), row[1].lower(), 1]
+       
+        for filename_UC in filenames_UC:
+            for filename_CC in filenames_CC:
+                if (filename_UC.lower(), filename_CC.lower()) not in artifacts_done:
+                    dataset_modified.loc[len(dataset_modified)] = [filename_UC, filename_CC, 0]
+            print("finished")
+        DataSet.to_csv(modified_csv_dir, index = False)    
+        print(DataSet)
