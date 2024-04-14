@@ -208,20 +208,21 @@ class PreProcessor:
         filenames_CC = self.CC_to_index.keys()
         filenames_UC = self.UC_to_index.keys()
         DataSet = pd.read_csv(csv_dir, names=['UC', 'CC'])
-        artifacts_done = set() 
-        dataset_modified = pd.DataFrame(columns=['UC', 'CC','Labels'])
-        DataSet['Labels'] = DataSet['CC'].str.lower().str.endswith('.java').astype(int)
         artifacts_done = set(zip(DataSet['UC'].str.lower(), DataSet['CC'].str.lower()))
         
 
         artifacts_not_done = []
         for filename_UC in filenames_UC:
             for filename_CC in filenames_CC:
-                if (filename_UC.lower(), filename_CC.lower()) not in artifacts_done:
-                    artifacts_not_done.append((filename_UC.lower(), filename_CC.lower(), 0))
+                if filename_CC.endswith('.java'):
+                    if (filename_UC.lower(), filename_CC.lower()) not in artifacts_done:
+                        artifacts_not_done.append((self.UC_to_index[filename_UC.lower()], self.CC_to_index[filename_CC.lower()], 0))
+                    else:
+                        artifacts_not_done.append((self.UC_to_index[filename_UC.lower()], self.CC_to_index[filename_CC.lower()], 1))
+
 
             
-        dataset_modified = pd.concat([DataSet, pd.DataFrame(artifacts_not_done, columns=['UC', 'CC', 'Labels'])])
+        dataset_modified = pd.DataFrame(artifacts_not_done, columns=['UC', 'CC', 'Labels'])
 
         dataset_modified.to_csv(modified_csv_dir, index = False)    
-        print(DataSet)
+        print(dataset_modified.shape)
