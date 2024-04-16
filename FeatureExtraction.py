@@ -82,28 +82,28 @@ class FeatureExtraction:
     # Jensen-Shannon.
     def JensenShannon(self,UC_count_matrix, code_count_matrix) -> np.ndarray:
 
-        UC_count_matrix_repeated = np.repeat(
-            UC_count_matrix, code_count_matrix.shape[0], axis=0
-        )
-        code_count_matrix_repeated = np.tile(
-            code_count_matrix, (UC_count_matrix.shape[0], 1)
-        )
+        # UC_count_matrix_repeated = np.repeat(
+        #     UC_count_matrix, code_count_matrix.shape[0], axis=0
+        # )
+        # code_count_matrix_repeated = np.tile(
+        #     code_count_matrix, (UC_count_matrix.shape[0], 1)
+        # )
 
-        JS_matrix = pow(
-            jensenshannon(UC_count_matrix_repeated, code_count_matrix_repeated, axis=1),
-            2,
-        )
-        JS_matrix = JS_matrix.reshape(
-            UC_count_matrix.shape[0], code_count_matrix.shape[0]
-        )
+        # JS_matrix = pow(
+        #     jensenshannon(UC_count_matrix_repeated, code_count_matrix_repeated, axis=1),
+        #     2,
+        # )
+        # JS_matrix = JS_matrix.reshape(
+        #     UC_count_matrix.shape[0], code_count_matrix.shape[0]
+        # )
 
         # ------------------------------loop approach---------------------------#
         # loop-approach
-        # JS_matrix = np.zeros((UC_count_matrix.shape[0], code_count_matrix.shape[0]))
-        # for i, UC_count_vector in enumerate(UC_count_matrix.toarray()):
-        #     for j, code_count_vector in enumerate(code_count_matrix.toarray()):
-        #         JS_matrix[i][j] = pow(jensenshannon(UC_count_vector, code_count_vector), 2)
-        # print(JS_matrix.shape) => (58,116)
+        JS_matrix = np.zeros((UC_count_matrix.shape[0], code_count_matrix.shape[0]))
+        for i, UC_count_vector in enumerate(list(UC_count_matrix)):
+            for j, code_count_vector in enumerate(list(code_count_matrix)):
+                JS_matrix[i][j] = pow(jensenshannon(UC_count_vector, code_count_vector), 2)
+        # print(JS_matrix.shape) #=> (58,116)
 
         return JS_matrix
     
@@ -511,37 +511,122 @@ class FeatureExtraction:
             percentage = (len(term_occurrence) / total_documents) * 100
             QSdocs.append(percentage)
         return np.array(QSdocs)
+    #  for query in UC_documents:
+    #         tokens = query.split()
+    #         query_variances = []  
+    #         for term in tokens:
+    #             term_weights = []
+    #             for doc in code_documents:
+    #                 tf_term_doc = doc.count(term)
+    #                 weight_term_doc = (1 / len(doc)) * np.log(1 + tf_term_doc) * idf_uc_dict[term]  #
+    #                 term_weights.append(weight_term_doc)
+
+    #             avg_weight_term = np.mean(term_weights)
+    #             variance_term = np.mean([(weight - avg_weight_term) ** 2 for weight in term_weights])
+    #             query_variances.append(variance_term) 
+    #         variance_uc.append(query_variances)  
+
+    def _EntropyPreProcessingPerDocument(self, token:str, document: str, idf_dict:dict ,df_dict:dict):
+        tf_term = document.count(token)+1
+        tf_term_collection = df_dict[token] +1
+        term_entropy = ((tf_term / tf_term_collection) * np.log((tf_term / tf_term_collection) + 1))
+
+        weight_term_doc = (1 / len(document)) * np.log(1 + tf_term-1) * idf_dict[token]  
+        return term_entropy,weight_term_doc
     
-    def EntropyPreProcessing(self,UC_documents:list,code_documents:list,df_uc_dict:dict,df_code_dict:dict):
-        entropy_uc = [] 
-        for query in UC_documents:
-            tokens = query.split()
-            query_entropy = []  
-            for term in tokens:
-                term_entropy =0
-                for doc in code_documents:
-                    tf_term_doc = doc.count(term)+1
-                    tf_term_collection = df_code_dict[term] +1
-                    term_entropy+=((tf_term_doc / tf_term_collection) * np.log((tf_term_doc / tf_term_collection) + 1))
-                query_entropy.append(term_entropy)
-            entropy_uc.append(query_entropy)  
+    def _EntropyPreProcessingPerToken(self, token:str, documents: np.ndarray, idf_dict:dict ,df_dict:dict):
+        entropy_per_document_vectorizer = np.vectorize(lambda doc: self._EntropyPreProcessingPerDocument(token, doc,idf_dict ,df_dict))
+        entropy_variance = entropy_per_document_vectorizer(documents)
+
+        entropy_per_doc = entropy_variance[:][:][0]
+        term_weights=entropy_variance[:][:][1]
+
+        return np.sum(entropy_per_doc),term_weights
+
+    def _EntropyPreProcessingPerQuery(self,query:str, documents: np.ndarray, idf_dict : dict,df_dict:dict):
+        tokens = query.split()
+        entropy_per_token_vectorizer = np.vectorize(lambda token: self._EntropyPreProcessingPerToken(token, documents,idf_dict, df_dict))
+        entropy_variance_per_token= entropy_per_token_vectorizer(tokens)
+
+        entropy_per_token = entropy_variance_per_token[:][:][0]  [(),()]
+        term_weights = entropy_variance_per_token[:][:][1]
+
+        avg_weight_term = np.mean(term_weights)
+        variance_term = np.mean([(weight - avg_weight_term) ** 2 for weight in term_weights])
+
+        return entropy_per_token,variance_term
+
+    def EntropyPreProcessing(self, UC_documents:list, code_documents:list,idf_uc_dict:dict, idf_code_dict:dict ,df_uc_dict:dict,df_code_dict:dict):
+
+        UC_documents = np.array(UC_documents)
+        code_documents = np.array(code_documents)
+
+        entropy_uc_vectorizer = np.vectorize(lambda query: self._EntropyPreProcessingPerQuery(query, code_documents, idf_uc_dict ,df_code_dict))
+        entropy_code_vectorizer = np.vectorize(lambda query: self._EntropyPreProcessingPerQuery(query, UC_documents,idf_code_dict ,df_uc_dict))
+
+        entropy_var_uc=entropy_uc_vectorizer(UC_documents)
+        entropy_var_code=entropy_code_vectorizer(code_documents)
+        
+        entropy_uc = entropy_var_uc[:][:][0]
+        variance_uc = entropy_var_uc[:][:][1]
+
+        entropy_code = entropy_var_code[:][:][0]
+        variance_code = entropy_var_code[:][:][1]
+
+        return entropy_uc,entropy_code,variance_uc,variance_code
+    
+    # def EntropyPreProcessing(self,UC_documents:list, code_documents:list,idf_uc_dict:dict,idf_cc_dict:dict, df_uc_dict:dict,df_code_dict:dict):
+    #     entropy_uc = [] 
+    #     variance_uc = []
+
+    #     for query in UC_documents:
+    #         tokens = query.split()
+    #         query_entropy = []  
+    #         query_variances = []  
+    #         for term in tokens:
+    #             term_entropy =0
+    #             term_weights = []
+    #             for doc in code_documents:
+    #                 tf_term_doc = doc.count(term)+1
+    #                 tf_term_collection = df_code_dict[term] +1
+    #                 term_entropy+=((tf_term_doc / tf_term_collection) * np.log((tf_term_doc / tf_term_collection) + 1))
+
+    #                 weight_term_doc = (1 / len(doc)) * np.log(1 + tf_term_doc) * idf_uc_dict[term]  
+    #                 term_weights.append(weight_term_doc)
+    #             avg_weight_term = np.mean(term_weights)
+    #             variance_term = np.mean([(weight - avg_weight_term) ** 2 for weight in term_weights])
+    #             query_variances.append(variance_term) 
+    #             query_entropy.append(term_entropy)
+    #         entropy_uc.append(query_entropy)  
+    #         variance_uc.append(query_variances)
+
+    #     entropy_code = []
+    #     variance_code=[]
+    #     for query in code_documents:
+    #         tokens = query.split()
+    #         query_entropy = []  
+    #         query_variances = []  
+    #         for term in tokens:
+    #             term_entropy =0
+    #             term_weights = []
+    #             for doc in UC_documents:
+    #                 tf_term_doc = doc.count(term)+1
+    #                 tf_term_collection = df_uc_dict[term] +1
+    #                 term_entropy+=((tf_term_doc / tf_term_collection) * np.log((tf_term_doc / tf_term_collection) + 1))
+
+    #                 weight_term_doc = (1 / len(doc)) * np.log(1 + tf_term_doc) * idf_cc_dict[term]  
+    #                 term_weights.append(weight_term_doc)
+
+    #             avg_weight_term = np.mean(term_weights)
+    #             variance_term = np.mean([(weight - avg_weight_term) ** 2 for weight in term_weights])
+    #             query_variances.append(variance_term) 
+
+    #             query_entropy.append(term_entropy)
+    #         entropy_code.append(query_entropy)
+    #         variance_code.append(query_variances)
 
 
-        entropy_code = []
-        for query in code_documents:
-            tokens = query.split()
-            query_entropy = []  
-            for term in tokens:
-                term_entropy =0
-                for doc in UC_documents:
-                    tf_term_doc = doc.count(term)+1
-                    tf_term_collection = df_uc_dict[term] +1
-                    term_entropy+=((tf_term_doc / tf_term_collection) * np.log((tf_term_doc / tf_term_collection) + 1))
-                query_entropy.append(term_entropy)
-            entropy_code.append(query_entropy)
-
-
-        return entropy_uc,entropy_code
+    #     return entropy_uc,entropy_code,variance_uc,variance_code
     
         
     def AvgEntropy(self,entropy_values:list):
