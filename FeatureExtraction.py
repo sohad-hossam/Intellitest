@@ -678,7 +678,7 @@ class FeatureExtraction:
             doc += " ".join([term] * np.random.poisson(_lambda))
         return doc
     
-    def _RobustnessScorePerQuery(self,query:str,documents:list,feature_extraction_type,Results,Robust_or_First_Rank)->np.ndarray:
+    def _RobustnessScorePerQuery(self,query:str,documents:list,feature_extraction_type,Results)->np.ndarray:
         top20 = np.argsort(Results)[::-1][:20] # arrange in descending order
         L = np.array(documents)[top20]
         new_L = np.vectorize(lambda doc: self._EditDocuments(query,doc))(L)
@@ -701,21 +701,19 @@ class FeatureExtraction:
         new_top20 = np.argsort(new_Results)[::-1][:20] # arrange in descending order
         
         # (5) Compute the Spearman rank correlation between the positions of the 50 documents in L and the positions of their corresponding perturbed documents in new_L
-        if Robust_or_First_Rank:
-            _,new_L_ranks  = np.unique(new_L, return_inverse=True)
-            _,new_L_top20_ranks = np.unique(new_L[new_top20].flatten(), return_inverse=True)
-            return spearmanr(new_L_ranks,new_L_top20_ranks).correlation if (np.std(new_L_ranks) != 0 and np.std(new_L_top20_ranks) != 0) else 0
-        else: # First Rank Change
-            return 1 if new_L[0] == new_L[new_top20].flatten()[0] else 0
+        _,new_L_ranks  = np.unique(new_L, return_inverse=True)
+        _,new_L_top20_ranks = np.unique(new_L[new_top20].flatten(), return_inverse=True)
+
+        return spearmanr(new_L_ranks,new_L_top20_ranks).correlation if (np.std(new_L_ranks) != 0 and np.std(new_L_top20_ranks) != 0) else 0 ,  1 if new_L[0] == new_L[new_top20].flatten()[0] else 0
 
 
 
-    def RobustnessScore(self,queries:list,documents:list,feature_extraction_type:str="JS",Robust_or_First_Rank=True)->np.array:
+    def RobustnessScore(self,queries:list,documents:list,feature_extraction_type:str="JS")->np.array:
         Results = None
         query_count_matrix, doc_count_matrix,_,tf_doc_dict = self.CountVectorizerModel(queries, documents, 'train')
-        tfidf_matrix_query, tfidf_matrix_doc,_,idf_doc_dict,_,_ ,_,_= self.TFIDFVectorizer(queries, documents)
 
         if feature_extraction_type == "BM":
+            _, _,_,idf_doc_dict,_,_ ,_,_= self.TFIDFVectorizer(queries, documents)
             Results = self.BM25(queries,documents,idf_doc_dict,doc_count_matrix)
         elif feature_extraction_type == "JM":
             Results = self.SmoothingMethods(queries,documents,doc_count_matrix,tf_doc_dict,JM_or_DP=True)
@@ -724,12 +722,13 @@ class FeatureExtraction:
         elif feature_extraction_type == "JS" :
             Results = self.JensenShannon(query_count_matrix, doc_count_matrix)
         else: # VSM
+            tfidf_matrix_query, tfidf_matrix_doc,_,_,_,_ ,_,_= self.TFIDFVectorizer(queries, documents)
             Results = self.VectorSpaceModel(tfidf_matrix_query, tfidf_matrix_doc)
 
         if Results.shape[0] != len(documents):
             Results = Results.T
 
-        return np.vectorize(lambda i: self._RobustnessScorePerQuery(queries[i],documents,feature_extraction_type,Results[:,i],Robust_or_First_Rank))(range(len(queries))).reshape(-1,1)
+        return np.vectorize(lambda i: self._RobustnessScorePerQuery(queries[i],documents,feature_extraction_type,Results[:,i]))(range(len(queries))).reshape(-1,1)
 
 
 
