@@ -187,7 +187,7 @@ class PreProcessor:
                     filepath_integrated.replace(code_path, "")
                     self.CC_to_index[filepath_integrated.lower()] = code_file_index
                     code_file_index += 1
-        return code_documents, CodeTokens
+        return code_documents, CodeTokens,self.CC_to_index
     
     def setupUC(self, UC_path: str)->tuple:
         UCTokens = set()
@@ -203,10 +203,10 @@ class PreProcessor:
 
         # UC_documents=dask.array.from_array(UC_documents)
         # code_documents=dask.array.from_array(code_documents)
-        return UC_documents, UCTokens
-    def setupCSV(self, csv_dir: str, modified_csv_dir: str) -> None:
-        filenames_CC = self.CC_to_index.keys()
-        filenames_UC = self.UC_to_index.keys()
+        return UC_documents, UCTokens, self.UC_to_index
+    def setupCSV(self, csv_dir: str, modified_csv_dir: str,UC_to_index,CC_to_index) -> None:
+        filenames_CC = CC_to_index.keys()
+        filenames_UC = UC_to_index.keys()
         DataSet = pd.read_csv(csv_dir, names=['UC', 'CC'])
         file_index={}
         index=0
@@ -224,9 +224,9 @@ class PreProcessor:
             for filename_CC in filenames_CC:
                 if filename_CC.endswith('.java'):
                     if (filename_UC.lower(), filename_CC.lower()) not in artifacts_done:
-                        artifacts_not_done.append((self.UC_to_index[filename_UC.lower()], self.CC_to_index[filename_CC.lower()], 0))
+                        artifacts_not_done.append((UC_to_index[filename_UC.lower()], CC_to_index[filename_CC.lower()], 0))
                     else:
-                        artifacts_not_done.append((self.UC_to_index[filename_UC.lower()], self.CC_to_index[filename_CC.lower()], 1))
+                        artifacts_not_done.append((UC_to_index[filename_UC.lower()], CC_to_index[filename_CC.lower()], 1))
 
 
             
@@ -234,3 +234,4 @@ class PreProcessor:
         print(np.count_nonzero(dataset_modified['Labels']))
         dataset_modified.to_csv(modified_csv_dir, index = False)    
         print(dataset_modified.shape)
+         
