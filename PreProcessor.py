@@ -214,14 +214,19 @@ class PreProcessor:
         file_to_index_list = []
         for file in DataSet['CC'].str.lower():
             if file_index.get(file)==None:
-                file_index[file]=str(index)+".java"
+                file_index[file]= "./dataset/railo_dataset/cc/"+str(index)+".java"
             file_to_index_list.append(file_index.get(file))
             index+=1
+        DataSet['UC'] = DataSet['UC'].astype(str) + ".txt"
+      
         artifacts_done = set(zip(DataSet['UC'].str.lower(),file_to_index_list))
-        
+        if artifacts_done:
+            first_element = next(iter(artifacts_done))
+            print(first_element)
         artifacts_not_done = []
         for filename_UC in filenames_UC:
             for filename_CC in filenames_CC:
+               # print(filename_UC, filename_CC)
                 if filename_CC.endswith('.java'):
                     if (filename_UC.lower(), filename_CC.lower()) not in artifacts_done:
                         artifacts_not_done.append((UC_to_index[filename_UC.lower()], CC_to_index[filename_CC.lower()], 0))
@@ -231,7 +236,8 @@ class PreProcessor:
 
             
         dataset_modified = pd.DataFrame(artifacts_not_done, columns=['UC', 'CC', 'Labels'])
-        print(np.count_nonzero(dataset_modified['Labels']))
+        if not dataset_modified.empty:
+           print(sum(dataset_modified['Labels'] ))
         dataset_modified.to_csv(modified_csv_dir, index = False)    
         print(dataset_modified.shape)
          
