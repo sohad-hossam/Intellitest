@@ -540,46 +540,58 @@ class FeatureExtraction:
 
         entropy_per_doc = entropy_variance[:][:][0]
         term_weights=entropy_variance[:][:][1]
-
-        return np.sum(entropy_per_doc),term_weights
-
-    def _EntropyPreProcessingPerQuery(self,query:str, documents: np.ndarray, idf_dict : dict,df_dict:dict):
-        tokens = query.split()
-        entropy_per_token_vectorizer = np.vectorize(lambda token: self._EntropyPreProcessingPerToken(token, documents,idf_dict, df_dict))
-        entropy_variance_per_token= entropy_per_token_vectorizer(tokens)
-
-        entropy_per_token = entropy_variance_per_token[:][:][0]  [(),()]
-        term_weights = entropy_variance_per_token[:][:][1]
-
         avg_weight_term = np.mean(term_weights)
         variance_term = np.mean([(weight - avg_weight_term) ** 2 for weight in term_weights])
-
-        return entropy_per_token,variance_term
+        return np.sum(entropy_per_doc),variance_term
 
     def EntropyPreProcessing(self, UC_documents:list, code_documents:list,idf_uc_dict:dict, idf_code_dict:dict ,df_uc_dict:dict,df_code_dict:dict):
 
-        UC_documents = np.array(UC_documents)
-        code_documents = np.array(code_documents)
+        # UC_documents = np.array(UC_documents)
+        # code_documents = np.array(code_documents)
 
-        entropy_uc_vectorizer = np.vectorize(lambda query: self._EntropyPreProcessingPerQuery(query, code_documents, idf_uc_dict ,df_code_dict))
-        entropy_code_vectorizer = np.vectorize(lambda query: self._EntropyPreProcessingPerQuery(query, UC_documents,idf_code_dict ,df_uc_dict))
+        # entropy_per_token_vectorizer_code = np.vectorize(lambda token: self._EntropyPreProcessingPerToken(token, code_documents,idf_uc_dict, df_code_dict))
+        # entropy_per_token_vectorizer_UC = np.vectorize(lambda token: self._EntropyPreProcessingPerToken(token, UC_documents,idf_code_dict, df_uc_dict))
 
-        entropy_var_uc=entropy_uc_vectorizer(UC_documents)
-        entropy_var_code=entropy_code_vectorizer(code_documents)
-        
-        entropy_uc = entropy_var_uc[:][:][0]
-        variance_uc = entropy_var_uc[:][:][1]
+        # entropy_code_vectorizer = np.vectorize(lambda query: self._EntropyPreProcessingPerQuery(query, UC_documents,idf_code_dict ,df_uc_dict))
+        variance_uc=[]
+        entropy_uc=[]
+        variance_code=[]
+        entropy_code=[]
+        for query in UC_documents.compute().flat:
+            tokens = query.split()
+            # entrpoy_variance=entropy_per_token_vectorizer_code(tokens)
 
-        entropy_code = entropy_var_code[:][:][0]
-        variance_code = entropy_var_code[:][:][1]
+            variance_uc.append(entrpoy_variance[:][:][1])
+            entropy_uc.append(entrpoy_variance[:][:][0])
+
+        for query in code_documents.compute().flat:
+            tokens = query.split()
+            entrpoy_variance=entropy_per_token_vectorizer_UC(tokens)
+            variance_code.append(entrpoy_variance[:][:][1])
+            entropy_code.append(entrpoy_variance[:][:][0])
 
         return entropy_uc,entropy_code,variance_uc,variance_code
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
     
     # def EntropyPreProcessing(self,UC_documents:list, code_documents:list,idf_uc_dict:dict,idf_cc_dict:dict, df_uc_dict:dict,df_code_dict:dict):
     #     entropy_uc = [] 
     #     variance_uc = []
-
+       
     #     for query in UC_documents:
+    #         print(query.compute())
     #         tokens = query.split()
     #         query_entropy = []  
     #         query_variances = []  
@@ -589,12 +601,12 @@ class FeatureExtraction:
     #             for doc in code_documents:
     #                 tf_term_doc = doc.count(term)+1
     #                 tf_term_collection = df_code_dict[term] +1
-    #                 term_entropy+=((tf_term_doc / tf_term_collection) * np.log((tf_term_doc / tf_term_collection) + 1))
+    #                 term_entropy += ((tf_term_doc / tf_term_collection) * np.log((tf_term_doc / tf_term_collection) + 1))
 
     #                 weight_term_doc = (1 / len(doc)) * np.log(1 + tf_term_doc) * idf_uc_dict[term]  
     #                 term_weights.append(weight_term_doc)
-    #             avg_weight_term = np.mean(term_weights)
-    #             variance_term = np.mean([(weight - avg_weight_term) ** 2 for weight in term_weights])
+    #             avg_weight_term = term_weights.mean().compute()
+    #             variance_term = [(weight - avg_weight_term) ** 2 for weight in term_weights].mean().compute()
     #             query_variances.append(variance_term) 
     #             query_entropy.append(term_entropy)
     #         entropy_uc.append(query_entropy)  

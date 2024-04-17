@@ -208,8 +208,19 @@ class PreProcessor:
         filenames_CC = self.CC_to_index.keys()
         filenames_UC = self.UC_to_index.keys()
         DataSet = pd.read_csv(csv_dir, names=['UC', 'CC'])
-        artifacts_done = set(zip(DataSet['UC'].str.lower(), DataSet['CC'].str.lower()))
+        file_index={}
+        index=0
+        artifacts_done = zip(DataSet['UC'].str.lower(),DataSet['CC'].str.lower())
+
+        for file in DataSet['CC'].str.lower():
+            if file_index.get(file)==None:
+                file_index[file]=str(index)+".java"
+            artifacts_done[index][1]=file_index[file]
+            index+=1
+
+
         
+
 
         artifacts_not_done = []
         for filename_UC in filenames_UC:
