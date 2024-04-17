@@ -210,18 +210,15 @@ class PreProcessor:
         DataSet = pd.read_csv(csv_dir, names=['UC', 'CC'])
         file_index={}
         index=0
-        artifacts_done = zip(DataSet['UC'].str.lower(),DataSet['CC'].str.lower())
-
+        
+        file_to_index_list = []
         for file in DataSet['CC'].str.lower():
             if file_index.get(file)==None:
                 file_index[file]=str(index)+".java"
-            artifacts_done[index][1]=file_index[file]
+            file_to_index_list.append(file_index.get(file))
             index+=1
-
-
+        artifacts_done = set(zip(DataSet['UC'].str.lower(),file_to_index_list))
         
-
-
         artifacts_not_done = []
         for filename_UC in filenames_UC:
             for filename_CC in filenames_CC:
@@ -234,6 +231,6 @@ class PreProcessor:
 
             
         dataset_modified = pd.DataFrame(artifacts_not_done, columns=['UC', 'CC', 'Labels'])
-
+        print(np.count_nonzero(dataset_modified['Labels']))
         dataset_modified.to_csv(modified_csv_dir, index = False)    
         print(dataset_modified.shape)
