@@ -6,7 +6,7 @@ class FeatureExtraction:
         self.tfidf_vectorizer = TfidfVectorizer(vocabulary=Tokens)
         self.count_vectorizer = CountVectorizer(vocabulary=Tokens)
         #self.vocab_index = {word: idx for idx, word in enumerate(self.count_vectorizer.get_feature_names_out())}
-        # UC_count_matrix, code_count_matrix
+        #UC_count_matrix, code_count_matrix
 
     # Latent Semantic Analysis.
     def LSA(self,tfidf_matrix_uc: np.ndarray,tfidf_matrix_code: np.ndarray,train_or_test: str = 'train') -> np.ndarray:
