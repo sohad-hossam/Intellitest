@@ -107,10 +107,18 @@ class FeatureExtraction:
 
         return JS_matrix
     
-    def TFIDFVectorizer(self, UC_documents: list, code_documents: list) :
+    def TFIDFVectorizer(self, UC_documents: list, code_documents: list, train_or_test: str="train") :
 
         # create the transform
-        self.tfidf_matrix_uc = self.tfidf_vectorizer.fit_transform(UC_documents)
+        if train_or_test == "train":
+            self.tfidf_matrix_uc = self.tfidf_vectorizer.fit_transform(UC_documents)
+            self.tfidf_matrix_code = self.tfidf_vectorizer.fit_transform(code_documents)
+
+        else:
+            self.tfidf_matrix_uc = self.tfidf_vectorizer.transform(UC_documents)
+            self.tfidf_matrix_code = self.tfidf_vectorizer.transform(code_documents)
+
+        
         idf_uc = self.tfidf_vectorizer.idf_ 
         
         feature_names_uc = self.tfidf_vectorizer.get_feature_names_out() 
@@ -123,7 +131,7 @@ class FeatureExtraction:
         df_uc_dict = {feature_names_uc[i]: df_uc_array[i] for i in range(len(feature_names_uc))}
 
 
-        self.tfidf_matrix_code = self.tfidf_vectorizer.fit_transform(code_documents)
+        
         idf_code = self.tfidf_vectorizer.idf_
 
         feature_names_code = self.tfidf_vectorizer.get_feature_names_out() 
@@ -775,13 +783,13 @@ class FeatureExtraction:
             doc += " ".join([term] * np.random.poisson(_lambda))
         return doc
     
-    def _RobustnessScorePerQuery(self,query:str,documents:list,feature_extraction_type,Results)->np.ndarray:
+    def _RobustnessScorePerQuery(self,query:str,documents:list,feature_extraction_type,Results,train_or_test:str="train")->np.ndarray:
         top20 = np.argsort(Results)[::-1][:20] # arrange in descending order
         L = np.array(documents)[top20]
         new_L = np.vectorize(lambda doc: self._EditDocuments(query,doc))(L)
 
-        query_count_matrix, doc_count_matrix,_,tf_doc_dict = self.CountVectorizerModel([query], new_L, 'test')
-        tfidf_matrix_query, tfidf_matrix_doc,_,idf_doc_dict,_,_ ,_,_= self.TFIDFVectorizer([query], new_L)
+        query_count_matrix, doc_count_matrix,_,tf_doc_dict = self.CountVectorizerModel([query], new_L, train_or_test)
+        tfidf_matrix_query, tfidf_matrix_doc,_,idf_doc_dict,_,_ ,_,_= self.TFIDFVectorizer([query], new_L,train_or_test)
 
         new_Results = None
         if feature_extraction_type == "BM":
@@ -805,12 +813,12 @@ class FeatureExtraction:
 
 
 
-    def RobustnessScore(self,queries:list,documents:list,feature_extraction_type:str="JS")->np.array:
+    def RobustnessScore(self,queries:list,documents:list,train_or_test:str = "train",feature_extraction_type:str="JS")->np.array:
         Results = None
-        query_count_matrix, doc_count_matrix,_,tf_doc_dict = self.CountVectorizerModel(queries, documents, 'train')
+        query_count_matrix, doc_count_matrix,_,tf_doc_dict = self.CountVectorizerModel(queries, documents,train_or_test)
 
         if feature_extraction_type == "BM":
-            _, _,_,idf_doc_dict,_,_ ,_,_= self.TFIDFVectorizer(queries, documents)
+            _, _,_,idf_doc_dict,_,_ ,_,_= self.TFIDFVectorizer(queries, documents,train_or_test)
             Results = self.BM25(queries,documents,idf_doc_dict,doc_count_matrix)
         elif feature_extraction_type == "JM":
             Results = self.SmoothingMethods(queries,documents,doc_count_matrix,tf_doc_dict,JM_or_DP=True)
@@ -819,7 +827,7 @@ class FeatureExtraction:
         elif feature_extraction_type == "JS" :
             Results = self.JensenShannon(query_count_matrix, doc_count_matrix)
         else: # VSM
-            tfidf_matrix_query, tfidf_matrix_doc,_,_,_,_ ,_,_= self.TFIDFVectorizer(queries, documents)
+            tfidf_matrix_query, tfidf_matrix_doc,_,_,_,_ ,_,_= self.TFIDFVectorizer(queries, documents,train_or_test)
             Results = self.VectorSpaceModel(tfidf_matrix_query, tfidf_matrix_doc)
 
         if Results.shape[0] != len(documents):
