@@ -5,14 +5,15 @@ import os
 class PreProcessor:
     def __init__(self) -> None:
         # 1) All the interpunction was removed.
+        #|||||||
         self.chars_to_remove = r"""(?x)
-        _|\s*;\s*|\s*,\s*|\s*\.\s*|  #Standalone Punctuation Marks
+        _|\s*;\s*|\s*,\s*|\s*\.\s*| #Standalone Punctuation Marks
         \s*\+\s*|\s*-\s*|\s*\/\s*|\s*\*\s*|  #arethmatic operations
-        \s*=\s*|\s*==\s*|\s*!=\s*|\s*>\s*|\s*>=\s*|\s*<\s*|\s*<=\s*|\s*&&\s*|\s*&\s*|
+        \s*=+\s*|\s*==\s*|\s*!=\s*|\s*>\s*|\s*>=\s*|\s*<\s*|\s*<=\s*|\s*&&\s*|\s*&\s*|
         \s*\|\|\s*
         |\s*!\s*|\s*\"\s*|\s*\'\s*|    #assignment 
-        \s*\(\s*|\s*\)\s*|\s*{\s*|\s*}\s*|\s*\[\s*|\s*\]\s*|\s*@\s*|\s*:\s*"""  # brackets
-
+        \s*\(\s*|\s*\)\s*|\s*{\s*|\s*}\s*|\s*\[\s*|\s*\]\s*|\s*@\s*|\s*:\s*|  # brackets
+        \s*\\\s*|\s*\#\s*|\s*\\n\s*|\s*%\s*|\s*^\s*|\s*~\s*|\s*\?\s*|\s*\|\s*"""
         self.stop_words = set(stopwords.words("english"))
 
         self.keywords_java = {
@@ -99,6 +100,7 @@ class PreProcessor:
         self.CC_to_index = dict()
 
     def CodePreProcessor(self, filepath):
+       
         dataset_txt = open(filepath, "r", encoding="utf-8").read()
         # 1) All the interpunction was removed.
         SourceCodeCleaned = re.split(self.chars_to_remove, dataset_txt)
@@ -122,6 +124,7 @@ class PreProcessor:
             NTLKTokenized = word_tokenize(sentence)
             for word in NTLKTokenized:
                 word = re.sub("\ufeff", "", word)
+                word = re.sub("\u200b", "", word)
                 if (
                     word not in self.stop_words
                     and word != ""
@@ -137,6 +140,7 @@ class PreProcessor:
                         word_lower = word_part.lower()
                         word_stem = porter_stemmer.stem(word_lower)
                         words_tokenized += word_stem + " "
+                        self.all_tokens.add(word_stem)
         return words_tokenized
 
     def UCPreProcessor(self, filepath):
@@ -170,6 +174,7 @@ class PreProcessor:
 
     # setup documents and tokens
     def setupCC(self, code_path: str)->tuple:
+        self.all_tokens=set()
         code_documents = list()
         code_file_index = 0
         file_stack = list()
@@ -182,11 +187,14 @@ class PreProcessor:
                     file_stack.append(filepath_integrated)
 
                 elif filename.endswith(".java"):
+                    
                     tokens = self.CodePreProcessor(filepath_integrated)
+                    
                     code_documents.append(tokens)
                     filepath_integrated.replace(code_path, "")
                     self.CC_to_index[filepath_integrated.lower()] = code_file_index
                     code_file_index += 1
+                
         return code_documents,self.CC_to_index
     
     def setupUC(self, UC_path: str)->tuple:
