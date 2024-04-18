@@ -4,9 +4,9 @@ import math
 import re
 import math
 from nltk.corpus import stopwords
+from nltk.corpus import words
 import nltk
-from scipy.stats import spearmanr, pearsonr
-#nltk.download() #download_folder = C:/nltk_data 
+from scipy.stats import spearmanr, pearsonr #download_folder = C:/nltk_data 
 
 from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
@@ -30,14 +30,13 @@ from collections import defaultdict
 from scipy.stats import rankdata
 
 import os
-from gensim import corpora
-from gensim.models import LdaMulticore
-import gensim
+# from gensim import corpora
+# from gensim.models import LdaMulticore
+# import gensim
 
 from imblearn.over_sampling import SMOTE
 
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor 
 import time
-import dask.array as da    
 import pickle

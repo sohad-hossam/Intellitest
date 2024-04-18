@@ -13,6 +13,8 @@ class PreProcessor:
         |\s*!\s*|\s*\"\s*|\s*\'\s*|    #assignment 
         \s*\(\s*|\s*\)\s*|\s*{\s*|\s*}\s*|\s*\[\s*|\s*\]\s*|\s*@\s*|\s*:\s*"""  # brackets
 
+        self.stop_words = set(stopwords.words("english"))
+
         self.keywords_java = {
             "abstract",
             "continue",
@@ -107,7 +109,7 @@ class PreProcessor:
         ]
         # 3) All sentences were tokenized with NLTK.
         # 4) The stop words corpus from NLTK was used to eliminate all stop words.
-        stop_words = set(stopwords.words("english"))
+        
         words_tokenized = ""
 
         # 5) All remaining terms were stemmed using the Porter Stemming Algorithm
@@ -121,7 +123,7 @@ class PreProcessor:
             for word in NTLKTokenized:
                 word = re.sub("\ufeff", "", word)
                 if (
-                    word not in stop_words
+                    word not in self.stop_words
                     and word != ""
                     and word.lower() not in self.keywords_java
                 ):
@@ -168,7 +170,6 @@ class PreProcessor:
 
     # setup documents and tokens
     def setupCC(self, code_path: str)->tuple:
-        CodeTokens = set()
         code_documents = list()
         code_file_index = 0
         file_stack = list()
@@ -183,14 +184,12 @@ class PreProcessor:
                 elif filename.endswith(".java"):
                     tokens = self.CodePreProcessor(filepath_integrated)
                     code_documents.append(tokens)
-                    CodeTokens.update(tokens.split())
                     filepath_integrated.replace(code_path, "")
                     self.CC_to_index[filepath_integrated.lower()] = code_file_index
                     code_file_index += 1
-        return code_documents, CodeTokens,self.CC_to_index
+        return code_documents,self.CC_to_index
     
     def setupUC(self, UC_path: str)->tuple:
-        UCTokens = set()
         UC_documents = list()
 
         for i, filename in enumerate(os.listdir(UC_path)):
@@ -198,15 +197,12 @@ class PreProcessor:
             filepath = os.path.join(UC_path, filename)
             tokens = self.UCPreProcessor(filepath)
             UC_documents.append(tokens)
-            UCTokens.update(tokens.split())
+        return UC_documents, self.UC_to_index
 
-
-        # UC_documents=dask.array.from_array(UC_documents)
-        # code_documents=dask.array.from_array(code_documents)
-        return UC_documents, UCTokens, self.UC_to_index
     def setupCSV(self, csv_dir: str, modified_csv_dir: str,UC_to_index,CC_to_index) -> None:
         filenames_CC = CC_to_index.keys()
         filenames_UC = UC_to_index.keys()
+        
         DataSet = pd.read_csv(csv_dir, names=['UC', 'CC'])
         file_index={}
         index=0
@@ -222,11 +218,9 @@ class PreProcessor:
         artifacts_done = set(zip(DataSet['UC'].str.lower(),file_to_index_list))
         if artifacts_done:
             first_element = next(iter(artifacts_done))
-            print(first_element)
         artifacts_not_done = []
         for filename_UC in filenames_UC:
             for filename_CC in filenames_CC:
-               # print(filename_UC, filename_CC)
                 if filename_CC.endswith('.java'):
                     if (filename_UC.lower(), filename_CC.lower()) not in artifacts_done:
                         artifacts_not_done.append((UC_to_index[filename_UC.lower()], CC_to_index[filename_CC.lower()], 0))
@@ -236,8 +230,5 @@ class PreProcessor:
 
             
         dataset_modified = pd.DataFrame(artifacts_not_done, columns=['UC', 'CC', 'Labels'])
-        if not dataset_modified.empty:
-           print(sum(dataset_modified['Labels'] ))
         dataset_modified.to_csv(modified_csv_dir, index = False)    
-        print(dataset_modified.shape)
          

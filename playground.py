@@ -6,19 +6,12 @@
 from imports import *
 from FeatureExtraction import *
 from PreProcessor import *
-
-# _PreProcessor = PreProcessor()
-# UC_documents, UCTokens= _PreProcessor.setupUC("./Dataset/railo_dataset/UC")
-# code_documents, CodeTokens = _PreProcessor.setupCC("./Dataset/railo_dataset/railo/") 
-# UCTokens.update(CodeTokens)
-
-
 import pandas as pd
 import sqlite3
 import shutil
 import os
 
-con = sqlite3.connect("Dataset/railo_dataset/railo.sqlite3")
+con = sqlite3.connect("Dataset/teiid_dataset/teiid.sqlite3")
 cur = con.cursor()
 
 issue_df = pd.read_sql_query("SELECT issue_id, summary, description FROM issue", con)
@@ -29,16 +22,33 @@ merged_df = pd.merge(change_set_link_df, change_set_df, on='commit_hash')
 merged_df = merged_df.drop(columns=['commit_hash'])
 
 
-merged_df.to_csv('Dataset/railo_dataset/railo.csv', index=False)
+merged_df.to_csv('Dataset/teiid_dataset/teiid.csv', index=False)
 
-# for i, row in issue_df.iterrows():
-#     issue_id = row['issue_id']
-#     if issue_id not in merged_df['issue_id'].values:
-#         continue
-#     summary = row['summary']
-#     description = row['description']
-#     with open(f'Dataset/railo_dataset/UC/{issue_id}.txt', 'w') as f:
-#         f.write(f"{summary}\n{description}")
+train,test = train_test_split(merged_df, test_size = 0.01)
+
+
+unique_cc = test['file_path'].unique()
+unique_uc = test['issue_id'].unique()
+
+train = train[~train['issue_id'].isin(unique_uc)]
+train = train[~train['file_path'].isin(unique_cc)]
+
+train_unique_cc = train['file_path'].unique()
+train_unique_uc = train['issue_id'].unique()
+
+for i, row in issue_df.iterrows():
+    issue_id = row['issue_id']
+    if issue_id not in merged_df['issue_id'].values:
+        continue
+    summary = row['summary']
+    description = row['description']
+    if row['issue_id'] in train_unique_uc:
+        with open(f'Dataset/teiid_dataset/train_UC/{issue_id}.txt', 'w',encoding='utf-8') as f:
+            f.write(f"{summary}\n{description}")
+    elif row['issue_id'] in unique_uc:
+        with open(f'Dataset/teiid_dataset/test_UC/{issue_id}.txt', 'w',encoding='utf-8') as f:
+            f.write(f"{summary}\n{description}")
+        
 
 test = set()
 for i, row in merged_df.iterrows():
@@ -46,8 +56,10 @@ for i, row in merged_df.iterrows():
     if file_path in test:
         continue
     test.add(file_path)
-    if os.path.exists('./Dataset/railo_dataset/railo/'+file_path) and os.path.isfile('./Dataset/railo_dataset/railo/'+file_path):
-        if ('./Dataset/railo_dataset/railo/'+file_path).endswith('.java'):
-            shutil.copy('./Dataset/railo_dataset/railo/'+file_path,f'./Dataset/railo_dataset/CC/{i}.java')
-            
+    if os.path.exists('./Dataset/teiid_dataset/teiid/'+file_path) and os.path.isfile('./Dataset/teiid_dataset/teiid/'+file_path):
+        if ('./Dataset/teiid_dataset/teiid/'+file_path).endswith('.java'):
+            if row['file_path'] in train_unique_cc:
+                shutil.copy('./Dataset/teiid_dataset/teiid/'+file_path,f'./Dataset/teiid_dataset/train_CC/{i}.java')
+            elif row['file_path'] in unique_cc:
+                shutil.copy('./Dataset/teiid_dataset/teiid/'+file_path,f'./Dataset/teiid_dataset/test_CC/{i}.java')
 con.close()
