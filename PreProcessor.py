@@ -3,6 +3,7 @@ import os
 #import dask.array 
 
 class PreProcessor:
+    Vocabulary_frequenecy_dict = dict()
     def __init__(self) -> None:
         # 1) All the interpunction was removed.
         #|||||||
@@ -140,7 +141,8 @@ class PreProcessor:
                         word_lower = word_part.lower()
                         word_stem = porter_stemmer.stem(word_lower)
                         words_tokenized += word_stem + " "
-                        self.all_tokens.add(word_stem)
+                        self.Vocabulary_frequenecy_dict[word_stem] = self.Vocabulary_frequenecy_dict.get(word_stem, 0) + 1
+                      
         return words_tokenized
 
     def UCPreProcessor(self, filepath):
@@ -170,11 +172,12 @@ class PreProcessor:
                     word_lower = word.lower()
                     word_stem = porter_stemmer.stem(word_lower)
                     words_tokenized += word_stem + " "
+                    self.Vocabulary_frequenecy_dict[word_stem] = self.Vocabulary_frequenecy_dict.get(word_stem, 0) + 1
         return words_tokenized
 
-    # setup documents and tokens
+    # setup documents
     def setupCC(self, code_path: str)->tuple:
-        self.all_tokens=set()
+        all_tokens=set()
         code_documents = list()
         code_file_index = 0
         file_stack = list()
@@ -194,19 +197,34 @@ class PreProcessor:
                     filepath_integrated.replace(code_path, "")
                     self.CC_to_index[filepath_integrated.lower()] = code_file_index
                     code_file_index += 1
+        for i, doc in enumerate(code_documents):
+            tokens = doc.split()
+            for j, token in enumerate(tokens):
+                if self.Vocabulary_frequenecy_dict.get(token, 0) < 5:
+                    tokens[j] = '<UNK>'
+                all_tokens.add(tokens[j])
+            code_documents[i] = ' '.join(tokens)
                 
-        return code_documents,self.CC_to_index
+        return code_documents,self.CC_to_index,all_tokens
     
     def setupUC(self, UC_path: str)->tuple:
         UC_documents = list()
-
+        all_tokens=set()
         for i, filename in enumerate(os.listdir(UC_path)):
             self.UC_to_index[filename.lower()] = i
             filepath = os.path.join(UC_path, filename)
             tokens = self.UCPreProcessor(filepath)
             UC_documents.append(tokens)
-        return UC_documents, self.UC_to_index
-
+        for i, doc in enumerate(UC_documents):
+            tokens = doc.split()
+            for j, token in enumerate(tokens):
+                if self.Vocabulary_frequenecy_dict.get(token, 0) < 5:
+                    tokens[j] = '<UNK>'
+                all_tokens.add(tokens[j])
+            UC_documents[i] = ' '.join(tokens)
+        return UC_documents, self.UC_to_index,all_tokens
+    
+    
     def setupCSV(self, csv_dir: str, modified_csv_dir: str,UC_to_index,CC_to_index) -> None:
         filenames_CC = CC_to_index.keys()
         filenames_UC = UC_to_index.keys()
