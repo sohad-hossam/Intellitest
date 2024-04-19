@@ -200,7 +200,7 @@ class PreProcessor:
         for i, doc in enumerate(code_documents):
             tokens = doc.split()
             for j, token in enumerate(tokens):
-                if self.Vocabulary_frequenecy_dict.get(token, 0) < 5:
+                if self.Vocabulary_frequenecy_dict.get(token, 0) < 3:
                     tokens[j] = '<UNK>'
                 all_tokens.add(tokens[j])
             code_documents[i] = ' '.join(tokens)
@@ -218,7 +218,7 @@ class PreProcessor:
         for i, doc in enumerate(UC_documents):
             tokens = doc.split()
             for j, token in enumerate(tokens):
-                if self.Vocabulary_frequenecy_dict.get(token, 0) < 5:
+                if self.Vocabulary_frequenecy_dict.get(token, 0) < 3:
                     tokens[j] = '<UNK>'
                 all_tokens.add(tokens[j])
             UC_documents[i] = ' '.join(tokens)
