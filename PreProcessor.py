@@ -8,15 +8,14 @@ class PreProcessor:
         # 1) All the interpunction was removed.
         #|||||||
         self.chars_to_remove = r"""(?x)
-        _|\s*;\s*|\s*,\s*|\s*\.\s*| #Standalone Punctuation Marks
-        \s*\+\s*|\s*-\s*|\s*\/\s*|\s*\*\s*|  #arethmatic operations
-        \s*=+\s*|\s*==\s*|\s*!=\s*|\s*>\s*|\s*>=\s*|\s*<\s*|\s*<=\s*|\s*&&\s*|\s*&\s*|
-        \s*\|\|\s*
-        |\s*!\s*|\s*\"\s*|\s*\'\s*|    #assignment 
-        \s*\(\s*|\s*\)\s*|\s*{\s*|\s*}\s*|\s*\[\s*|\s*\]\s*|\s*@\s*|\s*:\s*|  # brackets
-        \s*\\\s*|\s*\#\s*|\s*\\n\s*|\s*%\s*|\s*^\s*|\s*~\s*|\s*\?\s*|\s*\|\s*"""
+        \s*_+\s*|\s*;+\s*|\s*,+\s*|\s*\.+\s*| #Standalone Punctuation Marks
+        \s*\+\s*|\s*-+\s*|\s*\/+\s*|\s*\+\s*|  #arethmatic operations
+        \s*=+\s*|\s*!=+\s*|\s*>+\s*|\s*>+=+\s*|\s*<+\s*|\s*<+=+\s*|\s*&+\s*|
+        \s*\|+\s*
+        |\s*!+\s*|\s*\"+\s*|\s*\'+\s*|    #assignment 
+        \s*\(+\s*|\s*\)+\s*|\s*\{+\s*|\s*\}+\s*|\s*\[+\s*|\s*\]+\s*|\s*@+\s*|\s*:+\s*|  # brackets
+        \s*\+\s*|\s*\#+\s*|\s*\\n+\s*|\s*\%+\s*|\s*\^+\s*|\s*\~+\s*|\s*\?+\s*|\s*\\+\s*"""
         self.stop_words = set(stopwords.words("english"))
-
         self.keywords_java = {
             "abstract",
             "continue",
@@ -142,7 +141,6 @@ class PreProcessor:
                         word_stem = porter_stemmer.stem(word_lower)
                         words_tokenized += word_stem + " "
                         self.Vocabulary_frequenecy_dict[word_stem] = self.Vocabulary_frequenecy_dict.get(word_stem, 0) + 1
-                      
         return words_tokenized
 
     def UCPreProcessor(self, filepath):
@@ -192,7 +190,6 @@ class PreProcessor:
                 elif filename.endswith(".java"):
                     
                     tokens = self.CodePreProcessor(filepath_integrated)
-                    
                     code_documents.append(tokens)
                     filepath_integrated.replace(code_path, "")
                     self.CC_to_index[filepath_integrated.lower()] = code_file_index
