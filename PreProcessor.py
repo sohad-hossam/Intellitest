@@ -10,7 +10,7 @@ class PreProcessor:
         self.chars_to_remove = r"""(?x)
         \s*_+\s*|\s*;+\s*|\s*,+\s*|\s*\.+\s*| #Standalone Punctuation Marks
         \s*\+\s*|\s*-+\s*|\s*\/+\s*|\s*\+\s*|  #arethmatic operations
-        \s*=+\s*|\s*!=+\s*|\s*>+\s*|\s*>+=+\s*|\s*<+\s*|\s*<+=+\s*|\s*&+\s*|
+        \s*=+\s*|\s*!=+\s*|\s*>+\s*|\s*<+\s*|\s*&+\s*|
         \s*\|+\s*
         |\s*!+\s*|\s*\"+\s*|\s*\'+\s*|    #assignment 
         \s*\(+\s*|\s*\)+\s*|\s*\{+\s*|\s*\}+\s*|\s*\[+\s*|\s*\]+\s*|\s*@+\s*|\s*:+\s*|  # brackets
@@ -145,9 +145,14 @@ class PreProcessor:
 
     def UCPreProcessor(self, filepath):
         dataset_txt = open(filepath, "r", encoding="utf-8").read()
+         # 1) All the interpunction was removed.
+        UCCleaned = re.split(self.chars_to_remove, dataset_txt)
         # 2) All numeric characters were removed.
         numeric_chars_to_remove = r"[0-9]"
-        UCCleanedOfNumbers = re.sub(numeric_chars_to_remove, "", dataset_txt).split()
+        UCCleanedOfNumbers = [
+            re.sub(numeric_chars_to_remove, "", x) for x in UCCleaned
+        ]
+
         # 3) All sentences were tokenized with NLTK.
         # 4) The stop words corpus from NLTK was used to eliminate all stop words.
         stop_words = set(stopwords.words("english"))
