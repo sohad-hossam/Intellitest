@@ -1,11 +1,11 @@
 from imports import *
-
+import math
 
 def _readCallable(src, byte_offset, point):
     return src[byte_offset : byte_offset + 1]
 
 class MaintainabilityScore():
-    def __init__(self, langauage:str = "./tree-sitter-java", build_dir:str = "build/my-languages.so") -> None:
+    def __init__(self, file_dir: str, langauage:str = "../tree-sitter-java", build_dir:str = "build/my-languages.so") -> None:
         Language.build_library(
         # Store the library in the `build` directory
         build_dir
@@ -16,20 +16,35 @@ class MaintainabilityScore():
         JAVA = Language("build/my-languages.so", "java")
         self.parser = Parser()
         self.parser.set_language(JAVA)
-    
-    def getSourceFileStr(self, file_dir: str) -> str:
-        with open("Dataset/teiid_dataset/train_CC/1.java", "r") as f:
+        self.file_dir = file_dir
+        with open(self.file_dir, "r") as f:
             self.source_code = f.read()
             src = bytes(
                 self.source_code,
                 "utf-8",
             )
-        tree = self.parser.parse(_readCallable(src))
-        return tree
+        self.tree = self.parser.parse(src)
 
-    def computeHalsteadVolume(self, tree: Tree) -> float:
-        curr_node = tree.root_node
+    def drawAST(self) -> None:
+        queue = list()
+        id = 0
+        curr_node = self.tree.root_node
         cst_tree = Tree()
+        cst_tree.create_node(curr_node.type, id)
+        queue.append((curr_node, id))
+        
+        while(len(queue)):
+            curr_node, parent_id = queue.pop(0)
+
+            for child in curr_node.children:
+                id += 1
+                queue.append((child, id))
+                cst_tree.create_node(child.type, id, parent = parent_id)
+        print(cst_tree.show(stdout=False))
+
+    def computeHalsteadVolume(self) -> tuple:
+        curr_node = self.tree.root_node
+        
         arethmatc_operators={'+','-','*','/','%'}
         assignment_operators={'=','+=', '-=', '*=', '/=', '%='}
         relational_operators={ '==', '!=', '<', '>', '<=', '>='}
@@ -44,22 +59,10 @@ class MaintainabilityScore():
         unique_operators=set()
         queue = list()
         id = 0
-        queue.append((curr_node, id))
-
-        cst_tree.create_node(curr_node.type, id)
-
+        queue.append(curr_node)
 
         while(len(queue)):
-            curr_node, parent_id = queue.pop(0)
-
-            for child in curr_node.children:
-                id += 1
-                queue.append((child, id))
-                cst_tree.create_node(child.type, id, parent = parent_id)
-        print(cst_tree.show(stdout=False))
-
-        while(len(queue)):
-            curr_node, parent_id = queue.pop(0)
+            curr_node = queue.pop(0)
             if(curr_node.type in arethmatc_operators ):
                 unique_operators.add(curr_node.type)
                 operators_count+=1
@@ -87,6 +90,7 @@ class MaintainabilityScore():
             elif (curr_node.type in loops_conditions ):
                 unique_operators.add(curr_node.type)
                 operators_count+=1
+            queue.extend(curr_node.children)
 
 
 
@@ -100,7 +104,7 @@ class MaintainabilityScore():
         operators = {'+', '-', '*', '/', '%', '&&', '||', '!', '&', '|', '^', '~', '<<', '>>', '>>>', '==', '!=', '<', '>', '<=', '>=', '=', '+=', '-=', '*=', '/=', '%=', '&=', '|=', '^=', '<<=', '>>=', '>>>=', '?'}
 
 
-        curr_node = tree.root_node
+        curr_node = self.tree.root_node
 
         queue = list()
         queue.append(curr_node)
@@ -116,7 +120,7 @@ class MaintainabilityScore():
         #access modfiers??, extends, implments ?? , class ?? , function calls , function definations , 
         unique_operators=set()
         queue = list()
-        curr_node = tree.root_node
+        curr_node = self.tree.root_node
         queue.append(curr_node)
         excluded_operators=["}","]",")","import", "package"]
         while(len(queue)):
@@ -148,7 +152,7 @@ class MaintainabilityScore():
         # 
         unique_operands =set()
         queue = list()
-        curr_node = tree.root_node
+        curr_node = self.tree.root_node
         queue.append(curr_node)
         while(len(queue)):
             curr_node = queue.pop(0)
@@ -198,13 +202,18 @@ class MaintainabilityScore():
 
         return n, N, N_hat, V, D, E, T, B
     
-    def computeSLOC(self):
+    def computeSLOCAndCommentLines(self) -> tuple:
         # calculate SLOC
         SLOC = 0 #number of source line codes without comments and spaces and imports
         flag = False
-        with open("./operation2.java", "r") as file:
+        LOC = 0
+        blank_lines = 0
+        with open(self.file_dir, "r") as file:
             for line in file:
                 line = line.replace(" ", "")
+                LOC += 1
+                if not len(line):
+                    blank_lines += 1
                 #lw fy awel el line multiline comment f=t
                 if line.strip().rstrip('\n')[0:2] == '/*':
                     flag = True
@@ -237,8 +246,53 @@ class MaintainabilityScore():
                 if line.strip().rstrip('\n') != "" and not line.strip().startswith(('package', 'import','//')):
                     SLOC += 1
 
-        print(SLOC)
-        return SLOC
-    def computeCyclomaticComplexity(self):
-        pass
+        # print(SLOC)
+        comment_lines = LOC - SLOC - blank_lines
+        return SLOC, (comment_lines/LOC) * (math.pi/180)
+
+    def computeCyclomaticComplexity(self) -> int:
+        ################################### Cyclomatic Complexity  ########################################
+
+        # if	+1	An if statement is a single decision.
+        # elif	+1	The elif statement adds another decision.
+        # else	+0	The else statement does not cause a new decision. The decision is at the if.
+        # for	+1	There is a decision at the start of the loop.
+        # while	+1	There is a decision at the while statement.
+        # except	+1	Each except branch adds a new conditional path of execution.
+        # finally	+0	The finally block is unconditionally executed.
+        # with	+1	The with statement roughly corresponds to a try/except block (see PEP 343 for details).
+        # assert	+1	The assert statement internally roughly equals a conditional statement.
+        # Comprehension	+1	A list/set/dict comprehension of generator expression is equivalent to a for loop.
+        # Boolean Operator	+1	Every boolean operator (and, or) adds a decision point.
+        curr_node = self.tree.root_node
+        G = 1
+        queue = list()
+        queue.append(curr_node)
+        types_to_check = {'if', 'else if', 'for', 'while', '&&', '||', '!', 'assert', 'catch'}
+        while(len(queue)):
+            curr_node = queue.pop(0)
+            if(curr_node.type.lower() in types_to_check):
+                G += 1
+            queue.extend(curr_node.children)
+        return G
+    
+    def computeMaintainabilityScore(self) -> float:
+        n, N, N_hat, V, D, E, T, B = self.computeHalsteadVolume()
+        SLOC, comment_lines = self.computeSLOCAndCommentLines()
+        G = self.computeCyclomaticComplexity()
+        
+        if not V:
+            V = 1
+        if not SLOC:
+            SLOC = 1
+        
+        # print("V: ", V)
+        # print("SLOC: ", SLOC)
+        # print("G: ", G)
+
+        MI= max(0, (100*(171 - 5.2*np.log(V) - 0.23*G - 16.2*np.log(SLOC))) / 171)
+        return MI
+
+# score = MaintainabilityScore("Dataset/teiid_dataset/train_CC/9.java")
+# print(score.computeMaintainabilityScore())
 
