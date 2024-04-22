@@ -11,7 +11,7 @@ JAVA = Language("build/my-languages.so", "java")
 parser = Parser()
 parser.set_language(JAVA)
 
-with open("CC/BeanBeneCulturale.txt", "r") as f:
+with open("./operation2.java", "r") as f:
 
     source_code = f.read()
 
@@ -195,20 +195,82 @@ T=E/18
 B=V/3000
 
 # calculate SLOC
-SLOC = 0
+SLOC = 0 #number of source line codes without comments and spaces and imports
 flag = False
-with open("./CC/BeanBeneCulturale.txt", "r") as file:
+with open("./operation2.java", "r") as file:
     for line in file:
+        line = line.replace(" ", "")
+        #lw fy awel el line multiline comment f=t
         if line.strip().rstrip('\n')[0:2] == '/*':
             flag = True
+       
+        #lw ft7en multiline comment bs aflto msh fy akhr el line yb2a f=F w hn3d sloc
+        match = re.search(r"\*\/",line)
+        if flag and match:
+            flag=False
+            if line[match.end():match.end()+2] == "//":
+                continue
+            elif (line[match.end():match.end()+2])!="/*" and (line[match.end():match.end()+2])!="\n":
+                SLOC+=1
+                continue
+        #lw fy akher el line aflt el multiline comment f=F, w mfesh iteration
         if line.strip().rstrip('\n')[-2:] == '*/': 
             flag = False
             continue
+        #lw ft7en multiline comment yb2a msh hn3d el sloc
         if flag:
             continue
+            
+        #lw 3dena kol el fo2a yb2a aked el flag msh btrue , w el comment msh fy awel el line 
+        #hncheck lw comment asln w w2tha hndwr 3la aflto , bs kda kda hyt7seb sloc
+        if re.search(r"\/\*",line) != None and re.search(r"\/\*",line).start() != 0:
+            if re.search(r"\*\/",line)!=None:
+                flag = False
+            else:
+                flag = True
+
         if line.strip().rstrip('\n') != "" and not line.strip().startswith(('package', 'import','//')):
             SLOC += 1
-##print(SLOC)
+
+print(SLOC)
+with open("./dataset/teiid/train_CC/1.java", "r") as file:
+    content = file.read()
+    content = content.replace(r"\n", "X")
+    single_comment_pattern = r"//.*"
+    single_comment_lines = re.findall(single_comment_pattern, content)
+    print(single_comment_lines)
+    
+    multi_comment_pattern = r"\/\*.*?\*\/"
+    multi_comment_lines = re.findall(multi_comment_pattern, content, re.DOTALL)
+
+    exclude_strings = re.findall("\".*\"|'.*'", content)
+
+    multi_comment_lines_splitted = list()
+
+    for multi_comment_line in multi_comment_lines:
+        multi_comment_lines_splitted.extend(multi_comment_line.split("\n"))
+
+
+    # handles the case of interleaved comments
+    repeated_comment_lines = 0
+    for multi_comment_line in multi_comment_lines_splitted:
+        if re.findall(single_comment_pattern, multi_comment_line) or not len(multi_comment_line.strip()):
+
+            repeated_comment_lines += 1
+
+    for single_comment_line in single_comment_lines:
+        if re.findall(multi_comment_pattern, single_comment_line):
+            repeated_comment_lines += 1
+
+    excluded_lines = 0
+    for exclude_string in exclude_strings:
+        if re.findall(single_comment_pattern, exclude_string) or re.findall(multi_comment_pattern, exclude_string):
+            excluded_lines += 1
+      
+            
+
+    num_of_comments =  len(multi_comment_lines_splitted) + len(single_comment_lines) - repeated_comment_lines - excluded_lines
+    print(num_of_comments)
 
     # int x = 4; /* jijopok
     # this is a comment
@@ -227,6 +289,6 @@ with open("./CC/BeanBeneCulturale.txt", "r") as file:
 # assert	+1	The assert statement internally roughly equals a conditional statement.
 # Comprehension	+1	A list/set/dict comprehension of generator expression is equivalent to a for loop.
 # Boolean Operator	+1	Every boolean operator (and, or) adds a decision point.
-
-
+# is the percent of comment lines (important: converted to radians).
+C = num_of_comments/SLOC
 
