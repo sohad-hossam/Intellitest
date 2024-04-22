@@ -229,4 +229,16 @@ with open("./CC/BeanBeneCulturale.txt", "r") as file:
 # Boolean Operator	+1	Every boolean operator (and, or) adds a decision point.
 
 
+CycleComplexity = 1
+queue = list()
+curr_node = tree.root_node
+queue.append(curr_node)
+while(len(queue)):
+    curr_node = queue.pop(0)
+    if curr_node.type == "if_statement" or curr_node.type == "elif_statement" or curr_node.type == "for_statement" or curr_node.type == "while_statement" or curr_node.type == "except_clause" or curr_node.type == "with_statement" or curr_node.type == "assert_statement" or curr_node.type == "boolean_operator":
+        CycleComplexity += 1
+    queue.extend(curr_node.children)
+
+print("Cyclomatic Complexity: ", CycleComplexity)
+
 

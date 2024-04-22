@@ -36,6 +36,7 @@ train = train[~train['file_path'].isin(unique_cc)]
 train_unique_cc = train['file_path'].unique()
 train_unique_uc = train['issue_id'].unique()
 
+
 for i, row in issue_df.iterrows():
     issue_id = row['issue_id']
     if issue_id not in merged_df['issue_id'].values:
@@ -50,16 +51,51 @@ for i, row in issue_df.iterrows():
             f.write(f"{summary}\n{description}")
         
 
-test = set()
+_test = set()
 for i, row in merged_df.iterrows():
     file_path = row['file_path']
-    if file_path in test:
+    if row['file_path'] in train_unique_cc:
+        train.loc[train['file_path'] == row['file_path'], 'file_path'] = f'./dataset/teiid_dataset/train_cc/{i}.java'
+    elif row['file_path'] in unique_cc:
+        test.loc[test['file_path'] == row['file_path'], 'file_path'] = f'./dataset/teiid_dataset/test_cc/{i}.java'
+    if file_path in _test:
         continue
-    test.add(file_path)
+    _test.add(file_path)
     if os.path.exists('./Dataset/teiid_dataset/teiid/'+file_path) and os.path.isfile('./Dataset/teiid_dataset/teiid/'+file_path):
         if ('./Dataset/teiid_dataset/teiid/'+file_path).endswith('.java'):
             if row['file_path'] in train_unique_cc:
                 shutil.copy('./Dataset/teiid_dataset/teiid/'+file_path,f'./Dataset/teiid_dataset/train_CC/{i}.java')
             elif row['file_path'] in unique_cc:
                 shutil.copy('./Dataset/teiid_dataset/teiid/'+file_path,f'./Dataset/teiid_dataset/test_CC/{i}.java')
+
+train.to_csv('Dataset/teiid_dataset/train.csv',index=False)
+test.to_csv('Dataset/teiid_dataset/test.csv',index=False)
+
+
+# print(train)
+# print(test)
+
 con.close()
+
+
+# df = pd.read_csv('Dataset/teiid_dataset/teiid.csv')
+
+# train,test = train_test_split(df, test_size = 0.01)
+
+
+# unique_cc = test['file_path'].unique()
+# unique_uc = test['issue_id'].unique()
+# print(len(unique_cc),len(unique_uc))
+
+# train = train[~train['issue_id'].isin(unique_uc)]
+# train = train[~train['file_path'].isin(unique_cc)]
+
+# train_unique_cc = train['file_path'].unique()
+# train_unique_uc = train['issue_id'].unique()
+
+# print(len(train_unique_cc),len(train_unique_uc))
+
+# train.to_csv('Dataset/teiid_dataset/train.csv',index=False)
+# test.to_csv('Dataset/teiid_dataset/test.csv',index=False)
+# print(train.shape)
+# print(test.shape)

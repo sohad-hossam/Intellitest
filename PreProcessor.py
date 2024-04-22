@@ -202,8 +202,8 @@ class PreProcessor:
         for i, doc in enumerate(code_documents):
             tokens = doc.split()
             for j, token in enumerate(tokens):
-                if self.Vocabulary_frequenecy_dict.get(token, 0) < 3:
-                    tokens[j] = '<UNK>'
+                if self.Vocabulary_frequenecy_dict.get(token, 0) <= 1:
+                    tokens[j] = ' <unk>'
                 all_tokens.add(tokens[j])
             code_documents[i] = ' '.join(tokens)
         return code_documents,self.CC_to_index,all_tokens
@@ -219,8 +219,8 @@ class PreProcessor:
         for i, doc in enumerate(UC_documents):
             tokens = doc.split()
             for j, token in enumerate(tokens):
-                if self.Vocabulary_frequenecy_dict.get(token, 0) < 3:
-                    tokens[j] = '<UNK>'
+                if self.Vocabulary_frequenecy_dict.get(token, 0) <= 1:
+                    tokens[j] = ' <unk>'
                 all_tokens.add(tokens[j])
             UC_documents[i] = ' '.join(tokens)
         return UC_documents, self.UC_to_index,all_tokens
@@ -231,31 +231,27 @@ class PreProcessor:
         filenames_UC = UC_to_index.keys()
         
         DataSet = pd.read_csv(csv_dir, names=['UC', 'CC'])
-        file_index={}
-        index=0
         
-        file_to_index_list = []
-        for file in DataSet['CC'].str.lower():
-            if file_index.get(file)==None:
-                file_index[file]= "./dataset/railo_dataset/cc/"+str(index)+".java"
-            file_to_index_list.append(file_index.get(file))
-            index+=1
+        # file_to_index_list = []
+        # for file in DataSet['CC'].str.lower():
+        #     if file_index.get(file)==None:
+        #         file_index[file]= "./dataset/teiid_dataset/cc/"+str(index)+".java"
+        #     file_to_index_list.append(file_index.get(file))
+        #     index+=1
         DataSet['UC'] = DataSet['UC'].astype(str) + ".txt"
       
-        artifacts_done = set(zip(DataSet['UC'].str.lower(),file_to_index_list))
-        if artifacts_done:
-            first_element = next(iter(artifacts_done))
+        artifacts_done = set(zip(DataSet['UC'].str.lower(),DataSet['CC'].str.lower()))
+        print(artifacts_done)
         artifacts_not_done = []
         for filename_UC in filenames_UC:
             for filename_CC in filenames_CC:
                 if filename_CC.endswith('.java'):
-                    if (filename_UC.lower(), filename_CC.lower()) not in artifacts_done:
+                    if (filename_UC.lower(),filename_CC.lower()) not in artifacts_done:
                         artifacts_not_done.append((UC_to_index[filename_UC.lower()], CC_to_index[filename_CC.lower()], 0))
                     else:
+                        print(UC_to_index[filename_UC.lower()],CC_to_index[filename_CC.lower()])
                         artifacts_not_done.append((UC_to_index[filename_UC.lower()], CC_to_index[filename_CC.lower()], 1))
 
-
-            
         dataset_modified = pd.DataFrame(artifacts_not_done, columns=['UC', 'CC', 'Labels'])
         dataset_modified.to_csv(modified_csv_dir, index = False)    
          
