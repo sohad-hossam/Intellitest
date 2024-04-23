@@ -258,7 +258,7 @@ class FeatureExtraction:
                 if token in idf_code_dict.keys():
                     idf_q.append(idf_code_dict[token])
                 else:
-                    idf_q.append(idf_code_dict[' <unk>']) 
+                    idf_q.append(idf_code_dict['<unk>']) 
             idf_uc_q.append(idf_q)
 
         idf_code_q=[]
@@ -269,7 +269,7 @@ class FeatureExtraction:
                 if token in idf_uc_dict.keys():
                     idf_q.append(idf_uc_dict[token])
                 else:
-                    idf_q.append(idf_uc_dict[' <unk>'])
+                    idf_q.append(idf_uc_dict['<unk>'])
             idf_code_q.append(idf_q)
         return idf_uc_q,idf_code_q
 
@@ -305,7 +305,7 @@ class FeatureExtraction:
                 if token in tf_code_dict.keys():
                     ictf_q.append(np.log(len(code_documents)/(tf_code_dict[token]+1)))     
                 else :
-                     ictf_q.append(np.log(len(code_documents)/(tf_code_dict[' <unk>']+1)))
+                     ictf_q.append(np.log(len(code_documents)/(tf_code_dict['<unk>']+1)))
             ictf_uc_q.append(ictf_q)
 
         ictf_code_q=[]
@@ -316,7 +316,7 @@ class FeatureExtraction:
                 if token in tf_uc_dict.keys():
                   ictf_q.append(np.log(len(UC_documents)/(tf_uc_dict[token]+1)))
                 else:
-                    ictf_q.append(np.log(len(UC_documents)/(tf_uc_dict[' <unk>']+1)))  
+                    ictf_q.append(np.log(len(UC_documents)/(tf_uc_dict['<unk>']+1)))  
             ictf_code_q.append(ictf_q)
         return ictf_uc_q,ictf_code_q
 
@@ -358,7 +358,7 @@ class FeatureExtraction:
                     if term in idf_uc_dict.keys():
                         weight_term_doc = (1 / len(doc)) * np.log(1 + tf_term_doc) * idf_uc_dict[term]
                     else:
-                        weight_term_doc = (1 / len(doc)) * np.log(1 + tf_term_doc) * idf_uc_dict['<UNK']  
+                        weight_term_doc = (1 / len(doc)) * np.log(1 + tf_term_doc) * idf_uc_dict['<unk']  
                     term_weights.append(weight_term_doc)
 
                 avg_weight_term = np.mean(term_weights)
@@ -378,7 +378,7 @@ class FeatureExtraction:
                     if term in idf_code_dict.keys():
                         weight_term_doc = (1 / len(doc)) * np.log(1 + tf_term_doc) * idf_code_dict[term]  
                     else:
-                        weight_term_doc = (1 / len(doc)) * np.log(1 + tf_term_doc) * idf_code_dict['<UNK']
+                        weight_term_doc = (1 / len(doc)) * np.log(1 + tf_term_doc) * idf_code_dict['<unk']
                     term_weights.append(weight_term_doc)
 
                 avg_weight_term = np.mean(term_weights)
@@ -550,7 +550,7 @@ class FeatureExtraction:
     #     if token in df_dict.keys():
     #        tf_term_collection = df_dict[token] +1
     #     else:
-    #        tf_term_collection = df_dict[' <unk>'] +1
+    #        tf_term_collection = df_dict['<unk>'] +1
     #     term_entropy = ((tf_term / tf_term_collection) * np.log((tf_term / tf_term_collection) + 1))
       
     #     weight_term_doc = (1 / len(document)) * np.log(1 + tf_term-1) * idf_dict[token]  
@@ -597,16 +597,6 @@ class FeatureExtraction:
 
 
 
-
-
-
-
-
-
-
-
-
-
     def EntropyPreProcessing(self,UC_documents:list, code_documents:list,idf_uc_dict:dict,idf_cc_dict:dict, df_uc_dict:dict,df_code_dict:dict):
         entropy_uc = [] 
         variance_uc = []
@@ -620,13 +610,19 @@ class FeatureExtraction:
                 term_weights = []
                 for doc in code_documents:
                     tf_term_doc = doc.count(term)+1
-                    tf_term_collection = df_code_dict.get(term,df_code_dict.get(' <unk>')) +1
-                    term_entropy += ((tf_term_doc / tf_term_collection) * np.log((tf_term_doc / tf_term_collection) + 1))
-                    weight_term_doc = (1 / len(doc)) * np.log(1 + tf_term_doc) * idf_uc_dict.get(term, idf_uc_dict.get(' <unk>'))  
+                    if term in df_code_dict.keys():
+                       tf_term_collection = df_code_dict[term]+1
+                    else:
+                        tf_term_collection = df_code_dict['<unk>']+1
+                    term_entropy += ((tf_term_doc / tf_term_collection) * np.log((tf_term_doc / tf_term_collection)))
+                    if term in idf_uc_dict.keys():
+                        weight_term_doc = (1 / len(doc)) * np.log(1 + tf_term_doc) * idf_uc_dict[term]  
+                    else:
+                        weight_term_doc = (1 / len(doc)) * np.log(1 + tf_term_doc) * idf_uc_dict['<unk>']
                     term_weights.append(weight_term_doc)
                 term_weights_array = np.array(term_weights)
                 avg_weight_term = term_weights_array.mean()
-                variance_term = np.mean([(weight - avg_weight_term) ** 2 for weight in term_weights])
+                variance_term = np.sqrt(np.mean([(weight - avg_weight_term) ** 2 for weight in term_weights]))
                 query_variances.append(variance_term) 
                 query_entropy.append(term_entropy)
             entropy_uc.append(query_entropy)  
@@ -643,13 +639,20 @@ class FeatureExtraction:
                 term_weights = []
                 for doc in UC_documents:
                     tf_term_doc = doc.count(term)+1
-                    tf_term_collection = df_uc_dict.get(term,df_uc_dict.get(' <unk>')) +1
-                    term_entropy+=((tf_term_doc / tf_term_collection) * np.log((tf_term_doc / tf_term_collection) + 1))
-                    weight_term_doc = (1 / len(doc)) * np.log(1 + tf_term_doc) * idf_cc_dict.get(term, idf_cc_dict.get(' <unk>'))  
+                    if term in df_uc_dict.keys():
+                        tf_term_collection = df_uc_dict[term]+1
+                    else:
+                        tf_term_collection = df_uc_dict['<unk>']+1
+                  
+                    term_entropy+=((tf_term_doc / tf_term_collection) * np.log(tf_term_doc / tf_term_collection))
+                    if term in idf_cc_dict.keys():
+                        weight_term_doc = (1 / len(doc)) * np.log(1 + tf_term_doc) * idf_cc_dict[term]  
+                    else:
+                        weight_term_doc = (1 / len(doc)) * np.log(1 + tf_term_doc) * idf_cc_dict['<unk>']
                     term_weights.append(weight_term_doc)
 
                 avg_weight_term = np.mean(term_weights)
-                variance_term = np.mean([(weight - avg_weight_term) ** 2 for weight in term_weights])
+                variance_term = np.sqrt(np.mean([(weight - avg_weight_term) ** 2 for weight in term_weights]))
                 query_variances.append(variance_term) 
 
                 query_entropy.append(term_entropy)
