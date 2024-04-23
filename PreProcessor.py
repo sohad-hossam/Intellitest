@@ -241,7 +241,7 @@ class PreProcessor:
         DataSet['UC'] = DataSet['UC'].astype(str) + ".txt"
       
         artifacts_done = set(zip(DataSet['UC'].str.lower(),DataSet['CC'].str.lower()))
-        print(artifacts_done)
+        print(len(artifacts_done))
         artifacts_not_done = []
         for filename_UC in filenames_UC:
             for filename_CC in filenames_CC:
