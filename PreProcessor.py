@@ -239,9 +239,8 @@ class PreProcessor:
         #     file_to_index_list.append(file_index.get(file))
         #     index+=1
         DataSet['UC'] = DataSet['UC'].astype(str) + ".txt"
-      
+        sum=0
         artifacts_done = set(zip(DataSet['UC'].str.lower(),DataSet['CC'].str.lower()))
-        print(len(artifacts_done))
         artifacts_not_done = []
         for filename_UC in filenames_UC:
             for filename_CC in filenames_CC:
@@ -249,9 +248,9 @@ class PreProcessor:
                     if (filename_UC.lower(),filename_CC.lower()) not in artifacts_done:
                         artifacts_not_done.append((UC_to_index[filename_UC.lower()], CC_to_index[filename_CC.lower()], 0))
                     else:
-                        print(UC_to_index[filename_UC.lower()],CC_to_index[filename_CC.lower()])
                         artifacts_not_done.append((UC_to_index[filename_UC.lower()], CC_to_index[filename_CC.lower()], 1))
-
+                        sum+=1
+        print("sum = ", sum)
         dataset_modified = pd.DataFrame(artifacts_not_done, columns=['UC', 'CC', 'Labels'])
         dataset_modified.to_csv(modified_csv_dir, index = False)    
          

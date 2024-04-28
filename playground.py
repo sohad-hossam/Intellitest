@@ -10,6 +10,14 @@ import pandas as pd
 import sqlite3
 import shutil
 import os
+from pathlib import Path
+
+def find_file(root_directory, file_name,relative_path):
+    for root, dirs, files in os.walk(root_directory):
+        root_temp= root + "\\" + file_name
+        if file_name in files and root_temp[len(root_temp) - len(relative_path):] == relative_path:   
+            return os.path.join(root, file_name)
+    return None
 
 con = sqlite3.connect("Dataset/teiid_dataset/teiid.sqlite3")
 cur = con.cursor()
@@ -61,13 +69,20 @@ for i, row in merged_df.iterrows():
     if file_path in _test:
         continue
     _test.add(file_path)
-    if os.path.exists('./Dataset/teiid_dataset/teiid/'+file_path) and os.path.isfile('./Dataset/teiid_dataset/teiid/'+file_path):
-        if ('./Dataset/teiid_dataset/teiid/'+file_path).endswith('.java'):
+    
+    actual_path = find_file("./", os.path.basename(file_path),os.path.normpath(file_path))
+    if actual_path ==None:
+        print(file_path)
+        continue
+    if os.path.isfile(actual_path):
+        if (actual_path).endswith('.java'):
             if row['file_path'] in train_unique_cc:
-                shutil.copy('./Dataset/teiid_dataset/teiid/'+file_path,f'./Dataset/teiid_dataset/train_CC/{i}.java')
+                shutil.copy(actual_path,f'./Dataset/teiid_dataset/train_CC/{i}.java')
             elif row['file_path'] in unique_cc:
-                shutil.copy('./Dataset/teiid_dataset/teiid/'+file_path,f'./Dataset/teiid_dataset/test_CC/{i}.java')
+                shutil.copy(actual_path,f'./Dataset/teiid_dataset/test_CC/{i}.java')
 
+        
+    
 train.to_csv('Dataset/teiid_dataset/train.csv',index=False)
 test.to_csv('Dataset/teiid_dataset/test.csv',index=False)
 
