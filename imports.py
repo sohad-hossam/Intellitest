@@ -30,9 +30,9 @@ from collections import defaultdict
 from scipy.stats import rankdata
 
 import os
-from gensim import corpora
-from gensim.models import LdaMulticore
-import gensim
+# from gensim import corpora
+# from gensim.models import LdaMulticore
+# import gensim
 
 from imblearn.over_sampling import SMOTE
 

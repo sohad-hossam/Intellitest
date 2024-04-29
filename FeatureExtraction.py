@@ -159,7 +159,7 @@ class FeatureExtraction:
         
         query_term_jensen_shannon = None
         if feature_extraction_type == "JS" or feature_extraction_type == "VSM":
-            word_index = self.count_vocab_index.get(query_term, self.count_vocab_index.get(' <unk>'))
+            word_index = self.count_vocab_index.get(query_term, self.count_vocab_index.get('<unk>'))
             term_vector = np.zeros((1, args[0].shape[1])) #1*
             term_vector[:,word_index]=args[1][code_idx, word_index]
             query_term_jensen_shannon = feature_extraction_method(args[0], term_vector)
@@ -410,10 +410,10 @@ class FeatureExtraction:
         # lw 3ndna dict ndelo el term ydena el tf bt3o fy el document  ndivide by length el query * log ( nfs el value el fat / m7tgen dict tany w dh ashel shwya ndelo el term ydelna el freq bt3to fy kol el documents(uc/code) / a3tked 3dad el docuemtns)  
         query_terms = set(query.split())
         # PoQ
-        query_tf = np.vectorize(lambda term: query_tf_matrix[self.count_vocab_index.get(term, self.count_vocab_index.get(' <unk>'))])(list(query_terms)) # array of tf for all tokens in the query
+        query_tf = np.vectorize(lambda term: query_tf_matrix[self.count_vocab_index.get(term, self.count_vocab_index.get('<unk>'))])(list(query_terms)) # array of tf for all tokens in the query
         query_tf = query_tf / len(query.split())
         
-        doc_tf = np.vectorize(lambda term: doc_dict.get(term, doc_dict.get(' <unk>')))(list(query_terms))
+        doc_tf = np.vectorize(lambda term: doc_dict.get(term, doc_dict.get('<unk>')))(list(query_terms))
         doc_tf = doc_tf / np.sum(list(doc_dict.values()))
 
         mask = doc_tf != 0
@@ -441,7 +441,7 @@ class FeatureExtraction:
 
     def _CoherenceScorePerQuery(self,query:str,doc_tfidf_matrix:np.array)->np.float16:
         query_terms = set(query.split())
-        return 1/len(query_terms) * np.sum(np.vectorize(lambda term: self._CoherenceScorePerTerm(doc_tfidf_matrix[:,self.count_vocab_index.get(term, self.count_vocab_index.get(' <unk>'))]))(list(query_terms)))
+        return 1/len(query_terms) * np.sum(np.vectorize(lambda term: self._CoherenceScorePerTerm(doc_tfidf_matrix[:,self.count_vocab_index.get(term, self.count_vocab_index.get('<unk>'))]))(list(query_terms)))
 
     def CoherenceScore(self,queries:list,doc_tfidf_matrix:np.array):
         return np.vectorize(lambda i: self._CoherenceScorePerQuery(queries[i],doc_tfidf_matrix))(range(len(queries))).reshape(-1,1)
@@ -745,7 +745,7 @@ class FeatureExtraction:
     
     def _BM25PerToken(self,tokens:list,idf:dict,tf:np.array,doc_len:int,avgdl:int) -> np.float16:
         
-        return np.sum(np.vectorize(lambda token: idf.get(token, idf.get(' <unk>')) * (tf[self.count_vocab_index.get(token, self.count_vocab_index.get(' <unk>'))] * (1.2 + 1)) / (tf[self.count_vocab_index.get(token, self.count_vocab_index.get(' <unk>'))] + 1.2 * (1 - 0.75 + 0.75 * (doc_len / avgdl))) , otypes=[np.float16])(tokens))
+        return np.sum(np.vectorize(lambda token: idf.get(token, idf.get('<unk>')) * (tf[self.count_vocab_index.get(token, self.count_vocab_index.get('<unk>'))] * (1.2 + 1)) / (tf[self.count_vocab_index.get(token, self.count_vocab_index.get('<unk>'))] + 1.2 * (1 - 0.75 + 0.75 * (doc_len / avgdl))) , otypes=[np.float16])(tokens))
 
     def _BM25PerQuery(self,queries:list,idf_dict:dict,tf:np.array,doc_len:int,avgdl:int):
 
@@ -776,9 +776,9 @@ class FeatureExtraction:
         doc_len = len(doc.split())
         # P(w|d) = c(w;d) / |d| , P(w|C) = c(w;C) / |C|
         # c(w;d)
-        term_count_in_document = np.array([tf_matrix[self.count_vocab_index.get(token)] for token in tokens])
+        term_count_in_document = np.array([tf_matrix[self.count_vocab_index.get(token,self.count_vocab_index.get('<unk>'))] for token in tokens])
         # c(w;C)
-        term_count_in_corpus = np.array([tf_corpus.get(token,tf_corpus.get(' <unk>')) for token in tokens])
+        term_count_in_corpus = np.array([tf_corpus.get(token,tf_corpus.get('<unk>')) for token in tokens])
         # P(w|d)
         P_w_d = term_count_in_document / doc_len
         # P(w|C)
@@ -848,7 +848,7 @@ class FeatureExtraction:
         if Results.shape[0] != len(documents):
             Results = Results.T
 
-        return np.vectorize(lambda i: self._RobustnessScorePerQuery(queries[i],documents,feature_extraction_type,Results[:,i]))(range(len(queries))).reshape(-1,1)
+        return np.vectorize(lambda i: self._RobustnessScorePerQuery(queries[i],documents,feature_extraction_type,Results[:,i]))(range(len(queries)))
 
 
 
@@ -920,7 +920,7 @@ class FeatureExtraction:
     
     def _WeightedInformationGainPerToken(self,token:str,document:str,tf_dict:dict,total_corpus_size:int,_lambda:np.float16)->np.float16:
 
-        term_count = document.count(token); doc_len = len(document); tf = tf_dict.get(token, tf_dict.get(' <unk>'))
+        term_count = document.count(token); doc_len = len(document); tf = tf_dict.get(token, tf_dict.get('<unk>'))
         if term_count == 0 or doc_len == 0 or tf == 0 or total_corpus_size == 0:
             return 0
 
