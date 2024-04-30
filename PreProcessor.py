@@ -3,7 +3,7 @@ import os
 #import dask.array 
 
 class PreProcessor:
-    Vocabulary_frequenecy_dict = dict()
+    
     def __init__(self) -> None:
         # 1) All the interpunction was removed.
         #|||||||
@@ -15,6 +15,7 @@ class PreProcessor:
         |\s*!+\s*|\s*\"+\s*|\s*\'+\s*|    #assignment 
         \s*\(+\s*|\s*\)+\s*|\s*\{+\s*|\s*\}+\s*|\s*\[+\s*|\s*\]+\s*|\s*@+\s*|\s*:+\s*|  # brackets
         \s*\+\s*|\s*\#+\s*|\s*\\n+\s*|\s*\%+\s*|\s*\^+\s*|\s*\~+\s*|\s*\?+\s*|\s*\\+\s*"""
+        self.Vocabulary_frequenecy_dict = dict()
         self.stop_words = set(stopwords.words("english"))
         self.keywords_java = {
             "abstract",
@@ -99,8 +100,7 @@ class PreProcessor:
         self.UC_to_index = dict()
         self.CC_to_index = dict()
 
-    def CodePreProcessor(self, filepath):
-       
+    def PreProcessor(self, filepath, UC_or_CC: str = 'UC'):
         dataset_txt = open(filepath, "r", encoding="utf-8").read()
         # 1) All the interpunction was removed.
         SourceCodeCleaned = re.split(self.chars_to_remove, dataset_txt)
@@ -111,7 +111,6 @@ class PreProcessor:
         ]
         # 3) All sentences were tokenized with NLTK.
         # 4) The stop words corpus from NLTK was used to eliminate all stop words.
-        
         words_tokenized = ""
 
         # 5) All remaining terms were stemmed using the Porter Stemming Algorithm
@@ -125,10 +124,18 @@ class PreProcessor:
             for word in NTLKTokenized:
                 word = re.sub("\ufeff", "", word)
                 word = re.sub("\u200b", "", word)
+                
+                check = False
+                if UC_or_CC == 'UC' and word.lower() not in self.keywords_UC:
+                    check = True
+                elif UC_or_CC == 'CC' and word.lower() not in self.keywords_java:
+                    check = True
+
                 if (
                     word not in self.stop_words
                     and word != ""
-                    and word.lower() not in self.keywords_java
+                    and len(word) != 1
+                    and check
                 ):
                     split_words = re.sub(
                         r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])", " ", word
@@ -143,43 +150,8 @@ class PreProcessor:
                         self.Vocabulary_frequenecy_dict[word_stem] = self.Vocabulary_frequenecy_dict.get(word_stem, 0) + 1
         return words_tokenized
 
-    def UCPreProcessor(self, filepath):
-        dataset_txt = open(filepath, "r", encoding="utf-8").read()
-         # 1) All the interpunction was removed.
-        UCCleaned = re.split(self.chars_to_remove, dataset_txt)
-        # 2) All numeric characters were removed.
-        numeric_chars_to_remove = r"[0-9]"
-        UCCleanedOfNumbers = [
-            re.sub(numeric_chars_to_remove, "", x) for x in UCCleaned
-        ]
-
-        # 3) All sentences were tokenized with NLTK.
-        # 4) The stop words corpus from NLTK was used to eliminate all stop words.
-        stop_words = set(stopwords.words("english"))
-        words_tokenized = ""
-
-        # 5) All remaining terms were stemmed using the Porter Stemming Algorithm
-        porter_stemmer = PorterStemmer()
-
-        # 6) remove keywords in java
-        for sentence in UCCleanedOfNumbers:
-            # 7) All words were lowercased.
-            NTLKTokenized = word_tokenize(sentence)
-            for word in NTLKTokenized:
-                if (
-                    word not in stop_words
-                    and word != ""
-                    and len(word) != 1
-                    and word not in self.keywords_UC
-                ):
-                    word_lower = word.lower()
-                    word_stem = porter_stemmer.stem(word_lower)
-                    words_tokenized += word_stem + " "
-                    self.Vocabulary_frequenecy_dict[word_stem] = self.Vocabulary_frequenecy_dict.get(word_stem, 0) + 1
-        return words_tokenized
-
     # setup documents
-    def setupCC(self, code_path: str)->tuple:
+    def setupCC(self, code_path: str, train_or_test:str)->tuple:
         all_tokens=set()
         code_documents = list()
         code_file_index = 0
@@ -194,7 +166,7 @@ class PreProcessor:
 
                 elif filename.endswith(".java"):
                     
-                    tokens = self.CodePreProcessor(filepath_integrated)
+                    tokens = self.PreProcessor(filepath_integrated, 'CC')
                     code_documents.append(tokens)
                     filepath_integrated.replace(code_path, "")
                     self.CC_to_index[filepath_integrated.lower()] = code_file_index
@@ -202,25 +174,33 @@ class PreProcessor:
         for i, doc in enumerate(code_documents):
             tokens = doc.split()
             for j, token in enumerate(tokens):
-                if self.Vocabulary_frequenecy_dict.get(token, 0) <= 1:
+                if self.Vocabulary_frequenecy_dict.get(token, 0) <= 1 and train_or_test == 'train':
                     tokens[j] = '<unk>'
+                elif  tokens[j] not in self.Vocabulary_frequenecy_dict.keys() and train_or_test == 'test':
+                    tokens[j] = '<unk>'
+
                 all_tokens.add(tokens[j])
             code_documents[i] = ' '.join(tokens)
         return code_documents,self.CC_to_index,all_tokens
     
-    def setupUC(self, UC_path: str)->tuple:
+    def setupUC(self, UC_path: str, train_or_test: str)->tuple:
         UC_documents = list()
         all_tokens=set()
         for i, filename in enumerate(os.listdir(UC_path)):
             self.UC_to_index[filename.lower()] = i
             filepath = os.path.join(UC_path, filename)
-            tokens = self.UCPreProcessor(filepath)
+            tokens = self.PreProcessor(filepath, 'UC')
             UC_documents.append(tokens)
         for i, doc in enumerate(UC_documents):
             tokens = doc.split()
             for j, token in enumerate(tokens):
-                if self.Vocabulary_frequenecy_dict.get(token, 0) <= 1:
+                if(tokens[j] not in self.Vocabulary_frequenecy_dict.keys()):
+                    print("UNK IN DOCUMENT.")
+                if self.Vocabulary_frequenecy_dict.get(token, 0) <= 1 and train_or_test == 'train':
                     tokens[j] = '<unk>'
+                elif  tokens[j] not in self.Vocabulary_frequenecy_dict.keys() and train_or_test == 'test':
+                    tokens[j] = '<unk>'
+
                 all_tokens.add(tokens[j])
             UC_documents[i] = ' '.join(tokens)
         return UC_documents, self.UC_to_index,all_tokens
