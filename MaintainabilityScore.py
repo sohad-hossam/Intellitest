@@ -5,7 +5,7 @@ def _readCallable(src, byte_offset, point):
     return src[byte_offset : byte_offset + 1]
 
 class MaintainabilityScore():
-    def __init__(self, file_dir: str, langauage:str = "../tree-sitter-java", build_dir:str = "build/my-languages.so") -> None:
+    def __init__(self, file_dir: str, langauage:str = "tree-sitter-java", build_dir:str = "build/my-languages.so") -> None:
         Language.build_library(
         # Store the library in the `build` directory
         build_dir
@@ -93,17 +93,17 @@ class MaintainabilityScore():
             queue.extend(curr_node.children)
 
 
-CycleComplexity = 1
-queue = list()
-curr_node = tree.root_node
-queue.append(curr_node)
-while(len(queue)):
-    curr_node = queue.pop(0)
-    if curr_node.type == "if_statement" or curr_node.type == "elif_statement" or curr_node.type == "for_statement" or curr_node.type == "while_statement" or curr_node.type == "except_clause" or curr_node.type == "with_statement" or curr_node.type == "assert_statement" or curr_node.type == "boolean_operator":
-        CycleComplexity += 1
-    queue.extend(curr_node.children)
+        CycleComplexity = 1
+        queue = list()
+        curr_node = self.tree.root_node
+        queue.append(curr_node)
+        while(len(queue)):
+            curr_node = queue.pop(0)
+            if curr_node.type == "if_statement" or curr_node.type == "elif_statement" or curr_node.type == "for_statement" or curr_node.type == "while_statement" or curr_node.type == "except_clause" or curr_node.type == "with_statement" or curr_node.type == "assert_statement" or curr_node.type == "boolean_operator":
+                CycleComplexity += 1
+            queue.extend(curr_node.children)
 
-print("Cyclomatic Complexity: ", CycleComplexity)
+        print("Cyclomatic Complexity: ", CycleComplexity)
 
 
         unique_operators_count=len(unique_operators)  #n1
@@ -305,6 +305,6 @@ print("Cyclomatic Complexity: ", CycleComplexity)
         MI= max(0, (100*(171 - 5.2*np.log(V) - 0.23*G - 16.2*np.log(SLOC))) / 171)
         return MI
 
-# score = MaintainabilityScore("Dataset/teiid_dataset/train_CC/9.java")
-# print(score.computeMaintainabilityScore())
+score = MaintainabilityScore("Dataset/teiid_dataset/train_CC/9.java")
+print(score.computeMaintainabilityScore())
 
