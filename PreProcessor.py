@@ -100,7 +100,7 @@ class PreProcessor:
         self.UC_to_index = dict()
         self.CC_to_index = dict()
 
-    def PreProcessor(self, filepath, UC_or_CC: str = 'UC'):
+    def PreProcessor(self, filepath, UC_or_CC: str = 'UC',train_or_test: str ='train'):
         dataset_txt = open(filepath, "r", encoding="utf-8").read()
         # 1) All the interpunction was removed.
         SourceCodeCleaned = re.split(self.chars_to_remove, dataset_txt)
@@ -147,7 +147,8 @@ class PreProcessor:
                         word_lower = word_part.lower()
                         word_stem = porter_stemmer.stem(word_lower)
                         words_tokenized += word_stem + " "
-                        self.Vocabulary_frequenecy_dict[word_stem] = self.Vocabulary_frequenecy_dict.get(word_stem, 0) + 1
+                        if train_or_test == 'train':
+                            self.Vocabulary_frequenecy_dict[word_stem] = self.Vocabulary_frequenecy_dict.get(word_stem, 0) + 1
         return words_tokenized
 
     # setup documents
@@ -163,10 +164,8 @@ class PreProcessor:
                 filepath_integrated = filepath+"/"+filename
                 if os.path.isdir(filepath_integrated):
                     file_stack.append(filepath_integrated)
-
                 elif filename.endswith(".java"):
-                    
-                    tokens = self.PreProcessor(filepath_integrated, 'CC')
+                    tokens = self.PreProcessor(filepath_integrated, 'CC',train_or_test)
                     code_documents.append(tokens)
                     filepath_integrated.replace(code_path, "")
                     self.CC_to_index[filepath_integrated.lower()] = code_file_index
@@ -175,9 +174,9 @@ class PreProcessor:
             tokens = doc.split()
             for j, token in enumerate(tokens):
                 if self.Vocabulary_frequenecy_dict.get(token, 0) <= 1 and train_or_test == 'train':
-                    tokens[j] = '<unk>'
+                    tokens[j] = '__unk__'
                 elif  tokens[j] not in self.Vocabulary_frequenecy_dict.keys() and train_or_test == 'test':
-                    tokens[j] = '<unk>'
+                    tokens[j] = '__unk__'
 
                 all_tokens.add(tokens[j])
             code_documents[i] = ' '.join(tokens)
@@ -189,17 +188,15 @@ class PreProcessor:
         for i, filename in enumerate(os.listdir(UC_path)):
             self.UC_to_index[filename.lower()] = i
             filepath = os.path.join(UC_path, filename)
-            tokens = self.PreProcessor(filepath, 'UC')
+            tokens = self.PreProcessor(filepath, 'UC',train_or_test)
             UC_documents.append(tokens)
         for i, doc in enumerate(UC_documents):
             tokens = doc.split()
             for j, token in enumerate(tokens):
-                if(tokens[j] not in self.Vocabulary_frequenecy_dict.keys()):
-                    print("UNK IN DOCUMENT.")
                 if self.Vocabulary_frequenecy_dict.get(token, 0) <= 1 and train_or_test == 'train':
-                    tokens[j] = '<unk>'
+                    tokens[j] = '__unk__'
                 elif  tokens[j] not in self.Vocabulary_frequenecy_dict.keys() and train_or_test == 'test':
-                    tokens[j] = '<unk>'
+                    tokens[j] = '__unk__'
 
                 all_tokens.add(tokens[j])
             UC_documents[i] = ' '.join(tokens)
