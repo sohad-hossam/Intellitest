@@ -250,9 +250,9 @@ class PreProcessor:
         dataset_modified.to_csv(modified_csv_dir, index = False)    
 
 
-    def PreProcessorDeepLearning(self, filepath):
+    def PreProcessorCCDeepLearning(self, filepath):
 
-        with open(filepath, "r") as f:
+        with open(filepath, "r", encoding='utf-8') as f:
             source_code = f.read()
             source_code = re.sub("\ufeff", "", source_code)
             source_code = re.sub("\u200b", "", source_code)
@@ -304,22 +304,73 @@ class PreProcessor:
                     functions_segments.append(temp_function_segments)
 
         return functions_names,functions_segments
-    def setupCCDeepLearning(self, code_path: str)->tuple:
+    
+    def setupDeepLearning(self, code_path: str,CC_or_UC:str = 'CC' )->tuple:
         
-        all_function_names = list()
-        all_function_segemnts = list()
+        # for CC: arg1 = function_names, arg2 = function_segments
+        # for UC: arg1 = descriptions, arg2 = summary
+        arg1 = list()
+        arg2 = list()
+        
         file_stack = list()
         file_stack.append(code_path)
         while len(file_stack) > 0:
             filepath = file_stack.pop()
             for filename in os.listdir(filepath):
                 filepath_integrated = filepath+"/"+filename
-                if os.path.isdir(filepath_integrated):
-                    file_stack.append(filepath_integrated)
-                elif filename.endswith(".java"):
-                    function_names,function_segments = self.PreProcessorDeepLearning(filepath_integrated)
-                    all_function_names.append(function_names)
-                    all_function_segemnts.append(function_segments)
+                if CC_or_UC == 'CC':
+                    if os.path.isdir(filepath_integrated):
+                        file_stack.append(filepath_integrated)
+                    elif filename.endswith(".java"):
+                        function_names,function_segments = self.PreProcessorCCDeepLearning(filepath_integrated)
 
-        return all_function_names,all_function_segemnts
-                
+                        arg1.append(function_names)
+                        arg2.append(function_segments)
+                elif CC_or_UC == 'UC':
+                    if os.path.isdir(filepath_integrated):
+                        file_stack.append(filepath_integrated)
+                    else:
+                        description, summary = self.PreProcessorUCDeepLearning(filepath_integrated)
+
+                        arg1.append(description)
+                        arg2.append(summary)
+
+        return arg1,arg2
+
+    def PreProcessorUCDeepLearning(self, filename: str):
+        porter_stemmer = PorterStemmer()
+
+        with open(filename, "r", encoding='utf-8') as f:
+            source_code = f.readlines()
+
+            summary = source_code[0]
+            summary = re.sub("\ufeff", "", summary)
+            summary = re.sub("\u200b", "", summary)
+            summary = re.sub(self.chars_to_remove," " ,summary)
+            summary = re.sub(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])", " ", summary)
+
+            description = source_code[1:]
+
+            summary_tokenized = list()
+
+            for token in summary.split():
+                token_lower = token.lower()
+                if token not in self.stop_words and token != "" and len(token) != 1:
+                    token_stem = porter_stemmer.stem(token_lower)
+                    summary_tokenized.append(token_stem)
+
+            description_tokenized = list()
+            for line in description:
+                line = re.sub("\ufeff", "", line)
+                line = re.sub("\u200b", "", line)
+                line = re.sub(self.chars_to_remove," " ,line)
+                line = re.sub( r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])", " ", line)
+
+                for token in line.split():
+                    token_lower = token.lower()
+                    if token_lower not in self.stop_words and token != "" and len(token) != 1:
+                        split_words_tokenized = word_tokenize(token_lower)
+                        for word in split_words_tokenized:
+                            token_stem = porter_stemmer.stem(word)
+                            description_tokenized.append(token_stem)
+        return description_tokenized, summary_tokenized
