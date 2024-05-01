@@ -18,7 +18,7 @@ function App() {
             path="/MaintainabilityScore"
             element={<MaintainabilityScore />}
           />
-          <Route path="/ImportProject" element={<MaintainabilityScore />} />
+          <Route path="/ImportProject" element={<ImportProject />} />
           <Route path="/TraceLinks" element={<TraceLinks />} />
         </Routes>
       </div>

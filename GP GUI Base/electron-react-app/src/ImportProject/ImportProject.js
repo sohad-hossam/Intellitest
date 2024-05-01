@@ -18,7 +18,7 @@ function ProgressBar() {
       } else {
         setProgress((prevProgress) => prevProgress + 10);
       }
-    }, 10000); // Adjust interval duration to 10 seconds
+    }, 10000); 
 
     return () => clearInterval(interval);
   }, [progress]);
@@ -49,12 +49,38 @@ export function ImportProject() {
     "Import Project",
     "Proceed With",
   ];
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [progress, setProgress] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+
+  const uploadFile = async () => {
+    setLoading(true);
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+  
+    try {
+      const response = await fetch("http://localhost:5000/upload-folder", {
+        method: "POST",
+        body: formData,
+      });
+      if (!response.ok) {
+        throw new Error(`Upload failed with status ${response.status}`);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      setLoading(false);
+  
+    }
+  };
+  
   return (
     <div className="ImportProject">
-      <Header
-        visibleHyperlinks={visibleHyperlinks}
-        activeLink="Import Project"
-      />
+      <Header visibleHyperlinks={visibleHyperlinks} activeLink="Import Project" />
       <div className="LoadingText">
         <PageTitle title={"EL PROJECT ELSOHADY"} activeLink="Import Project" />
         <svg viewBox="0 0 1320 300">
@@ -64,9 +90,14 @@ export function ImportProject() {
         </svg>
       </div>
       <div className="LoadingBar">
-        <ProcessingProject />
+      <ProcessingProject />
         <ProgressBar />
         <ThisMighTakeFew />
+        <div className="file-upload">
+          <input type="file" onChange={handleFileChange} />
+          <button onClick={uploadFile}>Upload</button>
+        </div>
+        {loading && <p>Uploading...</p>}
       </div>
     </div>
   );
