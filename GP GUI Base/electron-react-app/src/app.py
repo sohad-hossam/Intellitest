@@ -2,8 +2,8 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from MaintainabilityScore import MaintainabilityScore
 import os
-import re
-import math
+import zipfile
+from concurrent.futures import ThreadPoolExecutor
 app = Flask(__name__)
 CORS(app)
 
@@ -50,6 +50,44 @@ def compute_score():
                     'cyclomatic_complexity': cyclomatic_complexity
                 }
             }), 200
+    except Exception as e:
+        app.logger.error(f"An error occurred: {e}")
+        return jsonify({'error': 'An unexpected error occurred.'}), 500
+
+
+UPLOAD_FOLDER = 'GP GUI Base/electron-react-app/src/uploads'
+executor = ThreadPoolExecutor()
+
+def extract_zip(zip_file, destination):
+    with zipfile.ZipFile(zip_file, 'r') as zip_ref:
+        zip_ref.extractall(destination)
+
+def process_zip_file(zip_file_path):
+    try:
+        extract_zip(zip_file_path, UPLOAD_FOLDER)
+        os.remove(zip_file_path)
+        app.logger.info(f"Zip folder processed successfully: {zip_file_path}")
+    except Exception as e:
+        app.logger.error(f"Error processing zip folder: {e}")
+
+@app.route('/upload-folder', methods=['POST'])
+def upload_folder():
+    try:
+        if 'file' not in request.files:
+            return jsonify({'error': 'No file part in the request.'}), 400
+
+        uploaded_file = request.files['file']
+
+        if uploaded_file.filename == '':
+            return jsonify({'error': 'No file selected for uploading.'}), 400
+
+        # Save the uploaded zip file temporarily
+        temp_file_path = os.path.join(UPLOAD_FOLDER, 'temp.zip')
+        uploaded_file.save(temp_file_path)
+        executor.submit(process_zip_file, temp_file_path)
+
+        return jsonify({'message': 'Folder upload started successfully.'}), 200
+
     except Exception as e:
         app.logger.error(f"An error occurred: {e}")
         return jsonify({'error': 'An unexpected error occurred.'}), 500

@@ -8,21 +8,7 @@ function ProcessingProject() {
   return <div className="ProcessingProject">Processing Project . . .</div>;
 }
 
-function ProgressBar() {
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (progress >= 100) {
-        clearInterval(interval);
-      } else {
-        setProgress((prevProgress) => prevProgress + 10);
-      }
-    }, 10000); // Adjust interval duration to 10 seconds
-
-    return () => clearInterval(interval);
-  }, [progress]);
-
+function ProgressBar({ progress }) {
   return (
     <div className="progress-container">
       <div
@@ -49,24 +35,61 @@ export function ImportProject() {
     "Import Project",
     "Proceed With",
   ];
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [fileUploaded, setFileUploaded] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+    setFileUploaded(false);
+    setProgress(20); 
+  };
+
+  const uploadFile = async () => {
+    setLoading(true);
+    setFileUploaded(true); 
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+
+    try {
+      const response = await fetch("http://localhost:5000/upload-folder", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Upload failed with status ${response.status}`);
+      }
+
+
+      setProgress(100); 
+      setLoading(false);
+      setFileUploaded(false); 
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    }
+  };
+
   return (
     <div className="ImportProject">
-      <Header
-        visibleHyperlinks={visibleHyperlinks}
-        activeLink="Import Project"
-      />
+      <Header visibleHyperlinks={visibleHyperlinks} activeLink="Import Project" />
       <div className="LoadingText">
         <PageTitle title={"EL PROJECT ELSOHADY"} activeLink="Import Project" />
         <svg viewBox="0 0 1320 300">
-          <text x="50%" y="50%" dy=".35em" text-anchor="middle">
+          <text x="50%" y="50%" dy=".35em" textAnchor="middle">
             Intellitest
           </text>
         </svg>
       </div>
       <div className="LoadingBar">
-        <ProcessingProject />
-        <ProgressBar />
-        <ThisMighTakeFew />
+        {fileUploaded && <ProcessingProject />}
+       {  <ProgressBar progress={progress} />}
+        { fileUploaded&& <ThisMighTakeFew />}
+        <div className="file-upload">
+          <input type="file" onChange={handleFileChange} />
+          <button onClick={uploadFile}>Upload</button>
+        </div>
       </div>
     </div>
   );
