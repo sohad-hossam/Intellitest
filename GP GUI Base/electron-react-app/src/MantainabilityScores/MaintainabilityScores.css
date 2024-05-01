@@ -19,3 +19,48 @@
 .page-link {
   color: #092635;
 }
+.items-card-container {
+  position: relative;
+}
+
+.items-card {
+  position: absolute;
+  top: 0;
+  color: aliceblue;
+  background-color: #092635;
+  border-radius: 20px;
+  padding: 20px;
+  width: 45%; 
+  font-family: "Oswald", sans-serif;
+  font-weight: 550;
+}
+.file-input {
+  position: relative;
+  display: inline-block; 
+}
+
+.file-input input[type="file"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer; 
+}
+
+.file-input-label {
+  background-color: #1b4242;
+  border-color: #1b4242;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  display: inline-block; 
+  cursor: pointer;
+}
+
+.file-input-label:hover {
+  background-color: #123434;
+  border-color: #123434;
+}
