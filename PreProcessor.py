@@ -107,6 +107,7 @@ class PreProcessor:
 
         self.UC_to_index = dict()
         self.CC_to_index = dict()
+        self.Vocab=dict()
         Language.build_library(
         # Store the library in the `build` directory
         "build/my-languages.so",
@@ -250,7 +251,7 @@ class PreProcessor:
         dataset_modified.to_csv(modified_csv_dir, index = False)    
 
 
-    def PreProcessorCCDeepLearning(self, filepath):
+    def PreProcessorCCDeepLearning(self, filepath,train_test="train"):
 
         with open(filepath, "r", encoding='utf-8') as f:
             source_code = f.read()
@@ -260,6 +261,7 @@ class PreProcessor:
                 source_code,
                 "utf-8",
             )
+        
         tree = self.parser.parse(src)
         curr_node = tree.root_node
         functions_names=list()
@@ -275,6 +277,7 @@ class PreProcessor:
                 queue.append(child)
                 if(child.type == "method_declaration" ):
                     method_name=source_code[child.children[2].start_byte:child.children[2].end_byte]
+                    method_name = re.sub(self.chars_to_remove," " ,method_name)
                     split_words = re.sub(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|_+", " ", method_name).lower().split()
                     temp_function_names=list()
 
@@ -283,6 +286,8 @@ class PreProcessor:
                             # 2) All numeric characters were removed.
                             word = re.sub(numeric_chars_to_remove, "", word)
                             word_stem = porter_stemmer.stem(word)
+                            if train_test == "train":
+                                self.Vocab[word_stem] = self.Vocab.get(word_stem, 0) + 1
                             temp_function_names.append(word_stem)
 
                     functions_names.append(temp_function_names)
@@ -299,16 +304,18 @@ class PreProcessor:
                             # 2) All numeric characters were removed.
                             word = re.sub(numeric_chars_to_remove, "", word)
                             word_stem = porter_stemmer.stem(word)
+                            if train_test == "train":
+                                self.Vocab[word_stem] = self.Vocab.get(word_stem, 0) + 1
                             temp_function_segments.append(word_stem)
 
                     functions_segments.append(temp_function_segments)
 
         return functions_names,functions_segments
     
-    def setupDeepLearning(self, code_path: str,CC_or_UC:str = 'CC' )->tuple:
+    def setupDeepLearning(self, code_path: str,CC_or_UC:str = 'CC' ,train_test="train")->tuple:
         
-        # for CC: arg1 = function_names, arg2 = function_segments
-        # for UC: arg1 = descriptions, arg2 = summary
+        # for CC: arg1 = function_names --> 3d array, arg2 = function_segments --> 3d array
+        # for UC: arg1 = descriptions --> 2d, arg2 = summary --> 2d
         arg1 = list()
         arg2 = list()
         
@@ -322,7 +329,7 @@ class PreProcessor:
                     if os.path.isdir(filepath_integrated):
                         file_stack.append(filepath_integrated)
                     elif filename.endswith(".java"):
-                        function_names,function_segments = self.PreProcessorCCDeepLearning(filepath_integrated)
+                        function_names,function_segments = self.PreProcessorCCDeepLearning(filepath_integrated,train_test)
 
                         arg1.append(function_names)
                         arg2.append(function_segments)
@@ -330,15 +337,16 @@ class PreProcessor:
                     if os.path.isdir(filepath_integrated):
                         file_stack.append(filepath_integrated)
                     else:
-                        description, summary = self.PreProcessorUCDeepLearning(filepath_integrated)
+                        description, summary = self.PreProcessorUCDeepLearning(filepath_integrated,train_test)
 
                         arg1.append(description)
                         arg2.append(summary)
-
+                      
         return arg1,arg2
 
-    def PreProcessorUCDeepLearning(self, filename: str):
+    def PreProcessorUCDeepLearning(self, filename: str,train_test="train"):
         porter_stemmer = PorterStemmer()
+        numeric_chars_to_remove = r"[0-9]"
 
         with open(filename, "r", encoding='utf-8') as f:
             source_code = f.readlines()
@@ -348,6 +356,8 @@ class PreProcessor:
             summary = re.sub("\u200b", "", summary)
             summary = re.sub(self.chars_to_remove," " ,summary)
             summary = re.sub(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])", " ", summary)
+            summary = re.sub(numeric_chars_to_remove, "", summary)
+            
 
             description = source_code[1:]
 
@@ -357,6 +367,8 @@ class PreProcessor:
                 token_lower = token.lower()
                 if token not in self.stop_words and token != "" and len(token) != 1:
                     token_stem = porter_stemmer.stem(token_lower)
+                    if train_test == "train":
+                        self.Vocab[token_stem] = self.Vocab.get(token_stem, 0) + 1
                     summary_tokenized.append(token_stem)
 
             description_tokenized = list()
@@ -365,6 +377,7 @@ class PreProcessor:
                 line = re.sub("\u200b", "", line)
                 line = re.sub(self.chars_to_remove," " ,line)
                 line = re.sub( r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])", " ", line)
+                line = re.sub(numeric_chars_to_remove, "", line)
 
                 for token in line.split():
                     token_lower = token.lower()
@@ -372,5 +385,39 @@ class PreProcessor:
                         split_words_tokenized = word_tokenize(token_lower)
                         for word in split_words_tokenized:
                             token_stem = porter_stemmer.stem(word)
+                            if train_test == "train":
+                                self.Vocab[token_stem] = self.Vocab.get(token_stem, 0) + 1
                             description_tokenized.append(token_stem)
         return description_tokenized, summary_tokenized
+
+    def setUpUnknown (self,arg1,arg2,UC_CC):
+
+        # for CC: arg1 = function_names --> 3d array, arg2 = function_segments --> 3d array
+        # for UC: arg1 = descriptions --> 2d, arg2 = summary --> 2d
+        if UC_CC == 'CC':
+            for i,file in enumerate(arg1):
+                for j,name in enumerate(file):
+                    for k,name_part in enumerate(name):
+                        if ( not self.Vocab.get(name_part) or  self.Vocab[name_part] < 2):
+                            arg1[i][j][k]="__unk__"
+                            # print("entered1")
+
+            for i,file in enumerate(arg2):
+                for j,name in enumerate(file):
+                    for k,name_part in enumerate(name):
+                        if (not self.Vocab.get(name_part) or self.Vocab[name_part] < 2):
+                            arg2[i][j][k]="__unk__"
+                            # print("entered2")
+        else:
+            for i,file in enumerate(arg1):
+                for j,name in enumerate(file):
+                      if (not self.Vocab.get(name) or self.Vocab[name] < 2):
+                            arg1[i][j]="__unk__"    
+                            # print("entered3")       
+
+            for i,file in enumerate(arg2):
+                for j,name in enumerate(file):
+                    if (not self.Vocab.get(name) or self.Vocab[name] < 2):
+                            arg2[i][j]="__unk__"  
+                            # print("entered4")   
+
