@@ -52,9 +52,11 @@ export function ImportProject() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [progress, setProgress] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [fileUploaded, setFileUploaded] = useState(false); 
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
+    setFileUploaded(true); 
   };
 
   const uploadFile = async () => {
@@ -74,7 +76,6 @@ export function ImportProject() {
     } catch (error) {
       console.error("Error uploading file:", error);
       setLoading(false);
-  
     }
   };
   
@@ -90,9 +91,9 @@ export function ImportProject() {
         </svg>
       </div>
       <div className="LoadingBar">
-      <ProcessingProject />
-        <ProgressBar />
-        <ThisMighTakeFew />
+        {fileUploaded && <ProcessingProject />} 
+        {fileUploaded && <ProgressBar />}
+        {fileUploaded && <ThisMighTakeFew />}
         <div className="file-upload">
           <input type="file" onChange={handleFileChange} />
           <button onClick={uploadFile}>Upload</button>
