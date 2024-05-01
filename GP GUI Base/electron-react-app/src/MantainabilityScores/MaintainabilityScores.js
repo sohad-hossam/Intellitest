@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./MaintainabilityScores.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Header } from "../TopBar/TopBar";
@@ -35,39 +35,70 @@ export function MaintainabilityScore() {
     "Maintainability Scores",
     "Trace Links",
   ];
-  const scores = {
-    "FileYasmina.java": 30,
-    "FileYasmina1.java": 80,
-    "FileYasmina2.java": 50,
-    "FileYasmina3.java": 10,
-    "FileYasmina4.java": 100,
-    "FileYasmina5.java": 50,
-    "FileYasmina7.java": 30,
-    "FileYasmina8.java": 80,
-    "FileYasmina9.java": 50,
-    "FileYasmina30.java": 10,
-    "FileYasmina94.java": 100,
-    "FileYasmina12.java": 50,
-  };
+  const [scores, setScores] = useState({}); // Initialize scores state with null
+  const [loading, setLoading] = useState(true);
 
   const itemsPerPage = 6;
-  const totalPages = Math.ceil(Object.keys(scores).length / itemsPerPage);
+  const totalPages = Math.ceil((scores ? Object.keys(scores) : []).length / itemsPerPage);
   const [currentPage, setCurrentPage] = useState(1);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
+  useEffect(() => {
+    fetchMaintainabilityScores(); 
+  }, []); 
+  useEffect(() => {
+    console.log("Scores updated:", scores);
+  }, [scores]);
+  
+  const fetchMaintainabilityScores = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/compute-score", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ file_path: "Dataset/teiid_dataset/train_CC/9.java" }),
+      });
+      const data = await response.json();
+  
+      if (response.ok) {
+        setScores(data); 
+      } else {
+        console.error("Error fetching maintainability scores:", data.error);
+      }
+      
+      
+    } catch (error) {
+      console.error("Error fetching maintainability scores:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  
+
   const renderScores = () => {
+   
+    if (loading) {
+      return <div>Loading...</div>; // Display loading indicator while loading
+    }
+    if (!scores || Object.keys(scores).length === 0) {
+   
+      return <div>No scores available.</div>; // Or any message for no scores
+    }
+  
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const slicedScores = Object.entries(scores).slice(startIndex, endIndex);
-
+  
     return slicedScores.map(([key, value], index) => (
       <ProgressBar key={index} label={key} score={value} />
     ));
   };
-
+  
   return (
     <div className="App">
       <Header
@@ -78,8 +109,6 @@ export function MaintainabilityScore() {
         title={"Maintainability Scores"}
         activeLink="Maintainability Scores"
       />
-      <div class="mt-5"></div>
-      <div class="mt-5"></div>
       <div className="container mt-5">
         <div className="row justify-content-center">
           <div className="col-md-9">{renderScores()}</div>
