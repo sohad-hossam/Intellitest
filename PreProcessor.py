@@ -14,7 +14,7 @@ class PreProcessor:
         \s*\|+\s*
         |\s*!+\s*|\s*\"+\s*|\s*\'+\s*|    #assignment 
         \s*\(+\s*|\s*\)+\s*|\s*\{+\s*|\s*\}+\s*|\s*\[+\s*|\s*\]+\s*|\s*@+\s*|\s*:+\s*|  # brackets
-        \s*\+\s*|\s*\#+\s*|\s*\\n+\s*|\s*\%+\s*|\s*\^+\s*|\s*\~+\s*|\s*\?+\s*|\s*\\+\s*"""
+        \s*\+\s*|\s*\#+\s*|\s*\\n+\s*|\s*\%+\s*|\s*\^+\s*|\s*\~+\s*|\s*\?+\s*|\s*\\+\s*|\s*\$+\s*"""
         self.Vocabulary_frequenecy_dict = dict()
         self.stop_words = set(stopwords.words("english"))
         self.keywords_java = {
@@ -57,23 +57,31 @@ class PreProcessor:
             "char",
             "final",
             "interface",
-            "static",
+            "static"
             "void",
             "class",
             "finally",
             "long",
             "strictfp",
             "volatile",
-            "Override",
-            "Deprecated",
-            "SafeVarArgs",
-            "SuppressWarnings",
-            "FuntionalInterface",
-            "Inherited",
-            "Documented",
-            "Target",
-            "Retention",
-            "Repeatable",
+            "override",
+            "deprecated",
+            "safevarargs",
+            "suppress",
+            "warnings",
+            "funtional",
+            "inherited",
+            "documented",
+            "target",
+            "retention",
+            "repeatable",
+            "list",
+            "set",
+            "array",
+            "iterator",
+            "linked",
+            "hash",
+            "map",
         }  # java non_primitive datatypes not added ex: "List"
 
         self.keywords_UC = {
@@ -99,6 +107,16 @@ class PreProcessor:
 
         self.UC_to_index = dict()
         self.CC_to_index = dict()
+        Language.build_library(
+        # Store the library in the `build` directory
+        "build/my-languages.so",
+        # Include one or more languages
+        ["./tree-sitter-java"],
+        )
+
+        JAVA = Language("build/my-languages.so", "java")
+        self.parser = Parser()
+        self.parser.set_language(JAVA)
 
     def PreProcessor(self, filepath, UC_or_CC: str = 'UC',train_or_test: str ='train'):
         dataset_txt = open(filepath, "r", encoding="utf-8").read()
@@ -230,4 +248,78 @@ class PreProcessor:
         print("sum = ", sum)
         dataset_modified = pd.DataFrame(artifacts_not_done, columns=['UC', 'CC', 'Labels'])
         dataset_modified.to_csv(modified_csv_dir, index = False)    
-         
+
+
+    def PreProcessorDeepLearning(self, filepath):
+
+        with open(filepath, "r") as f:
+            source_code = f.read()
+            source_code = re.sub("\ufeff", "", source_code)
+            source_code = re.sub("\u200b", "", source_code)
+            src = bytes(
+                source_code,
+                "utf-8",
+            )
+        tree = self.parser.parse(src)
+        curr_node = tree.root_node
+        functions_names=list()
+        functions_segments = list()
+        curr_node = tree.root_node
+        queue=list()
+        queue.append(curr_node)
+        porter_stemmer = PorterStemmer()
+        numeric_chars_to_remove = r"[0-9]"
+        while(len(queue)):
+            curr_node = queue.pop(0)
+            for child in curr_node.children:
+                queue.append(child)
+                if(child.type == "method_declaration" ):
+                    method_name=source_code[child.children[2].start_byte:child.children[2].end_byte]
+                    split_words = re.sub(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|_+", " ", method_name).lower().split()
+                    temp_function_names=list()
+
+                    for word in split_words:
+                        if ( word not in self.stop_words and word != "" and len(word) != 1):
+                            # 2) All numeric characters were removed.
+                            word = re.sub(numeric_chars_to_remove, "", word)
+                            word_stem = porter_stemmer.stem(word)
+                            temp_function_names.append(word_stem)
+
+                    functions_names.append(temp_function_names)
+
+                elif (child.parent.type == "method_declaration" and child.type == "block"):
+                    segment = source_code[child.start_byte:child.end_byte]
+                    segmentCleaned = re.sub(self.chars_to_remove," " ,segment)
+                    split_words = re.sub(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|_+", " ", segmentCleaned).lower().split()
+                    temp_function_segments=list()
+
+                    for word in split_words:
+                        word = word.strip()
+                        if ( word not in self.stop_words and word != "" and len(word) != 1 and word not in self.keywords_java):
+                            # 2) All numeric characters were removed.
+                            word = re.sub(numeric_chars_to_remove, "", word)
+                            word_stem = porter_stemmer.stem(word)
+                            temp_function_segments.append(word_stem)
+
+                    functions_segments.append(temp_function_segments)
+
+        return functions_names,functions_segments
+    def setupCCDeepLearning(self, code_path: str)->tuple:
+        
+        all_function_names = list()
+        all_function_segemnts = list()
+        file_stack = list()
+        file_stack.append(code_path)
+        while len(file_stack) > 0:
+            filepath = file_stack.pop()
+            for filename in os.listdir(filepath):
+                filepath_integrated = filepath+"/"+filename
+                if os.path.isdir(filepath_integrated):
+                    file_stack.append(filepath_integrated)
+                elif filename.endswith(".java"):
+                    function_names,function_segments = self.PreProcessorDeepLearning(filepath_integrated)
+                    all_function_names.append(function_names)
+                    all_function_segemnts.append(function_segments)
+
+        return all_function_names,all_function_segemnts
+                
