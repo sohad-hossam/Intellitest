@@ -3,7 +3,7 @@ import "./ImportProject.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Header } from "../TopBar/TopBar";
 import { PageTitle } from "../PageTitle/PageTitle";
-
+import { Link } from "react-router-dom";
 function ProcessingProject() {
   return <div className="ProcessingProject">Processing Project . . .</div>;
 }
@@ -47,28 +47,33 @@ export function ImportProject() {
   };
 
   const uploadFile = async () => {
-   
     const formData = new FormData();
     formData.append("file", selectedFile);
-
+  
+    // Extract the directory path from the temporary file path
+    const folderPath = selectedFile && selectedFile.webkitRelativePath ? selectedFile.webkitRelativePath.split('/').slice(0, -1).join('/') : '';
+  
+    // Append the folderPath to the FormData
+    formData.append("folderPath", folderPath);
+  
     try {
       const response = await fetch("http://localhost:5000/upload-folder", {
         method: "POST",
         body: formData,
       });
-
+  
       if (!response.ok) {
         throw new Error(`Upload failed with status ${response.status}`);
       }
-
-
-      setProgress(100); 
-      setFileUploaded(false); 
-      setfileFullyUploaded(true); 
+  
+      setProgress(100);
+      setFileUploaded(false);
+      setfileFullyUploaded(true);
     } catch (error) {
       console.error("Error uploading file:", error);
     }
   };
+  
 
   return (
     <div className="ImportProject">
@@ -86,7 +91,9 @@ export function ImportProject() {
         {<ProgressBar progress={progress} />}
         {fileUploaded && <ThisMighTakeFew />}
         {fileFullyUploaded ? (
-          <button className="proceed-button">Proceed</button>
+        <Link to={"/ViewSource"} className="btnProceed m-5">
+        Proceed with
+      </Link>
         ) : (
           <div className="file-upload">
             <label htmlFor="file-upload">Choose File</label>

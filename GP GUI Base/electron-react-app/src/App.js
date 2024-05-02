@@ -5,6 +5,7 @@ import { MaintainabilityScore } from "./MantainabilityScores/MaintainabilityScor
 import { HomePage } from "./HomePage/HomePage.js";
 import { AboutUs } from "./AboutUs";
 import { TraceLinks } from "./TraceLinks/TraceLinks.js";
+import { ViewSource } from "./ViewSource/ViewSource.js";
 import { HashRouter, Route, Routes } from "react-router-dom";
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           />
           <Route path="/ImportProject" element={<ImportProject />} />
           <Route path="/TraceLinks" element={<TraceLinks />} />
+          <Route path="/ViewSource" element={<ViewSource />} />
         </Routes>
       </div>
     </HashRouter>
