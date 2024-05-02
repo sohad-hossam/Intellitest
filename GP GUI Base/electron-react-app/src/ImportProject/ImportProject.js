@@ -36,19 +36,18 @@ export function ImportProject() {
     "Proceed With",
   ];
   const [selectedFile, setSelectedFile] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [fileUploaded, setFileUploaded] = useState(false);
+  const [fileFullyUploaded, setfileFullyUploaded] = useState(false);
   const [progress, setProgress] = useState(0);
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
-    setFileUploaded(false);
+    setFileUploaded(true); 
     setProgress(20); 
   };
 
   const uploadFile = async () => {
-    setLoading(true);
-    setFileUploaded(true); 
+   
     const formData = new FormData();
     formData.append("file", selectedFile);
 
@@ -64,8 +63,8 @@ export function ImportProject() {
 
 
       setProgress(100); 
-      setLoading(false);
       setFileUploaded(false); 
+      setfileFullyUploaded(true); 
     } catch (error) {
       console.error("Error uploading file:", error);
     }
@@ -84,13 +83,19 @@ export function ImportProject() {
       </div>
       <div className="LoadingBar">
         {fileUploaded && <ProcessingProject />}
-       {  <ProgressBar progress={progress} />}
-        { fileUploaded&& <ThisMighTakeFew />}
-        <div className="file-upload">
-          <input type="file" onChange={handleFileChange} />
-          <button onClick={uploadFile}>Upload</button>
-        </div>
+        {<ProgressBar progress={progress} />}
+        {fileUploaded && <ThisMighTakeFew />}
+        {fileFullyUploaded ? (
+          <button className="proceed-button">Proceed</button>
+        ) : (
+          <div className="file-upload">
+            <label htmlFor="file-upload">Choose File</label>
+            <input type="file" id="file-upload" onChange={handleFileChange} />
+            <button onClick={uploadFile}>Upload</button>
+          </div>
+        )}
       </div>
     </div>
   );
+  
 }

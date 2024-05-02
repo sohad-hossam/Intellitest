@@ -106,3 +106,40 @@ svg text {
     stroke-width: 0;
   }
 }
+.file-upload {
+  margin-top: 20px;
+}
+
+.file-upload input[type="file"] {
+  display: none;
+}
+
+.file-upload label {
+  background-color: #5c8374;
+  border-color: #5c8374;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.file-upload label:hover {
+  background-color: #4b6e61;
+  border-color: #4b6e61;
+}
+
+.file-upload button {
+  background-color: #1b4242;
+  border-color: #1b4242;
+  color: white;
+  margin-left: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.file-upload button:hover {
+  background-color: #123434;
+  border-color: #123434;
+}
