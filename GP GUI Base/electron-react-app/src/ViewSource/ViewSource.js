@@ -4,18 +4,20 @@ function ViewSource() {
   const [folderStructure, setFolderStructure] = useState(null);
 
   useEffect(() => {
-    // Fetch the folder structure from your Flask server
-    fetch("http://localhost:5000/get-folder-structure")
+   
+    fetch("http://localhost:5000/get-folder-structure?directory_path=GP GUI Base/electron-react-app/src/uploads/teiid_dataset")
       .then((response) => response.json())
       .then((data) => {
         setFolderStructure(data);
+        console.log(data);
       })
       .catch((error) => {
         console.error("Error fetching folder structure:", error);
       });
   }, []);
+  
 
-  // Recursive function to render folder structure
+  
   const renderFolderStructure = (folder) => {
     return (
       <ul key={folder.name}>

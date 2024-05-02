@@ -91,6 +91,31 @@ def upload_folder():
     except Exception as e:
         app.logger.error(f"An error occurred: {e}")
         return jsonify({'error': 'An unexpected error occurred.'}), 500
+    
+@app.route('/get-folder-structure', methods=['GET'])
+def get_folder_structure():
+    try:
+        directory_path = request.args.get('directory_path')
+        print("directory path",directory_path)
+        if not directory_path or not os.path.isdir(directory_path):
+            return jsonify({'error': 'Invalid directory path.'}), 400
+
+        folder_structure = generate_folder_structure(directory_path)
+        return jsonify(folder_structure), 200
+
+    except Exception as e:
+        app.logger.error(f"An error occurred: {e}")
+        return jsonify({'error': 'An unexpected error occurred.'}), 500
+
+def generate_folder_structure(directory):
+    folder_structure = {'name': os.path.basename(directory), 'type': 'folder', 'children': []}
+    for item in os.listdir(directory):
+        item_path = os.path.join(directory, item)
+        if os.path.isdir(item_path):
+            folder_structure['children'].append(generate_folder_structure(item_path))
+        else:
+            folder_structure['children'].append({'name': item, 'type': 'file'})
+    return folder_structure
 
 if __name__ == '__main__':
     app.run(debug=True)
