@@ -1,0 +1,6 @@
+@import "~bootstrap/dist/css/bootstrap.min.css";
+
+ul {
+    list-style: none;
+    padding-left: 0;
+  }
