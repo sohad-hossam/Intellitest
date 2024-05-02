@@ -117,5 +117,24 @@ def generate_folder_structure(directory):
             folder_structure['children'].append({'name': item, 'type': 'file'})
     return folder_structure
 
+@app.route('/get-file-content', methods=['GET'])
+def get_file_content():
+    try:
+        file_path = request.args.get('file_path')
+        print("File path:", file_path)
+
+        if not file_path or not os.path.isfile(file_path):
+            return jsonify({'error': 'Invalid file path or file does not exist.'}), 400
+
+        with open(file_path, 'r') as file:
+            content = file.read()
+
+        return jsonify({'content': content}), 200
+
+    except Exception as e:
+        app.logger.error(f"An error occurred: {e}")
+        return jsonify({'error': 'An unexpected error occurred.'}), 500
+
+
 if __name__ == '__main__':
     app.run(debug=True)
