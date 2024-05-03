@@ -35,8 +35,8 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick }) => {
     };
   
     const handleFileClick = (folder,file) => {
-      const filePath = `${directoryPath}/${folder.name}/${file.name}`; // Construct the file path
-      onFileClick({ ...file, path: filePath }); // Pass file object with file path
+      const filePath = `${directoryPath}/${folder.name}/${file.name}`;
+      onFileClick({ ...file, path: filePath }); 
     };
   
     return (
@@ -119,14 +119,14 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick }) => {
           <PageTitle title={folderStructure ? folderStructure.name.replace(/_/g, ' ').toUpperCase() : ''} activeLink="Source Code" />
           <h1>View Source</h1>
           <div className="row">
-            <div className="col-md-6">
+            <div className="col-md-4">
               {folderStructure ? (
                 <RenderFolderStructure folder={folderStructure} directoryPath="GP GUI Base/electron-react-app/src/uploads/teiid_dataset" onFileClick={handleFileClick} />
               ) : (
                 <p>Loading folder structure...</p>
               )}
             </div>
-            <div className="col-md-6">
+            <div className="col-md-8">
               {selectedFileContent && <CodeEditor content={selectedFileContent} fileType={selectedFileType} />}
             </div>
           </div>

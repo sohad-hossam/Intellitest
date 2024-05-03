@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify,send_file,Response
 from flask_cors import CORS
 from MaintainabilityScore import MaintainabilityScore
 import os
@@ -129,7 +129,7 @@ def get_file_content():
         with open(file_path, 'r') as file:
             content = file.read()
 
-        return jsonify({'content': content}), 200
+        return Response(content, mimetype='text/plain'), 200
 
     except Exception as e:
         app.logger.error(f"An error occurred: {e}")

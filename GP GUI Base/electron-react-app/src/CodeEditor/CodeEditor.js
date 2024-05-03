@@ -20,7 +20,7 @@ import { duotoneSpace } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { funky } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { ghcolors } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { gruvboxDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { gruvboxLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
 
 
 const CodeEditor = ({ content, fileType }) => {
@@ -53,11 +53,20 @@ const CodeEditor = ({ content, fileType }) => {
       ) : (
         <SyntaxHighlighter
         language={language}
-        style={duotoneLight}
-        customStyle={{ fontSize: '14px', lineHeight: '1.5' }}
-        preserveWhitespace={true} // Add this prop to preserve whitespace
-        PreTag="div" // Render each line as a div
-        LineTag="span" // Render each line content as a span
+        style={gruvboxDark}
+        customStyle={{
+            fontSize: '14px',
+            lineHeight: '1.5',
+            backgroundColor: '#282828', 
+            padding: '20px', 
+            borderRadius: '5px',
+            overflowX: 'auto', 
+            maxHeight: '800px', 
+            overflowY: 'auto', 
+          }}
+        preserveWhitespace={true}
+        PreTag="div" 
+        LineTag="span" 
       >
         {content}
       </SyntaxHighlighter>
