@@ -87,3 +87,8 @@
 ::-webkit-scrollbar-thumb-vertical:hover {
     background: rgb(64, 125, 89);
 }
+.vscode-file-tree span:hover {
+    background-color: #123434;
+    color: white;
+    cursor: pointer;
+  }

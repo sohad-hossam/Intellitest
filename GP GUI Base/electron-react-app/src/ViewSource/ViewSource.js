@@ -80,12 +80,15 @@ function ViewSource() {
       "Source Code",
     ];
     const EditorHeader = ({ filePath }) => {
-        return (
-          <div style={styles.header}>
-            <div style={styles.filePath}>{filePath}</div>
-          </div>
-        );
-      };
+      return (
+        <div style={styles.header}>
+         <div style={{ display: 'flex', alignItems: 'center' }}>
+      <FontAwesomeIcon icon={faChevronRight} style={{ marginRight: '5px' }} />
+      <div>{filePath}</div>
+    </div>
+        </div>
+      );
+    };
       
       const styles = {
         header: {
