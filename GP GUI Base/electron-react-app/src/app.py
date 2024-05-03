@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify,send_file,Response
 from flask_cors import CORS
 from MaintainabilityScore import MaintainabilityScore
+from MLScript import TraceLinks
 import os
 import zipfile
 from concurrent.futures import ThreadPoolExecutor
@@ -155,7 +156,23 @@ def get_usecase_files():
     
 
 
+@app.route('/compute-tracelinks', methods=['POST'])
+def computetracelinks():
+    try:
+        usecase_file = request.form.get('usecase_file')
+        code_file = request.form.get('code_file')
 
+        if not usecase_file or not code_file:
+            return jsonify({'error': 'Use case file and code file are required.'}), 400
+
+        score = TraceLinks(code_file, usecase_file)
+        trace_links = score.computeTraceLinks()
+
+        return jsonify({'trace_links': trace_links}), 200
+
+    except Exception as e:
+        app.logger.error(f"An error occurred: {e}")
+        return jsonify({'error': 'An unexpected error occurred.'}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

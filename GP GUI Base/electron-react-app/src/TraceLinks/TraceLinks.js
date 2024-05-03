@@ -7,37 +7,11 @@ import { PageTitle } from "../PageTitle/PageTitle";
 
 function DropDowns() {
   const [useCaseOptions, setUseCaseOptions] = useState([]);
-  const [codeOptions, setcodeOptions] = useState([]);
-
-  const dictionary = {
-    "Project 1 - Project 1": 10,
-    "Project 1 - Project 2": 20,
-    "Project 1 - Project 3": 30,
-    "Project 1 - Project 4": 40,
-    "Project 1 - Project 5": 50,
-    "Project 2 - Project 1": 60,
-    "Project 2 - Project 2": 70,
-    "Project 2 - Project 3": 80,
-    "Project 2 - Project 4": 90,
-    "Project 2 - Project 5": 100,
-    "Project 3 - Project 1": 110,
-    "Project 3 - Project 2": 120,
-    "Project 3 - Project 3": 130,
-    "Project 3 - Project 4": 140,
-    "Project 3 - Project 5": 150,
-    "Project 4 - Project 1": 160,
-    "Project 4 - Project 2": 170,
-    "Project 4 - Project 3": 180,
-    "Project 4 - Project 4": 190,
-    "Project 4 - Project 5": 200,
-    "Project 5 - Project 1": 210,
-    "Project 5 - Project 2": 220,
-    "Project 5 - Project 3": 230,
-    "Project 5 - Project 4": 240,
-    "Project 5 - Project 5": 250,
-  };
+  const [codeOptions, setCodeOptions] = useState([]);
   const [useCaseSelected, setUseCaseSelected] = useState(false);
   const [codeSelected, setCodeSelected] = useState(false);
+  const [score, setScore] = useState(null);
+
   useEffect(() => {
     fetchUseCaseFiles();
     fetchCodeFiles();
@@ -65,11 +39,12 @@ function DropDowns() {
       }
       const data = await response.json();
       const files = data.files || [];
-      setcodeOptions(files);
+      setCodeOptions(files);
     } catch (error) {
       console.error('Error fetching code files:', error);
     }
   };
+
   const handleCaseSelection = (event) => {
     setUseCaseSelected(event.target.value !== "");
   };
@@ -77,11 +52,8 @@ function DropDowns() {
   const handleCodeSelection = (event) => {
     setCodeSelected(event.target.value !== "");
   };
-  function getScore(useCase, code) {
-    const key = `${useCase} - ${code}`;
-    return dictionary[key];
-  }
-  const handleProcessDocs = () => {
+
+  const handleProcessDocs = async () => {
     if (!useCaseSelected || !codeSelected) {
       const warningMessage = document.querySelector(".warning-message");
       if (warningMessage) {
@@ -93,20 +65,22 @@ function DropDowns() {
         warningMessage.style.display = "none";
       }
 
-      const selectedUseCase = document.getElementById(
-        "exampleFormControlSelect1"
-      ).value;
-      const selectedCode = document.getElementById(
-        "exampleFormControlSelect2"
-      ).value;
-      const score = getScore(selectedUseCase, selectedCode);
-      const tracelinkMessage = document.querySelector(".tracelink-message");
-      if (tracelinkMessage) {
-        tracelinkMessage.style.display = "block";
-        tracelinkMessage.innerHTML = `Trace Links Exist between the documents by ${score}% indicating high correlation`;
+      const selectedUseCase = document.getElementById("exampleFormControlSelect1").value;
+      const selectedCode = document.getElementById("exampleFormControlSelect2").value;
+
+      try {
+        const response = await fetch(`http://localhost:5000/compute-tracelinks?usecase=${selectedUseCase}&code=${selectedCode}`);
+        if (!response.ok) {
+          throw new Error('Failed to compute trace links');
+        }
+        const data = await response.json();
+        setScore(data.score);
+      } catch (error) {
+        console.error('Error computing trace links:', error);
       }
     }
   };
+
   return (
     <div className="dropDowns mt-5">
       <div className="row justify-content-center align-items-center">
@@ -172,7 +146,9 @@ function DropDowns() {
 
       <div className="row justify-content-center mt-5">
         <div className="col-md-4">
-          <div className="tracelink-message"></div>
+          <div className="tracelink-message">
+            {score !== null && `Trace Links Exist between the documents by ${score}% indicating high correlation`}
+          </div>
         </div>
       </div>
     </div>
