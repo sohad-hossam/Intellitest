@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Header } from "../TopBar/TopBar";
 import { PageTitle } from "../PageTitle/PageTitle";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFolder, faFileCsv, faFileAlt, faFileCode } from '@fortawesome/free-solid-svg-icons';
+import { faFolder, faFileCsv, faFileAlt, faFileCode,faChevronRight  } from '@fortawesome/free-solid-svg-icons';
 import { CodeEditor } from "../CodeEditor/CodeEditor";
 import './ViewSource.css'; 
 
@@ -72,13 +72,32 @@ function ViewSource() {
     const [folderStructure, setFolderStructure] = useState(null);
     const [selectedFileContent, setSelectedFileContent] = useState('');
     const [selectedFileType, setSelectedFileType] = useState('');
+    const[SelectedFilePath,setSelectedFilePath]=useState('');
     const visibleHyperlinks = [
       "Home",
       "About Us",
       "Import Project",
       "Source Code",
     ];
-  
+    const EditorHeader = ({ filePath }) => {
+        return (
+          <div style={styles.header}>
+            <div style={styles.filePath}>{filePath}</div>
+          </div>
+        );
+      };
+      
+      const styles = {
+        header: {
+          padding: "10px",
+          backgroundColor: "#123434", 
+          borderBottom: "1px solid #092635",
+        },
+        filePath: {
+          color: "#fff", 
+          fontWeight: "bold",
+        },
+      };
     useEffect(() => {
       fetchFolderStructure();
     }, []);
@@ -88,7 +107,7 @@ function ViewSource() {
         .then((response) => response.json())
         .then((data) => {
           setFolderStructure(data);
-          console.log(data);
+
         })
         .catch((error) => {
           console.error("Error fetching folder structure:", error);
@@ -97,12 +116,13 @@ function ViewSource() {
   
     const handleFileClick = (file) => {
       setSelectedFileType(getFileExtension(file.name));
-      console.log("file name: ", file.name);
-      console.log("file path: ", file.path);
+
+      setSelectedFilePath(file.path)
       fetch(`http://localhost:5000/get-file-content?file_path=${file.path}`)
         .then((response) => response.text())
         .then((data) => {
           setSelectedFileContent(data);
+        
         })
         .catch((error) => {
           console.error("Error fetching file content:", error);
@@ -126,8 +146,13 @@ function ViewSource() {
               )}
             </div>
             <div className="col-md-8 vscode-code-editor">
-              {selectedFileContent && <CodeEditor content={selectedFileContent} fileType={selectedFileType} />}
-            </div>
+        {selectedFileContent && (
+          <>
+            <EditorHeader filePath={SelectedFilePath} />
+            <CodeEditor content={selectedFileContent} fileType={selectedFileType} />
+          </>
+        )}
+      </div>
           </div>
           <style>
             {`
