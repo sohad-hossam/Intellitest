@@ -91,7 +91,7 @@ export function ImportProject() {
         {<ProgressBar progress={progress} />}
         {fileUploaded && <ThisMighTakeFew />}
         {fileFullyUploaded ? (
-        <Link to={"/ViewSource"} className="btnProceed m-5">
+        <Link to={"/ViewSource"} className="file-proceed m-5">
         Proceed with
       </Link>
         ) : (

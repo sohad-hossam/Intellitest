@@ -138,8 +138,22 @@ svg text {
   border-radius: 5px;
   cursor: pointer;
 }
+.file-proceed {
+  background-color: #1b4242;
+  border-color: #1b4242;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+}
 
 .file-upload button:hover {
+  background-color: #123434;
+  border-color: #123434;
+}
+.file-proceed:hover {
   background-color: #123434;
   border-color: #123434;
 }
