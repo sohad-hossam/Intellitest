@@ -16,11 +16,8 @@ function App() {
         <Routes>
           <Route path="/" exact element={<HomePage />} />
           <Route path="/AboutUs" element={<AboutUs />} />
-          <Route
-            path="/MaintainabilityScore"
-            element={<MaintainabilityScore />}
-          />
-          <Route path="/ImportProject" element={<TraceLinks />} />
+          <Route path="/MaintainabilityScore" element={<MaintainabilityScore />} />
+          <Route path="/ImportProject" element={<ImportProject />} />
           <Route path="/TraceLinks" element={<TraceLinks />} />
           <Route path="/ViewSource" element={<ViewSource />} />
           <Route path="/CodeEditor" element={<CodeEditor />} />

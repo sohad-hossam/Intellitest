@@ -75,8 +75,8 @@ function ViewSource() {
     const[SelectedFilePath,setSelectedFilePath]=useState('');
     const visibleHyperlinks = [
       "Home",
-      "About Us",
-      "Import Project",
+      "Maintainability Scores",
+      "Trace Links",
       "Source Code",
     ];
     const EditorHeader = ({ filePath }) => {

@@ -8,7 +8,7 @@ export function Header({ visibleHyperlinks, activeLink }) {
     { url: "/AboutUs", label: "About Us" },
     { url: "/ImportProject", label: "Import Project" },
     { url: "/ProceedWith", label: "Proceed With" },
-    { url: "/MaintainbiltyScores", label: "Maintainability Scores" },
+    { url: "/MaintainabilityScore", label: "Maintainability Scores" },
     { url: "/TraceLinks", label: "Trace Links" },
     { url: "/ViewSource", label: "Source Code" },
 
