@@ -47,17 +47,16 @@ const CodeEditor = ({ content, fileType }) => {
 
   return (
     <div>
-      <h2>File Content</h2>
       {error ? (
         <div>Error: {error.message}</div>
       ) : (
         <SyntaxHighlighter
         language={language}
-        style={gruvboxDark}
+        style={dracula}
         customStyle={{
             fontSize: '14px',
             lineHeight: '1.5',
-            backgroundColor: '#282828', 
+            backgroundColor:  'rgba(15, 42, 42, 0.9)', 
             padding: '20px', 
             borderRadius: '5px',
             overflowX: 'auto', 

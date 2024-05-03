@@ -20,7 +20,7 @@ export function Header({ visibleHyperlinks, activeLink }) {
   );
 
   const iconSource =
-    activeLink === "Home" || activeLink === "About Us"
+    activeLink === "Home" || activeLink === "About Us"||activeLink === "Source Code"
       ? require("../assets/searching1.png")
       : require("../assets/searching.png");
 
@@ -39,7 +39,7 @@ export function Header({ visibleHyperlinks, activeLink }) {
                 to={link.url}
                 style={{
                   color:
-                    activeLink === "Home" || activeLink === "About Us"
+                    activeLink === "Home" || activeLink === "About Us"||activeLink === "Source Code"
                       ? "white"
                       : "#092635",
                   textDecoration:

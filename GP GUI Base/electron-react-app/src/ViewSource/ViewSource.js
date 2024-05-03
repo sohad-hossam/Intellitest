@@ -3,7 +3,8 @@ import { Header } from "../TopBar/TopBar";
 import { PageTitle } from "../PageTitle/PageTitle";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFolder, faFileCsv, faFileAlt, faFileCode } from '@fortawesome/free-solid-svg-icons';
-import {CodeEditor} from "../CodeEditor/CodeEditor";
+import { CodeEditor } from "../CodeEditor/CodeEditor";
+import './ViewSource.css'; 
 
 const RenderFolderStructure = ({ folder, directoryPath, onFileClick }) => {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -35,8 +36,8 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick }) => {
     };
   
     const handleFileClick = (folder,file) => {
-      const filePath = `${directoryPath}/${folder.name}/${file.name}`;
-      onFileClick({ ...file, path: filePath }); 
+      const filePath = `${directoryPath}/${folder.name}/${file.name}`; // Construct the file path
+      onFileClick({ ...file, path: filePath }); // Pass file object with file path
     };
   
     return (
@@ -48,7 +49,7 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick }) => {
           </span>
         </div>
         {folder.children && isExpanded && (
-          <div style={{ marginLeft: '20px' }}>
+          <div className="child-container"> {/* Apply styling to child container */}
             {folder.children.map((child) => (
               <div key={child.name}>
                 {child.type === 'folder' ? (
@@ -67,7 +68,7 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick }) => {
     );
   };
   
-  function ViewSource() {
+function ViewSource() {
     const [folderStructure, setFolderStructure] = useState(null);
     const [selectedFileContent, setSelectedFileContent] = useState('');
     const [selectedFileType, setSelectedFileType] = useState('');
@@ -84,7 +85,6 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick }) => {
   
     const fetchFolderStructure = () => {
       fetch("http://localhost:5000/get-folder-structure?directory_path=GP GUI Base/electron-react-app/src/uploads")
-     
         .then((response) => response.json())
         .then((data) => {
           setFolderStructure(data);
@@ -114,19 +114,18 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick }) => {
     };
   
     return (
-        <div className="container">
+        <div className="vscode-page">
           <Header visibleHyperlinks={visibleHyperlinks} activeLink="Source Code" />
           <PageTitle title={folderStructure ? folderStructure.name.replace(/_/g, ' ').toUpperCase() : ''} activeLink="Source Code" />
-          <h1>View Source</h1>
           <div className="row">
-            <div className="col-md-4">
+            <div className="col-md-4 vscode-file-tree"> 
               {folderStructure ? (
                 <RenderFolderStructure folder={folderStructure} directoryPath="GP GUI Base/electron-react-app/src/uploads/teiid_dataset" onFileClick={handleFileClick} />
               ) : (
                 <p>Loading folder structure...</p>
               )}
             </div>
-            <div className="col-md-8">
+            <div className="col-md-8 vscode-code-editor">
               {selectedFileContent && <CodeEditor content={selectedFileContent} fileType={selectedFileType} />}
             </div>
           </div>
@@ -144,8 +143,7 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick }) => {
           </style>
         </div>
       );
+      
     }
     
-  
-  export { ViewSource };
-  
+export { ViewSource };
