@@ -24,12 +24,10 @@ import { gruvboxDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 
 const CodeEditor = ({ content, fileType }) => {
-  console.log('Content:', content);
-  console.log('FileType:', fileType);
+
   const [error, setError] = useState(null); 
 
   const getLanguageForFileType = (fileType) => {
-    console.log('FileType in getLanguageForFileType:', fileType);
     switch (fileType) {
       case 'txt':
         return 'plaintext';
@@ -43,8 +41,6 @@ const CodeEditor = ({ content, fileType }) => {
   };
 
   const language = getLanguageForFileType(fileType);
-  console.log('Language:', language);
-
   return (
     <div>
       {error ? (
@@ -64,9 +60,7 @@ const CodeEditor = ({ content, fileType }) => {
             overflowY: 'auto', 
           }}
         showLineNumbers = {true}
-        preserveWhitespace={true}
         PreTag="div" 
-        LineTag="span" 
       >
         {content}
       </SyntaxHighlighter>

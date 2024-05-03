@@ -97,7 +97,6 @@ def upload_folder():
 def get_folder_structure():
     try:
         directory_path = request.args.get('directory_path')
-        print("directory path",directory_path)
         if not directory_path or not os.path.isdir(directory_path):
             return jsonify({'error': 'Invalid directory path.'}), 400
 
@@ -122,8 +121,6 @@ def generate_folder_structure(directory):
 def get_file_content():
     try:
         file_path = request.args.get('file_path')
-        print("File path:", file_path)
-
         if not file_path or not os.path.isfile(file_path):
             return jsonify({'error': 'Invalid file path or file does not exist.'}), 400
 
@@ -140,8 +137,6 @@ def get_file_content():
 def get_usecase_files():
     try:
         folder_path = request.args.get('folder_path')
-        print("Folder path:", folder_path)
-
         if not folder_path or not os.path.isdir(folder_path):
             return jsonify({'error': 'Invalid folder path or folder does not exist.'}), 400
 
