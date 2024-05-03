@@ -20,7 +20,7 @@ function App() {
             path="/MaintainabilityScore"
             element={<MaintainabilityScore />}
           />
-          <Route path="/ImportProject" element={<ImportProject />} />
+          <Route path="/ImportProject" element={<TraceLinks />} />
           <Route path="/TraceLinks" element={<TraceLinks />} />
           <Route path="/ViewSource" element={<ViewSource />} />
           <Route path="/CodeEditor" element={<CodeEditor />} />

@@ -134,6 +134,27 @@ def get_file_content():
     except Exception as e:
         app.logger.error(f"An error occurred: {e}")
         return jsonify({'error': 'An unexpected error occurred.'}), 500
+    
+@app.route('/get-usecase-files', methods=['GET'])
+def get_usecase_files():
+    try:
+        folder_path = request.args.get('folder_path')
+        print("Folder path:", folder_path)
+
+        if not folder_path or not os.path.isdir(folder_path):
+            return jsonify({'error': 'Invalid folder path or folder does not exist.'}), 400
+
+        # List all files in the directory
+        files = os.listdir(folder_path)
+
+        return jsonify({'files': files}), 200
+
+    except Exception as e:
+        app.logger.error(f"An error occurred: {e}")
+        return jsonify({'error': 'An unexpected error occurred.'}), 500
+    
+
+
 
 
 if __name__ == '__main__':

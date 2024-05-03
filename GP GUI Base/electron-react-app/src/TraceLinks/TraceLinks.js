@@ -1,24 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./TraceLinks.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Header } from "../TopBar/TopBar";
 import { PageTitle } from "../PageTitle/PageTitle";
 
+
 function DropDowns() {
-  const useCaseOptions = [
-    "Project 1",
-    "Project 2",
-    "Project 3",
-    "Project 4",
-    "Project 5",
-  ];
-  const codeOptions = [
-    "Project 1",
-    "Project 2",
-    "Project 3",
-    "Project 4",
-    "Project 5",
-  ];
+  const [useCaseOptions, setUseCaseOptions] = useState([]);
+  const [codeOptions, setcodeOptions] = useState([]);
+
   const dictionary = {
     "Project 1 - Project 1": 10,
     "Project 1 - Project 2": 20,
@@ -48,7 +38,38 @@ function DropDowns() {
   };
   const [useCaseSelected, setUseCaseSelected] = useState(false);
   const [codeSelected, setCodeSelected] = useState(false);
+  useEffect(() => {
+    fetchUseCaseFiles();
+    fetchCodeFiles();
+  }, []);
 
+  const fetchUseCaseFiles = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/get-usecase-files?folder_path=GP GUI Base/electron-react-app/src/uploads/teiid_dataset/test_UC');
+      if (!response.ok) {
+        throw new Error('Failed to fetch use case files');
+      }
+      const data = await response.json();
+      const files = data.files || [];
+      setUseCaseOptions(files);
+    } catch (error) {
+      console.error('Error fetching use case files:', error);
+    }
+  };
+
+  const fetchCodeFiles = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/get-usecase-files?folder_path=GP GUI Base/electron-react-app/src/uploads/teiid_dataset/test_CC');
+      if (!response.ok) {
+        throw new Error('Failed to fetch code files');
+      }
+      const data = await response.json();
+      const files = data.files || [];
+      setcodeOptions(files);
+    } catch (error) {
+      console.error('Error fetching code files:', error);
+    }
+  };
   const handleCaseSelection = (event) => {
     setUseCaseSelected(event.target.value !== "");
   };
