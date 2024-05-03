@@ -42,7 +42,7 @@ function ButtonsMoving() {
           <Link to={"/ImportProject"} className="btnImport  m-5">
             Import Project
           </Link>
-          <Link to={"/ProceedWith"} className="btnProceed m-5">
+          <Link to={"/ViewSource"} className="btnProceed m-5">
             Proceed with
           </Link>
         </div>
