@@ -108,6 +108,7 @@ class PreProcessor:
         self.UC_to_index = dict()
         self.CC_to_index = dict()
         self.Vocab=dict()
+        self.word_index=dict()
         Language.build_library(
         # Store the library in the `build` directory
         "build/my-languages.so",
@@ -420,4 +421,65 @@ class PreProcessor:
                     if (not self.Vocab.get(name) or self.Vocab[name] < 2):
                             arg2[i][j]="__unk__"  
                             # print("entered4")   
+    def vocabToIndex(self):
+        #convert each word in the vocan to index in order to map them later in the dataset
+        self.word_index = {word: idx + 1 for idx, word in enumerate(self.Vocab.keys())}
+
+    def dataSetToIndex(self,arg1,arg2,UC_CC):
+        # for CC: arg1 = function_names --> 3d array, arg2 = function_segments --> 3d array
+        # for UC: arg1 = descriptions --> 2d, arg2 = summary --> 2d
+        if UC_CC == 'CC':
+            for i,file in enumerate(arg1):
+                for j,name in enumerate(file):
+                    for k,name_part in enumerate(name):
+                        if(self.word_index.get(name_part) != None):
+                            arg1[i][j][k]=self.word_index[name_part]
+                        else:
+                            # In the case of unknown words
+                            arg1[i][j][k] = 0
+                    arg1[i][j] = torch.tensor(arg1[i][j])
+
+            for i,file in enumerate(arg2):
+                for j,name in enumerate(file):
+                    for k,name_part in enumerate(name):
+                        if(self.word_index.get(name_part) != None):
+                            arg2[i][j][k]=self.word_index[name_part]
+                        else:
+                            # In the case of unknown words
+                            arg2[i][j][k] = 0
+                    arg2[i][j] = torch.tensor(arg2[i][j])
+
+        else:
+            for i,file in enumerate(arg1):
+                for j,name in enumerate(file):
+                    if(self.word_index.get(name) != None):
+                        arg1[i][j]=self.word_index[name]
+                    else:
+                        # In the case of unknown words
+                       arg1[i][j]= 0   
+                arg1[i] = torch.tensor(arg1[i])
+
+            for i,file in enumerate(arg2):
+                for j,name in enumerate(file):
+                    if(self.word_index.get(name) != None):
+                        arg2[i][j] = self.word_index[name]
+                    else:
+                        # In the case of unknown words
+                        arg2[i][j] = 0   
+                arg2[i] = torch.tensor(arg2[i])
+                            
+    
+    def setUpLabels(self,function_names_train,function_segments_train,descriptions_train,summaries_train):
+        #reading the csv and creating a list containing the UC and CC and their coresponding label
+        Features = list()
+        labels=list()
+        DataSet_train = pd.read_csv('Dataset/teiid_dataset/train_modified.csv')
+        for row in DataSet_train.index:
+            index_code = int(DataSet_train.loc[row, 'CC'])
+            index_UC = int(DataSet_train.loc[row, 'UC'])
+            label = int(DataSet_train.loc[row, 'Labels'])
+            Features.append([function_names_train[index_code],function_segments_train[index_code],descriptions_train[index_UC],summaries_train[index_UC]])
+            labels.append(label)
+        return Features,labels
+
 
