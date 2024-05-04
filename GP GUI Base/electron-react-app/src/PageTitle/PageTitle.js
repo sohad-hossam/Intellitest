@@ -8,7 +8,7 @@ export function PageTitle({ title, activeLink }) {
       className="PageTitle"
       style={{
         color:
-          activeLink === "Home" || activeLink === "About Us"
+          activeLink === "Home" || activeLink === "About Us"|| activeLink === "Source Code"
             ? "white"
             : "#092635",
       }}

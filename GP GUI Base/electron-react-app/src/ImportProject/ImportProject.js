@@ -3,7 +3,7 @@ import "./ImportProject.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Header } from "../TopBar/TopBar";
 import { PageTitle } from "../PageTitle/PageTitle";
-
+import { Link } from "react-router-dom";
 function ProcessingProject() {
   return <div className="ProcessingProject">Processing Project . . .</div>;
 }
@@ -36,40 +36,44 @@ export function ImportProject() {
     "Proceed With",
   ];
   const [selectedFile, setSelectedFile] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [fileUploaded, setFileUploaded] = useState(false);
+  const [fileFullyUploaded, setfileFullyUploaded] = useState(false);
   const [progress, setProgress] = useState(0);
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
-    setFileUploaded(false);
+    setFileUploaded(true); 
     setProgress(20); 
   };
 
   const uploadFile = async () => {
-    setLoading(true);
-    setFileUploaded(true); 
     const formData = new FormData();
     formData.append("file", selectedFile);
-
+  
+    // Extract the directory path from the temporary file path
+    const folderPath = selectedFile && selectedFile.webkitRelativePath ? selectedFile.webkitRelativePath.split('/').slice(0, -1).join('/') : '';
+  
+    // Append the folderPath to the FormData
+    formData.append("folderPath", folderPath);
+  
     try {
       const response = await fetch("http://localhost:5000/upload-folder", {
         method: "POST",
         body: formData,
       });
-
+  
       if (!response.ok) {
         throw new Error(`Upload failed with status ${response.status}`);
       }
-
-
-      setProgress(100); 
-      setLoading(false);
-      setFileUploaded(false); 
+  
+      setProgress(100);
+      setFileUploaded(false);
+      setfileFullyUploaded(true);
     } catch (error) {
       console.error("Error uploading file:", error);
     }
   };
+  
 
   return (
     <div className="ImportProject">
@@ -84,13 +88,21 @@ export function ImportProject() {
       </div>
       <div className="LoadingBar">
         {fileUploaded && <ProcessingProject />}
-       {  <ProgressBar progress={progress} />}
-        { fileUploaded&& <ThisMighTakeFew />}
-        <div className="file-upload">
-          <input type="file" onChange={handleFileChange} />
-          <button onClick={uploadFile}>Upload</button>
-        </div>
+        {<ProgressBar progress={progress} />}
+        {fileUploaded && <ThisMighTakeFew />}
+        {fileFullyUploaded ? (
+        <Link to={"/ViewSource"} className="file-proceed m-5">
+        Proceed with
+      </Link>
+        ) : (
+          <div className="file-upload">
+            <label htmlFor="file-upload">Choose File</label>
+            <input type="file" id="file-upload" onChange={handleFileChange} />
+            <button onClick={uploadFile}>Upload</button>
+          </div>
+        )}
       </div>
     </div>
   );
+  
 }

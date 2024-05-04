@@ -1,6 +1,7 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify,send_file,Response
 from flask_cors import CORS
 from MaintainabilityScore import MaintainabilityScore
+from MLScript import TraceLinks
 import os
 import zipfile
 from concurrent.futures import ThreadPoolExecutor
@@ -87,6 +88,82 @@ def upload_folder():
         executor.submit(process_zip_file, temp_file_path)
 
         return jsonify({'message': 'Folder upload started successfully.'}), 200
+
+    except Exception as e:
+        app.logger.error(f"An error occurred: {e}")
+        return jsonify({'error': 'An unexpected error occurred.'}), 500
+    
+@app.route('/get-folder-structure', methods=['GET'])
+def get_folder_structure():
+    try:
+        directory_path = request.args.get('directory_path')
+        if not directory_path or not os.path.isdir(directory_path):
+            return jsonify({'error': 'Invalid directory path.'}), 400
+
+        folder_structure = generate_folder_structure(directory_path)
+        return jsonify(folder_structure), 200
+
+    except Exception as e:
+        app.logger.error(f"An error occurred: {e}")
+        return jsonify({'error': 'An unexpected error occurred.'}), 500
+
+def generate_folder_structure(directory):
+    folder_structure = {'name': os.path.basename(directory), 'type': 'folder', 'children': []}
+    for item in os.listdir(directory):
+        item_path = os.path.join(directory, item)
+        if os.path.isdir(item_path):
+            folder_structure['children'].append(generate_folder_structure(item_path))
+        else:
+            folder_structure['children'].append({'name': item, 'type': 'file'})
+    return folder_structure
+
+@app.route('/get-file-content', methods=['GET'])
+def get_file_content():
+    try:
+        file_path = request.args.get('file_path')
+        if not file_path or not os.path.isfile(file_path):
+            return jsonify({'error': 'Invalid file path or file does not exist.'}), 400
+
+        with open(file_path, 'r') as file:
+            content = file.read()
+
+        return Response(content, mimetype='text/plain'), 200
+
+    except Exception as e:
+        app.logger.error(f"An error occurred: {e}")
+        return jsonify({'error': 'An unexpected error occurred.'}), 500
+    
+@app.route('/get-usecase-files', methods=['GET'])
+def get_usecase_files():
+    try:
+        folder_path = request.args.get('folder_path')
+        if not folder_path or not os.path.isdir(folder_path):
+            return jsonify({'error': 'Invalid folder path or folder does not exist.'}), 400
+
+        # List all files in the directory
+        files = os.listdir(folder_path)
+
+        return jsonify({'files': files}), 200
+
+    except Exception as e:
+        app.logger.error(f"An error occurred: {e}")
+        return jsonify({'error': 'An unexpected error occurred.'}), 500
+    
+
+
+@app.route('/compute-tracelinks', methods=['POST'])
+def computetracelinks():
+    try:
+        usecase_file = request.form.get('usecase_file')
+        code_file = request.form.get('code_file')
+
+        if not usecase_file or not code_file:
+            return jsonify({'error': 'Use case file and code file are required.'}), 400
+
+        score = TraceLinks(code_file, usecase_file)
+        trace_links = score.computeTraceLinks()
+
+        return jsonify({'trace_links': trace_links}), 200
 
     except Exception as e:
         app.logger.error(f"An error occurred: {e}")
