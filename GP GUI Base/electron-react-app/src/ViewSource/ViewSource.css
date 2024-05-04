@@ -1,0 +1,94 @@
+@import "~bootstrap/dist/css/bootstrap.min.css";
+
+.vscode-page {
+    background-color: #1b4242;
+    color: #abb2bf;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.vscode-page .child-container {
+    margin-left: 20px;
+}
+
+.vscode-page .code-editor {
+    background-color: #1e1e1e;
+    border-radius: 5px;
+    overflow-y: auto;
+    border: 1px solid #444;
+    max-height: 800px;
+}
+
+.vscode-page .code-editor pre {
+    margin: 0;
+    white-space: pre-wrap;
+}
+
+.vscode-page .code-editor pre code {
+    color: #abb2bf;
+    font-family: 'Fira Code', Consolas, 'Courier New', monospace;
+    font-size: 14px;
+}
+
+.vscode-page .file-tree-container {
+    border: 1px solid #123434;
+    border-radius: 5px;
+}
+
+.vscode-file-tree {
+    background-color: #123434;
+    border-right: 1px solid #123434;
+    padding: 20px;
+    max-height: 800px;
+    overflow-y: auto;
+}
+
+.vscode-code-editor {
+    background-color: rgba(15, 42, 42, 0.9);
+    border-left: 1px solid rgba(15, 42, 42, 0.9);
+    max-height: 800px;
+}
+
+/* Style horizontal scrollbar */
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0f2a2a;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #5c8374;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgb(64, 125, 89);
+}
+
+/* Style vertical scrollbar */
+::-webkit-scrollbar-vertical {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track-vertical {
+    background: #0f2a2a;
+}
+
+::-webkit-scrollbar-thumb-vertical {
+    background: #5c8374;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb-vertical:hover {
+    background: rgb(64, 125, 89);
+}
+.vscode-file-tree span:hover {
+    background-color: #123434;
+    color: white;
+    cursor: pointer;
+  }

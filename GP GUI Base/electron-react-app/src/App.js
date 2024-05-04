@@ -5,6 +5,8 @@ import { MaintainabilityScore } from "./MantainabilityScores/MaintainabilityScor
 import { HomePage } from "./HomePage/HomePage.js";
 import { AboutUs } from "./AboutUs";
 import { TraceLinks } from "./TraceLinks/TraceLinks.js";
+import { ViewSource } from "./ViewSource/ViewSource.js";
+import { CodeEditor } from "./CodeEditor/CodeEditor.js";
 import { HashRouter, Route, Routes } from "react-router-dom";
 
 function App() {
@@ -14,12 +16,11 @@ function App() {
         <Routes>
           <Route path="/" exact element={<HomePage />} />
           <Route path="/AboutUs" element={<AboutUs />} />
-          <Route
-            path="/MaintainabilityScore"
-            element={<MaintainabilityScore />}
-          />
-          <Route path="/ImportProject" element={<MaintainabilityScore />} />
+          <Route path="/MaintainabilityScore" element={<MaintainabilityScore />} />
+          <Route path="/ImportProject" element={<ImportProject />} />
           <Route path="/TraceLinks" element={<TraceLinks />} />
+          <Route path="/ViewSource" element={<ViewSource />} />
+          <Route path="/CodeEditor" element={<CodeEditor />} />
         </Routes>
       </div>
     </HashRouter>

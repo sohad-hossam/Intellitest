@@ -8,8 +8,11 @@ export function Header({ visibleHyperlinks, activeLink }) {
     { url: "/AboutUs", label: "About Us" },
     { url: "/ImportProject", label: "Import Project" },
     { url: "/ProceedWith", label: "Proceed With" },
-    { url: "/MaintainbiltyScores", label: "Maintainability Scores" },
+    { url: "/MaintainabilityScore", label: "Maintainability Scores" },
     { url: "/TraceLinks", label: "Trace Links" },
+    { url: "/ViewSource", label: "Source Code" },
+
+
   ];
 
   const filteredHyperlinks = allHyperlinks.filter((link) =>
@@ -17,7 +20,7 @@ export function Header({ visibleHyperlinks, activeLink }) {
   );
 
   const iconSource =
-    activeLink === "Home" || activeLink === "About Us"
+    activeLink === "Home" || activeLink === "About Us"||activeLink === "Source Code"
       ? require("../assets/searching1.png")
       : require("../assets/searching.png");
 
@@ -36,7 +39,7 @@ export function Header({ visibleHyperlinks, activeLink }) {
                 to={link.url}
                 style={{
                   color:
-                    activeLink === "Home" || activeLink === "About Us"
+                    activeLink === "Home" || activeLink === "About Us"||activeLink === "Source Code"
                       ? "white"
                       : "#092635",
                   textDecoration:
