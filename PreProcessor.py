@@ -113,7 +113,7 @@ class PreProcessor:
         # Store the library in the `build` directory
         "build/my-languages.so",
         # Include one or more languages
-        ["../tree-sitter-java"],
+        ["./tree-sitter-java"],
         )
 
         JAVA = Language("build/my-languages.so", "java")
@@ -295,6 +295,8 @@ class PreProcessor:
 
                 elif (child.parent.type == "method_declaration" and child.type == "block"):
                     segment = source_code[child.start_byte:child.end_byte]
+                    if (segment == ""):
+                        continue
                     segmentCleaned = re.sub(self.chars_to_remove," " ,segment)
                     split_words = re.sub(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|_+", " ", segmentCleaned).lower().split()
                     temp_function_segments=list()
@@ -310,7 +312,7 @@ class PreProcessor:
                             temp_function_segments.append(word_stem)
 
                     functions_segments.append(temp_function_segments)
-
+        
         return functions_names,functions_segments
     
     def setupDeepLearning(self, code_path: str,CC_or_UC:str = 'CC' ,train_test="train")->tuple:
