@@ -68,7 +68,7 @@
 .tree-struc {
   border-right: 1px solid #123434;
   padding: 20px;
-  max-height: 800px;
+  max-height: 700px;
   overflow-y: auto;
 }
 .child-container {
