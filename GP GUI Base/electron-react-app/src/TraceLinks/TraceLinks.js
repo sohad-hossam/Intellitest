@@ -160,9 +160,14 @@ function DropDowns() {
 
       <div className="row justify-content-center mt-5">
         <div className="col-md-4">
-        {score!=null && (
+        {score!=null &&score>0.5 && (
             <div className="tracelink-message">
               Trace Links Exist between the documents by {score*100}% indicating high correlation
+            </div>
+          )}
+            {score!=null &&score<=0.5 && (
+            <div className="tracelink-message-low">
+              Trace Links Exist between the documents by {score*100}% indicating low correlation
             </div>
           )}
         </div>
