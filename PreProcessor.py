@@ -113,7 +113,7 @@ class PreProcessor:
         # Store the library in the `build` directory
         "build/my-languages.so",
         # Include one or more languages
-        ["./tree-sitter-java"],
+        ["../tree-sitter-java"],
         )
 
         JAVA = Language("build/my-languages.so", "java")
@@ -436,7 +436,7 @@ class PreProcessor:
                             arg1[i][j][k]=self.word_index[name_part]
                         else:
                             # In the case of unknown words
-                            arg1[i][j][k] = 0
+                            arg1[i][j][k] = len(self.word_index.keys()) + 1
                     arg1[i][j] = torch.tensor(arg1[i][j])
 
             for i,file in enumerate(arg2):
@@ -446,7 +446,7 @@ class PreProcessor:
                             arg2[i][j][k]=self.word_index[name_part]
                         else:
                             # In the case of unknown words
-                            arg2[i][j][k] = 0
+                            arg2[i][j][k] = len(self.word_index.keys()) + 1
                     arg2[i][j] = torch.tensor(arg2[i][j])
 
         else:
@@ -456,7 +456,7 @@ class PreProcessor:
                         arg1[i][j]=self.word_index[name]
                     else:
                         # In the case of unknown words
-                       arg1[i][j]= 0   
+                       arg1[i][j]= len(self.word_index.keys()) + 1  
                 arg1[i] = torch.tensor(arg1[i])
 
             for i,file in enumerate(arg2):
@@ -465,7 +465,7 @@ class PreProcessor:
                         arg2[i][j] = self.word_index[name]
                     else:
                         # In the case of unknown words
-                        arg2[i][j] = 0   
+                        arg2[i][j] = len(self.word_index.keys()) + 1   
                 arg2[i] = torch.tensor(arg2[i])
                             
     
