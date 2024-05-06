@@ -5,7 +5,6 @@ import { Header } from "../TopBar/TopBar";
 import { PageTitle } from "../PageTitle/PageTitle";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFolder, faFileCsv, faFileAlt, faFileCode  } from '@fortawesome/free-solid-svg-icons';
-
 const RenderFolderStructure = ({ folder, directoryPath, onFileClick }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -40,6 +39,11 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick }) => {
     onFileClick({ ...file, path: filePath });
   };
 
+  // Filter out files that are not Java files
+  const javaFiles = folder.children.filter((child) => {
+    return child.type === 'folder' || getFileExtension(child.name) === 'java';
+  });
+
   return (
     <div key={folder.name}>
       <div>
@@ -50,7 +54,7 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick }) => {
       </div>
       {folder.children && isExpanded && (
         <div className="child-container">
-          {folder.children.map((child) => (
+          {javaFiles.map((child) => (
             <div key={child.name}>
               {child.type === 'folder' ? (
                 <RenderFolderStructure folder={child} directoryPath={directoryPath} onFileClick={onFileClick} />
@@ -117,7 +121,7 @@ export function MaintainabilityScore() {
   const [selectedScoreKey, setSelectedScoreKey] = useState(null);
   const [folderStructure, setFolderStructure] = useState(null);
 
-  const itemsPerPage = 6;
+  const itemsPerPage = 12;
   const totalPages = Math.ceil((scores ? Object.keys(scores) : []).length / itemsPerPage);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -140,9 +144,9 @@ export function MaintainabilityScore() {
   const handleFileClick = async (file) => {
     setSelectedFile(file);
     setLoading(true);
-    
+  
     try {
-      const fileContentResponse = await fetch(`http://localhost:5000/get-file-content?file_path=${file}`);
+      const fileContentResponse = await fetch(`http://localhost:5000/get-file-content?file_path=${file.path}`); // Use file.path instead of file
       const fileContent = await fileContentResponse.text();
   
       const formData = new FormData();
@@ -234,7 +238,7 @@ export function MaintainabilityScore() {
       />
       <div className="container mt-5">
         <div className="row">
-          <div className="col-md-4"> 
+          <div className="col-md-4  tree-struc"> 
             {folderStructure ? (
               <RenderFolderStructure folder={folderStructure} directoryPath="GP GUI Base/electron-react-app/src/uploads/teiid_dataset" onFileClick={handleFileClick} />
             ) : (
@@ -245,11 +249,7 @@ export function MaintainabilityScore() {
             {renderScores()}
           </div>
         </div>
-        <div className="row justify-content-center">
-          <div className="col-md-9">
-            {renderScores()}
-          </div>
-        </div>
+    
         <nav aria-label="Page navigation example">
           <ul className="pagination justify-content-center mt-3 ">
             {[...Array(totalPages).keys()].map((page) => (

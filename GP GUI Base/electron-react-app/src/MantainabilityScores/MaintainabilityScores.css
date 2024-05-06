@@ -64,3 +64,13 @@
   background-color: #123434;
   border-color: #123434;
 }
+
+.tree-struc {
+  border-right: 1px solid #123434;
+  padding: 20px;
+  max-height: 800px;
+  overflow-y: auto;
+}
+.child-container {
+  margin-left: 20px;
+}

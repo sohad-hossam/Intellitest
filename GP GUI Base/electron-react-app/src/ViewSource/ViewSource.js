@@ -49,7 +49,7 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick }) => {
           </span>
         </div>
         {folder.children && isExpanded && (
-          <div className="child-container"> {/* Apply styling to child container */}
+          <div className="child-container"> 
             {folder.children.map((child) => (
               <div key={child.name}>
                 {child.type === 'folder' ? (
