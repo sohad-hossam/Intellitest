@@ -11,12 +11,21 @@ function DropDowns() {
   const [useCaseSelected, setUseCaseSelected] = useState(false);
   const [codeSelected, setCodeSelected] = useState(false);
   const [score, setScore] = useState(null);
+  const [showScoreMessage, setShowScoreMessage] = useState(false); // Flag to show score message
+
 
   useEffect(() => {
     fetchUseCaseFiles();
     fetchCodeFiles();
   }, []);
 
+  useEffect(() => {
+    // Show score message when score is set
+    if (score !== null) {
+      setShowScoreMessage(true);
+      console.log("Score is set", score);
+    }
+  }, [score]);
   const fetchUseCaseFiles = async () => {
     try {
       const response = await fetch('http://localhost:5000/get-usecase-files?folder_path=GP GUI Base/electron-react-app/src/uploads/teiid_dataset/test_UC');
@@ -79,7 +88,7 @@ function DropDowns() {
           throw new Error('Failed to compute trace links');
         }
         const data = await response.json();
-        setScore(data.score);
+        setScore(data.trace_links);
       } catch (error) {
         console.error('Error computing trace links:', error);
       }
@@ -151,9 +160,11 @@ function DropDowns() {
 
       <div className="row justify-content-center mt-5">
         <div className="col-md-4">
-          <div className="tracelink-message">
-            {score !== null && `Trace Links Exist between the documents by ${score}% indicating high correlation`}
-          </div>
+        {score!=null && (
+            <div className="tracelink-message">
+              Trace Links Exist between the documents by {score*100}% indicating high correlation
+            </div>
+          )}
         </div>
       </div>
     </div>
