@@ -154,15 +154,17 @@ def get_usecase_files():
 @app.route('/compute-tracelinks', methods=['POST'])
 def computetracelinks():
     try:
-        usecase_file = request.form.get('usecase_file')
-        code_file = request.form.get('code_file')
-
+        print("computing trace links")
+        usecase_file = request.args.get('usecase')
+        code_file = request.args.get('code')
+        print("usecasefile",usecase_file)
+        print("codefile",code_file)
         if not usecase_file or not code_file:
             return jsonify({'error': 'Use case file and code file are required.'}), 400
 
         score = TraceLinks(code_file, usecase_file)
         trace_links = score.computeTraceLinks()
-
+        print("tracelinks val at end point",trace_links)
         return jsonify({'trace_links': trace_links}), 200
 
     except Exception as e:

@@ -31,6 +31,8 @@ function DropDowns() {
     }
   };
 
+
+
   const fetchCodeFiles = async () => {
     try {
       const response = await fetch('http://localhost:5000/get-usecase-files?folder_path=GP GUI Base/electron-react-app/src/uploads/teiid_dataset/test_CC');
@@ -69,7 +71,10 @@ function DropDowns() {
       const selectedCode = document.getElementById("exampleFormControlSelect2").value;
 
       try {
-        const response = await fetch(`http://localhost:5000/compute-tracelinks?usecase=${selectedUseCase}&code=${selectedCode}`);
+  
+        const response = await fetch(`http://localhost:5000/compute-tracelinks?usecase=${selectedUseCase}&code=${selectedCode}`, {
+          method: "POST",
+        });
         if (!response.ok) {
           throw new Error('Failed to compute trace links');
         }

@@ -3,17 +3,17 @@ from joblib import load
 
 class TraceLinks():
     def __init__(self, code_file: str, usecase_file: str) -> None:
-        self.code_file = code_file
-        self.usecase_file = usecase_file
+        self.code_file = "./dataset/teiid_dataset/test_cc/"+code_file.lower()
+        self.usecase_file = usecase_file.lower()
         ############### Currently the test files only ##################
         self.CC_to_index = load('pickles/CCindex_test.pkl')
-        self.UC_to_index = load('pickles/UCindex_testpkl')
-        self.feature_map = load('/pickles/features_links_selected_test.pkl')
-
+        self.UC_to_index = load('pickles/UCindex_test.pkl')
+        self.feature_map = load('GP GUI Base/electron-react-app/src/pickles/features_links_selected_test.pkl')
+       
     def featureMap(self, code_file: str, usecase_file: str) -> None:  
         CC_index = self.CC_to_index[code_file]
-        UC_index = self.CC_to_index[usecase_file]
-        
+        UC_index = self.UC_to_index[usecase_file]
+        print("at feature mapping")
         return self.feature_map[CC_index][UC_index]
         
 
@@ -21,6 +21,7 @@ class TraceLinks():
       
         data = self.featureMap(self.code_file, self.usecase_file)
         model = load('pickles/teiid_model.pkl')
-        predictions = model.predict(data)[0]
+        predictions = model.predict(data.reshape(1, -1))[0]
+        print("computing predection",predictions)
         return predictions
 
