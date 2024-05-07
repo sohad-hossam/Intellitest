@@ -5,7 +5,7 @@
     color: #abb2bf;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     height: 100vh;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 .vscode-page .child-container {
@@ -40,7 +40,7 @@
     background-color: #123434;
     border-right: 1px solid #123434;
     padding: 20px;
-    max-height: 800px;
+    max-height: 850px;
     overflow-y: auto;
 }
 

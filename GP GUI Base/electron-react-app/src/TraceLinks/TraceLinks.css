@@ -41,3 +41,10 @@
   font-family: "Oswald", sans-serif;
   color: #5c8374;
 }
+.tracelink-message-low {
+  text-align: center;
+  font-size: 25px;
+  font-weight: 300;
+  font-family: "Oswald", sans-serif;
+  color: #bd2929;
+}
