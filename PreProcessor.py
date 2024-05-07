@@ -113,7 +113,7 @@ class PreProcessor:
         # Store the library in the `build` directory
         "build/my-languages.so",
         # Include one or more languages
-        ["./tree-sitter-java"],
+        ["../tree-sitter-java"],
         )
 
         JAVA = Language("build/my-languages.so", "java")
@@ -347,7 +347,7 @@ class PreProcessor:
                       
         return arg1,arg2
 
-    def PreProcessorUCDeepLearning(self, filename: str,train_test="train"):
+    def PreProcessorUCDeepLearning(self, filename: str,train_test="train") -> tuple:
         porter_stemmer = PorterStemmer()
         numeric_chars_to_remove = r"[0-9]"
 
@@ -393,7 +393,7 @@ class PreProcessor:
                             description_tokenized.append(token_stem)
         return description_tokenized, summary_tokenized
 
-    def setUpUnknown (self,arg1,arg2,UC_CC):
+    def setUpUnknown (self,arg1,arg2,UC_CC) -> None:
 
         # for CC: arg1 = function_names --> 3d array, arg2 = function_segments --> 3d array
         # for UC: arg1 = descriptions --> 2d, arg2 = summary --> 2d
@@ -427,7 +427,7 @@ class PreProcessor:
         #convert each word in the vocan to index in order to map them later in the dataset
         self.word_index = {word: idx + 1 for idx, word in enumerate(self.Vocab.keys())}
 
-    def dataSetToIndex(self,arg1,arg2,UC_CC):
+    def dataSetToIndex(self, arg1, arg2, UC_CC) -> None:
         # for CC: arg1 = function_names --> 3d array, arg2 = function_segments --> 3d array
         # for UC: arg1 = descriptions --> 2d, arg2 = summary --> 2d
         if UC_CC == 'CC':
@@ -469,6 +469,50 @@ class PreProcessor:
                         # In the case of unknown words
                         arg2[i][j] = len(self.word_index.keys()) + 1   
                 arg2[i] = torch.tensor(arg2[i], dtype=torch.int64)
+
+    def word2VecProcessor(self, arg1, arg2, UC_CC) -> list:
+        # both UC and CC are 1d array CC now contains all the functions regardless the file
+        # in Case of UC the list now contains all UC files where each entry containg the summary concated with the description 
+        if UC_CC == 'CC':
+            CC_docs = list()
+            for file_name, file_seg in zip(arg1, arg2):
+                '''
+                Example for the 2nd zip
+                [(['title1'], ['hi my name is', 'lol']), (['title2'], ['bassant'])]
+                [(['title3'], ['hi my name is2']), (['title4'], ['bassant2'])]
+                '''
+                names_segmants_zipped = list(zip(file_name, file_seg))
+                CC_doc = ''
+                for func_name, func_seg in names_segmants_zipped:
+                    func_name_joined = ' '.join(func_name)
+                    CC_doc += func_name_joined
+                    fun_seg_joined = ' '.join(func_seg)
+                    CC_doc += ' '
+                    CC_doc += fun_seg_joined
+    
+                if CC_doc != '':
+                    CC_doc += '</s>'
+                    CC_docs.append(CC_doc)
+            return CC_docs
+        
+        elif UC_CC == 'UC':
+            UC_docs = list()
+            names_segmants_zipped = list(zip(arg1, arg2))
+            
+            for func_name, func_seg in names_segmants_zipped:
+                UC_doc = ''
+                func_name_joined = ' '.join(func_name)
+                UC_doc += func_name_joined
+                fun_seg_joined = ' '.join(func_seg)
+                UC_doc += ' '
+                UC_doc += fun_seg_joined
+
+                if UC_doc != '':
+                    UC_doc += '</s>'
+                    UC_docs.append(UC_doc)
+        return UC_docs
+
+            
                             
     
     def setUpLabels(self,function_names_train,function_segments_train,descriptions_train,summaries_train):
