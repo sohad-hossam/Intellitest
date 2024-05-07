@@ -312,7 +312,7 @@ class PreProcessor:
                             temp_function_segments.append(word_stem)
 
                     functions_segments.append(temp_function_segments)
-        
+
         return functions_names,functions_segments
     
     def setupDeepLearning(self, code_path: str,CC_or_UC:str = 'CC' ,train_test="train")->tuple:
@@ -439,7 +439,7 @@ class PreProcessor:
                         else:
                             # In the case of unknown words
                             arg1[i][j][k] = len(self.word_index.keys()) + 1
-                    arg1[i][j] = torch.tensor(arg1[i][j])
+                    arg1[i][j] = torch.tensor(arg1[i][j],dtype=torch.int64)
 
             for i,file in enumerate(arg2):
                 for j,name in enumerate(file):
@@ -449,7 +449,7 @@ class PreProcessor:
                         else:
                             # In the case of unknown words
                             arg2[i][j][k] = len(self.word_index.keys()) + 1
-                    arg2[i][j] = torch.tensor(arg2[i][j])
+                    arg2[i][j] = torch.tensor(arg2[i][j],dtype=torch.int64)
 
         else:
             for i,file in enumerate(arg1):
@@ -459,7 +459,7 @@ class PreProcessor:
                     else:
                         # In the case of unknown words
                        arg1[i][j]= len(self.word_index.keys()) + 1  
-                arg1[i] = torch.tensor(arg1[i])
+                arg1[i] = torch.tensor(arg1[i], dtype=torch.int64)
 
             for i,file in enumerate(arg2):
                 for j,name in enumerate(file):
@@ -468,7 +468,7 @@ class PreProcessor:
                     else:
                         # In the case of unknown words
                         arg2[i][j] = len(self.word_index.keys()) + 1   
-                arg2[i] = torch.tensor(arg2[i])
+                arg2[i] = torch.tensor(arg2[i], dtype=torch.int64)
                             
     
     def setUpLabels(self,function_names_train,function_segments_train,descriptions_train,summaries_train):
@@ -480,8 +480,9 @@ class PreProcessor:
             index_code = int(DataSet_train.loc[row, 'CC'])
             index_UC = int(DataSet_train.loc[row, 'UC'])
             label = int(DataSet_train.loc[row, 'Labels'])
-            Features.append([function_names_train[index_code],function_segments_train[index_code],descriptions_train[index_UC],summaries_train[index_UC]])
-            labels.append(label)
+            if len(function_names_train[index_code]) != 0 and len(function_segments_train[index_code]) != 0 and len(descriptions_train[index_UC]) != 0 and len(summaries_train[index_UC]) != 0:
+                Features.append([function_names_train[index_code],function_segments_train[index_code],descriptions_train[index_UC],summaries_train[index_UC]])
+                labels.append(label)
         return Features,labels
 
 
