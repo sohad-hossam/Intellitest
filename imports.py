@@ -48,3 +48,5 @@ from torch.utils.data import random_split
 from torch import nn
 from tqdm import tqdm
 from torch.nn.utils.rnn import pad_sequence
+
+from gensim.models import Word2Vec
