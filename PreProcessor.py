@@ -423,9 +423,9 @@ class PreProcessor:
                     if (not self.Vocab.get(name) or self.Vocab[name] < 2):
                             arg2[i][j]="__unk__"  
                             # print("entered4")   
-    def vocabToIndex(self):
+    def vocabToIndex(self, vocab: dict):
         #convert each word in the vocan to index in order to map them later in the dataset
-        self.word_index = {word: idx + 1 for idx, word in enumerate(self.Vocab.keys())}
+        self.word_index = {word: idx + 1 for idx, word in enumerate(vocab)}
 
     def dataSetToIndex(self, arg1, arg2, UC_CC) -> None:
         # for CC: arg1 = function_names --> 3d array, arg2 = function_segments --> 3d array
@@ -439,7 +439,7 @@ class PreProcessor:
                         else:
                             # In the case of unknown words
                             arg1[i][j][k] = len(self.word_index.keys()) + 1
-                    arg1[i][j] = torch.tensor(arg1[i][j],dtype=torch.int64)
+                    arg1[i][j] = arg1[i][j]
 
             for i,file in enumerate(arg2):
                 for j,name in enumerate(file):
@@ -449,7 +449,7 @@ class PreProcessor:
                         else:
                             # In the case of unknown words
                             arg2[i][j][k] = len(self.word_index.keys()) + 1
-                    arg2[i][j] = torch.tensor(arg2[i][j],dtype=torch.int64)
+                    arg2[i][j] = arg2[i][j]
 
         else:
             for i,file in enumerate(arg1):
@@ -482,16 +482,17 @@ class PreProcessor:
                 [(['title3'], ['hi my name is2']), (['title4'], ['bassant2'])]
                 '''
                 names_segmants_zipped = list(zip(file_name, file_seg))
-                CC_doc = ''
+                CC_doc = list()
                 for func_name, func_seg in names_segmants_zipped:
-                    func_name_joined = ' '.join(func_name)
-                    CC_doc += func_name_joined
-                    fun_seg_joined = ' '.join(func_seg)
-                    CC_doc += ' '
-                    CC_doc += fun_seg_joined
+                    CC_doc.extend(func_name)
+                    CC_doc.extend(func_seg)
+                    # func_name_joined = ' '.join(func_name)
+                    # CC_doc += func_name_joined
+                    # fun_seg_joined = ' '.join(func_seg)
+                    # CC_doc += ' '
+                    # CC_doc += fun_seg_joined
     
-                if CC_doc != '':
-                    CC_doc += '</s>'
+                if len(CC_doc):
                     CC_docs.append(CC_doc)
             return CC_docs
         
@@ -500,15 +501,16 @@ class PreProcessor:
             names_segmants_zipped = list(zip(arg1, arg2))
             
             for func_name, func_seg in names_segmants_zipped:
-                UC_doc = ''
+                UC_doc = list()
                 func_name_joined = ' '.join(func_name)
                 UC_doc += func_name_joined
                 fun_seg_joined = ' '.join(func_seg)
                 UC_doc += ' '
                 UC_doc += fun_seg_joined
+                UC_doc.extend(func_name)
+                UC_doc.extend(func_seg)
 
-                if UC_doc != '':
-                    UC_doc += '</s>'
+                if len(UC_doc):
                     UC_docs.append(UC_doc)
         return UC_docs
 
