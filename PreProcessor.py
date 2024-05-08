@@ -528,8 +528,17 @@ class PreProcessor:
             index_UC = int(DataSet_train.loc[row, 'UC'])
             label = int(DataSet_train.loc[row, 'Labels'])
             if len(function_names_train[index_code]) != 0 and len(function_segments_train[index_code]) != 0 and len(descriptions_train[index_UC]) != 0 and len(summaries_train[index_UC]) != 0:
-                Features.append([function_names_train[index_code],function_segments_train[index_code],descriptions_train[index_UC],summaries_train[index_UC]])
-                labels.append(label)
+                if len(function_segments_train[index_code]) > 5000 :
+                    for i in range(len(function_segments_train[index_code]),5000):
+                        if i+5000 < len(function_segments_train[index_code]):
+                            Features.append([function_names_train[index_code][i:i+5000],function_segments_train[index_code][i:i+5000],descriptions_train[index_UC],summaries_train[index_UC]])
+                            labels.append(label)
+                        else :
+                            Features.append([function_names_train[index_code][i:],function_segments_train[index_code][i:],descriptions_train[index_UC],summaries_train[index_UC]])
+                            labels.append(label)
+                else : 
+                    Features.append([function_names_train[index_code],function_segments_train[index_code],descriptions_train[index_UC],summaries_train[index_UC]])
+                    labels.append(label)
         return Features,labels
 
 
