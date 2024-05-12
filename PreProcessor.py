@@ -518,11 +518,11 @@ class PreProcessor:
             
                             
     
-    def setUpLabels(self,function_names_train,function_segments_train,descriptions_train,summaries_train):
+    def setUpLabels(self,function_names_train,function_segments_train,descriptions_train,summaries_train,directory_csv):
         #reading the csv and creating a list containing the UC and CC and their coresponding label
         Features = list()
         labels=list()
-        DataSet_train = pd.read_csv('Dataset/teiid_dataset/train_modified.csv')
+        DataSet_train = pd.read_csv(directory_csv)
         for row in DataSet_train.index:
             index_code = int(DataSet_train.loc[row, 'CC'])
             index_UC = int(DataSet_train.loc[row, 'UC'])
