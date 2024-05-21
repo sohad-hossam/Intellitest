@@ -58,7 +58,7 @@ export function Header({ visibleHyperlinks, activeLink }) {
         <hr className="header-line"  style={{
                   backgroundColor:
                     activeLink === "Home" || activeLink === "About Us" || activeLink === "Source Code"
-                      ? "white"
+                      ? "none"
                       : "#092635",
                  
                 }} />

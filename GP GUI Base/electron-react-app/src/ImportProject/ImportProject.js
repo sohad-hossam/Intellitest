@@ -38,16 +38,16 @@ export function ImportProject() {
   useEffect(() => {
     const timer = setTimeout(() => {
       if (progress < 100) {
-        setProgress(progress + 10);
+        setProgress(progress + 20);
       } else {
         setRedirectToViewSource(true);
       }
-    }, 5000); // 10 seconds interval
+    }, 3000); 
     
     
   }, [progress]);
   useEffect(() => {
-    // Redirect to ViewSourcePage when redirectToViewSource is true
+   
     if (redirectToViewSource) {
       window.location.href = "http://localhost:3000/#/ViewSource";
     }

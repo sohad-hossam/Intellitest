@@ -30,10 +30,22 @@
   background-color: #092635;
   border-radius: 20px;
   padding: 20px;
-  width: 45%; 
+  width: 60%; 
   font-family: "Oswald", sans-serif;
   font-weight: 550;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); 
+  opacity: 0;
+  transition: opacity 0.5s ease; 
 }
+
+.items-card.show {
+  opacity: 1; /* Show the card when the 'show' class is applied */
+}
+
+.items-card.hide {
+  opacity: 0; /* Hide the card when the 'hide' class is applied */
+}
+
 .file-input {
   position: relative;
   display: inline-block; 
@@ -70,7 +82,28 @@
   padding: 30px;
   max-height: 700px;
   overflow-y: auto;
+  height: 95vh;
 }
 .child-container {
   margin-left: 20px;
+}
+
+.tree-struc span {
+  transition: background-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease, padding 0.4s ease, border-radius 0.4s ease;
+}
+
+.tree-struc span:hover {
+  background-color: #1234341a;
+  color:#123434;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  padding: 5px 10px;
+  border-radius: 7px;
+}
+.mohtawa
+{
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  border-radius: 7px;
+  height: 100vh;
 }

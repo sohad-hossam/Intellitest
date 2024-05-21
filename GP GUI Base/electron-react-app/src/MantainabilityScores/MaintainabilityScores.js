@@ -5,6 +5,7 @@ import { Header } from "../TopBar/TopBar";
 import { PageTitle } from "../PageTitle/PageTitle";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFolder, faFileCsv, faFileAlt, faFileCode  } from '@fortawesome/free-solid-svg-icons';
+
 const RenderFolderStructure = ({ folder, directoryPath, onFileClick }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -39,7 +40,6 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick }) => {
     onFileClick({ ...file, path: filePath });
   };
 
-  // Filter out files that are not Java files
   const javaFiles = folder.children.filter((child) => {
     return child.type === 'folder' || getFileExtension(child.name) === 'java';
   });
@@ -70,25 +70,25 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick }) => {
           ))}
         </div>
       )}
-       <style>
-            {`
-              svg {
-                font-family: "Russo One", sans-serif;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                width: 5%;
-                height: 80%;
-              }
-            `}
-          </style>
+      <style>
+        {`
+          svg {
+            font-family: "Russo One", sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 5%;
+            height: 80%;
+          }
+        `}
+      </style>
     </div>
   );
 };
 
-const ProgressBar = ({ label, score, onClick }) => {
+const ProgressBar = ({ label, score, onMouseEnter, onMouseLeave }) => {
   return (
-    <div className="progress-bar-container mt-3" onClick={onClick}>
+    <div className="progress-bar-container mt-3" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       <div className="row align-items-center">
         <div className="col-md-3">
           <div className="progress-label">{label}</div>
@@ -123,14 +123,13 @@ export function MaintainabilityScore() {
   const [selectedScoreKey, setSelectedScoreKey] = useState(null);
   const [folderStructure, setFolderStructure] = useState(null);
 
-  const itemsPerPage = 12;
+  const itemsPerPage = 10;
   const totalPages = Math.ceil((scores ? Object.keys(scores) : []).length / itemsPerPage);
   const [currentPage, setCurrentPage] = useState(1);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-
 
   const fetchFolderStructure = () => {
     fetch("http://localhost:5000/get-folder-structure?directory_path=GP GUI Base/electron-react-app/src/uploads")
@@ -146,21 +145,21 @@ export function MaintainabilityScore() {
   const handleFileClick = async (file) => {
     setSelectedFile(file);
     setLoading(true);
-  
+
     try {
-      const fileContentResponse = await fetch(`http://localhost:5000/get-file-content?file_path=${file.path}`); // Use file.path instead of file
+      const fileContentResponse = await fetch(`http://localhost:5000/get-file-content?file_path=${file.path}`);
       const fileContent = await fileContentResponse.text();
-  
+
       const formData = new FormData();
       formData.append("file", new Blob([fileContent], { type: "text/plain" }), file.name);
-  
+
       const response = await fetch("http://localhost:5000/compute-score", {
         method: "POST",
         body: formData,
       });
-  
+
       const data = await response.json();
-  
+
       if (response.ok) {
         setScores((prevScores) => ({
           ...prevScores,
@@ -175,10 +174,9 @@ export function MaintainabilityScore() {
       setLoading(false);
     }
   };
-  
 
-  const toggleCardVisibility = (key) => {
-    setSelectedScoreKey(key === selectedScoreKey ? null : key);
+  const toggleCardVisibility = (key, isVisible) => {
+    setSelectedScoreKey(isVisible ? key : null);
   };
 
   const renderScores = () => {
@@ -194,24 +192,26 @@ export function MaintainabilityScore() {
         <ProgressBar
           label={key}
           score={value.maintainability_score}
-          onClick={() => toggleCardVisibility(key)} 
+          onMouseEnter={() => toggleCardVisibility(key, true)}
+          onMouseLeave={() => toggleCardVisibility(key, false)}
         />
-        {selectedScoreKey === key && ( 
+        {selectedScoreKey === key && (
           <div className="items-card-container">
-            <div className="items-card mt-3">
+             <div className={`items-card mt-3 ${selectedScoreKey === key ? 'show' : 'hide'}`}>
               <h4 className="card-title">{key} - Maintainability Score : {Math.round(value.maintainability_score)}%</h4>
               <div className="m-3">
-                Program vocabulary: {value.halstead_volume_results.n} <br />
-                Program length: {value.halstead_volume_results.N} <br />
-                Calculated program length: {value.halstead_volume_results.N_hat} <br />
-                Volume: {value.halstead_volume_results.V} <br />
-                Difficulty: {value.halstead_volume_results.D} <br />
-                Effort: {value.halstead_volume_results.E} <br />
-                Time required to program: {value.halstead_volume_results.T} <br />
-                Number of delivered bugs: {value.halstead_volume_results.B} <br />
-                SLOC: {value.sloc_and_comment_lines_results.SLOC} <br />
-                Comment Lines Ratio: {value.sloc_and_comment_lines_results.comment_lines_ratio} <br />
-                Cyclomatic Complexity: {value.cyclomatic_complexity}
+              Program vocabulary: {Math.round(value.halstead_volume_results.D)} <br />
+              Program length: {Math.round(value.halstead_volume_results.N)} <br />
+              Calculated program length: {value.halstead_volume_results.N_hat.toFixed(3)} <br />
+              Volume: {value.halstead_volume_results.V.toFixed(3)} <br />
+              Difficulty: {value.halstead_volume_results.D.toFixed(3)} <br />
+              Effort: {value.halstead_volume_results.E.toFixed(3)} <br />
+              Time required to program: {value.halstead_volume_results.T.toFixed(3)} <br />
+              Number of delivered bugs: {value.halstead_volume_results.B.toFixed(3)} <br />
+              SLOC: {Math.round(value.sloc_and_comment_lines_results.SLOC)} <br />
+              Comment Lines Ratio: {value.sloc_and_comment_lines_results.comment_lines_ratio.toFixed(3)} <br />
+              Cyclomatic Complexity: {value.cyclomatic_complexity.toFixed(3)}
+          
               </div>
             </div>
           </div>
@@ -230,16 +230,11 @@ export function MaintainabilityScore() {
 
   return (
     <div className="App">
-      <Header
-        visibleHyperlinks={visibleHyperlinks}
-        activeLink="Maintainability Scores"
-      />
-      <PageTitle
-        title={"Maintainability Scores"}
-        activeLink="Maintainability Scores"
-      />
-      <div className="container mt-5">
+      <Header visibleHyperlinks={visibleHyperlinks} activeLink="Maintainability Scores" />
+      <PageTitle title={"Maintainability Scores"} activeLink="Maintainability Scores" />
+      <div className="container mohtawa mt-5">
         <div className="row">
+       
           <div className="col-md-3  tree-struc"> 
             {folderStructure ? (
               <RenderFolderStructure folder={folderStructure} directoryPath="GP GUI Base/electron-react-app/src/uploads/teiid_dataset" onFileClick={handleFileClick} />
@@ -247,26 +242,16 @@ export function MaintainabilityScore() {
               <p>Loading folder structure...</p>
             )}
           </div>
-          <div className="col-md-9">
+          <div className="col-md-7">
             {renderScores()}
           </div>
+          <div className="col-md-1"></div>
         </div>
-    
         <nav aria-label="Page navigation example">
-          <ul className="pagination justify-content-center mt-3 ">
+          <ul className="pagination justify-content-center mt-3">
             {[...Array(totalPages).keys()].map((page) => (
-              <li
-                key={page}
-                className={`page-item ${
-                  currentPage === page + 1 ? "active" : ""
-                }`}
-              >
-                <button
-                  className={`page-link ${
-                    currentPage === page + 1 ? "btn-primary" : ""
-                  }`}
-                  onClick={() => handlePageChange(page + 1)}
-                >
+              <li key={page} className={`page-item ${currentPage === page + 1 ? "active" : ""}`}>
+                <button className={`page-link ${currentPage === page + 1 ? "btn-primary" : ""}`} onClick={() => handlePageChange(page + 1)}>
                   {page + 1}
                 </button>
               </li>

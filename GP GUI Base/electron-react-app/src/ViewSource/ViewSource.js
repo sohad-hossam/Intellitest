@@ -148,10 +148,11 @@ function ViewSource() {
             <Header visibleHyperlinks={visibleHyperlinks} activeLink="Source Code" />
 
             <div className="row">
+                <div className="col-md-1"></div>
                 <div className="col-md-3 vscode-file-tree">
                     <RenderFolderStructure folder={folderStructure} directoryPath="GP GUI Base/electron-react-app/src/uploads/teiid_dataset" onFileClick={handleFileClick} />
                 </div>
-                <div className="col-md-9 vscode-code-editor">
+                <div className="col-md-7 vscode-code-editor">
                     {selectedFileContent && (
                         <>
                             <EditorHeader filePath={selectedFilePath} />
@@ -159,6 +160,7 @@ function ViewSource() {
                         </>
                     )}
                 </div>
+                <div className="col-md-1"></div>
             </div>
             <style>
                 {`

@@ -35,13 +35,6 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); 
 }
 
-.vscode-file-tree span:hover {
-    background-color: #123434;
-    color: white;
-    cursor: grab;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); 
-}
-
 
 ::-webkit-scrollbar {
     width: 12px;
@@ -79,10 +72,15 @@
 ::-webkit-scrollbar-thumb-vertical:hover {
     background: rgb(64, 125, 89);
 }
+.vscode-file-tree span {
+    transition: background-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease, padding 0.4s ease, border-radius 0.4s ease;
+}
+
 .vscode-file-tree span:hover {
     background-color: #123434;
     color: white;
     cursor: pointer;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     padding: 5px 10px;
-  }
+    border-radius: 7px;
+}
