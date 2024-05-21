@@ -108,6 +108,8 @@ class PreProcessor:
         self.UC_to_index = dict()
         self.CC_to_index = dict()
         self.Vocab=dict()
+        self.Vocab["</s>"] = 2
+
         self.word_index=dict()
         Language.build_library(
         # Store the library in the `build` directory
@@ -280,7 +282,6 @@ class PreProcessor:
                     method_name=source_code[child.children[2].start_byte:child.children[2].end_byte]
                     method_name = re.sub(self.chars_to_remove," " ,method_name)
                     split_words = re.sub(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|_+", " ", method_name).lower().split()
-                    temp_function_names=list()
 
                     for word in split_words:
                         if ( word not in self.stop_words and word != "" and len(word) != 1):
@@ -289,9 +290,9 @@ class PreProcessor:
                             word_stem = porter_stemmer.stem(word)
                             if train_test == "train":
                                 self.Vocab[word_stem] = self.Vocab.get(word_stem, 0) + 1
-                            temp_function_names.append(word_stem)
-
-                    functions_names.append(temp_function_names)
+                            # functions_segments.append("<s>")
+                            functions_names.append(word_stem)
+                    functions_names.append("</s>")
 
                 elif (child.parent.type == "method_declaration" and child.type == "block"):
                     segment = source_code[child.start_byte:child.end_byte]
@@ -299,7 +300,6 @@ class PreProcessor:
                         continue
                     segmentCleaned = re.sub(self.chars_to_remove," " ,segment)
                     split_words = re.sub(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|_+", " ", segmentCleaned).lower().split()
-                    temp_function_segments=list()
 
                     for word in split_words:
                         word = word.strip()
@@ -309,10 +309,10 @@ class PreProcessor:
                             word_stem = porter_stemmer.stem(word)
                             if train_test == "train":
                                 self.Vocab[word_stem] = self.Vocab.get(word_stem, 0) + 1
-                            temp_function_segments.append(word_stem)
+                            # functions_segments.append("<s>")
+                            functions_segments.append(word_stem)
+                    functions_segments.append("</s>")
 
-                    functions_segments.append(temp_function_segments)
-        
         return functions_names,functions_segments
     
     def setupDeepLearning(self, code_path: str,CC_or_UC:str = 'CC' ,train_test="train")->tuple:
@@ -347,7 +347,7 @@ class PreProcessor:
                       
         return arg1,arg2
 
-    def PreProcessorUCDeepLearning(self, filename: str,train_test="train"):
+    def PreProcessorUCDeepLearning(self, filename: str,train_test="train") -> tuple:
         porter_stemmer = PorterStemmer()
         numeric_chars_to_remove = r"[0-9]"
 
@@ -393,23 +393,21 @@ class PreProcessor:
                             description_tokenized.append(token_stem)
         return description_tokenized, summary_tokenized
 
-    def setUpUnknown (self,arg1,arg2,UC_CC):
+    def setUpUnknown (self,arg1,arg2,UC_CC) -> None:
 
         # for CC: arg1 = function_names --> 3d array, arg2 = function_segments --> 3d array
         # for UC: arg1 = descriptions --> 2d, arg2 = summary --> 2d
         if UC_CC == 'CC':
             for i,file in enumerate(arg1):
                 for j,name in enumerate(file):
-                    for k,name_part in enumerate(name):
-                        if ( not self.Vocab.get(name_part) or  self.Vocab[name_part] < 2):
-                            arg1[i][j][k]="__unk__"
+                        if ( not self.Vocab.get(name) or  self.Vocab[name] < 2):
+                            arg1[i][j]="__unk__"
                             # print("entered1")
 
             for i,file in enumerate(arg2):
                 for j,name in enumerate(file):
-                    for k,name_part in enumerate(name):
-                        if (not self.Vocab.get(name_part) or self.Vocab[name_part] < 2):
-                            arg2[i][j][k]="__unk__"
+                        if (not self.Vocab.get(name) or self.Vocab[name] < 2):
+                            arg2[i][j]="__unk__"
                             # print("entered2")
         else:
             for i,file in enumerate(arg1):
@@ -423,65 +421,124 @@ class PreProcessor:
                     if (not self.Vocab.get(name) or self.Vocab[name] < 2):
                             arg2[i][j]="__unk__"  
                             # print("entered4")   
-    def vocabToIndex(self):
+    def vocabToIndex(self, vocab: dict):
         #convert each word in the vocan to index in order to map them later in the dataset
-        self.word_index = {word: idx + 1 for idx, word in enumerate(self.Vocab.keys())}
+        self.word_index = {word: idx + 1 for idx, word in enumerate(vocab)}
 
-    def dataSetToIndex(self,arg1,arg2,UC_CC):
+    def dataSetToIndex(self, arg1, arg2) -> None:
         # for CC: arg1 = function_names --> 3d array, arg2 = function_segments --> 3d array
         # for UC: arg1 = descriptions --> 2d, arg2 = summary --> 2d
+        # if UC_CC == 'CC':
+        #     for i,file in enumerate(arg1):
+        #         for j,name in enumerate(file):
+        #             if(self.word_index.get(name) != None):
+        #                 arg1[i][j]=self.word_index[name]
+        #             else:
+        #                 # In the case of unknown words
+        #                 arg1[i][j]= len(self.word_index.keys()) + 1
+
+        #     for i,file in enumerate(arg2):
+        #         for j,name in enumerate(file):
+        #             if(self.word_index.get(name) != None):
+        #                 arg2[i][j]=self.word_index[name]
+        #             else:
+        #                 # In the case of unknown words
+        #                 arg2[i][j] = len(self.word_index.keys()) + 1
+
+        #else:
+        for i,file in enumerate(arg1):
+            for j,name in enumerate(file):
+                if(self.word_index.get(name) != None):
+                    arg1[i][j]=self.word_index[name]
+                else:
+                    # In the case of unknown words
+                    arg1[i][j]= len(self.word_index.keys())  
+            arg1[i] = torch.tensor(arg1[i], dtype=torch.int64)
+
+        for i,file in enumerate(arg2):
+            for j,name in enumerate(file):
+                if(self.word_index.get(name) != None):
+                    arg2[i][j] = self.word_index[name]
+                else:
+                    # In the case of unknown words
+                    arg2[i][j] = len(self.word_index.keys()) 
+            arg2[i] = torch.tensor(arg2[i], dtype=torch.int64)
+
+    def word2VecProcessor(self, arg1, arg2, UC_CC) -> list:
+        # is used because the word2vec takes 2d array , and we want to give the word2vec name+segement 
+        # output = both UC and CC are 1d array CC now contains all the functions regardless the file
+        # output = in Case of UC the list now contains all UC files where each entry containg the summary concatented with the description 
         if UC_CC == 'CC':
-            for i,file in enumerate(arg1):
-                for j,name in enumerate(file):
-                    for k,name_part in enumerate(name):
-                        if(self.word_index.get(name_part) != None):
-                            arg1[i][j][k]=self.word_index[name_part]
-                        else:
-                            # In the case of unknown words
-                            arg1[i][j][k] = len(self.word_index.keys()) + 1
-                    arg1[i][j] = torch.tensor(arg1[i][j])
+            CC_docs = list()
+            # names: [[<s>,'n1','n2'</s>,<s>,n11,n22,</s>],[<s> , n1' ,</s>,<s>'n2',n11,n22</s>],[n1','n2',n11,n22]]
+            # segments : [[<s>,'nte1','ntre2'</s>,<s>,ngvd11,nvrcdxsz22,</s>],[<s> , nscd1' ,</s>,<s>'ncdd2',nfdsd11,nfdewe22</s>],[n1','n2',n11,n22]]
 
-            for i,file in enumerate(arg2):
-                for j,name in enumerate(file):
-                    for k,name_part in enumerate(name):
-                        if(self.word_index.get(name_part) != None):
-                            arg2[i][j][k]=self.word_index[name_part]
-                        else:
-                            # In the case of unknown words
-                            arg2[i][j][k] = len(self.word_index.keys()) + 1
-                    arg2[i][j] = torch.tensor(arg2[i][j])
+            for file_name, file_seg in zip(arg1, arg2):
 
-        else:
-            for i,file in enumerate(arg1):
-                for j,name in enumerate(file):
-                    if(self.word_index.get(name) != None):
-                        arg1[i][j]=self.word_index[name]
-                    else:
-                        # In the case of unknown words
-                       arg1[i][j]= len(self.word_index.keys()) + 1  
-                arg1[i] = torch.tensor(arg1[i])
+                '''
+                Example for the 2nd zip
+                [(['title1'], ['hi my name is', 'lol']), (['title2'], ['bassant'])]
+                [(['title3'], ['hi my name is2']), (['title4'], ['bassant2'])]
+                '''
+                # [<s>,'n1','n2',</s>,<s>,n11,n22,</s>] ->file_name
+                # [<s>,'nte1','ntre2'</s>,<s>,ngvd11,nvrcdxsz22,</s>] -> 
+                # names_segmants_zipped = list(zip(file_name, file_seg))
 
-            for i,file in enumerate(arg2):
-                for j,name in enumerate(file):
-                    if(self.word_index.get(name) != None):
-                        arg2[i][j] = self.word_index[name]
-                    else:
-                        # In the case of unknown words
-                        arg2[i][j] = len(self.word_index.keys()) + 1   
-                arg2[i] = torch.tensor(arg2[i])
+                file_name_joined = ' '.join(file_name).split('</s>') #['func1 in file1', ' func2 in file1', '']
+                file_seg_joined = ' '.join(file_seg).split('</s>') #['func1_seg in file1 ', ' func2_seg in file1', '']
+
+                name_seg_concatenated = list(zip(file_name_joined,file_seg_joined)) #[('func1 in file1','func1_seg in file1 ')]
+                
+                for name_seg in name_seg_concatenated:
+                    name_seg_tokens = list()
+                    name_seg_tokens = name_seg[0].split()+name_seg[1].split() #[func1 ,in ,file1,func1_seg ,in, file1 ]
+                    if (len(name_seg_tokens)):
+                        name_seg_tokens.append("</s>")
+                        CC_docs.append(name_seg_tokens) 
+            return CC_docs
+        
+        elif UC_CC == 'UC':
+            UC_docs = list()
+            names_segmants_zipped = list(zip(arg1, arg2))
+            
+            for func_name, func_seg in names_segmants_zipped:
+                UC_doc = list()
+                func_name_joined = ' '.join(func_name)
+                UC_doc += func_name_joined
+                fun_seg_joined = ' '.join(func_seg)
+                UC_doc += ' '
+                UC_doc += fun_seg_joined
+                UC_doc.extend(func_name)
+                UC_doc.extend(func_seg)
+
+                if len(UC_doc):
+                    UC_docs.append(UC_doc)
+        return UC_docs
+
+            
                             
     
-    def setUpLabels(self,function_names_train,function_segments_train,descriptions_train,summaries_train):
+    def setUpLabels(self,function_names_train,function_segments_train,descriptions_train,summaries_train,directory_csv):
         #reading the csv and creating a list containing the UC and CC and their coresponding label
         Features = list()
         labels=list()
-        DataSet_train = pd.read_csv('Dataset/teiid_dataset/train_modified.csv')
+        DataSet_train = pd.read_csv(directory_csv)
         for row in DataSet_train.index:
             index_code = int(DataSet_train.loc[row, 'CC'])
             index_UC = int(DataSet_train.loc[row, 'UC'])
             label = int(DataSet_train.loc[row, 'Labels'])
-            Features.append([function_names_train[index_code],function_segments_train[index_code],descriptions_train[index_UC],summaries_train[index_UC]])
-            labels.append(label)
+            if len(function_names_train[index_code]) != 0 and len(function_segments_train[index_code]) != 0 and len(descriptions_train[index_UC]) != 0 and len(summaries_train[index_UC]) != 0:
+                if len(function_segments_train[index_code]) > 5000 :
+                    for i in range(len(function_segments_train[index_code]),5000):
+                        if i+5000 < len(function_segments_train[index_code]):
+                            Features.append([function_names_train[index_code][i:i+5000],function_segments_train[index_code][i:i+5000],descriptions_train[index_UC],summaries_train[index_UC]])
+                            labels.append(label)
+                        else :
+                            Features.append([function_names_train[index_code][i:],function_segments_train[index_code][i:],descriptions_train[index_UC],summaries_train[index_UC]])
+                            labels.append(label)
+                else : 
+                    Features.append([function_names_train[index_code],function_segments_train[index_code],descriptions_train[index_UC],summaries_train[index_UC]])
+                    labels.append(label)
         return Features,labels
 
 

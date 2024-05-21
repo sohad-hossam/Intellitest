@@ -73,8 +73,8 @@ class FeatureExtraction:
         self.UC_count_matrix /= UC_words_count
         self.code_count_matrix /= code_words_count
 
-        self.UC_count_matrix = self.UC_count_matrix.toarray()
-        self.code_count_matrix = self.code_count_matrix.toarray()
+        self.UC_count_matrix = self.UC_count_matrix.tolist()
+        self.code_count_matrix = self.code_count_matrix.tolist()
         
         return self.UC_count_matrix, self.code_count_matrix,tf_uc_dict,tf_code_dict
 
@@ -428,7 +428,7 @@ class FeatureExtraction:
 
 
     def simplifiedClarityScore(self,queries,query_tf_matrix,doc_dict):
-        return np.vectorize(lambda i: self._simplifiedClarityScorePerQuery(queries[i],query_tf_matrix[i,:],doc_dict))(range(len(queries))).reshape(-1,1)
+        return np.vectorize(lambda i: self._simplifiedClarityScorePerQuery(queries[i],query_tf_matrix[i][:],doc_dict))(range(len(queries))).reshape(-1,1)
 
     def _CoherenceScorePerTerm(self,doc_tfidf_matrix:np.array)->np.float16:
         cosineSimilarity = cosine_similarity(doc_tfidf_matrix)
