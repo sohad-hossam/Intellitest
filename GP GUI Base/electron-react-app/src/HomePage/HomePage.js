@@ -1,9 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useState,useEffect } from "react";
 import "./HomePage.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Header } from "../TopBar/TopBar";
 import { PageTitle } from "../PageTitle/PageTitle";
-import { Link } from "react-router-dom";
+import { Link  } from "react-router-dom";
+
+
 
 let progress = -1;
 
@@ -25,49 +27,92 @@ function animate() {
   }
 }
 
-function Message() {
-  return (
-    <div className="Message">
-      Uncovering Excellence:<br></br> Where Quality Meets Precision.
-    </div>
-  );
-}
 
-function ButtonsMoving() {
-  return (
-    <div className="container mt-5">
-      <div className="row">
-        <div className="col-md-2"></div>
-        <div className="col-md-8 text-center thebuttons">
-          <Link to={"/ImportProject"} className="btnImport  m-5">
-            Import Project
-          </Link>
-          <Link to={"/ViewSource"} className="btnProceed m-5">
-            Proceed with
-          </Link>
-        </div>
-        <div className="col-md-2"></div>
-      </div>
-    </div>
-  );
-}
 
 export function HomePage() {
+
   const visibleHyperlinks = [
     "Home",
     "About Us",
     "Import Project",
     "Proceed With",
   ];
+  const [fileUploaded, setFileUploaded] = useState(false);
+  const [fileFullyUploaded, setFileFullyUploaded] = useState(false);
+
+  const handleFileChange = async (event) => {
+    const selectedFile = event.target.files[0];
+
+    // Check if selectedFile is not null or undefined
+    if (!selectedFile) {
+      console.error("No file selected.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+
+    // Extract the directory path from the temporary file path
+    const folderPath =
+      selectedFile && selectedFile.webkitRelativePath
+        ? selectedFile.webkitRelativePath.split("/").slice(0, -1).join("/")
+        : "";
+
+    formData.append("folderPath", folderPath);
+
+    try {
+      const response = await fetch("http://localhost:5000/upload-folder", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Upload failed with status ${response.status}`);
+      }
+
+      setFileUploaded(true);
+      setFileFullyUploaded(true);
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    }
+  };
+
   useEffect(() => {
     animate();
   }, []);
+
+  useEffect(() => {
+   
+    if (fileFullyUploaded) {
+     //redirect to ImportProject
+      window.location.href = "http://localhost:3000/#/ImportProject";
+
+    }
+  }, [fileFullyUploaded]);
+
+
   return (
     <div className="HomePage">
       <Header visibleHyperlinks={visibleHyperlinks} activeLink="Home" />
       <PageTitle title={"Welcome to Intellitest"} activeLink="Home" />
-      <Message />
-      <ButtonsMoving />
+      <div className="Message">
+        Uncovering Excellence:<br></br> Where Quality Meets Precision.
+      </div>
+      <div className="container mt-5">
+        <div className="row">
+          <div className="col-md-2"></div>
+          <div className="col-md-8 text-center thebuttons">
+            <div className="file-upload">
+              <label htmlFor="file-upload">Choose File</label>
+              <input type="file" id="file-upload" onChange={handleFileChange} />
+            </div>
+            <Link to={"/ViewSource"} className="btnProceed m-5">
+              Proceed with
+            </Link>
+          </div>
+          <div className="col-md-2"></div>
+        </div>
+      </div>
     </div>
   );
 }

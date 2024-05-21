@@ -6,10 +6,7 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     height: 100vh;
     overflow-x: hidden;
-}
-
-.vscode-page .child-container {
-    margin-left: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .vscode-page .code-editor {
@@ -18,39 +15,34 @@
     overflow-y: auto;
     border: 1px solid #444;
     max-height: 800px;
-}
-
-.vscode-page .code-editor pre {
-    margin: 0;
-    white-space: pre-wrap;
-}
-
-.vscode-page .code-editor pre code {
-    color: #abb2bf;
-    font-family: 'Fira Code', Consolas, 'Courier New', monospace;
-    font-size: 14px;
-}
-
-.vscode-page .file-tree-container {
-    border: 1px solid #123434;
-    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); 
 }
 
 .vscode-file-tree {
     background-color: #123434;
     border-right: 1px solid #123434;
-    padding: 20px;
+    padding: 30px;
     max-height: 850px;
     overflow-y: auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .vscode-code-editor {
     background-color: rgba(15, 42, 42, 0.9);
     border-left: 1px solid rgba(15, 42, 42, 0.9);
     max-height: 800px;
+    height: 100vh;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); 
 }
 
-/* Style horizontal scrollbar */
+.vscode-file-tree span:hover {
+    background-color: #123434;
+    color: white;
+    cursor: grab;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); 
+}
+
+
 ::-webkit-scrollbar {
     width: 12px;
     height: 12px;
@@ -69,7 +61,7 @@
     background: rgb(64, 125, 89);
 }
 
-/* Style vertical scrollbar */
+
 ::-webkit-scrollbar-vertical {
     width: 12px;
     height: 12px;
@@ -91,4 +83,6 @@
     background-color: #123434;
     color: white;
     cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    padding: 5px 10px;
   }

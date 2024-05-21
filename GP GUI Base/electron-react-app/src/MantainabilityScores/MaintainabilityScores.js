@@ -49,6 +49,7 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick }) => {
       <div>
         <span onClick={toggleFolder}>
           {getFileIcon(folder.name, folder.type)}
+          &nbsp;&nbsp;
           {folder.name}
         </span>
       </div>
@@ -61,6 +62,7 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick }) => {
               ) : (
                 <span onClick={() => handleFolderClick(folder, child)}>
                   {getFileIcon(child.name, child.type)}
+                  &nbsp;&nbsp;
                   {child.name}
                 </span>
               )}
@@ -111,9 +113,9 @@ const ProgressBar = ({ label, score, onClick }) => {
 export function MaintainabilityScore() {
   const visibleHyperlinks = [
     "Home",
-    "About Us",
     "Maintainability Scores",
     "Trace Links",
+    "About Us",
   ];
   const [scores, setScores] = useState({});
   const [loading, setLoading] = useState(true);
@@ -238,14 +240,14 @@ export function MaintainabilityScore() {
       />
       <div className="container mt-5">
         <div className="row">
-          <div className="col-md-4  tree-struc"> 
+          <div className="col-md-3  tree-struc"> 
             {folderStructure ? (
               <RenderFolderStructure folder={folderStructure} directoryPath="GP GUI Base/electron-react-app/src/uploads/teiid_dataset" onFileClick={handleFileClick} />
             ) : (
               <p>Loading folder structure...</p>
             )}
           </div>
-          <div className="col-md-8">
+          <div className="col-md-9">
             {renderScores()}
           </div>
         </div>

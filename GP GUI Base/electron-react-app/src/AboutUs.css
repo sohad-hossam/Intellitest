@@ -1,0 +1,106 @@
+
+
+
+.circular-parent-container {
+    width: 100%; /* Ensure it takes up the entire width of the column */
+    height: 400px; /* Adjust height as needed */
+    display: flex;
+    justify-content: center; /* Center its child horizontally */
+    align-items: center; /* Center its child vertically */
+  }
+  
+  .circular-container {
+    width: 700px; 
+    height: 400px;
+    
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .circular-container:hover {
+    transform: scale(1.1); 
+  }
+  
+  .circular-image {
+    width: 140%; 
+    height: 90%;
+    object-fit: inherit;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3); 
+    overflow: hidden;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .circular-image:hover {
+    filter: brightness(70%); 
+  }
+  
+  .about-us-content
+  {
+    color:azure;
+    margin-top: 40px;
+    font-size: large;
+  }
+  .question{
+    color:azure;
+    font-size: 80px;
+    font-weight: bold;
+  }
+
+.card-wrapper {
+    height: 15%; 
+    transition: height 0.3s ease;
+    position: relative; 
+    overflow: hidden;
+}
+
+
+.card {
+    background-color: #f0f0f0;
+    padding: 20px;
+    transition: transform 0.3s ease; 
+    position: relative; 
+    bottom: 0; 
+    width: 100%; 
+}
+
+
+.card-image {
+    width: 100%; 
+    height: 300px; 
+}
+
+.card-content {
+    text-align: center;
+}
+
+.card-name {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 28px;
+    height: 50px;
+}
+
+
+.card-wrapper .card {
+    transform: translateY(85%); 
+}
+
+.card-wrapper {
+    height: 15%; 
+}
+.card-wrapper:hover .card {
+    transform: translateY(0); 
+}
+
+.card-wrapper:hover {
+    height: 100%; 
+}
+.PageBottom 
+{
+    width: 100%;
+    background-color:  #092635;
+    height: 300px;
+}
+.list-unstyled
+{
+    color:#f0f0f0;
+}
