@@ -139,11 +139,12 @@ export function AboutUs() {
             </div>
         </div>
         <div className="mt-3">
-    <h3>
-        <a href="https://docs.google.com/document/d/1kU-c8wsEUrNs8FKT7EbB6aFeMTJcEd2E/edit" className="text-decoration-none text-white">
-            Get deeper insights of our product through the book
-        </a>
-    </h3>
+        <h3>
+        <i className="me-2 fa-1x text-white bi bi-arrow-right arrow-icon fw-bold"></i>
+  <a href="https://docs.google.com/document/d/1kU-c8wsEUrNs8FKT7EbB6aFeMTJcEd2E/edit" className="text-decoration-none text-white">
+    Get deeper insights of our product through the book
+  </a>
+</h3>
 </div>
 
 

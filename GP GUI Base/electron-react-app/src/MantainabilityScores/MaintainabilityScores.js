@@ -283,7 +283,6 @@ export function MaintainabilityScore() {
   return (
     <div className="App">
       <Header visibleHyperlinks={visibleHyperlinks} activeLink="Maintainability Scores" />
-      <PageTitle title={"Maintainability Scores"} activeLink="Maintainability Scores" />
       <div className="container mohtawa mt-5">
         <div className="row ">
           <div className="col-md-3 tree-struc">
@@ -297,13 +296,11 @@ export function MaintainabilityScore() {
                 style={styles.searchInput}
               />
             </div>
-            {folderStructure ? (
-              <RenderFolderStructure folder={folderStructure} directoryPath="GP GUI Base/electron-react-app/src/uploads/teiid_dataset" onFileClick={handleFileClick} searchQuery={searchQuery} />
-            ) : (
-              <p>Loading folder structure...</p>
-            )}
+            
+          <RenderFolderStructure folder={folderStructure} directoryPath="GP GUI Base/electron-react-app/src/uploads/teiid_dataset" onFileClick={handleFileClick} searchQuery={searchQuery} />
           </div>
           <div className="col-md-9 p-2">
+            <PageTitle title="Maintainability Scores" />
             {renderScores()}
           </div>
        
