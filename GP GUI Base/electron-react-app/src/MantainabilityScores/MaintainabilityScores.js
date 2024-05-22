@@ -253,7 +253,9 @@ export function MaintainabilityScore() {
       border: "3px solid #123434",
     }
   };
-
+  if (!folderStructure) {
+    return null;
+}
   return (
     <div className="App">
       <Header visibleHyperlinks={visibleHyperlinks} activeLink="Maintainability Scores" />
