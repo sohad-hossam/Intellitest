@@ -56,8 +56,9 @@ const CodeEditor = ({ content, fileType }) => {
             padding: '20px', 
             borderRadius: '5px',
             overflowX: 'auto', 
-            maxHeight: '800px', 
+            maxHeight: '780px', 
             overflowY: 'auto', 
+
           }}
         showLineNumbers = {true}
         PreTag="div" 
