@@ -94,7 +94,7 @@ const ProgressBar = ({ label, score, onMouseEnter, onMouseLeave }) => {
   return (
     <div className="progress-bar-container mt-3" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       <div className="row align-items-center">
-        <div className="col-md-3">
+        <div className="col-md-3 col-md-3 text-center">
           <div className="progress-label">{label}</div>
         </div>
         <div className="col-md-9">
@@ -201,7 +201,7 @@ export function MaintainabilityScore() {
           onMouseLeave={() => toggleCardVisibility(key, false)}
         />
         {selectedScoreKey === key && (
-          <div className="items-card-container">
+          <div className="items-card-container ">
             <div className={`items-card mt-3 ${selectedScoreKey === key ? 'show' : 'hide'}`}>
               <h4 className="card-title">{key} - Maintainability Score : {Math.round(value.maintainability_score)}%</h4>
               <div className="m-3">
@@ -259,7 +259,7 @@ export function MaintainabilityScore() {
       <Header visibleHyperlinks={visibleHyperlinks} activeLink="Maintainability Scores" />
       <PageTitle title={"Maintainability Scores"} activeLink="Maintainability Scores" />
       <div className="container mohtawa mt-5">
-        <div className="row">
+        <div className="row ">
           <div className="col-md-3 tree-struc">
             <div style={styles.searchContainer}>
               <FontAwesomeIcon icon={faSearch} style={styles.searchIcon} />
@@ -277,10 +277,10 @@ export function MaintainabilityScore() {
               <p>Loading folder structure...</p>
             )}
           </div>
-          <div className="col-md-7">
+          <div className="col-md-9 p-2">
             {renderScores()}
           </div>
-          <div className="col-md-1"></div>
+       
         </div>
         <nav aria-label="Page navigation example">
           <ul className="pagination justify-content-center mt-3">
