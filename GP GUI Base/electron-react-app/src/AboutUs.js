@@ -38,7 +38,6 @@ export function AboutUs() {
   }, []);
   const visibleHyperlinks = [
     "Home",
-    "Import Project",
     "Proceed With",
     "About Us",
   ];

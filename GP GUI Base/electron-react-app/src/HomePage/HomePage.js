@@ -34,7 +34,6 @@ export function HomePage() {
   const visibleHyperlinks = [
     "Home",
     "About Us",
-    "Import Project",
     "Proceed With",
   ];
   const [fileUploaded, setFileUploaded] = useState(false);
