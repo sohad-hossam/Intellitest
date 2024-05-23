@@ -98,7 +98,7 @@ class FeatureExtraction:
 
         # ------------------------------loop approach---------------------------#
         # loop-approach
-        JS_matrix = np.zeros((UC_count_matrix.shape[0], code_count_matrix.shape[0]))
+        JS_matrix = np.zeros((len(UC_count_matrix), len(code_count_matrix)))
         for i, UC_count_vector in enumerate(list(UC_count_matrix)):
             for j, code_count_vector in enumerate(list(code_count_matrix)):
                 JS_matrix[i][j] = pow(jensenshannon(UC_count_vector, code_count_vector), 2)

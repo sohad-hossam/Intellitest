@@ -1,5 +1,4 @@
 from imports import *
-import os
 #import dask.array 
 
 class PreProcessor:
@@ -11,7 +10,7 @@ class PreProcessor:
         \s*_+\s*|\s*;+\s*|\s*,+\s*|\s*\.+\s*| #Standalone Punctuation Marks
         \s*\+\s*|\s*-+\s*|\s*\/+\s*|\s*\+\s*|  #arethmatic operations
         \s*=+\s*|\s*!=+\s*|\s*>+\s*|\s*<+\s*|\s*&+\s*|
-        \s*\|+\s*
+        \s*\|+\s* | \s*\*+\s*
         |\s*!+\s*|\s*\"+\s*|\s*\'+\s*|    #assignment 
         \s*\(+\s*|\s*\)+\s*|\s*\{+\s*|\s*\}+\s*|\s*\[+\s*|\s*\]+\s*|\s*@+\s*|\s*:+\s*|  # brackets
         \s*\+\s*|\s*\#+\s*|\s*\\n+\s*|\s*\%+\s*|\s*\^+\s*|\s*\~+\s*|\s*\?+\s*|\s*\\+\s*|\s*\$+\s*"""
@@ -105,8 +104,8 @@ class PreProcessor:
             "Returns",
         }
 
-        self.UC_to_index = dict()
-        self.CC_to_index = dict()
+        # self.UC_to_index = dict()
+        # self.CC_to_index = dict()
         self.Vocab=dict()
         self.Vocab["</s>"] = 2
 
@@ -180,6 +179,7 @@ class PreProcessor:
         code_file_index = 0
         file_stack = list()
         file_stack.append(code_path)
+        CC_to_index = dict()
         while len(file_stack) > 0:
             filepath = file_stack.pop()
             for filename in os.listdir(filepath):
@@ -190,7 +190,7 @@ class PreProcessor:
                     tokens = self.PreProcessor(filepath_integrated, 'CC',train_or_test)
                     code_documents.append(tokens)
                     filepath_integrated.replace(code_path, "")
-                    self.CC_to_index[filepath_integrated.lower()] = code_file_index
+                    CC_to_index[filepath_integrated.lower()] = code_file_index
                     code_file_index += 1
         for i, doc in enumerate(code_documents):
             tokens = doc.split()
@@ -202,13 +202,14 @@ class PreProcessor:
 
                 all_tokens.add(tokens[j])
             code_documents[i] = ' '.join(tokens)
-        return code_documents,self.CC_to_index,all_tokens
+        return code_documents,CC_to_index,all_tokens
     
     def setupUC(self, UC_path: str, train_or_test: str)->tuple:
         UC_documents = list()
         all_tokens=set()
+        UC_to_index = dict()
         for i, filename in enumerate(os.listdir(UC_path)):
-            self.UC_to_index[filename.lower()] = i
+            UC_to_index[filename.lower()] = i
             filepath = os.path.join(UC_path, filename)
             tokens = self.PreProcessor(filepath, 'UC',train_or_test)
             UC_documents.append(tokens)
@@ -222,7 +223,7 @@ class PreProcessor:
 
                 all_tokens.add(tokens[j])
             UC_documents[i] = ' '.join(tokens)
-        return UC_documents, self.UC_to_index,all_tokens
+        return UC_documents, UC_to_index,all_tokens
     
     
     def setupCSV(self, csv_dir: str, modified_csv_dir: str,UC_to_index,CC_to_index) -> None:
@@ -282,6 +283,7 @@ class PreProcessor:
                     method_name=source_code[child.children[2].start_byte:child.children[2].end_byte]
                     method_name = re.sub(self.chars_to_remove," " ,method_name)
                     split_words = re.sub(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|_+", " ", method_name).lower().split()
+                    name_temp = []
 
                     for word in split_words:
                         if ( word not in self.stop_words and word != "" and len(word) != 1):
@@ -290,9 +292,9 @@ class PreProcessor:
                             word_stem = porter_stemmer.stem(word)
                             if train_test == "train":
                                 self.Vocab[word_stem] = self.Vocab.get(word_stem, 0) + 1
-                            # functions_segments.append("<s>")
-                            functions_names.append(word_stem)
-                    functions_names.append("</s>")
+                            name_temp.append(word_stem) #list of tokens in fucntion name 1 in file 1 
+                    functions_names.append(name_temp) #append list for each file name for first file
+                    # functions_names.append("</s>")
 
                 elif (child.parent.type == "method_declaration" and child.type == "block"):
                     segment = source_code[child.start_byte:child.end_byte]
@@ -300,7 +302,7 @@ class PreProcessor:
                         continue
                     segmentCleaned = re.sub(self.chars_to_remove," " ,segment)
                     split_words = re.sub(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|_+", " ", segmentCleaned).lower().split()
-
+                    function_temp = []
                     for word in split_words:
                         word = word.strip()
                         if ( word not in self.stop_words and word != "" and len(word) != 1 and word not in self.keywords_java):
@@ -309,9 +311,9 @@ class PreProcessor:
                             word_stem = porter_stemmer.stem(word)
                             if train_test == "train":
                                 self.Vocab[word_stem] = self.Vocab.get(word_stem, 0) + 1
-                            # functions_segments.append("<s>")
-                            functions_segments.append(word_stem)
-                    functions_segments.append("</s>")
+                            function_temp.append(word_stem) #list of tokens in fucntion 1 in file 1 
+                    functions_segments.append(function_temp)#append list for each file segment for first file
+                    # functions_segments.append("</s>")
 
         return functions_names,functions_segments
     
@@ -391,79 +393,77 @@ class PreProcessor:
                             if train_test == "train":
                                 self.Vocab[token_stem] = self.Vocab.get(token_stem, 0) + 1
                             description_tokenized.append(token_stem)
+
         return description_tokenized, summary_tokenized
 
-    def setUpUnknown (self,arg1,arg2,UC_CC) -> None:
+    def setUpUnknown (self,arg1,arg2,CC_UC:str) -> None:
 
         # for CC: arg1 = function_names --> 3d array, arg2 = function_segments --> 3d array
         # for UC: arg1 = descriptions --> 2d, arg2 = summary --> 2d
-        if UC_CC == 'CC':
-            for i,file in enumerate(arg1):
-                for j,name in enumerate(file):
-                        if ( not self.Vocab.get(name) or  self.Vocab[name] < 2):
-                            arg1[i][j]="__unk__"
-                            # print("entered1")
-
-            for i,file in enumerate(arg2):
-                for j,name in enumerate(file):
-                        if (not self.Vocab.get(name) or self.Vocab[name] < 2):
-                            arg2[i][j]="__unk__"
-                            # print("entered2")
+        if CC_UC == "CC":
+            for arg in [arg1,arg2]:
+                for i,file in enumerate(arg):
+                    for j,name_list in enumerate(file):
+                        for k,name_token in enumerate(name_list):
+                            if ( not self.Vocab.get(name_token) or  self.Vocab[name_token] < 2):
+                                arg[i][j][k] = "__unk__"
         else:
-            for i,file in enumerate(arg1):
-                for j,name in enumerate(file):
-                      if (not self.Vocab.get(name) or self.Vocab[name] < 2):
-                            arg1[i][j]="__unk__"    
-                            # print("entered3")       
+            for arg in [arg1,arg2]:
+                for i,file in enumerate(arg):
+                    for j,descrip_token in enumerate(file):
+                        if ( not self.Vocab.get(descrip_token) or  self.Vocab[descrip_token] < 2):
+                            arg[i][j]="__unk__"
 
-            for i,file in enumerate(arg2):
-                for j,name in enumerate(file):
-                    if (not self.Vocab.get(name) or self.Vocab[name] < 2):
-                            arg2[i][j]="__unk__"  
-                            # print("entered4")   
+                            
     def vocabToIndex(self, vocab: dict):
         #convert each word in the vocan to index in order to map them later in the dataset
         self.word_index = {word: idx + 1 for idx, word in enumerate(vocab)}
 
-    def dataSetToIndex(self, arg1, arg2) -> None:
+    def dataSetToIndex(self, arg1, arg2, UC_CC) -> None:
         # for CC: arg1 = function_names --> 3d array, arg2 = function_segments --> 3d array
         # for UC: arg1 = descriptions --> 2d, arg2 = summary --> 2d
-        # if UC_CC == 'CC':
-        #     for i,file in enumerate(arg1):
-        #         for j,name in enumerate(file):
-        #             if(self.word_index.get(name) != None):
-        #                 arg1[i][j]=self.word_index[name]
-        #             else:
-        #                 # In the case of unknown words
-        #                 arg1[i][j]= len(self.word_index.keys()) + 1
 
-        #     for i,file in enumerate(arg2):
-        #         for j,name in enumerate(file):
-        #             if(self.word_index.get(name) != None):
-        #                 arg2[i][j]=self.word_index[name]
-        #             else:
-        #                 # In the case of unknown words
-        #                 arg2[i][j] = len(self.word_index.keys()) + 1
+        if UC_CC == 'CC':
+            for arg in [arg1,arg2]:
+                for i,file in enumerate(arg):
+                    for j,name_list in enumerate(file):
+                        for k,name_token in enumerate(name_list):
+                            if(self.word_index.get(name_token) != None):
+                                arg[i][j][k]=self.word_index[name_token]
+                            else:
+                                # In the case of unknown words
+                                arg[i][j][k]= len(self.word_index.keys()) + 1
+                        arg[i][j] = torch.tensor(arg[i][j], dtype=torch.int64)
 
-        #else:
-        for i,file in enumerate(arg1):
-            for j,name in enumerate(file):
-                if(self.word_index.get(name) != None):
-                    arg1[i][j]=self.word_index[name]
-                else:
-                    # In the case of unknown words
-                    arg1[i][j]= len(self.word_index.keys())  
-            arg1[i] = torch.tensor(arg1[i], dtype=torch.int64)
+            # for i,file in enumerate(arg2):
+            #     for j,name in enumerate(file):
+            #         if(self.word_index.get(name) != None):
+            #             arg2[i][j]=self.word_index[name]
+            #         else:
+            #             # In the case of unknown words
+            #             arg2[i][j] = len(self.word_index.keys()) + 1
 
-        for i,file in enumerate(arg2):
-            for j,name in enumerate(file):
-                if(self.word_index.get(name) != None):
-                    arg2[i][j] = self.word_index[name]
-                else:
-                    # In the case of unknown words
-                    arg2[i][j] = len(self.word_index.keys()) 
-            arg2[i] = torch.tensor(arg2[i], dtype=torch.int64)
+        else:
+            for arg in [arg1,arg2]:
+                for i,file in enumerate(arg):
+                    for j,name in enumerate(file):
+                        if(self.word_index.get(name) != None):
+                            arg[i][j]=self.word_index[name]
+                        else:
+                            # In the case of unknown words
+                            arg[i][j]= len(self.word_index.keys())  
+                    arg[i] = torch.tensor(arg[i], dtype=torch.int64)
 
+            # for i,file in enumerate(arg2):
+            #     for j,name in enumerate(file):
+            #         if(self.word_index.get(name) != None):
+            #             arg2[i][j] = self.word_index[name]
+            #         else:
+            #             # In the case of unknown words
+            #             arg2[i][j] = len(self.word_index.keys()) 
+            #     arg2[i] = torch.tensor(arg2[i], dtype=torch.int64)
+        
+                    
     def word2VecProcessor(self, arg1, arg2, UC_CC) -> list:
         # is used because the word2vec takes 2d array , and we want to give the word2vec name+segement 
         # output = both UC and CC are 1d array CC now contains all the functions regardless the file
@@ -473,7 +473,7 @@ class PreProcessor:
             # names: [[<s>,'n1','n2'</s>,<s>,n11,n22,</s>],[<s> , n1' ,</s>,<s>'n2',n11,n22</s>],[n1','n2',n11,n22]]
             # segments : [[<s>,'nte1','ntre2'</s>,<s>,ngvd11,nvrcdxsz22,</s>],[<s> , nscd1' ,</s>,<s>'ncdd2',nfdsd11,nfdewe22</s>],[n1','n2',n11,n22]]
 
-            for file_name, file_seg in zip(arg1, arg2):
+            for file_name, file_seg in zip(arg1, arg2): #msknaawel file fy kol whda
 
                 '''
                 Example for the 2nd zip
@@ -484,61 +484,100 @@ class PreProcessor:
                 # [<s>,'nte1','ntre2'</s>,<s>,ngvd11,nvrcdxsz22,</s>] -> 
                 # names_segmants_zipped = list(zip(file_name, file_seg))
 
-                file_name_joined = ' '.join(file_name).split('</s>') #['func1 in file1', ' func2 in file1', '']
-                file_seg_joined = ' '.join(file_seg).split('</s>') #['func1_seg in file1 ', ' func2_seg in file1', '']
+                # file_name_joined = ' '.join(file_name).split('</s>') #['func1 in file1', ' func2 in file1', '']
+                # file_seg_joined = ' '.join(file_seg).split('</s>') #['func1_seg in file1 ', ' func2_seg in file1', '']
 
-                name_seg_concatenated = list(zip(file_name_joined,file_seg_joined)) #[('func1 in file1','func1_seg in file1 ')]
-                
-                for name_seg in name_seg_concatenated:
-                    name_seg_tokens = list()
-                    name_seg_tokens = name_seg[0].split()+name_seg[1].split() #[func1 ,in ,file1,func1_seg ,in, file1 ]
-                    if (len(name_seg_tokens)):
-                        name_seg_tokens.append("</s>")
-                        CC_docs.append(name_seg_tokens) 
+                # name_seg_concatenated = list(zip(file_name_joined,file_seg_joined)) #[('func1 in file1','func1_seg in file1 ')]
+                name_seg_tokens = list()
+
+                # for name_seg in name_seg_concatenated:
+                for name,seg in zip(file_name,file_seg): #mskn awel name w seg fy kol whda
+                # [[file1:[funct1],[function2]] , [file2:[],[]]]
+                    # name_seg_tokens = name_seg[0].split()+name_seg[1].split() #[func1 ,in ,file1,func1_seg ,in, file1 ]
+                    temp = name + seg + ["</s>"]
+                    if (len(temp)):
+                        name_seg_tokens.extend(temp)
+                CC_docs.append(name_seg_tokens) 
             return CC_docs
         
         elif UC_CC == 'UC':
             UC_docs = list()
-            names_segmants_zipped = list(zip(arg1, arg2))
             
-            for func_name, func_seg in names_segmants_zipped:
-                UC_doc = list()
-                func_name_joined = ' '.join(func_name)
-                UC_doc += func_name_joined
-                fun_seg_joined = ' '.join(func_seg)
-                UC_doc += ' '
-                UC_doc += fun_seg_joined
-                UC_doc.extend(func_name)
-                UC_doc.extend(func_seg)
+            for summary, description in zip(arg1, arg2):
+#                 UC_doc = list()
+#                 func_name_joined = ' '.join(func_name)
+#                 UC_doc += func_name_joined
+#                 fun_seg_joined = ' '.join(func_seg)
+#                 UC_doc += ' '
+#                 UC_doc += fun_seg_joined
+#                 UC_doc.extend(func_name)
+                UC_docs.append(summary+description)
 
-                if len(UC_doc):
-                    UC_docs.append(UC_doc)
+#                 if len(UC_doc):
+#                     UC_docs.append(UC_doc)
         return UC_docs
 
             
                             
     
-    def setUpLabels(self,function_names_train,function_segments_train,descriptions_train,summaries_train,directory_csv):
+    def setUpLabels(self,function_names_train,function_segments_train,descriptions_train,summaries_train,directory_csv
+ ):
+#[[functions<s>functions<s>]]
         #reading the csv and creating a list containing the UC and CC and their coresponding label
         Features = list()
         labels=list()
+
         DataSet_train = pd.read_csv(directory_csv)
         for row in DataSet_train.index:
+           
             index_code = int(DataSet_train.loc[row, 'CC'])
             index_UC = int(DataSet_train.loc[row, 'UC'])
             label = int(DataSet_train.loc[row, 'Labels'])
+           
             if len(function_names_train[index_code]) != 0 and len(function_segments_train[index_code]) != 0 and len(descriptions_train[index_UC]) != 0 and len(summaries_train[index_UC]) != 0:
-                if len(function_segments_train[index_code]) > 5000 :
-                    for i in range(len(function_segments_train[index_code]),5000):
-                        if i+5000 < len(function_segments_train[index_code]):
-                            Features.append([function_names_train[index_code][i:i+5000],function_segments_train[index_code][i:i+5000],descriptions_train[index_UC],summaries_train[index_UC]])
-                            labels.append(label)
-                        else :
-                            Features.append([function_names_train[index_code][i:],function_segments_train[index_code][i:],descriptions_train[index_UC],summaries_train[index_UC]])
-                            labels.append(label)
-                else : 
-                    Features.append([function_names_train[index_code],function_segments_train[index_code],descriptions_train[index_UC],summaries_train[index_UC]])
-                    labels.append(label)
+                
+                description = descriptions_train[index_UC]
+                summaries = summaries_train[index_UC]
+                
+                if len(descriptions_train[index_UC]) > 200 :
+                    description = descriptions_train[index_UC][0:200]
+                if len(summaries_train[index_UC]) > 200 :
+                    summaries = summaries_train[index_UC][0:200]
+
+                
+                # key_func = lambda x: x.item() == self.word_index["</s>"]
+                # seg_groups = groupby(function_segments_train[index_code], key_func)
+                # name_groups = groupby(function_names_train[index_code], key_func)
+                # functions_in_file = [list(group) for key, group in seg_groups if not key]
+                # function_names_in_file = [list(group) for key, group in name_groups if not key]
+
+                #print("function_segments_train[index_code]", function_segments_train[index_code])
+                #print("function_names_train[index_code]", function_names_train[index_code])
+
+                # functions_in_file = ' '.join(function_segments_train[index_code]).split(self.word_index["</s>"])
+                # print("functions_in_file", functions_in_file)
+                # # function_names_in_file = ' '.join(function_names_train[index_code]).split('</s>')
+                # print("function_names_in_file", function_names_in_file)
+
+
+                for name,function in zip(function_names_train[index_code],function_segments_train[index_code]):
+                    # print("name", name)
+                    # print("function", function)
+                    #if len(function) > 200 :
+                        # for i in range(0,len(function),200):
+                            # if i+200 < len(function):
+                                # if name != [] and function[i:i+200] != [] and len(function[i:i+200]) > 5 and description != [] and summaries !=[]:
+                    if len(name) !=0 and len(function)!=0: 
+                        Features.append([name,function,description,summaries])
+                        labels.append(label)
+                #             # else :
+                #                 # if name != [] and function[i:] != [] and len(function[i:]) > 5 and description != [] and summaries !=[]:
+                #                     Features.append([name,function[i:],description,summaries])
+                #                     labels.append(label)
+                #    # else: 
+                #         # if name != [] and function != [] and len(function) > 5 and description != [] and summaries !=[]:
+                #             Features.append([name,function,description,summaries])
+                #             labels.append(label)
+
+
         return Features,labels
-
-
