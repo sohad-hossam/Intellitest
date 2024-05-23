@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Header } from "../TopBar/TopBar";
 import { PageTitle } from "../PageTitle/PageTitle";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFolder, faFileCsv, faFileAlt, faFileCode, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faFolder, faFileCsv, faFileAlt, faFileCode, faChevronRight,faSearch  } from '@fortawesome/free-solid-svg-icons';
 import { CodeEditor } from "../CodeEditor/CodeEditor";
 import './ViewSource.css';
 
-const RenderFolderStructure = ({ folder, directoryPath, onFileClick }) => {
+const RenderFolderStructure = ({ folder, directoryPath, onFileClick, searchQuery }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     const toggleFolder = () => {
@@ -36,8 +36,12 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick }) => {
     };
 
     const handleFileClick = (folder, file) => {
-        const filePath = `${directoryPath}/${folder.name}/${file.name}`; 
+        const filePath = `${directoryPath}/${folder.name}/${file.name}`;
         onFileClick({ ...file, path: filePath });
+    };
+
+    const matchesSearchQuery = (name) => {
+        return name.toLowerCase().includes(searchQuery.toLowerCase());
     };
 
     return (
@@ -54,13 +58,20 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick }) => {
                     {folder.children.map((child) => (
                         <div key={child.name}>
                             {child.type === 'folder' ? (
-                                <RenderFolderStructure folder={child} directoryPath={directoryPath} onFileClick={onFileClick} />
+                                <RenderFolderStructure 
+                                    folder={child} 
+                                    directoryPath={directoryPath} 
+                                    onFileClick={onFileClick} 
+                                    searchQuery={searchQuery} 
+                                />
                             ) : (
-                                <span onClick={() => handleFileClick(folder, child)}>
-                                    &nbsp;&nbsp;
-                                    {getFileIcon(child.name, child.type)}
-                                    {child.name}
-                                </span>
+                                matchesSearchQuery(child.name) && (
+                                    <span onClick={() => handleFileClick(folder, child)}>
+                                        &nbsp;&nbsp;
+                                        {getFileIcon(child.name, child.type)}
+                                        {child.name}
+                                    </span>
+                                )
                             )}
                         </div>
                     ))}
@@ -75,12 +86,14 @@ function ViewSource() {
     const [selectedFileContent, setSelectedFileContent] = useState('');
     const [selectedFileType, setSelectedFileType] = useState('');
     const [selectedFilePath, setSelectedFilePath] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
     const visibleHyperlinks = [
         "Home",
         "Maintainability Scores",
         "Trace Links",
         "Source Code",
     ];
+
     const EditorHeader = ({ filePath }) => {
         return (
             <div style={styles.header}>
@@ -102,7 +115,30 @@ function ViewSource() {
             color: "#fff",
             fontWeight: "bold",
         },
+        searchContainer: {
+            position: 'relative',
+            marginBottom: '20px',
+          
+        },
+        searchIcon: {
+            position: 'absolute',
+            top: '50%',
+            left: '10px',
+            transform: 'translateY(-50%)',
+            color: 'white',
+
+        },
+        searchInput: {
+            padding: "5px 10px 5px 30px",
+            width: "100%",
+            borderRadius: "10px",
+            backgroundColor: "#123434",
+            color:"white",
+            border: "3px solid white",
+        
+        }
     };
+
     useEffect(() => {
         fetchFolderStructure();
     }, []);
@@ -112,7 +148,6 @@ function ViewSource() {
             .then((response) => response.json())
             .then((data) => {
                 setFolderStructure(data);
-
             })
             .catch((error) => {
                 console.error("Error fetching folder structure:", error);
@@ -121,13 +156,11 @@ function ViewSource() {
 
     const handleFileClick = (file) => {
         setSelectedFileType(getFileExtension(file.name));
-
-        setSelectedFilePath(file.path)
+        setSelectedFilePath(file.path);
         fetch(`http://localhost:5000/get-file-content?file_path=${file.path}`)
             .then((response) => response.text())
             .then((data) => {
                 setSelectedFileContent(data);
-
             })
             .catch((error) => {
                 console.error("Error fetching file content:", error);
@@ -138,7 +171,6 @@ function ViewSource() {
         return filename.split('.').pop().toLowerCase();
     };
 
-  
     if (!folderStructure) {
         return null;
     }
@@ -146,11 +178,25 @@ function ViewSource() {
     return (
         <div className="vscode-page">
             <Header visibleHyperlinks={visibleHyperlinks} activeLink="Source Code" />
-
             <div className="row">
                 <div className="col-md-1"></div>
                 <div className="col-md-3 vscode-file-tree">
-                    <RenderFolderStructure folder={folderStructure} directoryPath="GP GUI Base/electron-react-app/src/uploads/teiid_dataset" onFileClick={handleFileClick} />
+                <div style={styles.searchContainer}>
+                        <FontAwesomeIcon icon={faSearch} style={styles.searchIcon} />
+                        <input
+                            type="text"
+                            placeholder="Go to file"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            style={styles.searchInput}
+                        />
+                    </div>
+                    <RenderFolderStructure 
+                        folder={folderStructure} 
+                        directoryPath="GP GUI Base/electron-react-app/src/uploads/teiid_dataset" 
+                        onFileClick={handleFileClick} 
+                        searchQuery={searchQuery} 
+                    />
                 </div>
                 <div className="col-md-7 vscode-code-editor">
                     {selectedFileContent && (
@@ -176,7 +222,6 @@ function ViewSource() {
             </style>
         </div>
     );
-
 }
 
 export { ViewSource };

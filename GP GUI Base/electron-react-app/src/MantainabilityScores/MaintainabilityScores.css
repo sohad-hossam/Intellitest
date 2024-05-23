@@ -3,10 +3,23 @@
   background-color: #5c8374;
   font-size: 25px;
   font-weight: 500;
+  transition: background-color 0.3s ease;
 }
+
+.progress:hover {
+  background-color: #6fa8a0; 
+}
+
 .progress-bar {
   background-color: #092635;
+  transition: background-color 0.3s ease; 
 }
+
+.progress-bar:hover {
+  background-color: #0f3e4a; 
+
+}
+
 .progress-label {
   font-size: 25px;
   font-weight: 500;
@@ -21,11 +34,14 @@
 }
 .items-card-container {
   position: relative;
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
 }
 
 .items-card {
-  position: absolute;
-  top: 0;
+ position: absolute;
+ top:0;
   color: aliceblue;
   background-color: #092635;
   border-radius: 20px;
@@ -36,14 +52,34 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); 
   opacity: 0;
   transition: opacity 0.5s ease; 
+
 }
 
 .items-card.show {
-  opacity: 1; /* Show the card when the 'show' class is applied */
+  opacity: 1; 
 }
 
 .items-card.hide {
-  opacity: 0; /* Hide the card when the 'hide' class is applied */
+  opacity: 0; 
+}
+.score-value {
+  font-weight: bold; 
+}
+
+.info-item {
+  margin-bottom: 10px;
+}
+
+.info-label {
+  font-weight: bold; 
+}
+
+.info-value {
+  font-weight: normal; 
+}
+
+.info-item span {
+  display: inline-block; 
 }
 
 .file-input {

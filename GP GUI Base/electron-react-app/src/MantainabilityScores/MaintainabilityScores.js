@@ -4,9 +4,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Header } from "../TopBar/TopBar";
 import { PageTitle } from "../PageTitle/PageTitle";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFolder, faFileCsv, faFileAlt, faFileCode  } from '@fortawesome/free-solid-svg-icons';
+import { faFolder, faFileCsv, faFileAlt, faFileCode, faSearch } from '@fortawesome/free-solid-svg-icons';
 
-const RenderFolderStructure = ({ folder, directoryPath, onFileClick }) => {
+const RenderFolderStructure = ({ folder, directoryPath, onFileClick, searchQuery }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleFolder = () => {
@@ -15,6 +15,10 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick }) => {
 
   const getFileExtension = (filename) => {
     return filename.split('.').pop().toLowerCase();
+  };
+
+  const matchesSearchQuery = (name) => {
+    return name.toLowerCase().includes(searchQuery.toLowerCase());
   };
 
   const getFileIcon = (filename, type) => {
@@ -40,8 +44,8 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick }) => {
     onFileClick({ ...file, path: filePath });
   };
 
-  const javaFiles = folder.children.filter((child) => {
-    return child.type === 'folder' || getFileExtension(child.name) === 'java';
+  const filteredChildren = folder.children.filter((child) => {
+    return child.type === 'folder' || (matchesSearchQuery(child.name) && getFileExtension(child.name) === 'java');
   });
 
   return (
@@ -55,10 +59,10 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick }) => {
       </div>
       {folder.children && isExpanded && (
         <div className="child-container">
-          {javaFiles.map((child) => (
+          {filteredChildren.map((child) => (
             <div key={child.name}>
               {child.type === 'folder' ? (
-                <RenderFolderStructure folder={child} directoryPath={directoryPath} onFileClick={onFileClick} />
+                <RenderFolderStructure folder={child} directoryPath={directoryPath} onFileClick={onFileClick} searchQuery={searchQuery} />
               ) : (
                 <span onClick={() => handleFolderClick(folder, child)}>
                   {getFileIcon(child.name, child.type)}
@@ -90,7 +94,7 @@ const ProgressBar = ({ label, score, onMouseEnter, onMouseLeave }) => {
   return (
     <div className="progress-bar-container mt-3" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       <div className="row align-items-center">
-        <div className="col-md-3">
+        <div className="col-md-3 col-md-3 text-center">
           <div className="progress-label">{label}</div>
         </div>
         <div className="col-md-9">
@@ -122,6 +126,7 @@ export function MaintainabilityScore() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedScoreKey, setSelectedScoreKey] = useState(null);
   const [folderStructure, setFolderStructure] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const itemsPerPage = 10;
   const totalPages = Math.ceil((scores ? Object.keys(scores) : []).length / itemsPerPage);
@@ -196,25 +201,48 @@ export function MaintainabilityScore() {
           onMouseLeave={() => toggleCardVisibility(key, false)}
         />
         {selectedScoreKey === key && (
-          <div className="items-card-container">
-             <div className={`items-card mt-3 ${selectedScoreKey === key ? 'show' : 'hide'}`}>
-              <h4 className="card-title">{key} - Maintainability Score : {Math.round(value.maintainability_score)}%</h4>
-              <div className="m-3">
-              Program vocabulary: {Math.round(value.halstead_volume_results.D)} <br />
-              Program length: {Math.round(value.halstead_volume_results.N)} <br />
-              Calculated program length: {value.halstead_volume_results.N_hat.toFixed(3)} <br />
-              Volume: {value.halstead_volume_results.V.toFixed(3)} <br />
-              Difficulty: {value.halstead_volume_results.D.toFixed(3)} <br />
-              Effort: {value.halstead_volume_results.E.toFixed(3)} <br />
-              Time required to program: {value.halstead_volume_results.T.toFixed(3)} <br />
-              Number of delivered bugs: {value.halstead_volume_results.B.toFixed(3)} <br />
-              SLOC: {Math.round(value.sloc_and_comment_lines_results.SLOC)} <br />
-              Comment Lines Ratio: {value.sloc_and_comment_lines_results.comment_lines_ratio.toFixed(3)} <br />
-              Cyclomatic Complexity: {value.cyclomatic_complexity.toFixed(3)}
-          
-              </div>
-            </div>
-          </div>
+         <div className="items-card-container">
+         <div className={`items-card mt-3 ${selectedScoreKey === key ? 'show' : 'hide'}`}>
+           <h4 className="card-title">{key} - Maintainability Score : <span className="score-value">{Math.round(value.maintainability_score)}%</span></h4>
+           <div className="m-3">
+             <div className="info-item">
+               <span className="info-label">Program vocabulary:</span> <span className="info-value">{Math.round(value.halstead_volume_results.D)}</span>
+             </div>
+             <div className="info-item">
+               <span className="info-label">Program length:</span> <span className="info-value">{Math.round(value.halstead_volume_results.N)}</span>
+             </div>
+             <div className="info-item">
+               <span className="info-label">Calculated program length:</span> <span className="info-value">{value.halstead_volume_results.N_hat.toFixed(3)}</span>
+             </div>
+             <div className="info-item">
+               <span className="info-label">Volume:</span> <span className="info-value">{value.halstead_volume_results.V.toFixed(3)}</span>
+             </div>
+             <div className="info-item">
+               <span className="info-label">Difficulty:</span> <span className="info-value">{value.halstead_volume_results.D.toFixed(3)}</span>
+             </div>
+             <div className="info-item">
+               <span className="info-label">Effort:</span> <span className="info-value">{value.halstead_volume_results.E.toFixed(3)}</span>
+             </div>
+             <div className="info-item">
+               <span className="info-label">Time required to program:</span> <span className="info-value">{value.halstead_volume_results.T.toFixed(3)}</span>
+             </div>
+             <div className="info-item">
+               <span className="info-label">Number of delivered bugs:</span> <span className="info-value">{value.halstead_volume_results.B.toFixed(3)}</span>
+             </div>
+             <div className="info-item">
+               <span className="info-label">SLOC:</span> <span className="info-value">{Math.round(value.sloc_and_comment_lines_results.SLOC)}</span>
+             </div>
+             <div className="info-item">
+               <span className="info-label">Comment Lines Ratio:</span> <span className="info-value">{value.sloc_and_comment_lines_results.comment_lines_ratio.toFixed(3)}</span>
+             </div>
+             <div className="info-item">
+               <span className="info-label">Cyclomatic Complexity:</span> <span className="info-value">{value.cyclomatic_complexity.toFixed(3)}</span>
+             </div>
+           
+           </div>
+         </div>
+       </div>
+       
         )}
       </div>
     ));
@@ -228,24 +256,54 @@ export function MaintainabilityScore() {
     console.log("Scores updated:", scores);
   }, [scores]);
 
+  const styles = {
+    searchContainer: {
+      position: 'relative',
+      marginBottom: '20px',
+    },
+    searchIcon: {
+      position: 'absolute',
+      top: '50%',
+      left: '10px',
+      transform: 'translateY(-50%)',
+      color: '#123434',
+    },
+    searchInput: {
+      padding: "5px 10px 5px 30px",
+      width: "100%",
+      borderRadius: "10px",
+      backgroundColor: "white",
+      color: "#123434",
+      border: "3px solid #123434",
+    }
+  };
+  if (!folderStructure) {
+    return null;
+}
   return (
     <div className="App">
       <Header visibleHyperlinks={visibleHyperlinks} activeLink="Maintainability Scores" />
-      <PageTitle title={"Maintainability Scores"} activeLink="Maintainability Scores" />
       <div className="container mohtawa mt-5">
-        <div className="row">
-       
-          <div className="col-md-3  tree-struc"> 
-            {folderStructure ? (
-              <RenderFolderStructure folder={folderStructure} directoryPath="GP GUI Base/electron-react-app/src/uploads/teiid_dataset" onFileClick={handleFileClick} />
-            ) : (
-              <p>Loading folder structure...</p>
-            )}
+        <div className="row ">
+          <div className="col-md-3 tree-struc">
+            <div style={styles.searchContainer}>
+              <FontAwesomeIcon icon={faSearch} style={styles.searchIcon} />
+              <input
+                type="text"
+                placeholder="Go to file"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={styles.searchInput}
+              />
+            </div>
+            
+          <RenderFolderStructure folder={folderStructure} directoryPath="GP GUI Base/electron-react-app/src/uploads/teiid_dataset" onFileClick={handleFileClick} searchQuery={searchQuery} />
           </div>
-          <div className="col-md-7">
+          <div className="col-md-9 p-2">
+            <PageTitle title="Maintainability Scores" />
             {renderScores()}
           </div>
-          <div className="col-md-1"></div>
+       
         </div>
         <nav aria-label="Page navigation example">
           <ul className="pagination justify-content-center mt-3">
