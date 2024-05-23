@@ -1,6 +1,10 @@
 @import "~bootstrap/dist/css/bootstrap.min.css";
 .header {
-  padding: 40px;
+
+  padding-top: 40px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 40px;
   font-family: "Oswald", sans-serif;
   font-weight: 500;
   display: flex;
@@ -20,4 +24,17 @@
 }
 .activeLink {
   text-decoration: underline !important;
+}
+.LOGONAME{
+  font-size: 28px; 
+  font-weight: 700;
+  color: #092635;
+  margin-left: 10px; 
+}
+.header-line {
+  border: 0;
+  height: 1px;
+  background: #092635; 
+  margin: 0;
+  margin-top: 10px; 
 }

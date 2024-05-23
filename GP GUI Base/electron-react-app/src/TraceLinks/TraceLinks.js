@@ -11,8 +11,10 @@ function DropDowns() {
   const [useCaseSelected, setUseCaseSelected] = useState(false);
   const [codeSelected, setCodeSelected] = useState(false);
   const [score, setScore] = useState(null);
-  const [showScoreMessage, setShowScoreMessage] = useState(false); // Flag to show score message
-
+  const [showScoreMessage, setShowScoreMessage] = useState(false);
+  const [url, setUrl] = useState('');
+  const [summary, setSummary] = useState('');
+  const [description, setDescription] = useState('');
 
   useEffect(() => {
     fetchUseCaseFiles();
@@ -20,10 +22,10 @@ function DropDowns() {
   }, []);
 
   useEffect(() => {
-    // Show score message when score is set
+   
     if (score !== null) {
       setShowScoreMessage(true);
-      console.log("Score is set", score);
+    
     }
   }, [score]);
   const fetchUseCaseFiles = async () => {
@@ -94,10 +96,53 @@ function DropDowns() {
       }
     }
   };
+ 
+
+
+  const handleInputChange = (e) => {
+    setUrl(e.target.value);
+  };
+
+  const handleUrlSubmit = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/fetch-details', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ url })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch the URL');
+      }
+
+      const data = await response.json();
+      setSummary(data.summary);
+      setDescription(data.description);
+    } catch (error) {
+      console.error('Error fetching the URL:', error);
+    }
+  };
+
+
 
   return (
     <div className="dropDowns mt-5">
       <div className="row justify-content-center align-items-center">
+        <div className="col-md-4 d-flex justify-content-center">
+            <div>
+          <input type="text" value={url} onChange={handleInputChange} />
+          <button onClick={handleUrlSubmit}>Submit URL</button>
+          <div>
+            <h2>Summary:</h2>
+            <p>{summary}</p>
+            <h2>Description:</h2>
+            <p>{description}</p>
+          </div>
+        </div>
+       
+        </div>
         <div className="col-md-4 d-flex justify-content-center">
           <div className="form-group">
             <label className="drops-label" htmlFor="exampleFormControlSelect1">

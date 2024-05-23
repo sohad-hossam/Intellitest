@@ -2,163 +2,214 @@ import React, { useState, useEffect } from "react";
 import { Header } from "../TopBar/TopBar";
 import { PageTitle } from "../PageTitle/PageTitle";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFolder, faFileCsv, faFileAlt, faFileCode,faChevronRight  } from '@fortawesome/free-solid-svg-icons';
+import { faFolder, faFileCsv, faFileAlt, faFileCode, faChevronRight,faSearch  } from '@fortawesome/free-solid-svg-icons';
 import { CodeEditor } from "../CodeEditor/CodeEditor";
-import './ViewSource.css'; 
+import './ViewSource.css';
 
-const RenderFolderStructure = ({ folder, directoryPath, onFileClick }) => {
+const RenderFolderStructure = ({ folder, directoryPath, onFileClick, searchQuery }) => {
     const [isExpanded, setIsExpanded] = useState(false);
-  
+
     const toggleFolder = () => {
-      setIsExpanded(!isExpanded);
+        setIsExpanded(!isExpanded);
     };
-  
+
     const getFileExtension = (filename) => {
-      return filename.split('.').pop().toLowerCase();
+        return filename.split('.').pop().toLowerCase();
     };
-  
+
     const getFileIcon = (filename, type) => {
-      if (type === 'folder') {
-        return <FontAwesomeIcon icon={faFolder} />;
-      }
-  
-      const extension = getFileExtension(filename);
-      switch (extension) {
-        case 'csv':
-          return <FontAwesomeIcon icon={faFileCsv} />;
-        case 'txt':
-          return <FontAwesomeIcon icon={faFileAlt} />;
-        case 'java':
-          return <FontAwesomeIcon icon={faFileCode} />;
-        default:
-          return <FontAwesomeIcon icon={faFileAlt} />;
-      }
+        if (type === 'folder') {
+            return <FontAwesomeIcon icon={faFolder} />;
+        }
+
+        const extension = getFileExtension(filename);
+        switch (extension) {
+            case 'csv':
+                return <FontAwesomeIcon icon={faFileCsv} />;
+            case 'txt':
+                return <FontAwesomeIcon icon={faFileAlt} />;
+            case 'java':
+                return <FontAwesomeIcon icon={faFileCode} />;
+            default:
+                return <FontAwesomeIcon icon={faFileAlt} />;
+        }
     };
-  
-    const handleFileClick = (folder,file) => {
-      const filePath = `${directoryPath}/${folder.name}/${file.name}`; // Construct the file path
-      onFileClick({ ...file, path: filePath }); // Pass file object with file path
+
+    const handleFileClick = (folder, file) => {
+        const filePath = `${directoryPath}/${folder.name}/${file.name}`;
+        onFileClick({ ...file, path: filePath });
     };
-  
+
+    const matchesSearchQuery = (name) => {
+        return name.toLowerCase().includes(searchQuery.toLowerCase());
+    };
+
     return (
-      <div key={folder.name}>
-        <div>
-          <span onClick={toggleFolder}>
-            {getFileIcon(folder.name, folder.type)}
-            {folder.name}
-          </span>
+        <div key={folder.name}>
+            <div>
+                <span onClick={toggleFolder}>
+                    {getFileIcon(folder.name, folder.type)}
+                    &nbsp;&nbsp;
+                    {folder.name}
+                </span>
+            </div>
+            {folder.children && isExpanded && (
+                <div className="child-container">
+                    {folder.children.map((child) => (
+                        <div key={child.name}>
+                            {child.type === 'folder' ? (
+                                <RenderFolderStructure 
+                                    folder={child} 
+                                    directoryPath={directoryPath} 
+                                    onFileClick={onFileClick} 
+                                    searchQuery={searchQuery} 
+                                />
+                            ) : (
+                                matchesSearchQuery(child.name) && (
+                                    <span onClick={() => handleFileClick(folder, child)}>
+                                        &nbsp;&nbsp;
+                                        {getFileIcon(child.name, child.type)}
+                                        {child.name}
+                                    </span>
+                                )
+                            )}
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
-        {folder.children && isExpanded && (
-          <div className="child-container"> 
-            {folder.children.map((child) => (
-              <div key={child.name}>
-                {child.type === 'folder' ? (
-                  <RenderFolderStructure folder={child} directoryPath={directoryPath} onFileClick={onFileClick} />
-                ) : (
-                  <span onClick={() => handleFileClick(folder,child)}>
-                    {getFileIcon(child.name, child.type)}
-                    {child.name}
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
     );
-  };
-  
+};
+
 function ViewSource() {
     const [folderStructure, setFolderStructure] = useState(null);
     const [selectedFileContent, setSelectedFileContent] = useState('');
     const [selectedFileType, setSelectedFileType] = useState('');
-    const[SelectedFilePath,setSelectedFilePath]=useState('');
+    const [selectedFilePath, setSelectedFilePath] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
     const visibleHyperlinks = [
-      "Home",
-      "Maintainability Scores",
-      "Trace Links",
-      "Source Code",
+        "Home",
+        "Maintainability Scores",
+        "Trace Links",
+        "Source Code",
     ];
+
     const EditorHeader = ({ filePath }) => {
-      return (
-        <div style={styles.header}>
-         <div style={{ display: 'flex', alignItems: 'center' }}>
-      <FontAwesomeIcon icon={faChevronRight} style={{ marginRight: '5px' }} />
-      <div>{filePath}</div>
-    </div>
-        </div>
-      );
+        return (
+            <div style={styles.header}>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <FontAwesomeIcon icon={faChevronRight} style={{ marginRight: '5px' }} />
+                    <div>{filePath}</div>
+                </div>
+            </div>
+        );
     };
-      
-      const styles = {
+
+    const styles = {
         header: {
-          padding: "10px",
-          backgroundColor: "#123434", 
-          borderBottom: "1px solid #092635",
+            padding: "10px",
+            backgroundColor: "#123434",
+            borderBottom: "1px solid #092635",
         },
         filePath: {
-          color: "#fff", 
-          fontWeight: "bold",
+            color: "#fff",
+            fontWeight: "bold",
         },
-      };
-    useEffect(() => {
-      fetchFolderStructure();
-    }, []);
-  
-    const fetchFolderStructure = () => {
-      fetch("http://localhost:5000/get-folder-structure?directory_path=GP GUI Base/electron-react-app/src/uploads")
-        .then((response) => response.json())
-        .then((data) => {
-          setFolderStructure(data);
+        searchContainer: {
+            position: 'relative',
+            marginBottom: '20px',
+          
+        },
+        searchIcon: {
+            position: 'absolute',
+            top: '50%',
+            left: '10px',
+            transform: 'translateY(-50%)',
+            color: 'white',
 
-        })
-        .catch((error) => {
-          console.error("Error fetching folder structure:", error);
-        });
-    };
-  
-    const handleFileClick = (file) => {
-      setSelectedFileType(getFileExtension(file.name));
-
-      setSelectedFilePath(file.path)
-      fetch(`http://localhost:5000/get-file-content?file_path=${file.path}`)
-        .then((response) => response.text())
-        .then((data) => {
-          setSelectedFileContent(data);
+        },
+        searchInput: {
+            padding: "5px 10px 5px 30px",
+            width: "100%",
+            borderRadius: "10px",
+            backgroundColor: "#123434",
+            color:"white",
+            border: "3px solid white",
         
-        })
-        .catch((error) => {
-          console.error("Error fetching file content:", error);
-        });
+        }
     };
-  
+
+    useEffect(() => {
+        fetchFolderStructure();
+    }, []);
+
+    const fetchFolderStructure = () => {
+        fetch("http://localhost:5000/get-folder-structure?directory_path=GP GUI Base/electron-react-app/src/uploads")
+            .then((response) => response.json())
+            .then((data) => {
+                setFolderStructure(data);
+            })
+            .catch((error) => {
+                console.error("Error fetching folder structure:", error);
+            });
+    };
+
+    const handleFileClick = (file) => {
+        setSelectedFileType(getFileExtension(file.name));
+        setSelectedFilePath(file.path);
+        fetch(`http://localhost:5000/get-file-content?file_path=${file.path}`)
+            .then((response) => response.text())
+            .then((data) => {
+                setSelectedFileContent(data);
+            })
+            .catch((error) => {
+                console.error("Error fetching file content:", error);
+            });
+    };
+
     const getFileExtension = (filename) => {
-      return filename.split('.').pop().toLowerCase();
+        return filename.split('.').pop().toLowerCase();
     };
-  
+
+    if (!folderStructure) {
+        return null;
+    }
+
     return (
         <div className="vscode-page">
-          <Header visibleHyperlinks={visibleHyperlinks} activeLink="Source Code" />
-          <PageTitle title={folderStructure ? folderStructure.name.replace(/_/g, ' ').toUpperCase() : ''} activeLink="Source Code" />
-          <div className="row">
-            <div className="col-md-4 vscode-file-tree"> 
-              {folderStructure ? (
-                <RenderFolderStructure folder={folderStructure} directoryPath="GP GUI Base/electron-react-app/src/uploads/teiid_dataset" onFileClick={handleFileClick} />
-              ) : (
-                <p>Loading folder structure...</p>
-              )}
+            <Header visibleHyperlinks={visibleHyperlinks} activeLink="Source Code" />
+            <div className="row">
+                <div className="col-md-1"></div>
+                <div className="col-md-3 vscode-file-tree">
+                <div style={styles.searchContainer}>
+                        <FontAwesomeIcon icon={faSearch} style={styles.searchIcon} />
+                        <input
+                            type="text"
+                            placeholder="Go to file"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            style={styles.searchInput}
+                        />
+                    </div>
+                    <RenderFolderStructure 
+                        folder={folderStructure} 
+                        directoryPath="GP GUI Base/electron-react-app/src/uploads/teiid_dataset" 
+                        onFileClick={handleFileClick} 
+                        searchQuery={searchQuery} 
+                    />
+                </div>
+                <div className="col-md-7 vscode-code-editor">
+                    {selectedFileContent && (
+                        <>
+                            <EditorHeader filePath={selectedFilePath} />
+                            <CodeEditor content={selectedFileContent} fileType={selectedFileType} />
+                        </>
+                    )}
+                </div>
+                <div className="col-md-1"></div>
             </div>
-            <div className="col-md-8 vscode-code-editor">
-        {selectedFileContent && (
-          <>
-            <EditorHeader filePath={SelectedFilePath} />
-            <CodeEditor content={selectedFileContent} fileType={selectedFileType} />
-          </>
-        )}
-      </div>
-          </div>
-          <style>
-            {`
+            <style>
+                {`
               svg {
                 font-family: "Russo One", sans-serif;
                 display: flex;
@@ -168,10 +219,9 @@ function ViewSource() {
                 height: 80%;
               }
             `}
-          </style>
+            </style>
         </div>
-      );
-      
-    }
-    
+    );
+}
+
 export { ViewSource };

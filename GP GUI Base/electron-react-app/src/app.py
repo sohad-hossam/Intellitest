@@ -5,6 +5,10 @@ from MLScript import TraceLinks
 import os
 import zipfile
 from concurrent.futures import ThreadPoolExecutor
+import requests 
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from bs4 import BeautifulSoup
 app = Flask(__name__)
 CORS(app)
 
@@ -170,6 +174,94 @@ def computetracelinks():
     except Exception as e:
         app.logger.error(f"An error occurred: {e}")
         return jsonify({'error': 'An unexpected error occurred.'}), 500
+    
+@app.route('/fetch-details', methods=['POST'])
+def fetch_details():
+    try:
+        data = request.json
+        if 'url' not in data:
+            return jsonify({'error': 'No URL provided.'}), 400
+
+        url = data['url']
+        page = requests.get(url)
+        if page.status_code == 200:
+            soup = BeautifulSoup(page.content, 'html.parser')
+            body_jira = soup.find('body', id='jira')
+            if body_jira:
+                page_div = body_jira.find('div', id='page')
+                if page_div:
+                    main_content = page_div.find('main', id='main')
+                    if main_content:
+                        header = main_content.find('header', id='stalker')
+                        if header:
+                            summary_value = header.find('h2', id='summary-val')
+                        else:
+                            return jsonify({'error': 'Header not found inside main content.'}), 404
+                        
+                        issue_body_content = main_content.find('div', class_='issue-body-content')
+                        if issue_body_content:
+                            user_content_block = issue_body_content.find('div', class_='user-content-block')
+                            if user_content_block:
+                                p = user_content_block.find('p')
+                            else:
+                                return jsonify({'error': 'User content block not found inside issue body content.'}), 404
+                            
+                            issuedetails = issue_body_content.find('ul', id='issuedetails')
+                            if issuedetails:
+                                type_val = issuedetails.find('span', id='type-val')
+                                if type_val:
+                                    priority_val = issuedetails.find('span', id='priority-val')
+                                    if priority_val:
+                                        resolution_val = issuedetails.find('span', id='resolution-val')
+                                        if resolution_val:
+                                            fixfor_val = issuedetails.find('span', id='fixfor-val')
+                                            fixfor_val = fixfor_val.find('a')
+                                            if fixfor_val:
+                                                versions_val = issuedetails.find('span', id='versions-val')
+                                                if versions_val:
+                                                    sprint_val = issue_body_content.find('div', id='customfield_12310940-val')
+                                                    if sprint_val:
+                                                    
+                                                        return jsonify({'summary': summary_value.text, 'description': p.text,
+                                                                        'details': {
+                                                                            'type': type_val.text.strip(),
+                                                                            'priority': priority_val.text.strip(),
+                                                                            'resolution': resolution_val.text.strip(),
+                                                                            'fixfor': fixfor_val.text,
+                                                                            'versions': versions_val.text.strip(),
+                                                                            'sprint': sprint_val.text.strip()
+                                                                        }}), 200
+                                                    else:
+                                                        return jsonify({'error': 'Sprint value not found inside issue details.'}), 404
+                                                else:
+                                                    return jsonify({'error': 'Versions value not found inside issue details.'}), 404
+                                            else:
+                                                return jsonify({'error': 'Fixfor value not found inside issue details.'}), 404
+                                        else:
+                                            return jsonify({'error': 'Resolution value not found inside issue details.'}), 404
+                                    else:
+                                        return jsonify({'error': 'Priority value not found inside issue details.'}), 404
+                                else:
+                                    return jsonify({'error': 'Type value not found inside issue details.'}), 404
+                            else:
+                                return jsonify({'error': 'Issue details not found inside issue body content.'}), 404
+                        else:
+                            return jsonify({'error': 'Issue body content not found inside main content.'}), 404
+                    else:
+                        return jsonify({'error': 'Main content not found inside page.'}), 404
+                else:
+                    return jsonify({'error': 'Page div not found inside body with id "jira".'}), 404
+            else:
+                return jsonify({'error': 'Body with id "jira" not found.'}), 404
+        else:
+            return jsonify({'error': 'Failed to fetch URL.'}), 500
+
+    except Exception as e:
+        app.logger.error(f"An error occurred: {e}")
+        return jsonify({'error': 'An unexpected error occurred.'}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+

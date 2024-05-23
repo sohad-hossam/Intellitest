@@ -3,10 +3,23 @@
   background-color: #5c8374;
   font-size: 25px;
   font-weight: 500;
+  transition: background-color 0.3s ease;
 }
+
+.progress:hover {
+  background-color: #6fa8a0; 
+}
+
 .progress-bar {
   background-color: #092635;
+  transition: background-color 0.3s ease; 
 }
+
+.progress-bar:hover {
+  background-color: #0f3e4a; 
+
+}
+
 .progress-label {
   font-size: 25px;
   font-weight: 500;
@@ -21,19 +34,54 @@
 }
 .items-card-container {
   position: relative;
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
 }
 
 .items-card {
-  position: absolute;
-  top: 0;
+ position: absolute;
+ top:0;
   color: aliceblue;
   background-color: #092635;
   border-radius: 20px;
   padding: 20px;
-  width: 45%; 
+  width: 60%; 
   font-family: "Oswald", sans-serif;
   font-weight: 550;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); 
+  opacity: 0;
+  transition: opacity 0.5s ease; 
+
 }
+
+.items-card.show {
+  opacity: 1; 
+}
+
+.items-card.hide {
+  opacity: 0; 
+}
+.score-value {
+  font-weight: bold; 
+}
+
+.info-item {
+  margin-bottom: 10px;
+}
+
+.info-label {
+  font-weight: bold; 
+}
+
+.info-value {
+  font-weight: normal; 
+}
+
+.info-item span {
+  display: inline-block; 
+}
+
 .file-input {
   position: relative;
   display: inline-block; 
@@ -67,10 +115,31 @@
 
 .tree-struc {
   border-right: 1px solid #123434;
-  padding: 20px;
+  padding: 30px;
   max-height: 700px;
   overflow-y: auto;
+  height: 95vh;
 }
 .child-container {
   margin-left: 20px;
+}
+
+.tree-struc span {
+  transition: background-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease, padding 0.4s ease, border-radius 0.4s ease;
+}
+
+.tree-struc span:hover {
+  background-color: #1234341a;
+  color:#123434;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  padding: 5px 10px;
+  border-radius: 7px;
+}
+.mohtawa
+{
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  border-radius: 7px;
+  height: 100vh;
 }

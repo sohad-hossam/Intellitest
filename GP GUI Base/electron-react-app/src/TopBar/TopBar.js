@@ -5,14 +5,12 @@ import { Link } from "react-router-dom";
 export function Header({ visibleHyperlinks, activeLink }) {
   const allHyperlinks = [
     { url: "/", label: "Home" },
-    { url: "/AboutUs", label: "About Us" },
     { url: "/ImportProject", label: "Import Project" },
-    { url: "/ProceedWith", label: "Proceed With" },
+    { url: "/ViewSource", label: "Proceed With" },
     { url: "/MaintainabilityScore", label: "Maintainability Scores" },
     { url: "/TraceLinks", label: "Trace Links" },
     { url: "/ViewSource", label: "Source Code" },
-
-
+    { url: "/AboutUs", label: "About Us" },
   ];
 
   const filteredHyperlinks = allHyperlinks.filter((link) =>
@@ -20,30 +18,36 @@ export function Header({ visibleHyperlinks, activeLink }) {
   );
 
   const iconSource =
-    activeLink === "Home" || activeLink === "About Us"||activeLink === "Source Code"
+    activeLink === "Home" || activeLink === "About Us" || activeLink === "Source Code"
       ? require("../assets/searching1.png")
       : require("../assets/searching.png");
 
   return (
     <header className="header">
       <div className="container">
-        <div className="row d-flex justify-content-center align-items-center">
-          <div className="col-auto">
+        <div className="row d-flex justify-content-between align-items-center">
+          <div className="col-auto d-flex align-items-center">
             <img src={iconSource} alt="Icon" />
+            <div className="LOGONAME" style={{
+                  color:
+                    activeLink === "Home" || activeLink === "About Us" || activeLink === "Source Code"
+                      ? "white"
+                      : "#092635"
+                 
+                }}>INTELLITEST</div>
           </div>
-          <div className="col-md-10 d-flex justify-content-center align-items-center">
+          <div className="col d-flex justify-content-end">
             {filteredHyperlinks.map((link) => (
               <Link
-                className={`hyperpages mx-5`}
+                className={`hyperpages mx-2`}
                 key={link.label}
                 to={link.url}
                 style={{
                   color:
-                    activeLink === "Home" || activeLink === "About Us"||activeLink === "Source Code"
+                    activeLink === "Home" || activeLink === "About Us" || activeLink === "Source Code"
                       ? "white"
                       : "#092635",
-                  textDecoration:
-                    activeLink === link.label ? "underline" : "none",
+                  textDecoration: activeLink === link.label ? "underline" : "none",
                 }}
               >
                 {link.label}
@@ -51,6 +55,13 @@ export function Header({ visibleHyperlinks, activeLink }) {
             ))}
           </div>
         </div>
+        <hr className="header-line"  style={{
+                  backgroundColor:
+                    activeLink === "Home" || activeLink === "About Us" || activeLink === "Source Code"
+                      ? "none"
+                      : "#092635",
+                 
+                }} />
       </div>
     </header>
   );
