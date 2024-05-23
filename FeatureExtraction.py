@@ -73,9 +73,9 @@ class FeatureExtraction:
         self.UC_count_matrix /= UC_words_count
         self.code_count_matrix /= code_words_count
 
-        self.UC_count_matrix = self.UC_count_matrix.tolist()
-        self.code_count_matrix = self.code_count_matrix.tolist()
-        
+        self.UC_count_matrix = self.UC_count_matrix.toarray()
+        self.code_count_matrix = self.code_count_matrix.toarray()       
+
         return self.UC_count_matrix, self.code_count_matrix,tf_uc_dict,tf_code_dict
 
     # Jensen-Shannon.

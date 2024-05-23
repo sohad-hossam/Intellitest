@@ -105,20 +105,19 @@ class PreProcessor:
             "Returns",
         }
 
-        self.UC_to_index = dict()
-        self.CC_to_index = dict()
         self.Vocab=dict()
         self.Vocab["</s>"] = 2
 
-        self.word_index=dict()
+        # self.word_index=dict()
         Language.build_library(
         # Store the library in the `build` directory
         "build/my-languages.so",
         # Include one or more languages
         ["./tree-sitter-java"],
         )
-
         JAVA = Language("build/my-languages.so", "java")
+        # JAVA_LANGUAGE = Language(tsjava.language())
+        # self.parser = Parser(JAVA_LANGUAGE)
         self.parser = Parser()
         self.parser.set_language(JAVA)
 
@@ -176,6 +175,7 @@ class PreProcessor:
     # setup documents
     def setupCC(self, code_path: str, train_or_test:str)->tuple:
         all_tokens=set()
+        CC_to_index = dict()
         code_documents = list()
         code_file_index = 0
         file_stack = list()
@@ -190,7 +190,7 @@ class PreProcessor:
                     tokens = self.PreProcessor(filepath_integrated, 'CC',train_or_test)
                     code_documents.append(tokens)
                     filepath_integrated.replace(code_path, "")
-                    self.CC_to_index[filepath_integrated.lower()] = code_file_index
+                    CC_to_index[filepath_integrated.lower()] = code_file_index
                     code_file_index += 1
         for i, doc in enumerate(code_documents):
             tokens = doc.split()
@@ -202,13 +202,14 @@ class PreProcessor:
 
                 all_tokens.add(tokens[j])
             code_documents[i] = ' '.join(tokens)
-        return code_documents,self.CC_to_index,all_tokens
+        return code_documents,CC_to_index,all_tokens
     
     def setupUC(self, UC_path: str, train_or_test: str)->tuple:
         UC_documents = list()
         all_tokens=set()
+        UC_to_index = dict()
         for i, filename in enumerate(os.listdir(UC_path)):
-            self.UC_to_index[filename.lower()] = i
+            UC_to_index[filename.lower()] = i
             filepath = os.path.join(UC_path, filename)
             tokens = self.PreProcessor(filepath, 'UC',train_or_test)
             UC_documents.append(tokens)
@@ -222,14 +223,14 @@ class PreProcessor:
 
                 all_tokens.add(tokens[j])
             UC_documents[i] = ' '.join(tokens)
-        return UC_documents, self.UC_to_index,all_tokens
+        return UC_documents, UC_to_index,all_tokens
     
     
     def setupCSV(self, csv_dir: str, modified_csv_dir: str,UC_to_index,CC_to_index) -> None:
         filenames_CC = CC_to_index.keys()
         filenames_UC = UC_to_index.keys()
         
-        DataSet = pd.read_csv(csv_dir, names=['UC', 'CC'])
+        DataSet = pd.read_csv(csv_dir, names=['UC', 'CC'], header=None)
         
         # file_to_index_list = []
         # for file in DataSet['CC'].str.lower():
@@ -240,16 +241,23 @@ class PreProcessor:
         DataSet['UC'] = DataSet['UC'].astype(str) + ".txt"
         sum=0
         artifacts_done = set(zip(DataSet['UC'].str.lower(),DataSet['CC'].str.lower()))
+        print("len(artifacts_done) = ", len(artifacts_done))
+        test = set()
         artifacts_not_done = []
         for filename_UC in filenames_UC:
             for filename_CC in filenames_CC:
-                if filename_CC.endswith('.java'):
-                    if (filename_UC.lower(),filename_CC.lower()) not in artifacts_done:
-                        artifacts_not_done.append((UC_to_index[filename_UC.lower()], CC_to_index[filename_CC.lower()], 0))
-                    else:
-                        artifacts_not_done.append((UC_to_index[filename_UC.lower()], CC_to_index[filename_CC.lower()], 1))
-                        sum+=1
+                if (filename_UC.lower(),filename_CC.lower()) not in artifacts_done:
+                    random_number = random.randint(0, 50)
+                    if random_number < 45:
+                        continue
+                    artifacts_not_done.append((UC_to_index[filename_UC.lower()], CC_to_index[filename_CC.lower()], 0))
+                else:
+                    artifacts_not_done.append((UC_to_index[filename_UC.lower()], CC_to_index[filename_CC.lower()], 1))
+                    test.add((filename_UC.lower(), filename_CC.lower()))
+                    sum+=1
         print("sum = ", sum)
+        diff = artifacts_done.symmetric_difference(test)
+        print(diff)
         dataset_modified = pd.DataFrame(artifacts_not_done, columns=['UC', 'CC', 'Labels'])
         dataset_modified.to_csv(modified_csv_dir, index = False)    
 
@@ -274,6 +282,7 @@ class PreProcessor:
         queue.append(curr_node)
         porter_stemmer = PorterStemmer()
         numeric_chars_to_remove = r"[0-9]"
+
         while(len(queue)):
             curr_node = queue.pop(0)
             for child in curr_node.children:
@@ -499,20 +508,8 @@ class PreProcessor:
         
         elif UC_CC == 'UC':
             UC_docs = list()
-            names_segmants_zipped = list(zip(arg1, arg2))
-            
-            for func_name, func_seg in names_segmants_zipped:
-                UC_doc = list()
-                func_name_joined = ' '.join(func_name)
-                UC_doc += func_name_joined
-                fun_seg_joined = ' '.join(func_seg)
-                UC_doc += ' '
-                UC_doc += fun_seg_joined
-                UC_doc.extend(func_name)
-                UC_doc.extend(func_seg)
-
-                if len(UC_doc):
-                    UC_docs.append(UC_doc)
+            for summary, description in zip(arg1, arg2):
+                UC_docs.append(summary+description)
         return UC_docs
 
             
@@ -522,23 +519,46 @@ class PreProcessor:
         #reading the csv and creating a list containing the UC and CC and their coresponding label
         Features = list()
         labels=list()
+
         DataSet_train = pd.read_csv(directory_csv)
         for row in DataSet_train.index:
+           
             index_code = int(DataSet_train.loc[row, 'CC'])
             index_UC = int(DataSet_train.loc[row, 'UC'])
             label = int(DataSet_train.loc[row, 'Labels'])
+           
             if len(function_names_train[index_code]) != 0 and len(function_segments_train[index_code]) != 0 and len(descriptions_train[index_UC]) != 0 and len(summaries_train[index_UC]) != 0:
-                if len(function_segments_train[index_code]) > 5000 :
-                    for i in range(len(function_segments_train[index_code]),5000):
-                        if i+5000 < len(function_segments_train[index_code]):
-                            Features.append([function_names_train[index_code][i:i+5000],function_segments_train[index_code][i:i+5000],descriptions_train[index_UC],summaries_train[index_UC]])
+                
+                description = descriptions_train[index_UC]
+                summaries = summaries_train[index_UC]
+                
+                if len(descriptions_train[index_UC]) > 200 :
+                    description = descriptions_train[index_UC][0:200]
+                if len(summaries_train[index_UC]) > 200 :
+                    summaries = summaries_train[index_UC][0:200]
+
+                
+                key_func = lambda x: x.item() == self.word_index["</s>"]
+                seg_groups = groupby(function_segments_train[index_code], key_func)
+                name_groups = groupby(function_names_train[index_code], key_func)
+                functions_in_file = [list(group) for key, group in seg_groups if not key]
+                function_names_in_file = [list(group) for key, group in name_groups if not key]
+
+                for name,function in zip(function_names_in_file,functions_in_file):
+                    if len(function) > 200 :
+                        for i in range(0,len(function),200):
+                            if i+200 < len(function):
+                                if name != [] and function[i:i+200] != [] and len(function[i:i+200]) > 5 and description != [] and summaries !=[]:
+                                    Features.append([name,function[i:i+200],description,summaries])
+                                    labels.append(label)
+                                else :
+                                    if name != [] and function[i:] != [] and len(function[i:]) > 5 and description != [] and summaries !=[]:
+                                        Features.append([name,function[i:],description,summaries])
+                                        labels.append(label)
+                    else: 
+                        if name != [] and function != [] and len(function) > 5 and description != [] and summaries !=[]:
+                            Features.append([name,function,description,summaries])
                             labels.append(label)
-                        else :
-                            Features.append([function_names_train[index_code][i:],function_segments_train[index_code][i:],descriptions_train[index_UC],summaries_train[index_UC]])
-                            labels.append(label)
-                else : 
-                    Features.append([function_names_train[index_code],function_segments_train[index_code],descriptions_train[index_UC],summaries_train[index_UC]])
-                    labels.append(label)
         return Features,labels
 
 
