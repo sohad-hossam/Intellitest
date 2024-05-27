@@ -9,7 +9,7 @@ class FeatureExtraction:
 
     # Latent Semantic Analysis.
     def LSA(self,tfidf_matrix_uc: np.ndarray,tfidf_matrix_code: np.ndarray,train_or_test: str = 'train') -> np.ndarray:
-        num_components = min(tfidf_matrix_uc.shape[0], tfidf_matrix_code.shape[1])
+        num_components = min(tfidf_matrix_uc.shape[0], tfidf_matrix_code.shape[0])
         num_components = min(num_components, 100)
         LSA_model = TruncatedSVD(n_components=num_components)
 
@@ -31,7 +31,7 @@ class FeatureExtraction:
         corpus_uc = [id2word.doc2bow(doc.split()) for doc in UC_documents]
         corpus_code = [id2word.doc2bow(doc.split()) for doc in code_documents]
 
-        num_topics = 58
+        num_topics = 200
         lda_model_uc = LdaMulticore(corpus=corpus_uc, id2word=id2word, num_topics=num_topics)
         lda_model_code = LdaMulticore(corpus=corpus_code, id2word=id2word, num_topics=num_topics)
 
@@ -73,8 +73,8 @@ class FeatureExtraction:
         self.UC_count_matrix /= UC_words_count
         self.code_count_matrix /= code_words_count
 
-        self.UC_count_matrix = self.UC_count_matrix.toarray()
-        self.code_count_matrix = self.code_count_matrix.toarray()       
+        self.UC_count_matrix = self.UC_count_matrix.tolist()
+        self.code_count_matrix = self.code_count_matrix.tolist()       
 
         return self.UC_count_matrix, self.code_count_matrix,tf_uc_dict,tf_code_dict
 
@@ -160,7 +160,7 @@ class FeatureExtraction:
         query_term_jensen_shannon = None
         if feature_extraction_type == "JS" or feature_extraction_type == "VSM":
             word_index = self.count_vocab_index.get(query_term, self.count_vocab_index.get('__unk__'))
-            term_vector = np.zeros((1, args[0].shape[1])) #1*
+            term_vector = np.zeros((1, len(args[0][0]))) #1*
             term_vector[:,word_index]=args[1][code_idx, word_index]
             query_term_jensen_shannon = feature_extraction_method(args[0], term_vector)
         elif feature_extraction_type == "BM":
@@ -200,12 +200,12 @@ class FeatureExtraction:
         else:
             total_score_query_feature_extraction = feature_extraction_method(*args)
 
-        query_tuples =  np.ascontiguousarray(list(enumerate(query)))
+        query_index,query_tokens = zip(*np.ascontiguousarray(list(enumerate(query))))
+
         
         ### Run each individual query term qt in the original query as a separate query and obtain the result list Rt.
-        vSubqueryOverlapCode = np.vectorize(lambda code_idx, code_doc: self._SubqueryOverlapCode(code_idx, code_doc, total_score_query_feature_extraction,feature_extraction_method,feature_extraction_type,*args), otypes=[np.float16])
-
-        overall_queries_score = vSubqueryOverlapCode(query_tuples[:,0], query_tuples[:,1])
+        vSubqueryOverlapCode = np.vectorize(lambda code_idx, code_doc: self._SubqueryOverlapCode(code_idx, code_doc, total_score_query_feature_extraction,feature_extraction_method,feature_extraction_type,*args), otypes=[np.ndarray])
+        overall_queries_score = vSubqueryOverlapCode(np.array(query_index), np.array(query_tokens))
         return overall_queries_score
     
     def DocumentStatistics(self, UC_documents: list, code_documents:list):
