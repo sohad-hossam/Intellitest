@@ -159,104 +159,93 @@ const getBackgroundColor = () => {
   }
 };
 
-  return (
-    <div className="App">
-      <Header visibleHyperlinks={visibleHyperlinks} activeLink="Trace Links" />
- 
-          <div className="card">
+return (
+  <div className="App">
+    <Header visibleHyperlinks={visibleHyperlinks} activeLink="Trace Links" />
+    <div className="card">
+      <div className="card-body">
+        <h5 className="card-title">Enter URL</h5>
+        <div className="form-group text-center">
+          <input 
+            type="text" 
+            className="form-control" 
+            id="urlInput" 
+            value={url} 
+            onChange={(e) => setUrl(e.target.value)} 
+            placeholder="Enter URL" 
+          />
+          <button className="btn btn-primary mt-3" onClick={handleUrlSubmit}>Submit</button>
+        </div>
+      </div>
+    </div>
+    {details && (
+      <div className="row mt-3">
+        <div className="col-1"></div>
+        <div className="col-3">
+          <div className="card big-circle-card">
             <div className="card-body">
-              <h5 className="card-title">Enter URL</h5>
-              <div className="form-group text-center">
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  id="urlInput" 
-                  value={url} 
-                  onChange={(e) => setUrl(e.target.value)} 
-                  placeholder="Enter URL" 
-                />
-                <button className="btn btn-primary mt-3" onClick={handleUrlSubmit}>Submit</button>
-              </div>
-            </div>
-            </div>
-          <div className="row">
-            <div className="col-1"></div>
-            <div className="col-3">
-            <div className="card big-circle-card">
-            {details && (   <div className="card-body">
-        <h3 className="card-title">{extractTeiidFromUrl(url)}</h3>
-        <h5 className="card-text">{details.summary}</h5>
-        <p className="card-text">{details.description}</p>
-        <div className="icon-container">
-          <div className="icon-text-container mt-2">
-            <FontAwesomeIcon icon={faWrench}fixedWidth  />
-            <span>Fix For: {details.details.fixfor}</span>
-          </div>
-          <div className="icon-text-container mt-2">
-            <FontAwesomeIcon icon={faExclamationCircle} fixedWidth  />
-            <span>Priority: {details.details.priority}</span>
-          </div>
-          <div className="icon-text-container mt-2">
-            <FontAwesomeIcon icon={faFlag}fixedWidth  />
-            <span>Resolution: {details.details.resolution}</span>
-          </div>
-          <div className="icon-text-container mt-2">
-            <FontAwesomeIcon icon={faClock} fixedWidth />
-            <span>Sprint: {details.details.sprint}</span>
-          </div>
-          <div className="icon-text-container mt-2">
-            <FontAwesomeIcon icon={faLayerGroup} fixedWidth />
-            <span>Type: {details.details.type}</span>
-          </div>
-          <div className="icon-text-container mt-2">
-            <FontAwesomeIcon icon={faLayerGroup}fixedWidth  />
-            <span>Versions: {details.details.versions}</span>
-          </div>
-        </div>
-      </div>)}
-    </div>
-            </div>
-            <div className="col-8">
-            <div className="circle-container">
-                <div className="big-circle" style={{ boxShadow: `0 4px 8px ${getShadowColor()}, inset 0 -4px 8px ${getShadowColor()}`, background: `${getBackgroundColor()}` }}>
-            
-            {details && (
-              <div>
-            <div className="big-circle-details text-center">
-              <h3>{details && details.details && details.details.type} Case</h3>
-            </div>
-            <div className="big-circle-details text-center">
-              <p>{details && details.summary}</p>
-            </div>
-            </div>
-          )}
-
+              <h3 className="card-title">{extractTeiidFromUrl(url)}</h3>
+              <h5 className="card-text">{details.summary}</h5>
+              <p className="card-text">{details.description}</p>
+              <div className="icon-container">
+                <div className="icon-text-container mt-2">
+                  <FontAwesomeIcon icon={faWrench} fixedWidth />
+                  <span>Fix For: {details.details.fixfor}</span>
                 </div>
-                {Object.keys(useCaseDictionary).map((issueId) =>
-  useCaseDictionary[issueId].map((item, index) => (
-    <div
-      key={`${issueId}-${index}`}
-      className={`text-center small-circle small-circle-${index + 1} ${
-        clickedCircle === index ? "clicked" : ""
-      }`}
-      onClick={() => handleClick(index)}
-      style={{
-       
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center"
-      }}
-    >
-      <h5 className="circle-name" style={{ position: "absolute" }}>{item.name}</h5>
-      <h5 className="circle-score" style={{ position: "absolute" }} data-score={item.score}>{item.score}%</h5>
-    </div>
-  ))
-)}
-          </div>
+                <div className="icon-text-container mt-2">
+                  <FontAwesomeIcon icon={faExclamationCircle} fixedWidth />
+                  <span>Priority: {details.details.priority}</span>
+                </div>
+                <div className="icon-text-container mt-2">
+                  <FontAwesomeIcon icon={faFlag} fixedWidth />
+                  <span>Resolution: {details.details.resolution}</span>
+                </div>
+                <div className="icon-text-container mt-2">
+                  <FontAwesomeIcon icon={faClock} fixedWidth />
+                  <span>Sprint: {details.details.sprint}</span>
+                </div>
+                <div className="icon-text-container mt-2">
+                  <FontAwesomeIcon icon={faLayerGroup} fixedWidth />
+                  <span>Type: {details.details.type}</span>
+                </div>
+                <div className="icon-text-container mt-2">
+                  <FontAwesomeIcon icon={faLayerGroup} fixedWidth />
+                  <span>Versions: {details.details.versions}</span>
+                </div>
               </div>
+            </div>
           </div>
-        
         </div>
-
-  );
+        <div className="col-8">
+          <div className="circle-container">
+            <div className="big-circle" style={{ boxShadow: `0 4px 8px ${getShadowColor()}, inset 0 -4px 8px ${getShadowColor()}`, background: `${getBackgroundColor()}` }}>
+              <div className="big-circle-details text-center">
+                <h3>{details.details.type} Case</h3>
+                <p>{details.summary}</p>
+              </div>
+          
+            </div>
+            {items.map((item, index) => (
+              <div
+                key={index}
+                className={`text-center small-circle small-circle-${index + 1} ${
+                  clickedCircle === index ? "clicked" : ""
+                }`}
+                onClick={() => handleClick(index)}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}
+              >
+                <h5 className="circle-name" style={{ position: "absolute" }}>{item.name}</h5>
+                <h5 className="circle-score" style={{ position: "absolute" }} data-score={item.score}>{item.score}%</h5>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    )}
+  </div>
+);
 }

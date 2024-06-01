@@ -34,9 +34,6 @@
   font-size: 13px;
   font-weight: bold;
   text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
 }
 .big-circle:hover{
