@@ -56,7 +56,7 @@ const CodeEditor = ({ content, fileType }) => {
             padding: '20px', 
             borderRadius: '5px',
             overflowX: 'auto', 
-            maxHeight: '780px', 
+            maxHeight: '900px', 
             overflowY: 'auto', 
 
           }}

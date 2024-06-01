@@ -142,7 +142,32 @@ function ViewSource() {
     useEffect(() => {
         fetchFolderStructure();
     }, []);
+    const mockJavaCode = `/**
+     * Constructor for ProcedurePlan.
+     */
+    public ProcedurePlan(Program originalProgram) {
+        this.originalProgram = originalProgram;
+        createVariableContext();
+    }
+`;
 
+const ErrorScript = () => {
+    return (
+        <div className="error-script">
+            <pre>
+                <code>
+                    {mockJavaCode.split('\n').map((line, index) => (
+                        <div key={index} className={index === 3 ? 'highlighted-line' : ''}>
+                            {index + 1}: {line}
+                        </div>
+                    ))}
+                </code>
+            </pre>
+        </div>
+    );
+};
+
+    
     const fetchFolderStructure = () => {
         fetch("http://localhost:5000/get-folder-structure?directory_path=GP GUI Base/electron-react-app/src/uploads")
             .then((response) => response.json())
@@ -220,6 +245,20 @@ function ViewSource() {
               }
             `}
             </style>
+            <div className="row">
+                <div className="col-md-1"></div>
+                <div className="col-md-10 error-separator"></div>
+                <div className="col-md-1"></div>
+            </div>
+            <div className="row">
+                <div className="col-md-1"></div>
+                <div className="col-md-10 cc">
+                <ErrorScript />
+                </div>
+                <div className="col-md-1"></div>
+            </div>
+          
+
         </div>
     );
 }

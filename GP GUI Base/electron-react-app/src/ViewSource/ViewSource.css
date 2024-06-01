@@ -90,3 +90,32 @@
     color: #fff;
     font-weight: bold;
 }
+
+.error-separator
+{
+background: #0f2a2a;
+  height: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); 
+  
+}
+.error-script {
+    background-color:rgba(15, 42, 42);
+    border-radius: 5px;
+    overflow-y: auto;
+    border: 1px solid #0f2a2a;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.error-script pre {
+    margin: 0;
+}
+
+.error-script .highlighted-line {
+    background-color: rgb(202, 20, 20);
+    color: #000;
+}
+.cc{
+    padding:0%;
+}
