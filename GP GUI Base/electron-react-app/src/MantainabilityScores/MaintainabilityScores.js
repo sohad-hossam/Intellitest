@@ -120,6 +120,7 @@ export function MaintainabilityScore() {
     "Maintainability Scores",
     "Trace Links",
     "About Us",
+    "FilesDisplay",
   ];
   const [scores, setScores] = useState({});
   const [loading, setLoading] = useState(true);

@@ -8,6 +8,7 @@ import { TraceLinks } from "./TraceLinks/TraceLinks.js";
 import { ViewSource } from "./ViewSource/ViewSource.js";
 import { CodeEditor } from "./CodeEditor/CodeEditor.js";
 import { HashRouter, Route, Routes } from "react-router-dom";
+import { FilesDisplay } from "./FilesDisplay/FilesDisplay.js";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/TraceLinks" element={<TraceLinks />} />
           <Route path="/ViewSource" element={<ViewSource />} />
           <Route path="/CodeEditor" element={<CodeEditor />} />
+          <Route path="/FilesDisplay" element={<FilesDisplay />} />
         </Routes>
       </div>
     </HashRouter>

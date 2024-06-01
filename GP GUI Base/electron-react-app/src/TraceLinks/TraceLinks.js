@@ -4,8 +4,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Header } from "../TopBar/TopBar";
 import { PageTitle } from "../PageTitle/PageTitle";
 
-
 function DropDowns() {
+  const [step, setStep] = useState(0); 
   const [useCaseOptions, setUseCaseOptions] = useState([]);
   const [codeOptions, setCodeOptions] = useState([]);
   const [useCaseSelected, setUseCaseSelected] = useState(false);
@@ -13,21 +13,13 @@ function DropDowns() {
   const [score, setScore] = useState(null);
   const [showScoreMessage, setShowScoreMessage] = useState(false);
   const [url, setUrl] = useState('');
-  const [summary, setSummary] = useState('');
-  const [description, setDescription] = useState('');
+  const [useCaseChoice, setUseCaseChoice1] = useState(null);
 
   useEffect(() => {
     fetchUseCaseFiles();
     fetchCodeFiles();
   }, []);
 
-  useEffect(() => {
-   
-    if (score !== null) {
-      setShowScoreMessage(true);
-    
-    }
-  }, [score]);
   const fetchUseCaseFiles = async () => {
     try {
       const response = await fetch('http://localhost:5000/get-usecase-files?folder_path=GP GUI Base/electron-react-app/src/uploads/teiid_dataset/test_UC');
@@ -41,8 +33,6 @@ function DropDowns() {
       console.error('Error fetching use case files:', error);
     }
   };
-
-
 
   const fetchCodeFiles = async () => {
     try {
@@ -58,50 +48,23 @@ function DropDowns() {
     }
   };
 
-  const handleCaseSelection = (event) => {
-    setUseCaseSelected(event.target.value !== "");
+  const handleCaseSelection = (option) => {
+    setUseCaseSelected(option);
+    handleProcessDocs();
+    setStep(3);
   };
-
-  const handleCodeSelection = (event) => {
-    setCodeSelected(event.target.value !== "");
-  };
-
-  const handleProcessDocs = async () => {
-    if (!useCaseSelected || !codeSelected) {
-      const warningMessage = document.querySelector(".warning-message");
-      if (warningMessage) {
-        warningMessage.style.display = "block";
-      }
-    } else {
-      const warningMessage = document.querySelector(".warning-message");
-      if (warningMessage) {
-        warningMessage.style.display = "none";
-      }
-
-      const selectedUseCase = document.getElementById("exampleFormControlSelect1").value;
-      const selectedCode = document.getElementById("exampleFormControlSelect2").value;
-
-      try {
   
-        const response = await fetch(`http://localhost:5000/compute-tracelinks?usecase=${selectedUseCase}&code=${selectedCode}`, {
-          method: "POST",
-        });
-        if (!response.ok) {
-          throw new Error('Failed to compute trace links');
-        }
-        const data = await response.json();
-        setScore(data.trace_links);
-      } catch (error) {
-        console.error('Error computing trace links:', error);
-      }
-    }
+  const handleCodeSelection = (option) => {
+    setCodeSelected(option);
+    setStep(1);
   };
+  
  
-
-
-  const handleInputChange = (e) => {
-    setUrl(e.target.value);
+  const setUseCaseChoice = (choice) => {
+    setUseCaseChoice1(choice);
+    setStep(2);
   };
+
 
   const handleUrlSubmit = async () => {
     try {
@@ -118,106 +81,148 @@ function DropDowns() {
       }
 
       const data = await response.json();
-      setSummary(data.summary);
-      setDescription(data.description);
+
     } catch (error) {
       console.error('Error fetching the URL:', error);
     }
+    handleProcessDocs();
+    setStep(3);
   };
 
+  const handleProcessDocs = async () => {
+    if (!useCaseSelected || !codeSelected) {
+      
+      return;
+    }
 
+    try {
+
+      const response = await fetch(`http://localhost:5000/compute-tracelinks?usecase=${useCaseSelected}&code=${codeSelected}`, {
+        method: "POST",
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to compute trace links');
+      }
+
+      const data = await response.json();
+      setScore(data.trace_links);
+    } catch (error) {
+      console.error('Error computing trace links:', error);
+    }
+    setStep(4)
+  };
 
   return (
-    <div className="dropDowns mt-5">
-      <div className="row justify-content-center align-items-center">
-        <div className="col-md-4 d-flex justify-content-center">
-            <div>
-          <input type="text" value={url} onChange={handleInputChange} />
-          <button onClick={handleUrlSubmit}>Submit URL</button>
-          <div>
-            <h2>Summary:</h2>
-            <p>{summary}</p>
-            <h2>Description:</h2>
-            <p>{description}</p>
-          </div>
-        </div>
-       
-        </div>
-        <div className="col-md-4 d-flex justify-content-center">
-          <div className="form-group">
-            <label className="drops-label" htmlFor="exampleFormControlSelect1">
-              Use Case Document
-            </label>
-            <select
-              className="form-control drops-label"
-              id="exampleFormControlSelect1"
-              onChange={handleCaseSelection}
-            >
-              <option value="" selected hidden>
-                Use Case
-              </option>
-              {useCaseOptions.map((option, index) => (
-                <option key={index}>{option}</option>
-              ))}
-            </select>
-          </div>
-        </div>
-        <div className="col-md-4 d-flex justify-content-center">
-          <div className="form-group">
-            <label className="drops-label" htmlFor="exampleFormControlSelect2">
-              Code Document
-            </label>
-            <select
-              className="form-control drops-label"
-              id="exampleFormControlSelect2"
-              onChange={handleCodeSelection}
-            >
-              <option value="" selected hidden>
-                Code
-              </option>
+    <div className="mt-2">
+
+      <div className="timeline mb-5">
+        <div className={`step ${step >= 0 ? 'completed' : ''}`}></div>
+        <div className={`circle ${step >= 0 ? 'completed' : ''}`}>1</div>
+        <div className={`step ${step >= 1 ? 'completed' : ''}`}></div>
+        <div className={`circle ${step >= 1 ? 'completed' : ''}`}>2</div>
+        <div className={`step ${step >= 2 ? 'completed' : ''}`}></div>
+        <div className={`circle ${step >= 2 ? 'completed' : ''}`}>3</div>
+        <div className={`step ${step >= 3 ? 'completed' : ''}`}></div>
+        <div className={`circle ${step >= 3 ? 'completed' : ''}`}>4</div>
+        <div className={`step ${step >= 4 ? 'completed' : ''}`}></div>
+      </div>
+      <div className="fixe">
+     <div className="row">
+        <div className="col-md-3 move">
+          <div className={`card ${step === 0 ? 'active' : ''}`}>
+          <div className="card-body">
+              <h5 className="card-title">Choose Code File</h5>
+              <div className="code-options-container">
               {codeOptions.map((option, index) => (
-                <option key={index}>{option}</option>
-              ))}
-            </select>
+                  <div 
+                    key={index} 
+                    className={`code-option ${codeSelected === option ? 'selected' : ''}`}
+                    onClick={() => handleCodeSelection(option)}
+                  >
+                    <p className="card-text">{option}</p>
+                  </div>
+                ))}
+              </div>
+              {step > 0 && <span className="badge bg-success">Completed</span>}
+            </div>
+          </div>
+        </div>
+        <div className="col-md-3">
+          <div className={`card ${step === 1 ? 'active' : ''}`}>
+          <div className="card-body">
+
+              <h5 className="card-title">Choose Use Case Option</h5>
+              {step>0 && <div className="text-center">
+              <p>We offer two options for handling use case files: you can either select an existing use case file from the project documents, or provide us with the URL of the required use case.</p>
+               <div className="button-container">
+              <button className="optionButton" onClick={() => setUseCaseChoice(0)}>Choose Use Case</button>
+              <button className="optionButton" onClick={() => setUseCaseChoice(1)}>Upload URL</button>
+            </div>
+            </div>}
+              {step > 1 && <span className="badge bg-success">Completed</span>}
+            </div>
+          </div>
+        </div>
+        <div className="col-md-3">
+          <div className={`card ${step === 2 ? 'active' : ''}`}>
+            <div className="card-body">
+              <h5 className="card-title">Choose Use Case File</h5>
+              {useCaseChoice === 0 ? (
+     <div className="code-options-container">
+    {useCaseOptions.map((option, index) => (
+      <div 
+        key={index} 
+        className={`use-option  ${useCaseSelected === option ? 'selected' : ''}`}
+        onClick={() => handleCaseSelection(option)}
+      >
+        <p className="card-text">{option}</p>
+      </div>
+    ))}
+  </div>
+) : useCaseChoice === 1 ? (
+  <div className="form-group  text-center">
+    <label htmlFor="urlInput">Enter URL:</label>
+    <input 
+      type="text" 
+      className="form-control" 
+      id="urlInput" 
+      value={url} 
+      onChange={(e) => setUrl(e.target.value)} 
+      placeholder="Enter URL" 
+    />
+
+    <button  className="optionButton" onClick={handleUrlSubmit}>Submit</button> 
+  </div>
+) : null}
+
+              {step > 2 && <span className="badge bg-success">Completed</span>}
+            </div>
+          </div>
+        </div>
+        <div className="col-md-3 moveer">
+          <div className={`card ${step === 3 ? 'active' : ''}`}>
+            <div className="card-body">
+              <h5 className="card-title">Process Documents</h5>
+             
+                    {score!=null &&score>0.5 && (
+                  <div className="tracelink-message  text-center">
+                    Trace Links Exist between the documents by {score*100}% indicating high correlation
+                  </div>)}
+                  {score!=null &&score<=0.5 && (
+                  <div className="tracelink-message-low  text-center" >
+                    Trace Links Exist between the documents by {score*100}% indicating low correlation
+                  </div>
+                )}
+           
+                 {step > 3 && <span className="badge bg-success">Completed</span>}
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="row justify-content-center mt-5">
-        <div className="col-md-4 d-flex justify-content-center">
-          <button
-            type="button"
-            className="process-btn"
-            onClick={handleProcessDocs}
-          >
-            Process Documents
-          </button>
-        </div>
-      </div>
-
-      <div className="row justify-content-center mt-3">
-        <div className="col-md-4">
-          <div className="warning-message text-danger">
-            Please select a Use Case and a Code Document to process.
-          </div>
-        </div>
-      </div>
-
-      <div className="row justify-content-center mt-5">
-        <div className="col-md-4">
-        {score!=null &&score>0.5 && (
-            <div className="tracelink-message">
-              Trace Links Exist between the documents by {score*100}% indicating high correlation
-            </div>
-          )}
-            {score!=null &&score<=0.5 && (
-            <div className="tracelink-message-low">
-              Trace Links Exist between the documents by {score*100}% indicating low correlation
-            </div>
-          )}
-        </div>
-      </div>
     </div>
+     </div>
   );
 }
 
@@ -227,12 +232,12 @@ export function TraceLinks() {
     "About Us",
     "Maintainability Scores",
     "Trace Links",
+    "FilesDisplay",
   ];
 
   return (
     <div className="App">
       <Header visibleHyperlinks={visibleHyperlinks} activeLink="Trace Links" />
-      <PageTitle title={"Trace Links"} activeLink="Trace Links" />
       <DropDowns />
     </div>
   );

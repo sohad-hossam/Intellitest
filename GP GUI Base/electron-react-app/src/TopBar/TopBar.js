@@ -11,6 +11,7 @@ export function Header({ visibleHyperlinks, activeLink }) {
     { url: "/TraceLinks", label: "Trace Links" },
     { url: "/ViewSource", label: "Source Code" },
     { url: "/AboutUs", label: "About Us" },
+    { url: "/FilesDisplay", label: "FilesDisplay"},
   ];
 
   const filteredHyperlinks = allHyperlinks.filter((link) =>
