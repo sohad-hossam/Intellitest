@@ -19,6 +19,7 @@ def find_file(root_directory, file_name,relative_path):
             return os.path.join(root, file_name)
     return None
 
+
 con = sqlite3.connect("Dataset/teiid_dataset/teiid.sqlite3")
 cur = con.cursor()
 
@@ -29,11 +30,9 @@ change_set_df = pd.read_sql_query("SELECT commit_hash,file_path FROM code_change
 merged_df = pd.merge(change_set_link_df, change_set_df, on='commit_hash')
 merged_df = merged_df.drop(columns=['commit_hash'])
 
-
 merged_df.to_csv('Dataset/teiid_dataset/teiid.csv', index=False)
 
 train,test = train_test_split(merged_df, test_size = 0.01)
-
 
 unique_cc = test['file_path'].unique()
 unique_uc = test['issue_id'].unique()
@@ -70,28 +69,52 @@ for i, row in merged_df.iterrows():
         continue
     _test.add(file_path)
     
-    actual_path = find_file("./", os.path.basename(file_path),os.path.normpath(file_path))
-    if actual_path ==None:
-        print(file_path)
-        continue
+    # actual_path = find_file("./", os.path.basename(file_path),os.path.normpath(file_path))
+    # if actual_path == None:
+    #     # print(file_path)
+    #     continue
+    
+    
+    actual_path = f'./Dataset/teiid_dataset/teiid/{file_path}'
     if os.path.isfile(actual_path):
         if (actual_path).endswith('.java'):
-            if row['file_path'] in train_unique_cc:
-                shutil.copy(actual_path,f'./Dataset/teiid_dataset/train_CC/{i}.java')
-            elif row['file_path'] in unique_cc:
-                shutil.copy(actual_path,f'./Dataset/teiid_dataset/test_CC/{i}.java')
-
+            try:
+                if row['file_path'] in train_unique_cc:
+                    shutil.copy(actual_path,f'./Dataset/teiid_dataset/train_CC/{i}.java')
+                elif row['file_path'] in unique_cc:
+                    shutil.copy(actual_path,f'./Dataset/teiid_dataset/test_CC/{i}.java')
+            except FileNotFoundError:
+                pass
         
-    
 train.to_csv('Dataset/teiid_dataset/train.csv',index=False)
 test.to_csv('Dataset/teiid_dataset/test.csv',index=False)
-
 
 # print(train)
 # print(test)
 
 con.close()
 
+
+train = pd.read_csv('Dataset/teiid_dataset/train.csv',header=None, names=['issue_id','file_path'])
+test = pd.read_csv('Dataset/teiid_dataset/test.csv',header=None, names=['issue_id','file_path'])
+
+
+file_paths = [f'./dataset/teiid_dataset/train_cc/{file_path}' for file_path in os.listdir('./dataset/teiid_dataset/train_cc/')]
+train = train[train['file_path'].isin(file_paths)]
+
+file_paths = [f'./dataset/teiid_dataset/test_cc/{file_path}' for file_path in os.listdir('./dataset/teiid_dataset/test_cc/')]
+test = test[test['file_path'].isin(file_paths)]
+
+for i, row in train.iterrows():
+    if not os.path.isfile(f'./Dataset/teiid_dataset/train_UC/{row['issue_id']}.txt'):
+        train = train[train['issue_id'] != row['issue_id']]
+
+for i, row in test.iterrows():
+    if not os.path.isfile(f'./Dataset/teiid_dataset/test_UC/{row['issue_id']}.txt'):
+        test = test[test['issue_id'] != row['issue_id']]
+
+train.to_csv('Dataset/teiid_dataset/train.csv',index=False)
+test.to_csv('Dataset/teiid_dataset/test.csv',index=False)
 
 # df = pd.read_csv('Dataset/teiid_dataset/teiid.csv')
 

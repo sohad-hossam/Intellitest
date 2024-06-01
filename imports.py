@@ -1,4 +1,5 @@
 from treelib import Node, Tree
+import tree_sitter_java as tsjava
 from tree_sitter import Language, Parser
 import math
 import re
@@ -19,6 +20,7 @@ from sklearn.decomposition import TruncatedSVD
 import numpy as np
 from numpy import ndarray
 import random
+from itertools import groupby
 
 from typing import Callable
 
@@ -30,9 +32,9 @@ from collections import defaultdict
 from scipy.stats import rankdata
 
 import os
-# from gensim import corpora
-# from gensim.models import LdaMulticore
-# import gensim
+from gensim import corpora
+from gensim.models import LdaMulticore
+import gensim
 
 # from imblearn.over_sampling import SMOTE
 
