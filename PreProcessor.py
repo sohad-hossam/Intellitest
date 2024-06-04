@@ -108,17 +108,17 @@ class PreProcessor:
         self.Vocab["</s>"] = 2
 
         # self.word_index=dict()
-        # Language.build_library(
+        Language.build_library(
         # # Store the library in the `build` directory
-        # "build/my-languages.so",
+        "build/my-languages.so",
         # # Include one or more languages
-        # ["./tree-sitter-java"],
-        # )
-        # JAVA = Language("build/my-languages.so", "java")
-        JAVA_LANGUAGE = Language(tsjava.language())
-        self.parser = Parser(JAVA_LANGUAGE)
-        # self.parser = Parser()
-        # self.parser.set_language(JAVA)
+         ["./tree-sitter-java"],
+         )
+        JAVA = Language("build/my-languages.so", "java")
+        # JAVA_LANGUAGE = Language(tsjava.language())
+        #self.parser = Parser(JAVA_LANGUAGE)
+        self.parser = Parser()
+        self.parser.set_language(JAVA)
 
     def PreProcessor(self, filepath, UC_or_CC: str = 'UC',train_or_test: str ='train'):
         dataset_txt = open(filepath, "r", encoding="utf-8").read()
