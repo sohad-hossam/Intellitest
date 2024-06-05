@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./TraceLinks.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+
 import { Header } from "../TopBar/TopBar";
 import { PageTitle } from "../PageTitle/PageTitle";
 
@@ -15,6 +18,9 @@ function DropDowns() {
   const [url, setUrl] = useState('');
   const [useCaseChoice, setUseCaseChoice1] = useState(null);
   const [invalidurl, setInvalidUrl] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [invalidtrace, setinvalidtrace] = useState(false);
+  
   useEffect(() => {
     fetchUseCaseFiles();
     fetchCodeFiles();
@@ -94,23 +100,30 @@ function DropDowns() {
     if (!useCaseSelected || !codeSelected) {
       return;
     }
-
+  
+    setLoading(true);
+    setStep(3);
+  
     try {
       const response = await fetch(`http://localhost:5000/compute-tracelinks?usecase=${useCaseSelected}&code=${codeSelected}`, {
         method: "POST",
       });
-      
+  
       if (!response.ok) {
         throw new Error('Failed to compute trace links');
       }
-
+  
       const data = await response.json();
       setScore(data.trace_links);
     } catch (error) {
+      setinvalidtrace(true);
       console.error('Error computing trace links:', error);
+    } finally {
+      setLoading(false);
+      setStep(4);
     }
-    setStep(4)
   };
+  
 
   return (
     <div className="mt-2">
@@ -152,9 +165,9 @@ function DropDowns() {
               <div className="card-body">
                 <h5 className="card-title">Choose Use Case Option</h5>
                 {step > 0 && (
-                  <div className="text-center">
+                  <div className="text-center mt-5">
                     <p>We offer two options for handling use case files: you can either select an existing use case file from the project documents, or provide us with the URL of the required use case.</p>
-                    <div className="button-container">
+                    <div className="button-container mt-5">
                       <button className="optionButton" onClick={() => setUseCaseChoice(0)}>Choose Use Case</button>
                       <button className="optionButton" onClick={() => setUseCaseChoice(1)}>Upload URL</button>
                     </div>
@@ -204,23 +217,37 @@ function DropDowns() {
             </div>
           </div>
           <div className="col-md-3 moveer">
-            <div className={`card ${step === 3 ? 'active' : ''} ${step >= 3 ? 'fixed-height' : ''}`}>
-              <div className="card-body">
-                <h5 className="card-title">Process Documents</h5>
-                {score != null && score <= 0.5 && (
-                  <div className="tracelink-message-low  text-center">
-                    Trace Links Exist between the documents by {score * 100}% indicating low correlation
-                  </div>
-                )}
-                {score != null && score > 0.5 && (
-                  <div className="tracelink-message  text-center">
-                    Trace Links Exist between the documents by {score * 100}% indicating high correlation
-                  </div>
-                )}
-                {step > 3 && <span className="badge bg-success">Completed</span>}
-              </div>
+  <div className={`card ${step === 3 ? 'active' : ''} ${step >= 3 ? 'fixed-height' : ''}`}>
+    <div className="card-body">
+      <h5 className="card-title">Process Documents</h5>
+      {loading ? (
+        <div className="text-center mt-5">
+          <FontAwesomeIcon icon={faSpinner} spin />
+          <p>Files are being processed...</p>
+        </div>
+      ) : (
+        <>
+          {score != null && score <= 0.5 && (
+            <div className="tracelink-message-low text-center">
+              Trace Links Exist between the documents by {score * 100}% indicating low correlation
             </div>
-          </div>
+          )}
+          {score != null && score > 0.5 && (
+            <div className="tracelink-message text-center">
+              Trace Links Exist between the documents by {score * 100}% indicating high correlation
+            </div>
+          )}
+          {invalidtrace && (
+                  <div className="tracelink-message-low  text-center mt-5">
+                  Unable to compute traceLinks between the corresponding files.
+                  </div>
+                )}
+          {step > 3 && <span className="badge bg-success">Completed</span>}
+        </>
+      )}
+    </div>
+  </div>
+</div>
         </div>
       </div>
     </div>
