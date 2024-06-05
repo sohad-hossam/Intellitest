@@ -17,7 +17,6 @@
 
 .progress-bar:hover {
   background-color: #0f3e4a; 
-
 }
 
 .progress-label {
@@ -40,8 +39,8 @@
 }
 
 .items-card {
- position: absolute;
- top:0;
+  position: absolute;
+  top: 0;
   color: aliceblue;
   background-color: #092635;
   border-radius: 20px;
@@ -52,7 +51,6 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); 
   opacity: 0;
   transition: opacity 0.5s ease; 
-
 }
 
 .items-card.show {
@@ -115,13 +113,13 @@
 
 .tree-struc {
   border-right: 1px solid #123434;
-  padding: 30px;
+  padding: 15px;
   max-height: 700px;
   overflow-y: auto;
   height: 95vh;
 }
 .child-container {
-  margin-left: 20px;
+  margin-left: 10px;
 }
 
 .tree-struc span {
@@ -136,8 +134,7 @@
   padding: 5px 10px;
   border-radius: 7px;
 }
-.mohtawa
-{
+.mohtawa {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   padding: 20px;
   border-radius: 7px;

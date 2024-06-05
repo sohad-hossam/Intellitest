@@ -44,37 +44,53 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick, searchQuery
         return name.toLowerCase().includes(searchQuery.toLowerCase());
     };
 
+    const renderFolderChildren = (children, directoryPath) => {
+        return children.map((child) => (
+            <div key={child.name}>
+                {child.type === 'folder' ? (
+                    <RenderFolderStructure
+                        folder={child}
+                        directoryPath={directoryPath}
+                        onFileClick={onFileClick}
+                        searchQuery={searchQuery}
+                    />
+                ) : (
+                    matchesSearchQuery(child.name) && (
+                        <span onClick={() => handleFileClick(folder, child)}>
+                            &nbsp;&nbsp;
+                            {getFileIcon(child.name, child.type)}
+                            &nbsp;&nbsp;
+                            {child.name}
+                        </span>
+                    )
+                )}
+            </div>
+        ));
+    };
+
+    const renderFolderPath = (folder, basePath) => {
+        let path = folder.name;
+        while (folder.children && folder.children.length === 1 && folder.children[0].type === 'folder') {
+            folder = folder.children[0];
+            path += `/${folder.name}`;
+        }
+        return { path, folder };
+    };
+
+    const { path, folder: actualFolder } = renderFolderPath(folder, directoryPath);
+
     return (
-        <div key={folder.name}>
+        <div key={actualFolder.name}>
             <div>
                 <span onClick={toggleFolder}>
-                    {getFileIcon(folder.name, folder.type)}
+                    {getFileIcon(actualFolder.name, actualFolder.type)}
                     &nbsp;&nbsp;
-                    {folder.name}
+                    {path}
                 </span>
             </div>
-            {folder.children && isExpanded && (
+            {actualFolder.children && isExpanded && (
                 <div className="child-container">
-                    {folder.children.map((child) => (
-                        <div key={child.name}>
-                            {child.type === 'folder' ? (
-                                <RenderFolderStructure 
-                                    folder={child} 
-                                    directoryPath={directoryPath} 
-                                    onFileClick={onFileClick} 
-                                    searchQuery={searchQuery} 
-                                />
-                            ) : (
-                                matchesSearchQuery(child.name) && (
-                                    <span onClick={() => handleFileClick(folder, child)}>
-                                        &nbsp;&nbsp;
-                                        {getFileIcon(child.name, child.type)}
-                                        {child.name}
-                                    </span>
-                                )
-                            )}
-                        </div>
-                    ))}
+                    {renderFolderChildren(actualFolder.children, directoryPath)}
                 </div>
             )}
         </div>
@@ -171,6 +187,7 @@ function ViewSource() {
                 console.error("Error fetching file content:", error);
             });
     };
+
     const mockJavaCode = `/**
      * Constructor for ProcedurePlan.
      */
@@ -194,6 +211,7 @@ function ViewSource() {
             </div>
         );
     };
+
     const handleFileClick = (file) => {
         const filePath = file.path;
         navigate(`/ViewSource/${encodeURIComponent(filePath)}`);
@@ -224,11 +242,11 @@ function ViewSource() {
                             style={styles.searchInput}
                         />
                     </div>
-                    <RenderFolderStructure 
-                        folder={folderStructure} 
-                        directoryPath="GP GUI Base/electron-react-app/src/uploads/teiid_dataset" 
-                        onFileClick={handleFileClick} 
-                        searchQuery={searchQuery} 
+                    <RenderFolderStructure
+                        folder={folderStructure}
+                        directoryPath="GP GUI Base/electron-react-app/src/uploads/teiid_dataset"
+                        onFileClick={handleFileClick}
+                        searchQuery={searchQuery}
                     />
                 </div>
                 <div className="col-md-7 vscode-code-editor">

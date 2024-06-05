@@ -21,7 +21,7 @@
 .vscode-file-tree {
     background-color: #123434;
     border-right: 1px solid #123434;
-    padding: 30px;
+    padding: 15px; 
     max-height: 850px;
     overflow-y: auto;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -33,9 +33,57 @@
     max-height: 800px;
     height: 100vh;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); 
-    padding:0px;
+    padding: 0px;
 }
 
+.vscode-file-tree span {
+    transition: background-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease, padding 0.4s ease, border-radius 0.4s ease;
+    padding-left: 5px;  
+    display: flex;
+    align-items: center;
+}
+
+.vscode-file-tree span:hover {
+    background-color: #123434;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    padding: 5px 10px;
+    border-radius: 7px;
+}
+
+.child-container {
+    margin-left: 10px; 
+}
+
+.error-separator {
+    background: #0f2a2a;
+    height: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); 
+}
+
+.error-script {
+    background-color: rgba(15, 42, 42);
+    border-radius: 5px;
+    overflow-y: auto;
+    border: 1px solid #0f2a2a;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.error-script pre {
+    margin: 0;
+}
+
+.error-script .highlighted-line {
+    background-color: rgb(202, 20, 20);
+    color: #000;
+}
+
+.cc {
+    padding: 0%;
+}
 
 ::-webkit-scrollbar {
     width: 12px;
@@ -56,7 +104,6 @@
     background: rgb(64, 125, 89);
 }
 
-
 ::-webkit-scrollbar-vertical {
     width: 12px;
     height: 12px;
@@ -73,49 +120,4 @@
 
 ::-webkit-scrollbar-thumb-vertical:hover {
     background: rgb(64, 125, 89);
-}
-.vscode-file-tree span {
-    transition: background-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease, padding 0.4s ease, border-radius 0.4s ease;
-}
-
-.vscode-file-tree span:hover {
-    background-color: #123434;
-    color: white;
-    cursor: pointer;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    padding: 5px 10px;
-    border-radius: 7px;
-}
-.filePath{
-    color: #fff;
-    font-weight: bold;
-}
-
-.error-separator
-{
-background: #0f2a2a;
-  height: 20px;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); 
-  
-}
-.error-script {
-    background-color:rgba(15, 42, 42);
-    border-radius: 5px;
-    overflow-y: auto;
-    border: 1px solid #0f2a2a;
-    padding: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-}
-
-.error-script pre {
-    margin: 0;
-}
-
-.error-script .highlighted-line {
-    background-color: rgb(202, 20, 20);
-    color: #000;
-}
-.cc{
-    padding:0%;
 }

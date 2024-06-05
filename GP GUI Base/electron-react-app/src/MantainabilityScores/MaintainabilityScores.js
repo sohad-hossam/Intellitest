@@ -44,8 +44,22 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick, searchQuery
     onFileClick({ ...file, path: filePath });
   };
 
+  const filterAndCombineFolders = (folder) => {
+    let combinedName = folder.name;
+    let currentFolder = folder;
+
+    while (currentFolder.children && currentFolder.children.length === 1 && currentFolder.children[0].type === 'folder') {
+      currentFolder = currentFolder.children[0];
+      combinedName += `/${currentFolder.name}`;
+    }
+
+    return { ...currentFolder, name: combinedName };
+  };
+
   const filteredChildren = folder.children.filter((child) => {
     return child.type === 'folder' || (matchesSearchQuery(child.name) && getFileExtension(child.name) === 'java');
+  }).map((child) => {
+    return child.type === 'folder' ? filterAndCombineFolders(child) : child;
   });
 
   return (
@@ -89,6 +103,7 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick, searchQuery
     </div>
   );
 };
+
 
 const ProgressBar = ({ label, score, onMouseEnter, onMouseLeave }) => {
   return (
