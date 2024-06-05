@@ -36,7 +36,7 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick, searchQuery
     };
 
     const handleFileClick = (folder, file) => {
-        const filePath = `${directoryPath}/${folder.name}/${file.name}`;
+        const filePath = `${directoryPath}/${file.name}`;
         onFileClick({ ...file, path: filePath });
     };
 
@@ -44,13 +44,13 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick, searchQuery
         return name.toLowerCase().includes(searchQuery.toLowerCase());
     };
 
-    const renderFolderChildren = (children, directoryPath) => {
+    const renderFolderChildren = (children, currentPath) => {
         return children.map((child) => (
             <div key={child.name}>
                 {child.type === 'folder' ? (
                     <RenderFolderStructure
                         folder={child}
-                        directoryPath={directoryPath}
+                        directoryPath={`${currentPath}/${child.name}`}
                         onFileClick={onFileClick}
                         searchQuery={searchQuery}
                     />
@@ -68,29 +68,18 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick, searchQuery
         ));
     };
 
-    const renderFolderPath = (folder, basePath) => {
-        let path = folder.name;
-        while (folder.children && folder.children.length === 1 && folder.children[0].type === 'folder') {
-            folder = folder.children[0];
-            path += `/${folder.name}`;
-        }
-        return { path, folder };
-    };
-
-    const { path, folder: actualFolder } = renderFolderPath(folder, directoryPath);
-
     return (
-        <div key={actualFolder.name}>
+        <div key={folder.name}>
             <div>
                 <span onClick={toggleFolder}>
-                    {getFileIcon(actualFolder.name, actualFolder.type)}
+                    {getFileIcon(folder.name, folder.type)}
                     &nbsp;&nbsp;
-                    {path}
+                    {folder.name}
                 </span>
             </div>
-            {actualFolder.children && isExpanded && (
+            {folder.children && isExpanded && (
                 <div className="child-container">
-                    {renderFolderChildren(actualFolder.children, directoryPath)}
+                    {renderFolderChildren(folder.children, directoryPath)}
                 </div>
             )}
         </div>
@@ -244,7 +233,7 @@ function ViewSource() {
                     </div>
                     <RenderFolderStructure
                         folder={folderStructure}
-                        directoryPath="GP GUI Base/electron-react-app/src/uploads/teiid_dataset"
+                        directoryPath="GP GUI Base/electron-react-app/src/uploads"
                         onFileClick={handleFileClick}
                         searchQuery={searchQuery}
                     />
