@@ -1,5 +1,5 @@
 from treelib import Node, Tree
-import tree_sitter_java as tsjava
+# import tree_sitter_java as tsjava
 from tree_sitter import Language, Parser
 import math
 import re
@@ -52,3 +52,5 @@ from tqdm import tqdm
 from torch.nn.utils.rnn import pad_sequence
 
 from gensim.models import Word2Vec
+import git
+import sqlite3
