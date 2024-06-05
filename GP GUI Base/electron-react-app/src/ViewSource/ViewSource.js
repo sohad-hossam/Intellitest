@@ -44,6 +44,24 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick, searchQuery
         return name.toLowerCase().includes(searchQuery.toLowerCase());
     };
 
+    const filterAndCombineFolders = (folder) => {
+        let combinedName = folder.name;
+        let currentFolder = folder;
+
+        while (currentFolder.children && currentFolder.children.length === 1 && currentFolder.children[0].type === 'folder') {
+            currentFolder = currentFolder.children[0];
+            combinedName += `/${currentFolder.name}`;
+        }
+
+        return { ...currentFolder, name: combinedName };
+    };
+
+    const filteredChildren = folder.children.filter((child) => {
+        return child.type === 'folder' || (matchesSearchQuery(child.name) && getFileExtension(child.name) === 'java');
+    }).map((child) => {
+        return child.type === 'folder' ? filterAndCombineFolders(child) : child;
+    });
+
     const renderFolderChildren = (children, currentPath) => {
         return children.map((child) => (
             <div key={child.name}>
@@ -79,7 +97,7 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick, searchQuery
             </div>
             {folder.children && isExpanded && (
                 <div className="child-container">
-                    {renderFolderChildren(folder.children, directoryPath)}
+                    {renderFolderChildren(filteredChildren, directoryPath)}
                 </div>
             )}
         </div>

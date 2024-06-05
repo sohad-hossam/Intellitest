@@ -108,7 +108,7 @@ const ProgressBar = ({ label, score, onMouseEnter, onMouseLeave }) => {
   return (
     <div className="progress-bar-container mt-3" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       <div className="row align-items-center">
-        <div className="col-md-4 text-center">
+        <div className="col-md-4 text-start">
           <div className="progress-label">{label}</div>
         </div>
         <div className="col-md-8">
