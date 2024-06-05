@@ -22,7 +22,7 @@ function DropDowns() {
 
   const fetchUseCaseFiles = async () => {
     try {
-      const response = await fetch('http://localhost:5000/get-usecase-files?folder_path=GP GUI Base/electron-react-app/src/uploads/teiid_dataset/test_UC');
+      const response = await fetch('http://localhost:5000/get-usecase-files?folder_path=GP GUI Base/electron-react-app/src/uploads/usecase_files');
       if (!response.ok) {
         throw new Error('Failed to fetch use case files');
       }
@@ -36,18 +36,18 @@ function DropDowns() {
 
   const fetchCodeFiles = async () => {
     try {
-      const response = await fetch('http://localhost:5000/get-usecase-files?folder_path=GP GUI Base/electron-react-app/src/uploads/teiid_dataset/test_CC');
+      const response = await fetch('http://localhost:5000/get-java-files');
       if (!response.ok) {
         throw new Error('Failed to fetch code files');
       }
       const data = await response.json();
-      const files = data.files || [];
+      const files = data.java_files || [];
       setCodeOptions(files);
     } catch (error) {
       console.error('Error fetching code files:', error);
     }
   };
-
+  
   const handleCaseSelection = (option) => {
     setUseCaseSelected(option);
     handleProcessDocs();
@@ -80,6 +80,7 @@ function DropDowns() {
       }
 
       const data = await response.json();
+      setInvalidUrl(false);
 
     } catch (error) {
       console.error('Error fetching the URL:', error);
@@ -181,7 +182,7 @@ function DropDowns() {
                   </div>
                 ) : useCaseChoice === 1 ? (
                   <div className="form-group  text-center">
-
+                    
                     <input 
                       type="text" 
                       className="form-control" 

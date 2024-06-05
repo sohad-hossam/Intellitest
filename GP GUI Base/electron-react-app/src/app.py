@@ -1,14 +1,17 @@
-from flask import Flask, request, jsonify,send_file,Response
+from flask import Flask, request, jsonify, send_file, Response
 from flask_cors import CORS
 from MaintainabilityScore import MaintainabilityScore
 from MLScript import TraceLinks
 import os
 import zipfile
+import pandas as pd
+import sqlite3
+from sklearn.model_selection import train_test_split
 from concurrent.futures import ThreadPoolExecutor
 import requests 
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
+import json
+
 app = Flask(__name__)
 CORS(app)
 
@@ -67,13 +70,76 @@ def extract_zip(zip_file, destination):
     with zipfile.ZipFile(zip_file, 'r') as zip_ref:
         zip_ref.extractall(destination)
 
+def find_sqlite_file(directory):
+    for root, _, files in os.walk(directory):
+        for file in files:
+            if file.endswith(".sqlite3"):
+                return os.path.join(root, file)
+    return None
+
+def process_sqlite_file(sqlite_file_path):
+    con = sqlite3.connect(sqlite_file_path)
+    cur = con.cursor()
+
+    issue_df = pd.read_sql_query("SELECT issue_id, summary, description FROM issue", con)
+    change_set_link_df = pd.read_sql_query("SELECT issue_id, commit_hash FROM change_set_link", con)
+    change_set_df = pd.read_sql_query("SELECT commit_hash, file_path FROM code_change", con)
+
+    merged_df = pd.merge(change_set_link_df, change_set_df, on='commit_hash')
+    merged_df = merged_df.drop(columns=['commit_hash'])
+
+    merged_df.to_csv(os.path.join(UPLOAD_FOLDER, 'teiid.csv'), index=False)
+
+    train, test = train_test_split(merged_df, test_size=0.01)
+
+    unique_cc = test['file_path'].unique()
+    unique_uc = test['issue_id'].unique()
+
+    train = train[~train['issue_id'].isin(unique_uc)]
+    train = train[~train['file_path'].isin(unique_cc)]
+
+    train_unique_cc = train['file_path'].unique()
+    train_unique_uc = train['issue_id'].unique()
+
+    os.makedirs(os.path.join(UPLOAD_FOLDER, 'usecase_files'), exist_ok=True)  # Create usecase_files folder
+
+    for i, row in issue_df.iterrows():
+        issue_id = row['issue_id']
+        if issue_id not in merged_df['issue_id'].values:
+            continue
+        summary = row['summary']
+        description = row['description']
+        if row['issue_id'] in train_unique_uc:
+            with open(os.path.join(UPLOAD_FOLDER, 'usecase_files', f'{issue_id}.txt'), 'w', encoding='utf-8') as f:
+                f.write(f"{summary}\n{description}")
+
+
+def extract_java_files(directory):
+    java_files = {}
+    for root, _, files in os.walk(directory):
+        for file in files:
+            if file.endswith(".java"):
+                java_files[file] = os.path.join(root, file)
+    return java_files
+
+
+
 def process_zip_file(zip_file_path):
     try:
         extract_zip(zip_file_path, UPLOAD_FOLDER)
+        sqlite_file_path = find_sqlite_file(UPLOAD_FOLDER)
+        if sqlite_file_path:
+            process_sqlite_file(sqlite_file_path)
+        
+        java_files = extract_java_files(UPLOAD_FOLDER)
+        with open(os.path.join(UPLOAD_FOLDER, 'java_files_dict.json'), 'w') as f:
+            json.dump(java_files, f)
+
         os.remove(zip_file_path)
         app.logger.info(f"Zip folder processed successfully: {zip_file_path}")
     except Exception as e:
         app.logger.error(f"Error processing zip folder: {e}")
+
 
 @app.route('/upload-folder', methods=['POST'])
 def upload_folder():
@@ -86,7 +152,6 @@ def upload_folder():
         if uploaded_file.filename == '':
             return jsonify({'error': 'No file selected for uploading.'}), 400
 
-        # Save the uploaded zip file temporarily
         temp_file_path = os.path.join(UPLOAD_FOLDER, 'temp.zip')
         uploaded_file.save(temp_file_path)
         executor.submit(process_zip_file, temp_file_path)
@@ -260,7 +325,23 @@ def fetch_details():
         app.logger.error(f"An error occurred: {e}")
         return jsonify({'error': 'An unexpected error occurred.'}), 500
 
+@app.route('/get-java-files', methods=['GET'])
+def get_java_files():
+    try:
+        java_files_dict_path = os.path.join(UPLOAD_FOLDER, 'java_files_dict.json')
+        if not os.path.exists(java_files_dict_path):
+            return jsonify({'error': 'Java files dictionary not found.'}), 404
 
+        with open(java_files_dict_path, 'r') as f:
+            java_files_dict = json.load(f)
+
+        java_files = list(java_files_dict.keys())
+
+        return jsonify({'java_files': java_files}), 200
+
+    except Exception as e:
+        app.logger.error(f"An error occurred: {e}")
+        return jsonify({'error': 'An unexpected error occurred.'}), 500
 if __name__ == '__main__':
     app.run(debug=True)
 

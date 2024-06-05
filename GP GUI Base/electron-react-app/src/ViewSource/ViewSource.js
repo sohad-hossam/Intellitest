@@ -203,6 +203,7 @@ function ViewSource() {
 
     const handleFileClick = (file) => {
         const filePath = file.path;
+        console.log("File path:", filePath);
         navigate(`/ViewSource/${encodeURIComponent(filePath)}`);
         fetchFileContent(filePath);
     };
