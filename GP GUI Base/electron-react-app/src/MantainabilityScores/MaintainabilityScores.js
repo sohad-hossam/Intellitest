@@ -39,8 +39,8 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick, searchQuery
     }
   };
 
-  const handleFolderClick = (folder, file) => {
-    const filePath = `${directoryPath}/${folder.name}/${file.name}`;
+  const handleFileClick = (file) => {
+    const filePath = `${directoryPath}/${file.name}`;
     onFileClick({ ...file, path: filePath });
   };
 
@@ -76,9 +76,9 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick, searchQuery
           {filteredChildren.map((child) => (
             <div key={child.name}>
               {child.type === 'folder' ? (
-                <RenderFolderStructure folder={child} directoryPath={directoryPath} onFileClick={onFileClick} searchQuery={searchQuery} />
+                <RenderFolderStructure folder={child} directoryPath={`${directoryPath}/${child.name}`} onFileClick={onFileClick} searchQuery={searchQuery} />
               ) : (
-                <span onClick={() => handleFolderClick(folder, child)}>
+                <span onClick={() => handleFileClick(child)}>
                   {getFileIcon(child.name, child.type)}
                   &nbsp;&nbsp;
                   {child.name}
@@ -104,15 +104,14 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick, searchQuery
   );
 };
 
-
 const ProgressBar = ({ label, score, onMouseEnter, onMouseLeave }) => {
   return (
     <div className="progress-bar-container mt-3" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       <div className="row align-items-center">
-        <div className="col-md-3 col-md-3 text-center">
+        <div className="col-md-4 text-center">
           <div className="progress-label">{label}</div>
         </div>
-        <div className="col-md-9">
+        <div className="col-md-8">
           <div className="progress">
             <div
               className="progress-bar"
@@ -217,48 +216,46 @@ export function MaintainabilityScore() {
           onMouseLeave={() => toggleCardVisibility(key, false)}
         />
         {selectedScoreKey === key && (
-         <div className="items-card-container">
-      <div className={`items-card mt-3 ${selectedScoreKey === key ? 'show' : 'hide'}`}>
-  <h4 className="card-title">{key} - Maintainability Score : <span className="score-value">{Math.round(value.maintainability_score)}%</span></h4>
-  <div className="m-3">
-    <div className="info-item">
-      <span className="info-label">Program vocabulary:</span> <span className="info-value">{Math.round(value.halstead_volume_results.D)}</span>
-    </div>
-    <div className="info-item">
-      <span className="info-label">Program length:</span> <span className="info-value">{Math.round(value.halstead_volume_results.N)}</span>
-    </div>
-    <div className="info-item">
-      <span className="info-label">Calculated program length:</span> <span className="info-value">{value.halstead_volume_results.N_hat.toFixed(3)}</span>
-    </div>
-    <div className="info-item">
-      <span className="info-label">Volume:</span> <span className="info-value">{((value.halstead_volume_results.V / 1000) * 10).toFixed(3)}</span>
-    </div>
-    <div className="info-item">
-      <span className="info-label">Difficulty:</span> <span className="info-value">{((value.halstead_volume_results.D / 100) * 10).toFixed(3)}</span>
-    </div>
-    <div className="info-item">
-      <span className="info-label">Effort:</span> <span className="info-value">{((value.halstead_volume_results.E / 100000) * 10).toFixed(3)}</span>
-    </div>
-    <div className="info-item">
-      <span className="info-label">Time required to program:</span> <span className="info-value">{(value.halstead_volume_results.T / 60).toFixed(3)} </span>
-    </div>
-    <div className="info-item">
-      <span className="info-label">Number of delivered bugs:</span> <span className="info-value">{value.halstead_volume_results.B.toFixed(3)}</span>
-    </div>
-    <div className="info-item">
-      <span className="info-label">SLOC:</span> <span className="info-value">{Math.round(value.sloc_and_comment_lines_results.SLOC)}</span>
-    </div>
-    <div className="info-item">
-      <span className="info-label">Comment Lines Ratio:</span> <span className="info-value">{value.sloc_and_comment_lines_results.comment_lines_ratio.toFixed(3)}</span>
-    </div>
-    <div className="info-item">
-      <span className="info-label">Cyclomatic Complexity:</span> <span className="info-value">{value.cyclomatic_complexity.toFixed(3)}</span>
-    </div>
-  </div>
-</div>
-
-       </div>
-       
+          <div className="items-card-container">
+            <div className={`items-card mt-3 ${selectedScoreKey === key ? 'show' : 'hide'}`}>
+              <h4 className="card-title">{key} - Maintainability Score : <span className="score-value">{Math.round(value.maintainability_score)}%</span></h4>
+              <div className="m-3">
+                <div className="info-item">
+                  <span className="info-label">Program vocabulary:</span> <span className="info-value">{Math.round(value.halstead_volume_results.D)}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Program length:</span> <span className="info-value">{Math.round(value.halstead_volume_results.N)}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Calculated program length:</span> <span className="info-value">{value.halstead_volume_results.N_hat.toFixed(3)}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Volume:</span> <span className="info-value">{((value.halstead_volume_results.V / 1000) * 10).toFixed(3)}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Difficulty:</span> <span className="info-value">{((value.halstead_volume_results.D / 100) * 10).toFixed(3)}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Effort:</span> <span className="info-value">{((value.halstead_volume_results.E / 100000) * 10).toFixed(3)}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Time required to program:</span> <span className="info-value">{(value.halstead_volume_results.T / 60).toFixed(3)}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Number of delivered bugs:</span> <span className="info-value">{value.halstead_volume_results.B.toFixed(3)}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">SLOC:</span> <span className="info-value">{Math.round(value.sloc_and_comment_lines_results.SLOC)}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Comment Lines Ratio:</span> <span className="info-value">{value.sloc_and_comment_lines_results.comment_lines_ratio.toFixed(3)}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Cyclomatic Complexity:</span> <span className="info-value">{value.cyclomatic_complexity.toFixed(3)}</span>
+                </div>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     ));
@@ -293,14 +290,16 @@ export function MaintainabilityScore() {
       border: "3px solid #123434",
     }
   };
+  
   if (!folderStructure) {
     return null;
-}
+  }
+
   return (
     <div className="App">
       <Header visibleHyperlinks={visibleHyperlinks} activeLink="Maintainability Scores" />
       <div className="container mohtawa mt-5">
-        <div className="row ">
+        <div className="row">
           <div className="col-md-3 tree-struc">
             <div style={styles.searchContainer}>
               <FontAwesomeIcon icon={faSearch} style={styles.searchIcon} />
@@ -312,14 +311,12 @@ export function MaintainabilityScore() {
                 style={styles.searchInput}
               />
             </div>
-            
-          <RenderFolderStructure folder={folderStructure} directoryPath="GP GUI Base/electron-react-app/src/uploads/teiid_dataset" onFileClick={handleFileClick} searchQuery={searchQuery} />
+            <RenderFolderStructure folder={folderStructure} directoryPath="GP GUI Base/electron-react-app/src/uploads" onFileClick={handleFileClick} searchQuery={searchQuery} />
           </div>
           <div className="col-md-9 p-2">
             <PageTitle title="Maintainability Scores" />
             {renderScores()}
           </div>
-       
         </div>
         <nav aria-label="Page navigation example">
           <ul className="pagination justify-content-center mt-3">

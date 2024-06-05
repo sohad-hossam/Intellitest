@@ -101,7 +101,7 @@ def process_sqlite_file(sqlite_file_path):
     train_unique_cc = train['file_path'].unique()
     train_unique_uc = train['issue_id'].unique()
 
-    os.makedirs(os.path.join(UPLOAD_FOLDER, 'usecase_files'), exist_ok=True)  # Create usecase_files folder
+    os.makedirs(os.path.join(UPLOAD_FOLDER, 'usecase_files'), exist_ok=True) 
 
     for i, row in issue_df.iterrows():
         issue_id = row['issue_id']
