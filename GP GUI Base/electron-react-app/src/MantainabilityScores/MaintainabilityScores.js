@@ -203,45 +203,45 @@ export function MaintainabilityScore() {
         />
         {selectedScoreKey === key && (
          <div className="items-card-container">
-         <div className={`items-card mt-3 ${selectedScoreKey === key ? 'show' : 'hide'}`}>
-           <h4 className="card-title">{key} - Maintainability Score : <span className="score-value">{Math.round(value.maintainability_score)}%</span></h4>
-           <div className="m-3">
-             <div className="info-item">
-               <span className="info-label">Program vocabulary:</span> <span className="info-value">{Math.round(value.halstead_volume_results.D)}</span>
-             </div>
-             <div className="info-item">
-               <span className="info-label">Program length:</span> <span className="info-value">{Math.round(value.halstead_volume_results.N)}</span>
-             </div>
-             <div className="info-item">
-               <span className="info-label">Calculated program length:</span> <span className="info-value">{value.halstead_volume_results.N_hat.toFixed(3)}</span>
-             </div>
-             <div className="info-item">
-               <span className="info-label">Volume:</span> <span className="info-value">{value.halstead_volume_results.V.toFixed(3)}</span>
-             </div>
-             <div className="info-item">
-               <span className="info-label">Difficulty:</span> <span className="info-value">{value.halstead_volume_results.D.toFixed(3)}</span>
-             </div>
-             <div className="info-item">
-               <span className="info-label">Effort:</span> <span className="info-value">{value.halstead_volume_results.E.toFixed(3)}</span>
-             </div>
-             <div className="info-item">
-               <span className="info-label">Time required to program:</span> <span className="info-value">{value.halstead_volume_results.T.toFixed(3)}</span>
-             </div>
-             <div className="info-item">
-               <span className="info-label">Number of delivered bugs:</span> <span className="info-value">{value.halstead_volume_results.B.toFixed(3)}</span>
-             </div>
-             <div className="info-item">
-               <span className="info-label">SLOC:</span> <span className="info-value">{Math.round(value.sloc_and_comment_lines_results.SLOC)}</span>
-             </div>
-             <div className="info-item">
-               <span className="info-label">Comment Lines Ratio:</span> <span className="info-value">{value.sloc_and_comment_lines_results.comment_lines_ratio.toFixed(3)}</span>
-             </div>
-             <div className="info-item">
-               <span className="info-label">Cyclomatic Complexity:</span> <span className="info-value">{value.cyclomatic_complexity.toFixed(3)}</span>
-             </div>
-           
-           </div>
-         </div>
+      <div className={`items-card mt-3 ${selectedScoreKey === key ? 'show' : 'hide'}`}>
+  <h4 className="card-title">{key} - Maintainability Score : <span className="score-value">{Math.round(value.maintainability_score)}%</span></h4>
+  <div className="m-3">
+    <div className="info-item">
+      <span className="info-label">Program vocabulary:</span> <span className="info-value">{Math.round(value.halstead_volume_results.D)}</span>
+    </div>
+    <div className="info-item">
+      <span className="info-label">Program length:</span> <span className="info-value">{Math.round(value.halstead_volume_results.N)}</span>
+    </div>
+    <div className="info-item">
+      <span className="info-label">Calculated program length:</span> <span className="info-value">{value.halstead_volume_results.N_hat.toFixed(3)}</span>
+    </div>
+    <div className="info-item">
+      <span className="info-label">Volume:</span> <span className="info-value">{((value.halstead_volume_results.V / 1000) * 10).toFixed(3)}</span>
+    </div>
+    <div className="info-item">
+      <span className="info-label">Difficulty:</span> <span className="info-value">{((value.halstead_volume_results.D / 100) * 10).toFixed(3)}</span>
+    </div>
+    <div className="info-item">
+      <span className="info-label">Effort:</span> <span className="info-value">{((value.halstead_volume_results.E / 100000) * 10).toFixed(3)}</span>
+    </div>
+    <div className="info-item">
+      <span className="info-label">Time required to program:</span> <span className="info-value">{(value.halstead_volume_results.T / 60).toFixed(3)} </span>
+    </div>
+    <div className="info-item">
+      <span className="info-label">Number of delivered bugs:</span> <span className="info-value">{value.halstead_volume_results.B.toFixed(3)}</span>
+    </div>
+    <div className="info-item">
+      <span className="info-label">SLOC:</span> <span className="info-value">{Math.round(value.sloc_and_comment_lines_results.SLOC)}</span>
+    </div>
+    <div className="info-item">
+      <span className="info-label">Comment Lines Ratio:</span> <span className="info-value">{value.sloc_and_comment_lines_results.comment_lines_ratio.toFixed(3)}</span>
+    </div>
+    <div className="info-item">
+      <span className="info-label">Cyclomatic Complexity:</span> <span className="info-value">{value.cyclomatic_complexity.toFixed(3)}</span>
+    </div>
+  </div>
+</div>
+
        </div>
        
         )}

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Header } from "../TopBar/TopBar";
-import { PageTitle } from "../PageTitle/PageTitle";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFolder, faFileCsv, faFileAlt, faFileCode, faChevronRight,faSearch  } from '@fortawesome/free-solid-svg-icons';
+import { faFolder, faFileCsv, faFileAlt, faFileCode, faChevronRight, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { CodeEditor } from "../CodeEditor/CodeEditor";
 import './ViewSource.css';
 
@@ -82,6 +82,9 @@ const RenderFolderStructure = ({ folder, directoryPath, onFileClick, searchQuery
 };
 
 function ViewSource() {
+    const navigate = useNavigate();
+    const { file } = useParams();
+
     const [folderStructure, setFolderStructure] = useState(null);
     const [selectedFileContent, setSelectedFileContent] = useState('');
     const [selectedFileType, setSelectedFileType] = useState('');
@@ -92,6 +95,7 @@ function ViewSource() {
         "Maintainability Scores",
         "Trace Links",
         "Source Code",
+        "FilesDisplay"
     ];
 
     const EditorHeader = ({ filePath }) => {
@@ -118,7 +122,6 @@ function ViewSource() {
         searchContainer: {
             position: 'relative',
             marginBottom: '20px',
-          
         },
         searchIcon: {
             position: 'absolute',
@@ -126,48 +129,25 @@ function ViewSource() {
             left: '10px',
             transform: 'translateY(-50%)',
             color: 'white',
-
         },
         searchInput: {
             padding: "5px 10px 5px 30px",
             width: "100%",
             borderRadius: "10px",
             backgroundColor: "#123434",
-            color:"white",
+            color: "white",
             border: "3px solid white",
-        
         }
     };
 
     useEffect(() => {
         fetchFolderStructure();
-    }, []);
-    const mockJavaCode = `/**
-     * Constructor for ProcedurePlan.
-     */
-    public ProcedurePlan(Program originalProgram) {
-        this.originalProgram = originalProgram;
-        createVariableContext();
-    }
-`;
 
-const ErrorScript = () => {
-    return (
-        <div className="error-script">
-            <pre>
-                <code>
-                    {mockJavaCode.split('\n').map((line, index) => (
-                        <div key={index} className={index === 3 ? 'highlighted-line' : ''}>
-                            {index + 1}: {line}
-                        </div>
-                    ))}
-                </code>
-            </pre>
-        </div>
-    );
-};
+        if (file) {
+            fetchFileContent(file);
+        }
+    }, [file]);
 
-    
     const fetchFolderStructure = () => {
         fetch("http://localhost:5000/get-folder-structure?directory_path=GP GUI Base/electron-react-app/src/uploads")
             .then((response) => response.json())
@@ -179,10 +159,10 @@ const ErrorScript = () => {
             });
     };
 
-    const handleFileClick = (file) => {
-        setSelectedFileType(getFileExtension(file.name));
-        setSelectedFilePath(file.path);
-        fetch(`http://localhost:5000/get-file-content?file_path=${file.path}`)
+    const fetchFileContent = (filePath) => {
+        setSelectedFileType(getFileExtension(filePath));
+        setSelectedFilePath(filePath);
+        fetch(`http://localhost:5000/get-file-content?file_path=${filePath}`)
             .then((response) => response.text())
             .then((data) => {
                 setSelectedFileContent(data);
@@ -190,6 +170,34 @@ const ErrorScript = () => {
             .catch((error) => {
                 console.error("Error fetching file content:", error);
             });
+    };
+    const mockJavaCode = `/**
+     * Constructor for ProcedurePlan.
+     */
+    public ProcedurePlan(Program originalProgram) {
+        this.originalProgram = originalProgram;
+        createVariableContext();
+    }
+`;
+    const ErrorScript = () => {
+        return (
+            <div className="error-script">
+                <pre>
+                    <code>
+                        {mockJavaCode.split('\n').map((line, index) => (
+                            <div key={index} className={index === 3 ? 'highlighted-line' : ''}>
+                                {index + 1}: {line}
+                            </div>
+                        ))}
+                    </code>
+                </pre>
+            </div>
+        );
+    };
+    const handleFileClick = (file) => {
+        const filePath = file.path;
+        navigate(`/ViewSource/${encodeURIComponent(filePath)}`);
+        fetchFileContent(filePath);
     };
 
     const getFileExtension = (filename) => {
@@ -206,7 +214,7 @@ const ErrorScript = () => {
             <div className="row">
                 <div className="col-md-1"></div>
                 <div className="col-md-3 vscode-file-tree">
-                <div style={styles.searchContainer}>
+                    <div style={styles.searchContainer}>
                         <FontAwesomeIcon icon={faSearch} style={styles.searchIcon} />
                         <input
                             type="text"
@@ -253,12 +261,10 @@ const ErrorScript = () => {
             <div className="row">
                 <div className="col-md-1"></div>
                 <div className="col-md-10 cc">
-                <ErrorScript />
+                    <ErrorScript />
                 </div>
                 <div className="col-md-1"></div>
             </div>
-          
-
         </div>
     );
 }

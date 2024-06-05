@@ -21,6 +21,7 @@ function App() {
           <Route path="/ImportProject" element={<ImportProject />} />
           <Route path="/TraceLinks" element={<TraceLinks />} />
           <Route path="/ViewSource" element={<ViewSource />} />
+          <Route path="/ViewSource/:file" element={<ViewSource />} />
           <Route path="/CodeEditor" element={<CodeEditor />} />
           <Route path="/FilesDisplay" element={<FilesDisplay />} />
         </Routes>

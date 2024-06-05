@@ -14,7 +14,7 @@ function DropDowns() {
   const [showScoreMessage, setShowScoreMessage] = useState(false);
   const [url, setUrl] = useState('');
   const [useCaseChoice, setUseCaseChoice1] = useState(null);
-
+  const [invalidurl, setInvalidUrl] = useState(false);
   useEffect(() => {
     fetchUseCaseFiles();
     fetchCodeFiles();
@@ -59,12 +59,10 @@ function DropDowns() {
     setStep(1);
   };
   
- 
   const setUseCaseChoice = (choice) => {
     setUseCaseChoice1(choice);
     setStep(2);
   };
-
 
   const handleUrlSubmit = async () => {
     try {
@@ -78,12 +76,14 @@ function DropDowns() {
 
       if (!response.ok) {
         throw new Error('Failed to fetch the URL');
+        setInvalidUrl(true);
       }
 
       const data = await response.json();
 
     } catch (error) {
       console.error('Error fetching the URL:', error);
+      setInvalidUrl(true);
     }
     handleProcessDocs();
     setStep(3);
@@ -91,12 +91,10 @@ function DropDowns() {
 
   const handleProcessDocs = async () => {
     if (!useCaseSelected || !codeSelected) {
-      
       return;
     }
 
     try {
-
       const response = await fetch(`http://localhost:5000/compute-tracelinks?usecase=${useCaseSelected}&code=${codeSelected}`, {
         method: "POST",
       });
@@ -128,101 +126,103 @@ function DropDowns() {
         <div className={`step ${step >= 4 ? 'completed' : ''}`}></div>
       </div>
       <div className="fixe">
-     <div className="row">
-        <div className="col-md-3 move">
-          <div className={`card ${step === 0 ? 'active' : ''}`}>
-          <div className="card-body">
-              <h5 className="card-title">Choose Code File</h5>
-              <div className="code-options-container">
-              {codeOptions.map((option, index) => (
-                  <div 
-                    key={index} 
-                    className={`code-option ${codeSelected === option ? 'selected' : ''}`}
-                    onClick={() => handleCodeSelection(option)}
-                  >
-                    <p className="card-text">{option}</p>
-                  </div>
-                ))}
+        <div className="row">
+          <div className="col-md-3 move">
+            <div className={`card ${step === 0 ? 'active' : ''} ${step >= 0 ? 'fixed-height' : ''}`}>
+              <div className="card-body">
+                <h5 className="card-title">Choose Code File</h5>
+                <div className="code-options-container">
+                  {codeOptions.map((option, index) => (
+                    <div 
+                      key={index} 
+                      className={`code-option ${codeSelected === option ? 'selected' : ''}`}
+                      onClick={() => handleCodeSelection(option)}
+                    >
+                      <p className="card-text">{option}</p>
+                    </div>
+                  ))}
+                </div>
+                {step > 0 && <span className="badge bg-success">Completed</span>}
               </div>
-              {step > 0 && <span className="badge bg-success">Completed</span>}
             </div>
           </div>
-        </div>
-        <div className="col-md-3">
-          <div className={`card ${step === 1 ? 'active' : ''}`}>
-          <div className="card-body">
-
-              <h5 className="card-title">Choose Use Case Option</h5>
-              {step>0 && <div className="text-center">
-              <p>We offer two options for handling use case files: you can either select an existing use case file from the project documents, or provide us with the URL of the required use case.</p>
-               <div className="button-container">
-              <button className="optionButton" onClick={() => setUseCaseChoice(0)}>Choose Use Case</button>
-              <button className="optionButton" onClick={() => setUseCaseChoice(1)}>Upload URL</button>
-            </div>
-            </div>}
-              {step > 1 && <span className="badge bg-success">Completed</span>}
-            </div>
-          </div>
-        </div>
-        <div className="col-md-3">
-          <div className={`card ${step === 2 ? 'active' : ''}`}>
-            <div className="card-body">
-              <h5 className="card-title">Choose Use Case File</h5>
-              {useCaseChoice === 0 ? (
-     <div className="code-options-container">
-    {useCaseOptions.map((option, index) => (
-      <div 
-        key={index} 
-        className={`use-option  ${useCaseSelected === option ? 'selected' : ''}`}
-        onClick={() => handleCaseSelection(option)}
-      >
-        <p className="card-text">{option}</p>
-      </div>
-    ))}
-  </div>
-) : useCaseChoice === 1 ? (
-  <div className="form-group  text-center">
-    <label htmlFor="urlInput">Enter URL:</label>
-    <input 
-      type="text" 
-      className="form-control" 
-      id="urlInput" 
-      value={url} 
-      onChange={(e) => setUrl(e.target.value)} 
-      placeholder="Enter URL" 
-    />
-
-    <button  className="optionButton" onClick={handleUrlSubmit}>Submit</button> 
-  </div>
-) : null}
-
-              {step > 2 && <span className="badge bg-success">Completed</span>}
-            </div>
-          </div>
-        </div>
-        <div className="col-md-3 moveer">
-          <div className={`card ${step === 3 ? 'active' : ''}`}>
-            <div className="card-body">
-              <h5 className="card-title">Process Documents</h5>
-             
-                    {score!=null &&score>0.5 && (
-                  <div className="tracelink-message  text-center">
-                    Trace Links Exist between the documents by {score*100}% indicating high correlation
-                  </div>)}
-                  {score!=null &&score<=0.5 && (
-                  <div className="tracelink-message-low  text-center" >
-                    Trace Links Exist between the documents by {score*100}% indicating low correlation
+          <div className="col-md-3">
+            <div className={`card ${step === 1 ? 'active' : ''} ${step >= 1 ? 'fixed-height' : ''}`}>
+              <div className="card-body">
+                <h5 className="card-title">Choose Use Case Option</h5>
+                {step > 0 && (
+                  <div className="text-center">
+                    <p>We offer two options for handling use case files: you can either select an existing use case file from the project documents, or provide us with the URL of the required use case.</p>
+                    <div className="button-container">
+                      <button className="optionButton" onClick={() => setUseCaseChoice(0)}>Choose Use Case</button>
+                      <button className="optionButton" onClick={() => setUseCaseChoice(1)}>Upload URL</button>
+                    </div>
                   </div>
                 )}
-           
-                 {step > 3 && <span className="badge bg-success">Completed</span>}
+                {step > 1 && <span className="badge bg-success">Completed</span>}
+              </div>
+            </div>
+          </div>
+          <div className="col-md-3">
+            <div className={`card ${step === 2 ? 'active' : ''} ${step >= 2 ? 'fixed-height' : ''}`}>
+              <div className="card-body">
+                <h5 className="card-title">Choose Use Case File</h5>
+                {useCaseChoice === 0 ? (
+                  <div className="code-options-container">
+                    {useCaseOptions.map((option, index) => (
+                      <div 
+                        key={index} 
+                        className={`use-option  ${useCaseSelected === option ? 'selected' : ''}`}
+                        onClick={() => handleCaseSelection(option)}
+                      >
+                        <p className="card-text">{option}</p>
+                      </div>
+                    ))}
+                  </div>
+                ) : useCaseChoice === 1 ? (
+                  <div className="form-group  text-center">
+
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      id="urlInput" 
+                      value={url} 
+                      onChange={(e) => setUrl(e.target.value)} 
+                      placeholder="Enter URL" 
+                    />
+                    <button  className="optionButton" onClick={handleUrlSubmit}>Submit</button> 
+                    {invalidurl && (
+                  <div className="tracelink-message-low  text-center">
+                   Invalid Url . Please enter a valid issue Url
+                  </div>
+                )}
+                  </div>
+                ) : null}
+                {step > 2 && <span className="badge bg-success">Completed</span>}
+              </div>
+            </div>
+          </div>
+          <div className="col-md-3 moveer">
+            <div className={`card ${step === 3 ? 'active' : ''} ${step >= 3 ? 'fixed-height' : ''}`}>
+              <div className="card-body">
+                <h5 className="card-title">Process Documents</h5>
+                {score != null && score <= 0.5 && (
+                  <div className="tracelink-message-low  text-center">
+                    Trace Links Exist between the documents by {score * 100}% indicating low correlation
+                  </div>
+                )}
+                {score != null && score > 0.5 && (
+                  <div className="tracelink-message  text-center">
+                    Trace Links Exist between the documents by {score * 100}% indicating high correlation
+                  </div>
+                )}
+                {step > 3 && <span className="badge bg-success">Completed</span>}
+              </div>
             </div>
           </div>
         </div>
       </div>
-
     </div>
-     </div>
   );
 }
 

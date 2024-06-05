@@ -116,6 +116,7 @@ export function FilesDisplay() {
   const visibleHyperlinks = [
     "Home",
     "About Us",
+    "FilesDisplay",
     "Maintainability Scores",
     "Trace Links"
   ];
@@ -161,7 +162,7 @@ const getBackgroundColor = () => {
 
 return (
   <div className="App">
-    <Header visibleHyperlinks={visibleHyperlinks} activeLink="Trace Links" />
+    <Header visibleHyperlinks={visibleHyperlinks} activeLink="FilesDisplay" />
     <div className="card">
       <div className="card-body">
         <h5 className="card-title">Enter URL</h5>

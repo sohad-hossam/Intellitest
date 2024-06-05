@@ -10,8 +10,8 @@ export function Header({ visibleHyperlinks, activeLink }) {
     { url: "/MaintainabilityScore", label: "Maintainability Scores" },
     { url: "/TraceLinks", label: "Trace Links" },
     { url: "/ViewSource", label: "Source Code" },
-    { url: "/AboutUs", label: "About Us" },
     { url: "/FilesDisplay", label: "FilesDisplay"},
+    { url: "/AboutUs", label: "About Us" },
   ];
 
   const filteredHyperlinks = allHyperlinks.filter((link) =>

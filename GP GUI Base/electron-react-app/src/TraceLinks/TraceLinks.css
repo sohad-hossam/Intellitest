@@ -182,3 +182,7 @@
 {
  overflow-x: hidden;
 }
+.fixed-height {
+  height: 400px;
+  overflow-y: auto;
+}
