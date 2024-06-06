@@ -120,8 +120,8 @@ class PreProcessor:
         self.parser = Parser()
         self.parser.set_language(JAVA)
 
-    def PreProcessor(self, filepath, UC_or_CC: str = 'UC',train_or_test: str ='train'):
-        dataset_txt = open(filepath, "r", encoding="utf-8").read()
+    def PreProcessor(self, file_content: str, UC_or_CC: str = 'UC',train_or_test: str ='train'):
+        dataset_txt = file_content
         # 1) All the interpunction was removed.
         SourceCodeCleaned = re.split(self.chars_to_remove, dataset_txt)
         # 2) All numeric characters were removed.
@@ -172,26 +172,14 @@ class PreProcessor:
         return words_tokenized
 
     # setup documents
-    def setupCC(self, code_path: str, train_or_test:str)->tuple:
+    def setupCC(self, code_files: list, train_or_test:str)->tuple:
         all_tokens=set()
-        CC_to_index = dict()
         code_documents = list()
-        code_file_index = 0
-        file_stack = list()
-        file_stack.append(code_path)
-        CC_to_index = dict()
-        while len(file_stack) > 0:
-            filepath = file_stack.pop()
-            for filename in os.listdir(filepath):
-                filepath_integrated = filepath+"/"+filename
-                if os.path.isdir(filepath_integrated):
-                    file_stack.append(filepath_integrated)
-                elif filename.endswith(".java"):
-                    tokens = self.PreProcessor(filepath_integrated, 'CC',train_or_test)
-                    code_documents.append(tokens)
-                    filepath_integrated.replace(code_path, "")
-                    CC_to_index[filepath_integrated.lower()] = code_file_index
-                    code_file_index += 1
+        
+        for i, file_content in enumerate(code_files):
+            tokens = self.PreProcessor(file_content, 'CC',train_or_test)
+            code_documents.append(tokens)
+
         for i, doc in enumerate(code_documents):
             tokens = doc.split()
             for j, token in enumerate(tokens):
@@ -202,16 +190,13 @@ class PreProcessor:
 
                 all_tokens.add(tokens[j])
             code_documents[i] = ' '.join(tokens)
-        return code_documents,CC_to_index,all_tokens
+        return code_documents, all_tokens
     
-    def setupUC(self, UC_path: str, train_or_test: str)->tuple:
+    def setupUC(self, UC_files: list, train_or_test: str)->tuple:
         UC_documents = list()
         all_tokens=set()
-        UC_to_index = dict()
-        for i, filename in enumerate(os.listdir(UC_path)):
-            UC_to_index[filename.lower()] = i
-            filepath = os.path.join(UC_path, filename)
-            tokens = self.PreProcessor(filepath, 'UC',train_or_test)
+        for i, file_content in enumerate(UC_files):
+            tokens = self.PreProcessor(file_content, 'UC',train_or_test)
             UC_documents.append(tokens)
         for i, doc in enumerate(UC_documents):
             tokens = doc.split()
@@ -223,7 +208,7 @@ class PreProcessor:
 
                 all_tokens.add(tokens[j])
             UC_documents[i] = ' '.join(tokens)
-        return UC_documents, UC_to_index,all_tokens
+        return UC_documents, all_tokens
     
     
     def setupCSV(self, csv_dir: str, modified_csv_dir: str,UC_to_index,CC_to_index) -> None:
@@ -262,16 +247,14 @@ class PreProcessor:
         dataset_modified.to_csv(modified_csv_dir, index = False)    
 
 
-    def PreProcessorCCDeepLearning(self, filepath,train_test="train"):
+    def PreProcessorCCDeepLearning(self, file: str, train_test="train"):
 
-        with open(filepath, "r", encoding='utf-8') as f:
-            source_code = f.read()
-            source_code = re.sub("\ufeff", "", source_code)
-            source_code = re.sub("\u200b", "", source_code)
-            src = bytes(
-                source_code,
-                "utf-8",
-            )
+        source_code = re.sub("\ufeff", "", file)
+        source_code = re.sub("\u200b", "", source_code)
+        src = bytes(
+            source_code,
+            "utf-8",
+        )
         
         tree = self.parser.parse(src)
         curr_node = tree.root_node
@@ -325,140 +308,94 @@ class PreProcessor:
 
         return functions_names,functions_segments
     
-    def setupDeepLearning(self, code_path: str,CC_or_UC:str = 'CC' ,train_test="train")->tuple:
+    def setupDeepLearning(self, CC_UC_files: list, CC_or_UC:str = 'CC' ,train_test="train")->tuple:
         
         # for CC: arg1 = function_names --> 3d array, arg2 = function_segments --> 3d array
         # for UC: arg1 = descriptions --> 2d, arg2 = summary --> 2d
-        arg1 = list()
-        arg2 = list()
-        
-        file_stack = list()
-        file_stack.append(code_path)
-        while len(file_stack) > 0:
-            filepath = file_stack.pop()
-            for filename in os.listdir(filepath):
-                filepath_integrated = filepath+"/"+filename
-                if CC_or_UC == 'CC':
-                    if os.path.isdir(filepath_integrated):
-                        file_stack.append(filepath_integrated)
-                    elif filename.endswith(".java"):
-                        function_names,function_segments = self.PreProcessorCCDeepLearning(filepath_integrated,train_test)
+        arg = list()        
 
-                        arg1.append(function_names)
-                        arg2.append(function_segments)
-                elif CC_or_UC == 'UC':
-                    if os.path.isdir(filepath_integrated):
-                        file_stack.append(filepath_integrated)
-                    else:
-                        description, summary = self.PreProcessorUCDeepLearning(filepath_integrated,train_test)
-
-                        arg1.append(description)
-                        arg2.append(summary)
+        for file in CC_UC_files: 
+            file = self.PreProcessor(file,CC_or_UC,train_test)
+            file_tokens = file.split()
+            arg.append(file_tokens)
                       
-        return arg1,arg2
+        return arg
 
-    def PreProcessorUCDeepLearning(self, filename: str,train_test="train") -> tuple:
+    def PreProcessorUCDeepLearning(self, file: str,train_test="train") -> tuple:
         porter_stemmer = PorterStemmer()
         numeric_chars_to_remove = r"[0-9]"
 
-        with open(filename, "r", encoding='utf-8') as f:
-            source_code = f.readlines()
+        source_code = file.split('\n')
+        
 
-            summary = source_code[0]
-            summary = re.sub("\ufeff", "", summary)
-            summary = re.sub("\u200b", "", summary)
-            summary = re.sub(self.chars_to_remove," " ,summary)
-            summary = re.sub(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])", " ", summary)
-            summary = re.sub(numeric_chars_to_remove, "", summary)
-            
+        summary = source_code[0]
+        summary = re.sub("\ufeff", "", summary)
+        summary = re.sub("\u200b", "", summary)
+        summary = re.sub(self.chars_to_remove," " ,summary)
+        summary = re.sub(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])", " ", summary)
+        summary = re.sub(numeric_chars_to_remove, "", summary)
+        
 
-            description = source_code[1:]
+        description = source_code[1:]
+        summary_tokenized = list()
 
-            summary_tokenized = list()
+        for token in summary.split():
+            token_lower = token.lower()
+            if token not in self.stop_words and token != "" and len(token) != 1:
+                token_stem = porter_stemmer.stem(token_lower)
+                if train_test == "train":
+                    self.Vocab[token_stem] = self.Vocab.get(token_stem, 0) + 1
+                summary_tokenized.append(token_stem)
 
-            for token in summary.split():
+        description_tokenized = list()
+        for line in description:
+            line = re.sub("\ufeff", "", line)
+            line = re.sub("\u200b", "", line)
+            line = re.sub(self.chars_to_remove," " ,line)
+            line = re.sub( r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])", " ", line)
+            line = re.sub(numeric_chars_to_remove, "", line)
+
+            for token in line.split():
                 token_lower = token.lower()
-                if token not in self.stop_words and token != "" and len(token) != 1:
-                    token_stem = porter_stemmer.stem(token_lower)
-                    if train_test == "train":
-                        self.Vocab[token_stem] = self.Vocab.get(token_stem, 0) + 1
-                    summary_tokenized.append(token_stem)
-
-            description_tokenized = list()
-            for line in description:
-                line = re.sub("\ufeff", "", line)
-                line = re.sub("\u200b", "", line)
-                line = re.sub(self.chars_to_remove," " ,line)
-                line = re.sub( r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])", " ", line)
-                line = re.sub(numeric_chars_to_remove, "", line)
-
-                for token in line.split():
-                    token_lower = token.lower()
-                    if token_lower not in self.stop_words and token != "" and len(token) != 1:
-                        split_words_tokenized = word_tokenize(token_lower)
-                        for word in split_words_tokenized:
-                            token_stem = porter_stemmer.stem(word)
-                            if train_test == "train":
-                                self.Vocab[token_stem] = self.Vocab.get(token_stem, 0) + 1
-                            description_tokenized.append(token_stem)
+                if token_lower not in self.stop_words and token != "" and len(token) != 1:
+                    split_words_tokenized = word_tokenize(token_lower)
+                    for word in split_words_tokenized:
+                        token_stem = porter_stemmer.stem(word)
+                        if train_test == "train":
+                            self.Vocab[token_stem] = self.Vocab.get(token_stem, 0) + 1
+                        description_tokenized.append(token_stem)
 
         return description_tokenized, summary_tokenized
 
-    def setUpUnknown (self,arg1,arg2,CC_UC:str,train_test:str) -> None:
+    def setUpUnknown (self,arg,train_test:str) -> None:
 
         # for CC: arg1 = function_names --> 3d array, arg2 = function_segments --> 3d array
         # for UC: arg1 = descriptions --> 2d, arg2 = summary --> 2d
-        if CC_UC == "CC":
-            for arg in [arg1,arg2]:
-                for i,file in enumerate(arg): # function_names or function_segments
-                    for j,name_list in enumerate(file):
-                        print(name_list)
-                        for k,name_token in enumerate(name_list):
-                            print(name_token)
-                            if ( train_test == 'train' and  self.Vocab[name_token] < 2):
-                                arg[i][j][k] = "__unk__"
-                            elif ( train_test == 'test' and  not self.Vocab.get(name_token)):
-                                arg[i][j][k] = "__unk__"
-        else:
-            for arg in [arg1,arg2]:
-                for i,file in enumerate(arg):
-                    for j,descrip_token in enumerate(file):
-                            if ( train_test == 'train' and  self.Vocab[descrip_token] < 2):
-                                arg[i][j] = "__unk__"
-                            elif ( train_test == 'test' and  not self.Vocab.get(descrip_token)):
-                                arg[i][j] = "__unk__"
+            for i,file in enumerate(arg): # function_names or function_segments
+                for j,token in enumerate(file):
+                        if ( train_test == 'train' and  self.Vocabulary_frequenecy_dict[token] < 2):
+                            arg[i][j] = "__unk__"
+                        elif ( train_test == 'test' and  not self.Vocabulary_frequenecy_dict.get(token)):
+                            arg[i][j] = "__unk__"
 
                             
     def vocabToIndex(self, vocab: dict):
         #convert each word in the vocan to index in order to map them later in the dataset
         self.word_index = {word: idx + 1 for idx, word in enumerate(vocab)}
 
-    def dataSetToIndex(self, arg1, arg2, UC_CC) -> None:
+    def dataSetToIndex(self, arg) -> None:
         # for CC: arg1 = function_names --> 3d array, arg2 = function_segments --> 3d array
         # for UC: arg1 = descriptions --> 2d, arg2 = summary --> 2d
 
-        if UC_CC == 'CC':
-            for arg in [arg1,arg2]:
-                for i,file in enumerate(arg):
-                    for j,name_list in enumerate(file):
-                        for k,name_token in enumerate(name_list):
-                            if(self.word_index.get(name_token) != None):
-                                arg[i][j][k]=self.word_index[name_token]
-                            else:
-                                # In the case of unknown words
-                                arg[i][j][k]= self.word_index['__unk__']
-                        arg[i][j] = torch.tensor(arg[i][j], dtype=torch.int64)
-        else:
-            for arg in [arg1,arg2]:
-                for i,file in enumerate(arg):
-                    for j,name in enumerate(file):
-                        if(self.word_index.get(name) != None):
-                            arg[i][j]=self.word_index[name]
-                        else:
-                            # In the case of unknown words
-                            arg[i][j]= self.word_index['__unk__']
-                    arg[i] = torch.tensor(arg[i], dtype=torch.int64)
-        
+        for i,file in enumerate(arg):
+            for j,token in enumerate(file):
+                if(self.word_index.get(token) != None):
+                    arg[i][j]=self.word_index[token]
+                else:
+                    # In the case of unknown words
+                    arg[i][j]= self.word_index['__unk__']
+            # arg[i] = torch.tensor(arg[i], dtype=torch.int64)
+    
                     
     def word2VecProcessor(self, arg1, arg2, UC_CC) -> list:
         # is used because the word2vec takes 2d array , and we want to give the word2vec name+segement 
@@ -504,7 +441,7 @@ class PreProcessor:
 
         return UC_docs
     
-    def setUpLabels(self,function_names_train,function_segments_train,descriptions_train,summaries_train,directory_csv):
+    def setUpLabels(self,CC,UC,directory_csv):
         #[[functions<s>functions<s>]]
         #reading the csv and creating a list containing the UC and CC and their coresponding label
         Features = list()
@@ -516,25 +453,16 @@ class PreProcessor:
             index_code = int(DataSet_train.loc[row, 'CC'])
             index_UC = int(DataSet_train.loc[row, 'UC'])
             label = int(DataSet_train.loc[row, 'Labels'])
-           
-            if len(function_names_train[index_code]) != 0 and len(function_segments_train[index_code]) != 0 and len(descriptions_train[index_UC]) != 0 and len(summaries_train[index_UC]) != 0:
-                
-                description = descriptions_train[index_UC]
-                summaries = summaries_train[index_UC]
-                
-                if len(descriptions_train[index_UC]) > 200 :
-                    description = descriptions_train[index_UC][0:200]
-                if len(summaries_train[index_UC]) > 200 :
-                    summaries = summaries_train[index_UC][0:200]
 
                 
-                for name,function in zip(function_names_train[index_code],function_segments_train[index_code]):
-                    if len(name) !=0 and len(function)!=0: 
-                        if len(function) > 200:
-                            Features.append([name,function[0:200],description,summaries])
-                            labels.append(label)
-                        else:
-                            Features.append([name,function,description,summaries])
-                            labels.append(label)
+            UC_segmented = UC[index_UC][0:1000]
+            CC_segmented = CC[index_code][0:4000]
+            Features.append([CC_segmented,UC_segmented])
+            labels.append(label)
 
+            if (len(CC[index_code]) > 4000):
+                Features.append([CC[index_code][4000:8000],UC_segmented])
+                labels.append(label)
+            
         return Features,labels
+    
