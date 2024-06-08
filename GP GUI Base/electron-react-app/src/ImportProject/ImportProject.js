@@ -49,7 +49,7 @@ export function ImportProject() {
   useEffect(() => {
    
     if (redirectToViewSource) {
-      window.location.href = "http://localhost:3000/#/ViewSource";
+      window.location.href = "http://localhost:3000/#/TraceLinks";
     }
   }, [redirectToViewSource]);
 

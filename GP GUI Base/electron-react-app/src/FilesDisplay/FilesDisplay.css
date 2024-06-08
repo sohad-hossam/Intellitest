@@ -133,3 +133,27 @@
 .icon-text-container svg {
   margin-right: 5px; 
 }
+
+.talabat
+{
+  background-color: white !important;
+  box-shadow: none !important;
+  border-color: white !important;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.enterurl
+{
+  font-size: 40px !important;
+}
+.searchee
+{
+  width: 60%;
+  margin-top: 10px !important;
+  padding: 10px;
+}
+.buttonurl
+{
+  margin-left: 30px;
+  margin-top: 10px;
+}
