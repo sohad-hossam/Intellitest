@@ -11,6 +11,7 @@ from concurrent.futures import ThreadPoolExecutor
 import requests 
 from bs4 import BeautifulSoup
 import json
+from DLScript import *
 
 app = Flask(__name__)
 CORS(app)
@@ -124,6 +125,21 @@ def extract_java_files(directory):
 
 
 
+def extract_java_files(directory):
+        java_files = {}
+        name_to_functions = {}
+        embedding_matrix = np.load('GP GUI Base/electron-react-app/src/Script pickles/embedding_matrix.pkl', allow_pickle=True)
+        word2vec_vocab = np.load('GP GUI Base/electron-react-app/src/Script pickles/word2vec_vocab.pkl', allow_pickle=True)
+        dl_obj = DLScript('GP GUI Base/electron-react-app/src/Script pickles/LSTM_3projects_3Linearlayers_10epochs.pth', word2vec_vocab, embedding_matrix, embedding_matrix.shape, 4000, 2000)
+
+        for root, _, files in os.walk(directory):
+            for file in files:
+                if file.endswith(".java"):
+                    path = os.path.join(root, file)
+                    java_files[file] = path
+                    name_to_functions[file] = dl_obj.splitToFunctionsSecondEdition(path)
+        return java_files,name_to_functions
+
 def process_zip_file(zip_file_path):
     try:
         extract_zip(zip_file_path, UPLOAD_FOLDER)
@@ -131,7 +147,7 @@ def process_zip_file(zip_file_path):
         if sqlite_file_path:
             process_sqlite_file(sqlite_file_path)
         
-        java_files = extract_java_files(UPLOAD_FOLDER)
+        java_files,name_to_functions = extract_java_files(UPLOAD_FOLDER)
         with open(os.path.join(UPLOAD_FOLDER, 'java_files_dict.json'), 'w') as f:
             json.dump(java_files, f)
 
@@ -223,17 +239,24 @@ def get_usecase_files():
 @app.route('/compute-tracelinks', methods=['POST'])
 def computetracelinks():
     try:
-        print("computing trace links")
-        usecase_file = request.args.get('usecase')
-        code_file = request.args.get('code')
-        print("usecasefile",usecase_file)
-        print("codefile",code_file)
-        if not usecase_file or not code_file:
-            return jsonify({'error': 'Use case file and code file are required.'}), 400
+        data = request.json
+        usecase_file = data.get('usecase')
+        code_file = data.get('code')
 
-        score = TraceLinks(code_file, usecase_file)
-        trace_links = score.computeTraceLinks()
-        print("tracelinks val at end point",trace_links)
+        with open('GP GUI Base/electron-react-app/src/uploads/java_files_dict.json') as json_file:
+            java_files_dict = json.load(json_file)
+            code_file = java_files_dict.get(code_file)
+
+        if not usecase_file or not code_file:
+            return jsonify({'error': 'Use case file and code file are required in the request body.'}), 400
+        
+        embedding_matrix = np.load('GP GUI Base/electron-react-app/src/Script pickles/embedding_matrix.pkl', allow_pickle=True)
+        word2vec_vocab = np.load('GP GUI Base/electron-react-app/src/Script pickles/word2vec_vocab.pkl', allow_pickle=True)
+        dl_obj = DLScript('GP GUI Base/electron-react-app/src/Script pickles/LSTM_3projects_3Linearlayers_10epochs.pth', word2vec_vocab, embedding_matrix, embedding_matrix.shape, 4000, 2000)
+
+        trace_links = dl_obj.UseCaseSourceFileScript(code_file, usecase_file)
+
+        print("tracelinks val at end point", trace_links)
         return jsonify({'trace_links': trace_links}), 200
 
     except Exception as e:
@@ -338,6 +361,27 @@ def get_java_files():
         java_files = list(java_files_dict.keys())
 
         return jsonify({'java_files': java_files}), 200
+
+    except Exception as e:
+        app.logger.error(f"An error occurred: {e}")
+        return jsonify({'error': 'An unexpected error occurred.'}), 500
+    
+@app.route('/get-usecase-content', methods=['POST'])
+def get_usecase_content():
+    try:
+        data = request.json
+        usecase_file_name = data.get('usecase_file_name')
+        if not usecase_file_name:
+            return jsonify({'error': 'Use case file name is required in the request body.'}), 400
+        
+        usecase_file_path = os.path.join('GP GUI Base/electron-react-app/src/uploads/usecase_files', f'{usecase_file_name}')
+        if not os.path.isfile(usecase_file_path):
+            return jsonify({'error': 'Use case file not found.'}), 404
+        
+        with open(usecase_file_path, 'r', encoding='utf-8') as file:
+            usecase_content = file.read()
+        
+        return jsonify({'usecase_content': usecase_content}), 200
 
     except Exception as e:
         app.logger.error(f"An error occurred: {e}")

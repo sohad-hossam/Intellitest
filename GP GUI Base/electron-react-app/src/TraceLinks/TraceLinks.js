@@ -54,12 +54,35 @@ function DropDowns() {
     }
   };
   
-  const handleCaseSelection = (option) => {
-    setUseCaseSelected(option);
-    handleProcessDocs();
-    setStep(3);
-  };
-  
+  const handleCaseSelection = async (option) => {
+    try {
+        // Fetch the content of the selected use case file
+        const response = await fetch('http://localhost:5000/get-usecase-content', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ usecase_file_name: option })
+        });
+        if (!response.ok) {
+            throw new Error('Failed to fetch use case content');
+        }
+        const data = await response.json();
+        const useCaseContent = data.usecase_content;
+
+        // Update the state with the selected use case content and option
+        setUseCaseSelected(useCaseContent);
+      
+
+        // Proceed with the necessary actions (handleProcessDocs and setStep)
+        handleProcessDocs();
+        setStep(3);
+    } catch (error) {
+        console.error('Error selecting use case:', error);
+        // Handle error (e.g., show error message)
+    }
+};
+
   const handleCodeSelection = (option) => {
     setCodeSelected(option);
     setStep(1);
@@ -81,12 +104,15 @@ function DropDowns() {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to fetch the URL');
         setInvalidUrl(true);
+        throw new Error('Failed to fetch the URL');
+
       }
 
       const data = await response.json();
       setInvalidUrl(false);
+      const useCaseContent = `${data.summary}\n${data.description}`;
+      setUseCaseSelected(useCaseContent);
 
     } catch (error) {
       console.error('Error fetching the URL:', error);
@@ -105,24 +131,34 @@ function DropDowns() {
     setStep(3);
   
     try {
-      const response = await fetch(`http://localhost:5000/compute-tracelinks?usecase=${useCaseSelected}&code=${codeSelected}`, {
+      const requestBody = {
+        usecase: useCaseSelected,
+        code: codeSelected
+      };
+  
+      const response = await fetch('http://localhost:5000/compute-tracelinks', {
         method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestBody)
       });
   
       if (!response.ok) {
+        setinvalidtrace(true);
         throw new Error('Failed to compute trace links');
       }
   
       const data = await response.json();
       setScore(data.trace_links);
     } catch (error) {
-      setinvalidtrace(true);
       console.error('Error computing trace links:', error);
     } finally {
       setLoading(false);
       setStep(4);
     }
   };
+  
   
 
   return (
@@ -228,16 +264,16 @@ function DropDowns() {
       ) : (
         <>
           {score != null && score <= 0.5 && (
-            <div className="tracelink-message-low text-center">
-              Trace Links Exist between the documents by {score * 100}% indicating low correlation
+            <div className="tracelink-message-low text-center  mt-5">
+              Trace Links Exist between the documents by {score.toFixed(2)}% indicating low correlation
             </div>
           )}
           {score != null && score > 0.5 && (
-            <div className="tracelink-message text-center">
-              Trace Links Exist between the documents by {score * 100}% indicating high correlation
+            <div className="tracelink-message text-center  mt-5">
+              Trace Links Exist between the documents by {score.toFixed(2)}% indicating high correlation
             </div>
           )}
-          {invalidtrace && (
+          {invalidtrace==true && (
                   <div className="tracelink-message-low  text-center mt-5">
                   Unable to compute traceLinks between the corresponding files.
                   </div>
