@@ -3,7 +3,8 @@ from imports import *
 class DatasetRetrieval:
     
     def __init__(self) -> None:
-        pass
+        self.count_0 = 0
+        self.count_1 = 0
 
     def parseSqlite(self, sqlite_path: str):
         con = sqlite3.connect(sqlite_path)
@@ -18,27 +19,24 @@ class DatasetRetrieval:
 
         return merged_df
 
-    def getGlobalDatasetData(self, merged_df, repo_clone_path:str) -> tuple:
-        token = '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'
-
-        headers = {
-            'Authorization': f'token {token}'
-        }
+    def getGlobalDatasetData(self, merged_df, repo_clone_path:str, max_prob: int=4) -> tuple:
 
         repo_local = git.Repo(repo_clone_path)
 
-        CC_UC_dict_true = dict()
-        UC_to_index = dict()
-        index_to_UC = dict()
-        CC_index_dict = dict()
-        index_to_CC = dict()
+        # CC_UC_dict_true = dict()
+        # UC_to_index = dict()
+        # index_to_UC = dict()
+        # CC_index_dict = dict()
+        # index_to_CC = dict()
 
 
         counter = 0
-        UC_index = 0
-        CC_index = 0
+        # UC_index = 0
+        # CC_index = 0
 
         merged_list = list(merged_df.to_records(index=False))
+        dataset = list()
+        
         for commit_hash, file_path, type, resolution, summary, description in merged_list:
 
             commit_local = repo_local.commit(commit_hash) 
@@ -46,32 +44,41 @@ class DatasetRetrieval:
             commit_parent = repo_local.commit(commit_parent_hash)
 
             try: 
-                UC = summary+'\n'+description
-                if UC_to_index.get(UC) == None:
-                    UC_to_index[UC] = UC_index
-                    index_to_UC[UC_index] = UC
-                    UC_index += 1
+                # UC = summary+'\n'+description
+                # if UC_to_index.get(UC) == None:
+                #     UC_to_index[UC] = UC_index
+                #     index_to_UC[UC_index] = UC
+                #     UC_index += 1
 
+                old_content = commit_parent.tree[file_path].data_stream.read().decode('utf-8')
+                new_content = commit_local.tree[file_path].data_stream.read().decode('utf-8')
+                
                 if type == 'Bug':
-
-                    old_content = commit_parent.tree[file_path].data_stream.read().decode('utf-8')
-                    new_content = commit_local.tree[file_path].data_stream.read().decode('utf-8')
-                    if CC_index_dict.get(old_content) == None:
-                        CC_index_dict[old_content] = CC_index
-                        index_to_CC[CC_index] = old_content
-                        CC_UC_dict_true[CC_index] = UC_to_index.get(UC)
-                        CC_index += 1
+                    related_functions = self._FindChangedFunctions(old_content, new_content, summary, description, type, max_prob)
+                    if len(related_functions):
+                        dataset.extend(related_functions)
+                    # if CC_index_dict.get(old_content) == None:
+                    #     CC_index_dict[old_content] = CC_index
+                    #     index_to_CC[CC_index] = old_content
+                    #     CC_UC_dict_true[CC_index] = UC_to_index.get(UC)
+                    #     CC_index += 1
                 else:
-                    new_content = commit_local.tree[file_path].data_stream.read().decode('utf-8')
-                    if CC_index_dict.get(new_content) == None:
-                        CC_index_dict[new_content] = CC_index
-                        index_to_CC[CC_index] = new_content
-                        CC_UC_dict_true[CC_index] = UC_to_index.get(UC)
-                        CC_index += 1
+                    related_functions = self._FindChangedFunctions(old_content, new_content, summary, description, type, max_prob)
+                    if len(related_functions):
+                        dataset.extend(related_functions)
+                    # new_content = commit_local.tree[file_path].data_stream.read().decode('utf-8')
+                    # if CC_index_dict.get(new_content) == None:
+                    #     CC_index_dict[new_content] = CC_index
+                    #     index_to_CC[CC_index] = new_content
+                    #     CC_UC_dict_true[CC_index] = UC_to_index.get(UC)
+                    #     CC_index += 1
 
             except:
                 counter+=1
-        return CC_UC_dict_true, UC_to_index, index_to_UC, CC_index_dict, index_to_CC
+        # return CC_UC_dict_true, UC_to_index, index_to_UC, CC_index_dict, index_to_CC
+        print('count1 ', self.count_1)
+        print('count0 ', self.count_0)
+        return dataset
     
     def splitTestTrain(self, CC_UC_dict_true: dict, UC_to_index: dict, index_to_UC: dict, CC_index_dict: dict, index_to_CC: dict) -> tuple:
         UC_train, UC_test = train_test_split(list(UC_to_index.values()), test_size = 0.2, random_state = 42)
@@ -169,13 +176,13 @@ class DatasetRetrieval:
         train_df = pd.DataFrame(train_csv)
         train_df.to_csv(out_dir, index=False)
     
-    def findChangedFunctions(self,old_content,new_content,summary,description):
-        JAVA_LANGUAGE = Language(tsjava.language())
-        parser = Parser(JAVA_LANGUAGE)
+    def _FindChangedFunctions(self, old_content: str, new_content: str, summary: str, description: str, type: str='not Bug', max_prob: int=4) -> list:
+        # JAVA_LANGUAGE = Language(tsjava.language())
+        # parser = Parser(JAVA_LANGUAGE)
 
-        # JAVA = Language("build/my-languages.so", "java")
-        # parser = Parser()
-        # parser.set_language(JAVA)
+        JAVA = Language("build/my-languages.so", "java")
+        parser = Parser()
+        parser.set_language(JAVA)
 
         data = list()
 
@@ -198,7 +205,8 @@ class DatasetRetrieval:
         queue_old=list()
         queue_old.append(curr_node_old)
 
-        method_dict = dict()
+        method_dict_new = dict()
+        method_dict_old = dict()
         
         while(len(queue_new)):
             curr_node = queue_new.pop(0)
@@ -207,7 +215,7 @@ class DatasetRetrieval:
                 if(child.parent.type == "method_declaration" and child.type == "block"):
                     segment = new_content[child.start_byte:child.end_byte]
                     method_name=new_content[child.parent.children[2].start_byte:child.parent.children[2].end_byte]
-                    method_dict[method_name] = segment
+                    method_dict_new[method_name] = segment
 
                     
         while(len(queue_old)):
@@ -216,12 +224,32 @@ class DatasetRetrieval:
                 queue_old.append(child)
                 if(child.parent.type == "method_declaration" and child.type == "block"):
                     segment = old_content[child.start_byte:child.end_byte]
-                    method_name=old_content[child.parent.children[2].start_byte:child.parent.children[2].end_byte]
+                    method_name = old_content[child.parent.children[2].start_byte:child.parent.children[2].end_byte]
+                    method_dict_old[method_name] = segment
                     
                     # we put the functions that were deleted in the new commit but not the function that was added
                     # as the deleted func isa buggy one but the added one is not a buggy one
+                    if type == 'Bug':
+                        if (method_dict_new.get(method_name) != None and method_dict_new[method_name] != segment) or method_dict_new.get(method_name) == None:
+                            data.append([method_name+segment,summary+description,1])
+                            self.count_1 += 1
+                        elif random.randint(1, max_prob) == 4: #just a dummy number
+                            data.append([method_name+segment,summary+description,0])
+                            self.count_0 += 1
+                    else:
+                        if (method_dict_new.get(method_name) != None and method_dict_new[method_name] != segment):
+                            data.append([method_name+method_dict_new[method_name], summary+description, 1])
+                            self.count_1 += 1
+                        elif random.randint(1, max_prob) == 4: #just a dummy number
+                            data.append([method_name+method_dict_new[method_name], summary+description, 0])
+                            self.count_0 +=1
 
-                    if (method_dict.get(method_name) != None and method_dict[method_name] != segment) or method_dict.get(method_name) == None:
-                        data.append([method_name+segment,summary+description,1])
-                    elif random.randint(1, 3) == 3: #just a dummy number
-                        data.append([method_name+segment,summary+description,0])
+        for method_name_new, segment_new in method_dict_new.items():
+            if method_dict_old.get(method_name_new) == None:
+                data.append([method_name_new+segment_new, summary+description,1])
+                self.count_1 += 1
+            elif  method_dict_old.get(method_name_new) != None and method_dict_old[method_name_new] == segment_new and random.randint(1, max_prob) == 4: #just a dummy number
+                data.append([method_name_new+segment_new, summary+description,0])
+                self.count_0 += 1
+
+        return data
