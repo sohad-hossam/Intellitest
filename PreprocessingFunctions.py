@@ -104,7 +104,7 @@ class PreProcessorFunctions:
         self.Vocab=dict()
 
 
-    def PreProcessorFuncDeepLearning(self, source_code : str ,type : str,train_test = "train") -> list:
+    def _PreProcessorFuncDeepLearning(self, source_code : str ,type : str, train_test = "train") -> list:
         porter_stemmer = PorterStemmer()
         numeric_chars_to_remove = r"[0-9]"
 
@@ -131,8 +131,24 @@ class PreProcessorFunctions:
                         method_tokenized.append(token_stem)
                             
         return method_tokenized
+    
+    def setupDeepLearning(self, CC_UC_dataset: list, train_test="train")->tuple:
+        features_tokenized = list()
+        labels = list()
 
-    def setUpUnknown (self,arg1 : list,train_test : str) -> None:
+        for CC, UC, label in CC_UC_dataset:
+            method_tokenized = self._PreProcessorFuncDeepLearning(CC, 'cc', train_test)
+            uc_tokenized = self._PreProcessorFuncDeepLearning(UC, 'uc' , train_test)
+
+            features_tokenized.append([method_tokenized,uc_tokenized])
+
+            labels.append(label)
+        return features_tokenized, labels
+
+    def setVocab(self, vocab):
+        self.Vocab = vocab
+
+    def setUpUnknown (self, arg1 : list, train_test : str) -> None:
 
         for i,row in enumerate(arg1):
             for j,arg in enumerate(row):

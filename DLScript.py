@@ -47,6 +47,24 @@ class DLScript():
         # with torch.no_grad():  # Disable gradient calculation
         #     output = self.model(torch.tensor(feature_list))
         #     print(output)
+
+    def TopFiveSourceFilesScript(self, directories_dict: dict, summary_description: str) -> dict:
+        index_to_file = dict()
+        percentages = list()
+
+        for index, file_info in enumerate(directories_dict):
+            file_name, file_dir = file_info
+            index_to_file[index] = file_name
+            positive_percentage = self.UseCaseSourceFileScript(file_dir, summary_description)
+            percentages.append(positive_percentage)
+        
+        top_five_percentages = heapq.nlargest(5, percentages)
+        percentages_indices = [percentages.index(i) for i in top_five_percentages]
+
+        for i in range(len(percentages_indices)):
+            
+
+
         
 
 
