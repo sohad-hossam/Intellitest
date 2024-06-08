@@ -53,7 +53,9 @@ class DatasetRetrieval:
                     UC_index += 1
 
                 if type == 'Bug':
+
                     old_content = commit_parent.tree[file_path].data_stream.read().decode('utf-8')
+                    new_content = commit_local.tree[file_path].data_stream.read().decode('utf-8')
                     if CC_index_dict.get(old_content) == None:
                         CC_index_dict[old_content] = CC_index
                         index_to_CC[CC_index] = old_content
@@ -167,4 +169,59 @@ class DatasetRetrieval:
         train_df = pd.DataFrame(train_csv)
         train_df.to_csv(out_dir, index=False)
     
+    def findChangedFunctions(self,old_content,new_content,summary,description):
+        JAVA_LANGUAGE = Language(tsjava.language())
+        parser = Parser(JAVA_LANGUAGE)
 
+        # JAVA = Language("build/my-languages.so", "java")
+        # parser = Parser()
+        # parser.set_language(JAVA)
+
+        data = list()
+
+        src_new = bytes(
+        new_content,
+        "utf-8",
+        )
+        src_old = bytes(
+        old_content,
+        "utf-8",
+        )
+
+        tree_new = parser.parse(src_new)
+        curr_node_new = tree_new.root_node
+        queue_new=list()
+        queue_new.append(curr_node_new)
+
+        tree_old = parser.parse(src_old)
+        curr_node_old = tree_old.root_node
+        queue_old=list()
+        queue_old.append(curr_node_old)
+
+        method_dict = dict()
+        
+        while(len(queue_new)):
+            curr_node = queue_new.pop(0)
+            for child in curr_node.children:
+                queue_new.append(child)
+                if(child.parent.type == "method_declaration" and child.type == "block"):
+                    segment = new_content[child.start_byte:child.end_byte]
+                    method_name=new_content[child.parent.children[2].start_byte:child.parent.children[2].end_byte]
+                    method_dict[method_name] = segment
+
+                    
+        while(len(queue_old)):
+            curr_node = queue_old.pop(0)
+            for child in curr_node.children:
+                queue_old.append(child)
+                if(child.parent.type == "method_declaration" and child.type == "block"):
+                    segment = old_content[child.start_byte:child.end_byte]
+                    method_name=old_content[child.parent.children[2].start_byte:child.parent.children[2].end_byte]
+                    
+                    # we put the functions that were deleted in the new commit but not the function that was added
+                    # as the deleted func isa buggy one but the added one is not a buggy one
+
+                    if (method_dict.get(method_name) != None and method_dict[method_name] != segment) or method_dict.get(method_name) == None:
+                        data.append([method_name+segment,summary+description,1])
+                    elif random.randint(1, 3) == 3: #just a dummy number
+                        data.append([method_name+segment,summary+description,0])

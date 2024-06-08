@@ -104,7 +104,7 @@ class PreProcessorFunctions:
         self.Vocab=dict()
 
 
-    def PreProcessorFuncDeepLearning(self, source_code : str ,train_test = "train") -> list:
+    def PreProcessorFuncDeepLearning(self, source_code : str ,type : str,train_test = "train") -> list:
         porter_stemmer = PorterStemmer()
         numeric_chars_to_remove = r"[0-9]"
 
@@ -115,7 +115,9 @@ class PreProcessorFunctions:
         source_code = re.sub( r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])", " ", source_code)
         source_code = re.sub(numeric_chars_to_remove, "", source_code)
 
+        counter = 0
         for token in source_code.split():
+            counter += 1
             token_lower = token.lower()
             if token_lower not in self.stop_words and token != "" and len(token) != 1:
                 split_words_tokenized = word_tokenize(token_lower)
@@ -123,7 +125,10 @@ class PreProcessorFunctions:
                     token_stem = porter_stemmer.stem(word)
                     if train_test == "train":
                         self.Vocab[token_stem] = self.Vocab.get(token_stem, 0) + 1
-                    method_tokenized.append(token_stem)
+                    if type == 'cc' and counter <= 2000:
+                        method_tokenized.append(token_stem)
+                    elif type == 'uc' and counter <= 4000:
+                        method_tokenized.append(token_stem)
                             
         return method_tokenized
 
