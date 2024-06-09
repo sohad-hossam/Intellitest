@@ -153,7 +153,6 @@ class DLScript():
             for prediction in predictions:
                 if prediction==1:
                     indecies.append(predictions.index(prediction))
-            positive_percentage = (positive_labels/len(feature_list)) * 100
             return indecies
         except:
             return -1

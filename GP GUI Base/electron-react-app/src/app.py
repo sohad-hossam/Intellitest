@@ -410,6 +410,29 @@ def get_top_five():
     except Exception as e:
         app.logger.error(f"An error occurred: {e}")
         return jsonify({'error': 'An unexpected error occurred.'}), 500
+    
+@app.route('/localize-bugs', methods=['post'])
+def localize_bugs():
+    try:
+        embedding_matrix = np.load('GP GUI Base/electron-react-app/src/Script pickles/embedding_matrix.pkl', allow_pickle=True)
+        word2vec_vocab = np.load('GP GUI Base/electron-react-app/src/Script pickles/word2vec_vocab.pkl', allow_pickle=True)
+        dl_obj = DLScript('GP GUI Base/electron-react-app/src/Script pickles/LSTM_3projects_3Linearlayers_10epochs.pth', word2vec_vocab, embedding_matrix, embedding_matrix.shape, 4000, 2000)
+
+
+        function_names_dict_path = os.path.join(UPLOAD_FOLDER, 'name_to_functions_dict.json')
+        if not os.path.exists(function_names_dict_path):
+            return jsonify({'error': 'Function names dictionary not found.'}), 404
+        with open(function_names_dict_path, 'r') as f:
+            name_to_functions = json.load(f)
+
+        data = request.json
+        javafilename = data.get('java_file')
+        summary_description = data.get('summary_description')
+        bugs_idecies= dl_obj.BugLocalization(javafilename, name_to_functions, summary_description)  
+        return jsonify({'bugs_idecies': bugs_idecies}), 200
+    except Exception as e:
+        app.logger.error(f"An error occurred: {e}")
+        return jsonify({'error': 'An unexpected error occurred.'}), 500
 if __name__ == '__main__':
     app.run(debug=True)
 

@@ -90,7 +90,7 @@ class DLScript():
 
         return  CC_padded, UC_padded, y_batch
 
-    def predict(self, test_dataset, batch_size=100):
+    def predict(self, test_dataset, batch_size=2):
         
         positive_labels = 0
         test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=batch_size, collate_fn=self.customCollate , shuffle=False)
@@ -101,13 +101,14 @@ class DLScript():
                 self.model = self.model.cuda()
 
         with torch.no_grad():
-            for  CC,UC, y_batch in tqdm(test_dataloader,disable=True):
+            for  CC,UC, y_batch in tqdm(test_dataloader):
                 
                 UC_padded_tensor = torch.tensor(UC, device=device)
                 CC_padded_tensor = torch.tensor(CC, device=device)
 
                 output = self.model.forward(CC_padded_tensor, UC_padded_tensor)
                 _,predicted=torch.max(output,dim=1)
+                print("predicted",predicted)
                 positive_labels += int(torch.sum(predicted == 1))
                 # predictions.extend(predicted.tolist())
         return positive_labels
@@ -156,6 +157,7 @@ class DLScript():
         
     def TopFiveSourceFilesScript(self, directories_dict: dict, name_to_functions: dict, summary_description: str) -> dict:
         try:
+            print(summary_description)
             index_to_file = dict()
             results_dict = dict()
             percentages = list()
@@ -184,5 +186,51 @@ class DLScript():
             return -1
             
             
-        
 
+    def predict2(self, test_dataset, batch_size=5):
+        
+        positive_labels = 0
+        predictions=[]
+        test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=batch_size, collate_fn=self.customCollate , shuffle=False)
+        use_cuda = torch.cuda.is_available()    
+        device = torch.device("cuda" if use_cuda else "cpu") 
+        
+        if use_cuda:
+                self.model = self.model.cuda()
+
+        with torch.no_grad():
+            for  CC,UC, y_batch in tqdm(test_dataloader):
+                
+                UC_padded_tensor = torch.tensor(UC, device=device)
+                CC_padded_tensor = torch.tensor(CC, device=device)
+
+                output = self.model.forward(CC_padded_tensor, UC_padded_tensor)
+                _,predicted=torch.max(output,dim=1)
+                positive_labels += int(torch.sum(predicted == 1))
+                predictions.extend(predicted.tolist())
+     
+        return positive_labels, predictions
+    
+
+        
+    def BugLocalization(self,javaFileName:str, name_to_func_dict:dict,summary_description:str):
+        try:
+            feature_list = list()
+            UC_processed = self.preprocessor_functions._PreProcessorFuncDeepLearning(summary_description, 'uc' , 'test')
+            functions_list=name_to_func_dict[javaFileName]
+            for function in functions_list:
+                feature_list.append([function, UC_processed])
+
+            self.preprocessor_functions.setUpUnknown(feature_list, 'test')
+            self.preprocessor_functions.dataSetToIndex(feature_list)
+
+            feature_obj = TracibilityLinkDataset(feature_list, [0]*len(feature_list))
+            positive_labels,predictions = self.predict2(feature_obj)
+            print("predectionsss",predictions)
+            indecies=[]
+            for i,prediction in enumerate(predictions):
+                if prediction==1:
+                    indecies.append(i)
+            return indecies
+        except:
+            return -1
