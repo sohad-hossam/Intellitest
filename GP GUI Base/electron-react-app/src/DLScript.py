@@ -90,7 +90,7 @@ class DLScript():
 
         return  CC_padded, UC_padded, y_batch
 
-    def predict(self, test_dataset, batch_size=10):
+    def predict(self, test_dataset, batch_size=100):
         
         positive_labels = 0
         test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=batch_size, collate_fn=self.customCollate , shuffle=False)
@@ -160,16 +160,23 @@ class DLScript():
             results_dict = dict()
             percentages = list()
             UC_processed = self.preprocessor_functions._PreProcessorFuncDeepLearning(summary_description, 'uc' , 'test')
+            counter=0
             for index, file_info in enumerate(directories_dict.items()):
+                if(len(percentages)==5):
+                    break
                 file_name, file_dir = file_info
                 index_to_file[index] = file_name
                 positive_percentage = self.UseCaseSourceFileScriptForTopFive(name_to_functions[file_name], UC_processed)
-                percentages.append(positive_percentage)
-            top_five_percentages = heapq.nlargest(5, percentages)
-            percentages_indices = [percentages.index(i) for i in top_five_percentages]
-
+                if(positive_percentage>80):
+                   percentages.append(positive_percentage)
+                print (counter)
+                counter+=1
+            
+         
+            percentages_indices = [percentages.index(i) for i in percentages]
+          
             for i in range(len(percentages_indices)):
-                results_dict[index_to_file[i]] = top_five_percentages[i]
+                results_dict[index_to_file[i]] = percentages[i]
             
             return results_dict
         

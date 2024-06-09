@@ -380,7 +380,7 @@ def get_usecase_content():
         app.logger.error(f"An error occurred: {e}")
         return jsonify({'error': 'An unexpected error occurred.'}), 500
     
-@app.route('/get-top-five', methods=['GET'])
+@app.route('/get-top-five', methods=['POST'])
 def get_top_five():
   
     try:

@@ -6,36 +6,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWrench, faExclamationCircle, faFlag, faClock, faLayerGroup } from '@fortawesome/free-solid-svg-icons';
 
 import { Header } from "../TopBar/TopBar";
-
+import dictionaries from '../uploads/java_files_dict.json'; 
 export function FilesDisplay() {
   const [url, setUrl] = useState('');
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState({});
   const [details, setDetails] = useState(null);
-
-  const useCaseDictionary = {
-    "TEIID-5928": [
-      { name: "java.1", score: Math.floor(Math.random() * 100) }, 
-      { name: "java.2", score: Math.floor(Math.random() * 100) },
-      { name: "java.3", score: Math.floor(Math.random() * 100) },
-      { name: "java.4", score: Math.floor(Math.random() * 100) },
-      { name: "java.5", score: Math.floor(Math.random() * 100) }
-    ],
-    "TEIID-6025": [
-      { name: "java.6", score: Math.floor(Math.random() * 100) }, 
-      { name: "java.7", score: Math.floor(Math.random() * 100) },
-      { name: "java.8", score: Math.floor(Math.random() * 100) },
-      { name: "java.9", score: Math.floor(Math.random() * 100) },
-      { name: "java.10", score: Math.floor(Math.random() * 100) }
-    ],
-    "TEIID-5936": [
-      { name: "java.11", score: Math.floor(Math.random() * 100) }, 
-      { name: "java.12", score: Math.floor(Math.random() * 100) },
-      { name: "java.13", score: Math.floor(Math.random() * 100) },
-      { name: "java.14", score: Math.floor(Math.random() * 100) },
-      { name: "java.15", score: Math.floor(Math.random() * 100) }
-    ],
-
-  };
+  const [itemsReturned, setItemsReturned] = useState(false);
+ 
 
   const extractTeiidFromUrl = (url) => {
     const match = url.match(/TEIID-\d+/);
@@ -65,9 +42,24 @@ export function FilesDisplay() {
       console.log('Fetched data:', data);
       setDetails(data);
 
-      const newItems = useCaseDictionary[teiid] || []; 
+      const topFiveResponse = await fetch('http://localhost:5000/get-top-five', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ summary_description: data.summary + " " + data.description })
+      });
+
+      if (!topFiveResponse.ok) {
+        throw new Error('Failed to fetch top five files');
+      }
+
+      const topFiveData = await topFiveResponse.json();
+      const newItems = topFiveData.top_five_dict || {};
+     
       setItems(newItems);
-      console.log(items);
+      console.log('newItems: ', newItems);
+      setItemsReturned(true);
     } catch (error) {
       console.error('Error fetching the URL:', error);
     }
@@ -88,16 +80,16 @@ export function FilesDisplay() {
         case "Bug":
           return "rgba(255, 0, 0, 0.5)";
         case "Quality Risk":
-          return "rgba(255, 140, 0, 0.8)"; 
+          return "rgba(255, 140, 0, 0.8)";
         case "Feature Request":
-          return "rgba(0, 128, 0, 0.8)"; 
+          return "rgba(0, 128, 0, 0.8)";
         case "Enhancement":
-          return "rgba(0, 0, 255, 0.5)"; 
+          return "rgba(0, 0, 255, 0.5)";
         default:
-          return "rgba(0, 0, 0, 0.2)"; 
+          return "rgba(0, 0, 0, 0.2)";
       }
     } else {
-      return "rgba(0, 0, 0, 0.2)"; 
+      return "rgba(0, 0, 0, 0.2)";
     }
   };
 
@@ -108,18 +100,24 @@ export function FilesDisplay() {
         case "Quality Risk":
           return "linear-gradient(to top, #FF8E00, #FFD600)";
         case "Bug":
-          return "linear-gradient(to top, #FF0000, #FF3333)"; 
+          return "linear-gradient(to top, #FF0000, #FF3333)";
         case "Feature Request":
           return "linear-gradient(to top, #004d00, #66b266)";
         case "Enhancement":
-          return "linear-gradient(to top, #0066FF, #66CCFF)"; 
+          return "linear-gradient(to top, #0066FF, #66CCFF)";
         default:
-          return "linear-gradient(to top, #092635, #1c4b60, #6fa3c7)"; 
+          return "linear-gradient(to top, #092635, #1c4b60, #6fa3c7)";
       }
     } else {
-      return "linear-gradient(to top, #092635, #1c4b60, #6fa3c7)"; 
+      return "linear-gradient(to top, #092635, #1c4b60, #6fa3c7)";
     }
   };
+
+  useEffect(() => {
+    if (items.length > 0) {
+      console.log('Items updated:', items);
+    }
+  }, [items]);
 
   return (
     <div className="App">
@@ -185,25 +183,33 @@ export function FilesDisplay() {
                   <p>{details.summary}</p>
                 </div>
               </div>
-              {items.map((item, index) => (
-                <a
-                  key={index}
-                  href={`http://localhost:3000/#/ViewSource/${item.name}`} 
-                  className={`text-center small-circle small-circle-${index + 1}`}
-                  style={{
+              {itemsReturned &&
+    Object.entries(items).map(([name, score], index) => {
+       
+        const transformedName = encodeURIComponent(dictionaries[name].replace(/\\/g, "/"));
+
+        return (
+            <a
+                key={index}
+                href={`http://localhost:3000/#/ViewSource/${transformedName}`}
+                className={`text-center small-circle small-circle-${index + 1}`}
+                style={{
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center"
-                  }}
-                >
-                  <h5 className="circle-name" style={{ position: "absolute" }}>{item.name}</h5>
-                  <h5 className="circle-score" style={{ position: "absolute" }} data-score={item.score}>{item.score}%</h5>
-                </a>
-              ))}
+                }}
+            >
+                <p className="circle-name" style={{ position: "absolute" }}>{name.slice(0, -5)}</p>
+                <p className="circle-name mt-5" style={{ position: "absolute" }} data-score={score}>{score.toFixed(2)}%</p>
+            </a>
+        );
+    })
+}
             </div>
           </div>
         </div>
       )}
     </div>
   );
+
 }

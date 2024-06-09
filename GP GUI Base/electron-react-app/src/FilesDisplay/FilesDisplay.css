@@ -2,8 +2,8 @@
 
 .circle-container {
   position: relative;
-  width: 500px;
-  height: 500px;
+  width: 600px;
+  height: 600px;
   margin: auto;
   display: flex;
   align-items: center;
@@ -11,8 +11,8 @@
 }
 
 .big-circle {
-  width: 250px;
-  height: 250px;
+  width: 220px;
+  height: 220px;
   border-radius: 50%;
   background: rgba(9, 53, 38, 0.683); 
   display: flex;
@@ -22,7 +22,6 @@
   z-index: 10;
 
 }
-
 
 .big-circle-details {
 
@@ -44,20 +43,21 @@
   opacity: 1;
 }
 .small-circle {
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   background:  #5c8374;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 14px;
+  font-size: 12px;
   position: absolute;
   text-align: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), inset 0 -4px 8px rgba(0, 0, 0, 0.2); 
   transition: transform 0.3s ease;
   cursor: pointer; 
+ 
 }
 
 @keyframes rotate {
