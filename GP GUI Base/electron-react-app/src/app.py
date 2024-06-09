@@ -115,15 +115,6 @@ def process_sqlite_file(sqlite_file_path):
                 f.write(f"{summary}\n{description}")
 
 
-def extract_java_files(directory):
-    java_files = {}
-    for root, _, files in os.walk(directory):
-        for file in files:
-            if file.endswith(".java"):
-                java_files[file] = os.path.join(root, file)
-    return java_files
-
-
 
 def extract_java_files(directory):
         java_files = {}
@@ -150,6 +141,8 @@ def process_zip_file(zip_file_path):
         java_files,name_to_functions = extract_java_files(UPLOAD_FOLDER)
         with open(os.path.join(UPLOAD_FOLDER, 'java_files_dict.json'), 'w') as f:
             json.dump(java_files, f)
+        with open(os.path.join(UPLOAD_FOLDER, 'name_to_functions_dict.json'), 'w') as f:
+            json.dump(name_to_functions, f)
 
         os.remove(zip_file_path)
         app.logger.info(f"Zip folder processed successfully: {zip_file_path}")
@@ -383,6 +376,37 @@ def get_usecase_content():
         
         return jsonify({'usecase_content': usecase_content}), 200
 
+    except Exception as e:
+        app.logger.error(f"An error occurred: {e}")
+        return jsonify({'error': 'An unexpected error occurred.'}), 500
+    
+@app.route('/get-top-five', methods=['GET'])
+def get_top_five():
+  
+    try:
+        embedding_matrix = np.load('GP GUI Base/electron-react-app/src/Script pickles/embedding_matrix.pkl', allow_pickle=True)
+        word2vec_vocab = np.load('GP GUI Base/electron-react-app/src/Script pickles/word2vec_vocab.pkl', allow_pickle=True)
+        dl_obj = DLScript('GP GUI Base/electron-react-app/src/Script pickles/LSTM_3projects_3Linearlayers_10epochs.pth', word2vec_vocab, embedding_matrix, embedding_matrix.shape, 4000, 2000)
+
+        java_files_dict_path = os.path.join(UPLOAD_FOLDER, 'java_files_dict.json')
+        if not os.path.exists(java_files_dict_path):
+            return jsonify({'error': 'Java files dictionary not found.'}), 404
+        with open(java_files_dict_path, 'r') as f:
+            directories_dict = json.load(f)
+
+        function_names_dict_path = os.path.join(UPLOAD_FOLDER, 'name_to_functions_dict.json')
+        if not os.path.exists(function_names_dict_path):
+            return jsonify({'error': 'Function names dictionary not found.'}), 404
+        with open(function_names_dict_path, 'r') as f:
+            name_to_functions = json.load(f)
+
+
+        data = request.json
+        summary_description = data.get('summary_description')
+        top_five_dict= dl_obj.TopFiveSourceFilesScript(directories_dict, name_to_functions, summary_description)  
+        if isinstance(top_five_dict, set):
+            top_five_dict = list(top_five_dict)
+        return jsonify({'top_five_dict': top_five_dict}), 200
     except Exception as e:
         app.logger.error(f"An error occurred: {e}")
         return jsonify({'error': 'An unexpected error occurred.'}), 500

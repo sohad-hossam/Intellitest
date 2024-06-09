@@ -108,9 +108,10 @@ class DLScript():
 
         return  CC_padded, UC_padded, y_batch
 
-    def predict(self, test_dataset, batch_size=5):
+    def predict(self, test_dataset, batch_size=5,function_level=False):
         
         positive_labels = 0
+        predictions=()
         test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=batch_size, collate_fn=self.customCollate , shuffle=False)
         use_cuda = torch.cuda.is_available()    
         device = torch.device("cuda" if use_cuda else "cpu") 
@@ -128,9 +129,35 @@ class DLScript():
                 _,predicted=torch.max(output,dim=1)
                 print(predicted)
                 positive_labels += int(torch.sum(predicted == 1))
-                # predictions.extend(predicted.tolist())
+                if function_level:
+                   predictions.extend(predicted.tolist())
         print('positive_labels', positive_labels)
-        return positive_labels
+        return positive_labels, predictions
+    
+
+        
+    def BugLocalization(self,javaFileName:str, name_to_func_dict:dict,summary_description:str):
+        try:
+            feature_list = list()
+            UC_processed = self.preprocessor_functions._PreProcessorFuncDeepLearning(summary_description, 'uc' , 'test')
+            functions_list=name_to_func_dict[javaFileName]
+            for function in functions_list:
+                feature_list.append([function, UC_processed])
+
+            self.preprocessor_functions.setUpUnknown(feature_list, 'test')
+            self.preprocessor_functions.dataSetToIndex(feature_list)
+
+            feature_obj = TracibilityLinkDataset(feature_list, [0]*len(feature_list))
+            positive_labels,predictions = self.predict(feature_obj)
+            indecies=[]
+            for prediction in predictions:
+                if prediction==1:
+                    indecies.append(predictions.index(prediction))
+            positive_percentage = (positive_labels/len(feature_list)) * 100
+            return indecies
+        except:
+            return -1
+
 
             
             

@@ -34,27 +34,7 @@ export function FilesDisplay() {
       { name: "java.14", score: Math.floor(Math.random() * 100) },
       { name: "java.15", score: Math.floor(Math.random() * 100) }
     ],
-    "TEIID-5949": [
-      { name: "java.16", score: Math.floor(Math.random() * 100) }, 
-      { name: "java.17", score: Math.floor(Math.random() * 100) },
-      { name: "java.18", score: Math.floor(Math.random() * 100) },
-      { name: "java.19", score: Math.floor(Math.random() * 100) },
-      { name: "java.20", score: Math.floor(Math.random() * 100) }
-    ],
-    "TEIID-5975": [
-      { name: "java.21", score: Math.floor(Math.random() * 100) }, 
-      { name: "java.22", score: Math.floor(Math.random() * 100) },
-      { name: "java.23", score: Math.floor(Math.random() * 100) },
-      { name: "java.24", score: Math.floor(Math.random() * 100) },
-      { name: "java.25", score: Math.floor(Math.random() * 100) }
-    ],
-    "TEIID-5985": [
-      { name: "java.26", score: Math.floor(Math.random() * 100) }, 
-      { name: "java.27", score: Math.floor(Math.random() * 100) },
-      { name: "java.28", score: Math.floor(Math.random() * 100) },
-      { name: "java.29", score: Math.floor(Math.random() * 100) },
-      { name: "java.30", score: Math.floor(Math.random() * 100) }
-    ]
+
   };
 
   const extractTeiidFromUrl = (url) => {
