@@ -104,7 +104,7 @@ class PreProcessorFunctions:
         self.Vocab=dict()
 
 
-    def PreProcessorFuncDeepLearning(self, source_code : str ,type : str,train_test = "train") -> list:
+    def _PreProcessorFuncDeepLearning(self, source_code : str ,type : str, train_test = "train") -> list:
         porter_stemmer = PorterStemmer()
         numeric_chars_to_remove = r"[0-9]"
 
@@ -131,13 +131,29 @@ class PreProcessorFunctions:
                         method_tokenized.append(token_stem)
                             
         return method_tokenized
+    
+    def setupDeepLearning(self, CC_UC_dataset: list, train_test="train")->tuple:
+        features_tokenized = list()
+        labels = list()
 
-    def setUpUnknown (self,arg1 : list,train_test : str) -> None:
+        for CC, UC, label in CC_UC_dataset:
+            method_tokenized = self._PreProcessorFuncDeepLearning(CC, 'cc', train_test)
+            uc_tokenized = self._PreProcessorFuncDeepLearning(UC, 'uc' , train_test)
 
-        for i,row in enumerate(arg1):
+            features_tokenized.append([method_tokenized,uc_tokenized])
+
+            labels.append(label)
+        return features_tokenized, labels
+
+    def setVocab(self, vocab):
+        self.Vocab = vocab
+
+    def setUpUnknown (self, arg1 : list, train_test : str) -> None:
+        for i,row in enumerate(arg1): 
             for j,arg in enumerate(row):
                 for k,token in enumerate(arg):
-                    if ( train_test == 'train' and  self.Vocab[token] < 2):
+                    if ( train_test == 'train' and  self.Vocab[token] < 4):
+                        print(i,j,k)
                         arg1[i][j][k] = "__unk__"
                     elif ( train_test == 'test' and  not self.Vocab.get(token)):
                         arg1[i][j][k] = "__unk__"
@@ -156,5 +172,4 @@ class PreProcessorFunctions:
                         # In the case of unknown words
                         arg1[i][j][k]= self.word_index["__unk__"]
                 #arg1[i]= torch.tensor(arg1[i], dtype=torch.int64)
-
 

@@ -108,17 +108,17 @@ class PreProcessor:
         self.Vocab["</s>"] = 2
 
         # self.word_index=dict()
-        Language.build_library(
-        # # Store the library in the `build` directory
-        "build/my-languages.so",
-        # # Include one or more languages
-         ["./tree-sitter-java"],
-         )
-        JAVA = Language("build/my-languages.so", "java")
-        # JAVA_LANGUAGE = Language(tsjava.language())
-        #self.parser = Parser(JAVA_LANGUAGE)
-        self.parser = Parser()
-        self.parser.set_language(JAVA)
+        # Language.build_library(
+        # # # Store the library in the `build` directory
+        # "build/my-languages.so",
+        # # # Include one or more languages
+        #  ["./tree-sitter-java"],
+        #  )
+        # JAVA = Language("build/my-languages.so", "java")
+        JAVA_LANGUAGE = Language(tsjava.language())
+        self.parser = Parser(JAVA_LANGUAGE)
+        # self.parser = Parser()
+        # self.parser.set_language(JAVA)
 
     def PreProcessor(self, file_content: str, UC_or_CC: str = 'UC',train_or_test: str ='train'):
         dataset_txt = file_content
@@ -313,11 +313,16 @@ class PreProcessor:
         # for CC: arg1 = function_names --> 3d array, arg2 = function_segments --> 3d array
         # for UC: arg1 = descriptions --> 2d, arg2 = summary --> 2d
         arg = list()        
-
-        for file in CC_UC_files: 
-            file = self.PreProcessor(file,CC_or_UC,train_test)
-            file_tokens = file.split()
-            arg.append(file_tokens)
+        if CC_or_UC == 'CC':
+            for file in CC_UC_files:
+                for i,function in enumerate(file):
+                    file[i] = self.PreProcessorCCDeepLearning(function,train_test).split()
+                arg.append(file)
+        else:
+            for file in CC_UC_files: 
+                file = self.PreProcessor(file,CC_or_UC,train_test)
+                file_tokens = file.split()
+                arg.append(file_tokens)
                       
         return arg
 
@@ -466,3 +471,28 @@ class PreProcessor:
             
         return Features,labels
     
+    def splitToFunctions(self,CC_docs):
+
+        list_of_docs = list()
+        
+        for doc in CC_docs:
+            list_of_methods = list()
+            src_new = bytes(doc,"utf-8")
+            tree_new = self.parser.parse(src_new)
+            curr_node_new = tree_new.root_node
+            queue_new=list()
+            queue_new.append(curr_node_new)
+
+            
+            while(len(queue_new)):
+                curr_node = queue_new.pop(0)
+                for child in curr_node.children:
+                    queue_new.append(child)
+                    if(child.parent.type == "method_declaration" and child.type == "block"):
+                        segment = doc[child.start_byte:child.end_byte]
+                        method_name=doc[child.parent.children[2].start_byte:child.parent.children[2].end_byte]
+                        list_of_methods.append(method_name+segment)
+            if len(list_of_methods) != 0:
+                list_of_docs.append(list_of_methods)
+
+        return list_of_docs
