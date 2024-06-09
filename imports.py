@@ -1,5 +1,5 @@
 from treelib import Node, Tree
-# import tree_sitter_java as tsjava
+import tree_sitter_java as tsjava
 from tree_sitter import Language, Parser
 import math
 import re

@@ -139,10 +139,10 @@ class PreProcessorFunctions:
         for CC, UC, label in CC_UC_dataset:
             method_tokenized = self._PreProcessorFuncDeepLearning(CC, 'cc', train_test)
             uc_tokenized = self._PreProcessorFuncDeepLearning(UC, 'uc' , train_test)
+            if len(method_tokenized) > 0 and len(uc_tokenized) > 0:
+                features_tokenized.append([method_tokenized,uc_tokenized])
 
-            features_tokenized.append([method_tokenized,uc_tokenized])
-
-            labels.append(label)
+                labels.append(label)
         return features_tokenized, labels
 
     def setVocab(self, vocab):
@@ -153,7 +153,8 @@ class PreProcessorFunctions:
         for i,row in enumerate(arg1):
             for j,arg in enumerate(row):
                 for k,token in enumerate(arg):
-                    if ( train_test == 'train' and  self.Vocab[token] < 2):
+                    if ( train_test == 'train' and  self.Vocab[token] < 4):
+                        print(i,j,k)
                         arg1[i][j][k] = "__unk__"
                     elif ( train_test == 'test' and  not self.Vocab.get(token)):
                         arg1[i][j][k] = "__unk__"
@@ -172,5 +173,4 @@ class PreProcessorFunctions:
                         # In the case of unknown words
                         arg1[i][j][k]= self.word_index["__unk__"]
                 #arg1[i]= torch.tensor(arg1[i], dtype=torch.int64)
-
 

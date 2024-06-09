@@ -645,6 +645,7 @@ class FeatureExtraction:
                         tf_term_collection = df_uc_dict['__unk__']+1
                   
                     term_entropy+=((tf_term_doc / tf_term_collection) * np.log(tf_term_doc / tf_term_collection))
+                    print(tf_term_doc,tf_term_collection)
                     if term in idf_cc_dict.keys():
                         weight_term_doc = (1 / len(doc)) * np.log(1 + tf_term_doc) * idf_cc_dict[term]  
                     else:
