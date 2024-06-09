@@ -75,8 +75,6 @@ class DatasetRetrieval:
             except:
                 counter+=1
         # return CC_UC_dict_true, UC_to_index, index_to_UC, CC_index_dict, index_to_CC
-        print('count1 ', self.count_1)
-        print('count0 ', self.count_0)
         return dataset
     
     def splitTestTrain(self, CC_UC_dict_true: dict, UC_to_index: dict, index_to_UC: dict, CC_index_dict: dict, index_to_CC: dict) -> tuple:
@@ -176,12 +174,12 @@ class DatasetRetrieval:
         train_df.to_csv(out_dir, index=False)
     
     def _FindChangedFunctions(self, old_content: str, new_content: str, summary: str, description: str, type: str='not Bug', max_prob: int=4) -> list:
-        # JAVA_LANGUAGE = Language(tsjava.language())
-        # parser = Parser(JAVA_LANGUAGE)
+        JAVA_LANGUAGE = Language(tsjava.language())
+        parser = Parser(JAVA_LANGUAGE)
 
-        JAVA = Language("build/my-languages.so", "java")
-        parser = Parser()
-        parser.set_language(JAVA)
+        # JAVA = Language("build/my-languages.so", "java")
+        # parser = Parser()
+        # parser.set_language(JAVA)
 
         data = list()
 
@@ -231,24 +229,24 @@ class DatasetRetrieval:
                     if type == 'Bug':
                         if (method_dict_new.get(method_name) != None and method_dict_new[method_name] != segment) or method_dict_new.get(method_name) == None:
                             data.append([method_name+segment,summary+description,1])
-                            self.count_1 += 1
+                             
                         elif random.randint(1, max_prob) == 4: #just a dummy number
                             data.append([method_name+segment,summary+description,0])
-                            self.count_0 += 1
+                             
                     else:
                         if (method_dict_new.get(method_name) != None and method_dict_new[method_name] != segment):
                             data.append([method_name+method_dict_new[method_name], summary+description, 1])
-                            self.count_1 += 1
+                             
                         elif random.randint(1, max_prob) == 4: #just a dummy number
                             data.append([method_name+method_dict_new[method_name], summary+description, 0])
-                            self.count_0 +=1
+                             
 
         for method_name_new, segment_new in method_dict_new.items():
             if method_dict_old.get(method_name_new) == None:
                 data.append([method_name_new+segment_new, summary+description,1])
-                self.count_1 += 1
+                 
             elif  method_dict_old.get(method_name_new) != None and method_dict_old[method_name_new] == segment_new and random.randint(1, max_prob) == 4: #just a dummy number
                 data.append([method_name_new+segment_new, summary+description,0])
-                self.count_0 += 1
+                 
 
         return data

@@ -139,10 +139,10 @@ class PreProcessorFunctions:
         for CC, UC, label in CC_UC_dataset:
             method_tokenized = self._PreProcessorFuncDeepLearning(CC, 'cc', train_test)
             uc_tokenized = self._PreProcessorFuncDeepLearning(UC, 'uc' , train_test)
+            if len(method_tokenized) > 0 and len(uc_tokenized) > 0:
+                features_tokenized.append([method_tokenized,uc_tokenized])
 
-            features_tokenized.append([method_tokenized,uc_tokenized])
-
-            labels.append(label)
+                labels.append(label)
         return features_tokenized, labels
 
     def setVocab(self, vocab):
