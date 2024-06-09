@@ -52,8 +52,7 @@ export function AboutUs() {
               <div className="question">Who are we ?</div>
               <p>
                 We are a team of 4 students from the Cairo University, Egypt. We are currently in our 4th year of study and are
-                working on our graduation project "INTLITEST". Our project is to nsha3bol el 2omoor kda l7d ma ne3raf elbeta3 da by3ml eh 
-                3lshan 3ndi currectly "azmet fokdan el haweya el mashr3oya" wmsh fay2a lel mas5ara w elt el adab de.
+                working on our graduation project "INTLITEST". Aiming to automate the process of software testing and maintaining .
               </p>
             </div>
           </div>

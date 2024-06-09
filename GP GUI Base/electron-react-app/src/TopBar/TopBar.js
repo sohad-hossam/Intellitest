@@ -6,7 +6,7 @@ export function Header({ visibleHyperlinks, activeLink }) {
   const allHyperlinks = [
     { url: "/", label: "Home" },
     { url: "/ImportProject", label: "Import Project" },
-    { url: "/ViewSource", label: "Proceed With" },
+    { url: "/TraceLinks", label: "Proceed With" },
     { url: "/MaintainabilityScore", label: "Maintainability Scores" },
     { url: "/TraceLinks", label: "Trace Links" },
     { url: "/ViewSource", label: "Source Code" },

@@ -3,7 +3,8 @@ from imports import *
 class DatasetRetrieval:
     
     def __init__(self) -> None:
-        pass
+        self.count_0 = 0
+        self.count_1 = 0
 
     def parseSqlite(self, sqlite_path: str):
         con = sqlite3.connect(sqlite_path)

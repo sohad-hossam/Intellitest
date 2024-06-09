@@ -105,7 +105,7 @@ export function HomePage() {
               <label htmlFor="file-upload">Choose File</label>
               <input type="file" id="file-upload" onChange={handleFileChange} />
             </div>
-            <Link to={"/ViewSource"} className="btnProceed m-5">
+            <Link to={"/TraceLinks"} className="btnProceed m-5">
               Proceed with
             </Link>
           </div>

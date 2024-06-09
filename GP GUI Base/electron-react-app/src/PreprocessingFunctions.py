@@ -153,8 +153,7 @@ class PreProcessorFunctions:
         for i,row in enumerate(arg1):
             for j,arg in enumerate(row):
                 for k,token in enumerate(arg):
-                    if ( train_test == 'train' and  self.Vocab[token] < 4):
-                        print(i,j,k)
+                    if ( train_test == 'train' and  self.Vocab[token] < 2):
                         arg1[i][j][k] = "__unk__"
                     elif ( train_test == 'test' and  not self.Vocab.get(token)):
                         arg1[i][j][k] = "__unk__"
@@ -173,4 +172,5 @@ class PreProcessorFunctions:
                         # In the case of unknown words
                         arg1[i][j][k]= self.word_index["__unk__"]
                 #arg1[i]= torch.tensor(arg1[i], dtype=torch.int64)
+
 
