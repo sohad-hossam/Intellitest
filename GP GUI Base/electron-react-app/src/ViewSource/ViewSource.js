@@ -118,7 +118,7 @@ function ViewSource() {
   const [selectedFilePath, setSelectedFilePath] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [highlightLines, setHighlightLines] = useState([]);
-
+  const [funcIndecies,setfuncIndecies]=useState([]);
   const visibleHyperlinks = [
     "Home",
     "Maintainability Scores",
@@ -171,11 +171,26 @@ function ViewSource() {
 
   useEffect(() => {
     fetchFolderStructure();
-
+  }, []);
+  
+  useEffect(() => {
     if (file) {
       fetchFileContent(file);
     }
   }, [file]);
+  
+  useEffect(() => {
+    if (selectedFileContent) {
+      findFunctionIndices(selectedFileContent);
+    }
+  }, [selectedFileContent]);
+  
+  useEffect(() => {
+    if (funcIndecies.length > 0 && selectedFilePath) {
+      fetchHighlightedLines(selectedFilePath, summaryDescription);
+    }
+  }, [funcIndecies, selectedFilePath]);
+  
 
   const fetchFolderStructure = () => {
     fetch("http://localhost:5000/get-folder-structure?directory_path=GP GUI Base/electron-react-app/src/uploads")
@@ -188,46 +203,54 @@ function ViewSource() {
       });
   };
 
-  const fetchFileContent = (filePath) => {
+  const fetchFileContent = async (filePath) => {
     setSelectedFileType(getFileExtension(filePath));
     setSelectedFilePath(filePath);
-    fetch(`http://localhost:5000/get-file-content?file_path=${filePath}`)
-      .then((response) => response.text())
-      .then((data) => {
-        setSelectedFileContent(data);
-        fetchHighlightedLines(filePath, summaryDescription);  // Fetch highlighted lines when content is fetched
-      })
-      .catch((error) => {
-        console.error("Error fetching file content:", error);
-      });
+  
+    try {
+      const response = await fetch(`http://localhost:5000/get-file-content?file_path=${filePath}`);
+      const data = await response.text();
+  
+      setSelectedFileContent(data); // This will trigger the useEffect to find function indices
+    } catch (error) {
+      console.error("Error fetching file content:", error);
+    }
   };
-
-  const fetchHighlightedLines = (javaFilePath, summaryDescription) => {
-   console.log("javaFilePath", javaFilePath)
-    const key = javaFilePath.split('/').pop();
-   console.log("key", key)
-    fetch("http://localhost:5000/localize-bugs", {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        java_file: key,
-        summary_description: summaryDescription,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        
-        setHighlightLines(data.bugs_idecies);
-        console.log("javaFilePath", javaFilePath)
-        console.log("summaryDescription", summaryDescription)
-        console.log("data",data)
-        console.log("Highlighted lines:", highlightLines)
-      })
-      .catch((error) => {
-        console.error("Error fetching highlighted lines:", error);
+  
+  const findFunctionIndices = (code) => {
+    const functionRegex = /(?:public|protected|private|static|\s)+[a-zA-Z<>\[\]]+\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\([^\)]*\)\s*\{/g;
+    const lines = code.split('\n');
+    const functionIndices = [];
+  
+    lines.forEach((line, index) => {
+      if (functionRegex.test(line)) {
+        functionIndices.push(index + 1); 
+      }
+    });
+    setfuncIndecies(functionIndices);
+   
+  };
+  const fetchHighlightedLines = async (javaFilePath, summaryDescription) => {
+    try {
+      const key = javaFilePath.split('/').pop();
+      const response = await fetch("http://localhost:5000/localize-bugs", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          java_file: key,
+          summary_description: summaryDescription,
+        }),
       });
+      const data = await response.json();
+      const buggedFuncIndecies = data.bugs_idecies;
+      const highlightedLines = buggedFuncIndecies.map(index => funcIndecies[index]);
+  
+      setHighlightLines(highlightedLines);
+    } catch (error) {
+      console.error("Error fetching highlighted lines:", error);
+    }
   };
   
 

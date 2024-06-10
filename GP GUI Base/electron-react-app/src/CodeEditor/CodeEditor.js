@@ -36,7 +36,7 @@ const CodeEditor = ({ content, fileType, highlightLines = [] }) => {
             padding: '20px', 
             borderRadius: '5px',
             overflowX: 'auto', 
-            maxHeight: '900px', 
+            maxHeight: '690px', 
             overflowY: 'auto', 
           }}
           showLineNumbers={true}

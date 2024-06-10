@@ -113,13 +113,14 @@ function DropDowns() {
       setInvalidUrl(false);
       const useCaseContent = `${data.summary}\n${data.description}`;
       setUseCaseSelected(useCaseContent);
+      setStep(3);
 
     } catch (error) {
       console.error('Error fetching the URL:', error);
       setInvalidUrl(true);
     }
     handleProcessDocs();
-    setStep(3);
+    
   };
 
   const handleProcessDocs = async () => {

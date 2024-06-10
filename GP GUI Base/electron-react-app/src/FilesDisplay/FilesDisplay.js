@@ -4,6 +4,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./FilesDisplay.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWrench, faExclamationCircle, faFlag, faClock, faLayerGroup } from '@fortawesome/free-solid-svg-icons';
+import { ClipLoader } from "react-spinners";
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 import { Header } from "../TopBar/TopBar";
 import dictionaries from '../uploads/java_files_dict.json'; 
@@ -15,7 +17,7 @@ export function FilesDisplay() {
   const [details, setDetails] = useState(null);
   const [itemsReturned, setItemsReturned] = useState(false);
   const { setSummaryDescription } = useContext(GlobalContext);
-
+  const [submitClicked,setsubmitClicked]=useState(false);
 
   const extractTeiidFromUrl = (url) => {
     const match = url.match(/TEIID-\d+/);
@@ -24,6 +26,7 @@ export function FilesDisplay() {
 
   const handleUrlSubmit = async () => {
     try {
+      setsubmitClicked(true);
       const teiid = extractTeiidFromUrl(url);
       if (!teiid) {
         throw new Error('Invalid URL');
@@ -140,8 +143,14 @@ export function FilesDisplay() {
           <button className="btn btn-primary buttonurl" onClick={handleUrlSubmit}>Submit</button>
         </div>
       </div>
+      {submitClicked && !itemsReturned && (
+  <div className="spinner-container">
+    <FontAwesomeIcon icon={faSpinner} spin size="3x" />
+    <p className="mt-3">Issue is being processed...</p>
+  </div>
+)}
 
-      {details && (
+      {details&&itemsReturned && (
         <div className="row mt-3">
           <div className="col-1"></div>
           <div className="col-3">
