@@ -92,7 +92,7 @@ def process_sqlite_file(sqlite_file_path):
     merged_df.to_csv(os.path.join(UPLOAD_FOLDER, 'teiid.csv'), index=False)
 
     train, test = train_test_split(merged_df, test_size=0.01)
-
+    print("creating use case files")
     unique_cc = test['file_path'].unique()
     unique_uc = test['issue_id'].unique()
 
@@ -117,6 +117,7 @@ def process_sqlite_file(sqlite_file_path):
 
 
 def extract_java_files(directory):
+        print("Extracting java files")
         java_files = {}
         name_to_functions = {}
         embedding_matrix = np.load('GP GUI Base/electron-react-app/src/Script pickles/embedding_matrix.pkl', allow_pickle=True)

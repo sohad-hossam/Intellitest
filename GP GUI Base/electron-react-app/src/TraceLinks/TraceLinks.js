@@ -84,6 +84,8 @@ function DropDowns() {
 };
 
   const handleCodeSelection = (option) => {
+    setInvalidUrl(false);
+    setScore(null);
     setCodeSelected(option);
     setStep(1);
   };
@@ -269,12 +271,12 @@ function DropDowns() {
         </div>
       ) : (
         <>
-          {score != null && score <= 0.5 && (
+          {score != null && score <= 50 && (
             <div className="tracelink-message-low text-center  mt-5">
               Trace Links Exist between the documents by {score.toFixed(2)}% indicating low correlation
             </div>
           )}
-          {score != null && score > 0.5 && (
+          {score != null && score > 50 && (
             <div className="tracelink-message text-center  mt-5">
               Trace Links Exist between the documents by {score.toFixed(2)}% indicating high correlation
             </div>

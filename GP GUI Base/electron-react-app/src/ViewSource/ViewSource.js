@@ -1,13 +1,11 @@
-import React, { useState, useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Header } from "../TopBar/TopBar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFolder, faFileCsv, faFileAlt, faFileCode, faChevronRight, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { CodeEditor } from "../CodeEditor/CodeEditor";
 import './ViewSource.css';
-import dictionaries from '../uploads/java_files_dict.json'; 
 import { GlobalContext } from '../GlobalState';
-
 
 const RenderFolderStructure = ({ folder, directoryPath, onFileClick, searchQuery }) => {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -119,6 +117,8 @@ function ViewSource() {
   const [searchQuery, setSearchQuery] = useState('');
   const [highlightLines, setHighlightLines] = useState([]);
   const [funcIndecies,setfuncIndecies]=useState([]);
+  const [dictionaries, setDictionaries] = useState(null); // Added state for dictionaries
+
   const visibleHyperlinks = [
     "Home",
     "Maintainability Scores",
@@ -170,9 +170,21 @@ function ViewSource() {
   };
 
   useEffect(() => {
+    // Fetch dictionaries dynamically
+    const fetchDictionaries = async () => {
+      try {
+        const dictionariesModule = await import('../uploads/java_files_dict.json');
+        setDictionaries(dictionariesModule);
+      } catch (error) {
+        console.log('Dictionaries file does not exist.');
+        setDictionaries(null);
+      }
+    };
+
+    fetchDictionaries();
     fetchFolderStructure();
   }, []);
-  
+
   useEffect(() => {
     if (file) {
       fetchFileContent(file);
@@ -218,7 +230,7 @@ function ViewSource() {
   };
   
   const findFunctionIndices = (code) => {
-    const functionRegex = /(?:public|protected|private|static|\s)+[a-zA-Z<>\[\]]+\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\([^)]*\)\s*\{/g;
+    const functionRegex = /(?:public|protected|private|static|final|synchronized|\s)*[a-zA-Z<>\[\],\s]+\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\([^)]*\)\s*(?:throws\s+[a-zA-Z<>\[\],\s]+)?\s*\{/g;
     const lines = code.split('\n');
     const functionIndices = [];
   
@@ -227,15 +239,13 @@ function ViewSource() {
   
     let match;
     while ((match = functionRegex.exec(joinedCode)) !== null) {
-        // Calculate the number of delimiters before the match index
-        const lineNumber = joinedCode.substring(0, match.index).split(delimiter).length;
-        functionIndices.push(lineNumber);
+      const lineNumber = joinedCode.substring(0, match.index).split(delimiter).length;
+      functionIndices.push(lineNumber);
     }
   
     setfuncIndecies(functionIndices);
-};
-
-
+  };
+  
   const fetchHighlightedLines = async (javaFilePath, summaryDescription) => {
     try {
       const key = javaFilePath.split('/').pop();
@@ -251,7 +261,7 @@ function ViewSource() {
       });
       const data = await response.json();
       const buggedFuncIndecies = data.bugs_idecies;
-      console.log("bug indecies",buggedFuncIndecies)
+      console.log("buggedFuncIndecies",buggedFuncIndecies)
       console.log("funcIndecies",funcIndecies)
       const highlightedLines = buggedFuncIndecies.map(index => funcIndecies[index]);
       console.log("highlightedLines",highlightedLines)
@@ -261,11 +271,9 @@ function ViewSource() {
       console.error("Error fetching highlighted lines:", error);
     }
   };
-  
 
   const handleFileClick = (file) => {
     const filePath = file.path;
-    console.log("File path:", filePath);
     navigate(`/ViewSource/${encodeURIComponent(filePath)}`);
     fetchFileContent(filePath);
   };

@@ -300,7 +300,7 @@ export function MaintainabilityScore() {
       <Header visibleHyperlinks={visibleHyperlinks} activeLink="Maintainability Scores" />
       <div className="container mohtawa mt-5">
         <div className="row">
-          <div className="col-md-3 tree-struc">
+          <div className="col-md-4 tree-struc">
             <div style={styles.searchContainer}>
               <FontAwesomeIcon icon={faSearch} style={styles.searchIcon} />
               <input
@@ -313,7 +313,7 @@ export function MaintainabilityScore() {
             </div>
             <RenderFolderStructure folder={folderStructure} directoryPath="GP GUI Base/electron-react-app/src/uploads" onFileClick={handleFileClick} searchQuery={searchQuery} />
           </div>
-          <div className="col-md-9 p-2">
+          <div className="col-md-8 p-2">
             <PageTitle title="Maintainability Scores" />
             {renderScores()}
           </div>

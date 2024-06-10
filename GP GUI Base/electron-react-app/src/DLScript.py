@@ -61,6 +61,7 @@ class DLScript():
 
         while(len(queue_new)):
             curr_node = queue_new.pop(0)
+            counter=0
             for child in curr_node.children:
                 queue_new.append(child)
                 if(child.parent.type == "method_declaration" and child.type == "block"):
@@ -68,6 +69,8 @@ class DLScript():
                     method_name=CC_file[child.parent.children[2].start_byte:child.parent.children[2].end_byte]
                     function = self.preprocessor_functions._PreProcessorFuncDeepLearning(method_name+segment, 'cc' , 'test')
                     feature_list.append([function, UC_processed])
+                print(counter)
+                counter+=1
 
         return feature_list 
     
@@ -108,8 +111,9 @@ class DLScript():
 
                 output = self.model.forward(CC_padded_tensor, UC_padded_tensor)
                 _,predicted=torch.max(output,dim=1)
-                print("predicted",predicted)
+              
                 positive_labels += int(torch.sum(predicted == 1))
+               
                 # predictions.extend(predicted.tolist())
         return positive_labels
     
@@ -120,25 +124,28 @@ class DLScript():
                 CC_file = file.read()
 
             functions_list = list()
-            src_new = bytes(CC_file,"utf-8")
+            src_new = bytes(CC_file, "utf-8")
             tree_new = self.parser.parse(src_new)
             curr_node_new = tree_new.root_node
-            queue_new=list()
+            queue_new = list()
             queue_new.append(curr_node_new)
 
-            while(len(queue_new)):
+            while (len(queue_new)):
                 curr_node = queue_new.pop(0)
                 for child in curr_node.children:
                     queue_new.append(child)
-                    if(child.parent.type == "method_declaration" and child.type == "block"):
+                    if (child.parent.type == "method_declaration" and child.type == "block"):
                         segment = CC_file[child.start_byte:child.end_byte]
-                        method_name=CC_file[child.parent.children[2].start_byte:child.parent.children[2].end_byte]
-                        function = self.preprocessor_functions._PreProcessorFuncDeepLearning(method_name+segment, 'cc' , 'test')
+                        method_name = CC_file[child.parent.children[2].start_byte:child.parent.children[2].end_byte]
+                        function = self.preprocessor_functions._PreProcessorFuncDeepLearning(method_name + segment, 'cc',
+                                                                                            'test')
                         functions_list.append(function)
 
             return functions_list
-        except:
-            return -1
+        except Exception as e:
+            print("Error:", e)
+            return []
+
     def UseCaseSourceFileScriptForTopFive(self, functions_list: list, UC_processed: list) -> float:
         try:
             feature_list = list()
@@ -158,34 +165,27 @@ class DLScript():
     def TopFiveSourceFilesScript(self, directories_dict: dict, name_to_functions: dict, summary_description: str) -> dict:
         try:
             print(summary_description)
-            index_to_file = dict()
+            # index_to_file = dict()
             results_dict = dict()
-            percentages = list()
+            file_to_percentages = dict()
             UC_processed = self.preprocessor_functions._PreProcessorFuncDeepLearning(summary_description, 'uc' , 'test')
             counter=0
             for index, file_info in enumerate(directories_dict.items()):
-                if(len(percentages)==5):
+                if(len(results_dict)==5):
                     break
                 file_name, file_dir = file_info
-                index_to_file[index] = file_name
+                # index_to_file[index] = file_name
                 positive_percentage = self.UseCaseSourceFileScriptForTopFive(name_to_functions[file_name], UC_processed)
-                if(positive_percentage>80):
-                   percentages.append(positive_percentage)
+                if(positive_percentage>80 and positive_percentage<100):
+                    results_dict[file_name] = positive_percentage
                 print (counter)
                 counter+=1
-            
-         
-            percentages_indices = [percentages.index(i) for i in percentages]
-          
-            for i in range(len(percentages_indices)):
-                results_dict[index_to_file[i]] = percentages[i]
             
             return results_dict
         
         except:
             return -1
-            
-            
+                
 
     def predict2(self, test_dataset, batch_size=5):
         
@@ -205,7 +205,9 @@ class DLScript():
                 CC_padded_tensor = torch.tensor(CC, device=device)
 
                 output = self.model.forward(CC_padded_tensor, UC_padded_tensor)
+               
                 _,predicted=torch.max(output,dim=1)
+                print(predicted)
                 positive_labels += int(torch.sum(predicted == 1))
                 predictions.extend(predicted.tolist())
      
@@ -232,5 +234,6 @@ class DLScript():
                 if prediction==1:
                     indecies.append(i)
             return indecies
-        except:
-            return -1
+        except Exception as e:
+            print("Error:", e)
+            return []

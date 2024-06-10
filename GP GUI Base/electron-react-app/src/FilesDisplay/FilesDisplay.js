@@ -1,14 +1,11 @@
-import React, { useState, useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "../TraceLinks/TraceLinks.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./FilesDisplay.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faWrench, faExclamationCircle, faFlag, faClock, faLayerGroup } from '@fortawesome/free-solid-svg-icons';
+import { faWrench, faExclamationCircle, faFlag, faClock, faLayerGroup, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { ClipLoader } from "react-spinners";
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
-
 import { Header } from "../TopBar/TopBar";
-import dictionaries from '../uploads/java_files_dict.json'; 
 import { GlobalContext } from '../GlobalState';
 
 export function FilesDisplay() {
@@ -17,16 +14,17 @@ export function FilesDisplay() {
   const [details, setDetails] = useState(null);
   const [itemsReturned, setItemsReturned] = useState(false);
   const { setSummaryDescription } = useContext(GlobalContext);
-  const [submitClicked,setsubmitClicked]=useState(false);
+  const [submitClicked, setSubmitClicked] = useState(false);
+  const [dictionaries, setDictionaries] = useState(null); // Added state for dictionaries
 
   const extractTeiidFromUrl = (url) => {
     const key = url.split('/').pop();
-    return key ;
+    return key;
   };
 
   const handleUrlSubmit = async () => {
     try {
-      setsubmitClicked(true);
+      setSubmitClicked(true);
       setItemsReturned(false);
       setDetails(null);
       const teiid = extractTeiidFromUrl(url);
@@ -65,7 +63,7 @@ export function FilesDisplay() {
 
       const topFiveData = await topFiveResponse.json();
       const newItems = topFiveData.top_five_dict || {};
-     
+
       setItems(newItems);
       console.log('newItems: ', newItems);
       setItemsReturned(true);
@@ -128,6 +126,21 @@ export function FilesDisplay() {
     }
   }, [items]);
 
+  useEffect(() => {
+    // Fetch dictionaries dynamically
+    const fetchDictionaries = async () => {
+      try {
+        const dictionariesModule = await import('../uploads/java_files_dict.json');
+        setDictionaries(dictionariesModule);
+      } catch (error) {
+        console.log('Dictionaries file does not exist.');
+        setDictionaries(null);
+      }
+    };
+
+    fetchDictionaries();
+  }, []);
+
   return (
     <div className="App">
       <Header visibleHyperlinks={visibleHyperlinks} activeLink="FilesDisplay" />
@@ -146,13 +159,13 @@ export function FilesDisplay() {
         </div>
       </div>
       {submitClicked && !itemsReturned && (
-  <div className="spinner-container">
-    <FontAwesomeIcon icon={faSpinner} spin size="3x" />
-    <p className="mt-3">Issue is being processed...</p>
-  </div>
-)}
+        <div className="spinner-container">
+          <FontAwesomeIcon icon={faSpinner} spin size="3x" />
+          <p className="mt-3">Issue is being processed...</p>
+        </div>
+      )}
 
-      {details&&itemsReturned && (
+      {details && itemsReturned && (
         <div className="row mt-3">
           <div className="col-1"></div>
           <div className="col-3">
@@ -199,32 +212,31 @@ export function FilesDisplay() {
                 </div>
               </div>
               {itemsReturned &&
-    Object.entries(items).map(([name, score], index) => {
-       
-        const transformedName = encodeURIComponent(dictionaries[name].replace(/\\/g, "/"));
+                dictionaries && 
+                Object.entries(items).map(([name, score], index) => {
+                  const transformedName = encodeURIComponent(dictionaries[name].replace(/\\/g, "/"));
 
-        return (
-            <a
-                key={index}
-                href={`http://localhost:3000/#/ViewSource/${transformedName}`}
-                className={`text-center small-circle small-circle-${index + 1}`}
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center"
-                }}
-            >
-                <p className="circle-name" style={{ position: "absolute" }}>{name.slice(0, -5)}</p>
-                <p className="circle-name mt-5" style={{ position: "absolute" }} data-score={score}>{score.toFixed(2)}%</p>
-            </a>
-        );
-    })
-}
+                  return (
+                    <a
+                      key={index}
+                      href={`http://localhost:3000/#/ViewSource/${transformedName}`}
+                      className={`text-center small-circle small-circle-${index + 1}`}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
+                      }}
+                    >
+                      <p className="circle-name" style={{ position: "absolute" }}>{name.slice(0, -5)}</p>
+                      <p className="circle-name mt-5" style={{ position: "absolute" }} data-score={score}>{score.toFixed(2)}%</p>
+                    </a>
+                  );
+                })
+              }
             </div>
           </div>
         </div>
       )}
     </div>
   );
-
 }
