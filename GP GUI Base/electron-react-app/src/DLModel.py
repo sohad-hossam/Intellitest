@@ -20,40 +20,39 @@ class TracibilityLinkDataset(Dataset):
 
 class DLModel(nn.Module):
 
-  def __init__(self,embedding_matrix : np.array, embedding_dim : tuple,UC_size: int, CC_size:int, 
-               hidden_size:int = 128, classes: int = 2,stride_size = 2,kernal_size=3):
-      super(DLModel, self).__init__()
+    def __init__(self,embedding_matrix : np.array, embedding_dim : tuple,UC_size: int, CC_size:int, hidden_size:int = 128, classes: int = 2):
+        super(DLModel, self).__init__()
 
-      self.embedding = nn.Embedding(num_embeddings = embedding_dim[0], embedding_dim = embedding_dim[1], _weight = torch.tensor(embedding_matrix))
-      
-      self.lstm = nn.LSTM(embedding_dim[1],hidden_size,batch_first=True, bidirectional=False)
 
-      self.conv_layer = nn.Conv1d(CC_size + UC_size, hidden_size, kernal_size, stride=stride_size)
-      self.pooling_layer = nn.MaxPool1d(kernal_size,stride = stride_size)
-    
-      conv_size_l = math.floor((((UC_size + CC_size) - kernal_size) / stride_size ) + 1)
-      conv_size_w = math.floor(((hidden_size - kernal_size) / stride_size ) + 1)
-      pooling_size = math.floor(((conv_size_w - kernal_size) / stride_size ) + 1)
+        self.embedding = nn.Embedding(num_embeddings = embedding_dim[0], embedding_dim = embedding_dim[1], _weight = torch.tensor(embedding_matrix))
         
-      self.linear = nn.Linear(hidden_size * pooling_size ,classes)
-    
-  def forward(self, CC,UC ):
-    
-    CC_embedding  = self.embedding(CC)
-    UC_embedding = self.embedding(UC)    
-    
-    UC_lstm,_ = self.lstm (UC_embedding.float())
-    CC_lstm,_ = self.lstm (CC_embedding.float())
+        self.lstm_CC = nn.LSTM(embedding_dim[1],hidden_size,batch_first=True, bidirectional=False)
+        
+        self.linear_post_flatten = nn.Linear(CC_size*hidden_size+UC_size*hidden_size,hidden_size*3)
+        self.linear_post_flatten2 = nn.Linear(hidden_size*3,hidden_size*2)
+        self.linear_post_flatten3 = nn.Linear(hidden_size*2,hidden_size)
 
-    UC_CC = torch.cat([UC_lstm,CC_lstm],axis=1)
-    conv = self.conv_layer (UC_CC)
-    
-    pooling = self.pooling_layer (conv)    
+        self.linear = nn.Linear(hidden_size,classes)
 
-    pooling_flatten = pooling.reshape(pooling.shape[0],-1)
-
-    linear_output = self.linear(pooling_flatten)
+        self.softmax = nn.Softmax(dim=1)
+        self.relu = nn.PReLU()
     
-    
+    def forward(self, CC,UC ):
 
-    return linear_output
+        CC_embedding  = self.embedding(CC)
+        UC_embedding = self.embedding(UC)        
+        
+        UC_lstm, _ = self.lstm_CC (UC_embedding.float())
+        CC_lstm, _ = self.lstm_CC (CC_embedding.float())
+
+        UC_lstm_flatten  = UC_lstm.reshape(UC_lstm.shape[0],-1)
+        CC_lstm_flatten  = CC_lstm.reshape(CC_lstm.shape[0],-1) # batch_no * (feature_vector * no_tokens)
+        
+        
+
+        linear_output_one = self.linear_post_flatten(torch.cat([UC_lstm_flatten,CC_lstm_flatten],axis=1).float())
+        linear_output_two = self.linear_post_flatten2(self.relu(linear_output_one))
+        linear_output_three = self.linear_post_flatten3(self.relu(linear_output_two))
+        linear_output = self.linear(self.relu(linear_output_three))
+    
+        return linear_output

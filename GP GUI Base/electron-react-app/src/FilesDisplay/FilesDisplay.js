@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import "../TraceLinks/TraceLinks.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./FilesDisplay.css";
@@ -7,12 +7,15 @@ import { faWrench, faExclamationCircle, faFlag, faClock, faLayerGroup } from '@f
 
 import { Header } from "../TopBar/TopBar";
 import dictionaries from '../uploads/java_files_dict.json'; 
+import { GlobalContext } from '../GlobalState';
+
 export function FilesDisplay() {
   const [url, setUrl] = useState('');
   const [items, setItems] = useState({});
   const [details, setDetails] = useState(null);
   const [itemsReturned, setItemsReturned] = useState(false);
- 
+  const { setSummaryDescription } = useContext(GlobalContext);
+
 
   const extractTeiidFromUrl = (url) => {
     const match = url.match(/TEIID-\d+/);
@@ -41,7 +44,8 @@ export function FilesDisplay() {
       const data = await response.json();
       console.log('Fetched data:', data);
       setDetails(data);
-
+      const summaryDescription = `${data.summary} ${data.description}`;
+      setSummaryDescription(summaryDescription);
       const topFiveResponse = await fetch('http://localhost:5000/get-top-five', {
         method: 'POST',
         headers: {
