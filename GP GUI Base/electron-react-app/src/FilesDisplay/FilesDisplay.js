@@ -27,6 +27,8 @@ export function FilesDisplay() {
   const handleUrlSubmit = async () => {
     try {
       setsubmitClicked(true);
+      setItemsReturned(false);
+      setDetails(null);
       const teiid = extractTeiidFromUrl(url);
       if (!teiid) {
         throw new Error('Invalid URL');

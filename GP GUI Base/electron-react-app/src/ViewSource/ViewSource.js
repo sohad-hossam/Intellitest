@@ -245,9 +245,12 @@ function ViewSource() {
       });
       const data = await response.json();
       const buggedFuncIndecies = data.bugs_idecies;
+      console.log("bug indecies",buggedFuncIndecies)
+      console.log("funcIndecies",funcIndecies)
       const highlightedLines = buggedFuncIndecies.map(index => funcIndecies[index]);
-  
+      console.log("highlightedLines",highlightedLines)
       setHighlightLines(highlightedLines);
+
     } catch (error) {
       console.error("Error fetching highlighted lines:", error);
     }

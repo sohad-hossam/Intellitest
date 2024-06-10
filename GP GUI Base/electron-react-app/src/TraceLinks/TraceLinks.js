@@ -95,6 +95,8 @@ function DropDowns() {
 
   const handleUrlSubmit = async () => {
     try {
+      setInvalidUrl(false);
+      setScore(null);
       const response = await fetch('http://localhost:5000/fetch-details', {
         method: 'POST',
         headers: {
@@ -105,6 +107,8 @@ function DropDowns() {
 
       if (!response.ok) {
         setInvalidUrl(true);
+        setStep(2);
+        setScore(null);
         throw new Error('Failed to fetch the URL');
 
       }
@@ -114,12 +118,13 @@ function DropDowns() {
       const useCaseContent = `${data.summary}\n${data.description}`;
       setUseCaseSelected(useCaseContent);
       setStep(3);
+      handleProcessDocs();
 
     } catch (error) {
       console.error('Error fetching the URL:', error);
       setInvalidUrl(true);
     }
-    handleProcessDocs();
+   
     
   };
 
