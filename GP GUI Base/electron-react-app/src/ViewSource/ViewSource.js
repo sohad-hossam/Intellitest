@@ -218,18 +218,25 @@ function ViewSource() {
   };
   
   const findFunctionIndices = (code) => {
-    const functionRegex = /(?:public|protected|private|static|\s)+[a-zA-Z<>\[\]]+\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\([^\)]*\)\s*\{/g;
+    const functionRegex = /(?:public|protected|private|static|\s)+[a-zA-Z<>\[\]]+\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\([^)]*\)\s*\{/g;
     const lines = code.split('\n');
     const functionIndices = [];
   
-    lines.forEach((line, index) => {
-      if (functionRegex.test(line)) {
-        functionIndices.push(index + 1); 
-      }
-    });
+    // Join lines with a unique delimiter to preserve line information
+    const delimiter = '\uFFFF';
+    const joinedCode = lines.join(delimiter);
+  
+    let match;
+    while ((match = functionRegex.exec(joinedCode)) !== null) {
+        // Calculate the number of delimiters before the match index
+        const lineNumber = joinedCode.substring(0, match.index).split(delimiter).length;
+        functionIndices.push(lineNumber);
+    }
+  
     setfuncIndecies(functionIndices);
-   
-  };
+};
+
+
   const fetchHighlightedLines = async (javaFilePath, summaryDescription) => {
     try {
       const key = javaFilePath.split('/').pop();
