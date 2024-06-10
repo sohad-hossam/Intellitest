@@ -211,7 +211,7 @@ function ViewSource() {
       const response = await fetch(`http://localhost:5000/get-file-content?file_path=${filePath}`);
       const data = await response.text();
   
-      setSelectedFileContent(data); // This will trigger the useEffect to find function indices
+      setSelectedFileContent(data); 
     } catch (error) {
       console.error("Error fetching file content:", error);
     }
@@ -222,7 +222,6 @@ function ViewSource() {
     const lines = code.split('\n');
     const functionIndices = [];
   
-    // Join lines with a unique delimiter to preserve line information
     const delimiter = '\uFFFF';
     const joinedCode = lines.join(delimiter);
   

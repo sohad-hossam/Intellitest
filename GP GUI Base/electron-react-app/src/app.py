@@ -268,78 +268,40 @@ def fetch_details():
         if page.status_code == 200:
             soup = BeautifulSoup(page.content, 'html.parser')
             body_jira = soup.find('body', id='jira')
-            if body_jira:
-                page_div = body_jira.find('div', id='page')
-                if page_div:
-                    main_content = page_div.find('main', id='main')
-                    if main_content:
-                        header = main_content.find('header', id='stalker')
-                        if header:
-                            summary_value = header.find('h2', id='summary-val')
-                        else:
-                            return jsonify({'error': 'Header not found inside main content.'}), 404
-                        
-                        issue_body_content = main_content.find('div', class_='issue-body-content')
-                        if issue_body_content:
-                            user_content_block = issue_body_content.find('div', class_='user-content-block')
-                            if user_content_block:
-                                p = user_content_block.find('p')
-                            else:
-                                return jsonify({'error': 'User content block not found inside issue body content.'}), 404
-                            
-                            issuedetails = issue_body_content.find('ul', id='issuedetails')
-                            if issuedetails:
-                                type_val = issuedetails.find('span', id='type-val')
-                                if type_val:
-                                    priority_val = issuedetails.find('span', id='priority-val')
-                                    if priority_val:
-                                        resolution_val = issuedetails.find('span', id='resolution-val')
-                                        if resolution_val:
-                                            fixfor_val = issuedetails.find('span', id='fixfor-val')
-                                            fixfor_val = fixfor_val.find('a')
-                                            if fixfor_val:
-                                                versions_val = issuedetails.find('span', id='versions-val')
-                                                if versions_val:
-                                                    sprint_val = issue_body_content.find('div', id='customfield_12310940-val')
-                                                    if sprint_val:
-                                                    
-                                                        return jsonify({'summary': summary_value.text, 'description': p.text,
-                                                                        'details': {
-                                                                            'type': type_val.text.strip(),
-                                                                            'priority': priority_val.text.strip(),
-                                                                            'resolution': resolution_val.text.strip(),
-                                                                            'fixfor': fixfor_val.text,
-                                                                            'versions': versions_val.text.strip(),
-                                                                            'sprint': sprint_val.text.strip()
-                                                                        }}), 200
-                                                    else:
-                                                        return jsonify({'error': 'Sprint value not found inside issue details.'}), 404
-                                                else:
-                                                    return jsonify({'error': 'Versions value not found inside issue details.'}), 404
-                                            else:
-                                                return jsonify({'error': 'Fixfor value not found inside issue details.'}), 404
-                                        else:
-                                            return jsonify({'error': 'Resolution value not found inside issue details.'}), 404
-                                    else:
-                                        return jsonify({'error': 'Priority value not found inside issue details.'}), 404
-                                else:
-                                    return jsonify({'error': 'Type value not found inside issue details.'}), 404
-                            else:
-                                return jsonify({'error': 'Issue details not found inside issue body content.'}), 404
-                        else:
-                            return jsonify({'error': 'Issue body content not found inside main content.'}), 404
-                    else:
-                        return jsonify({'error': 'Main content not found inside page.'}), 404
-                else:
-                    return jsonify({'error': 'Page div not found inside body with id "jira".'}), 404
-            else:
-                return jsonify({'error': 'Body with id "jira" not found.'}), 404
+            page_div = body_jira.find('div', id='page') if body_jira else None
+            main_content = page_div.find('main', id='main') if page_div else None
+            header = main_content.find('header', id='stalker') if main_content else None
+            summary_value = header.find('h2', id='summary-val') if header else None
+            issue_body_content = main_content.find('div', class_='issue-body-content') if main_content else None
+            user_content_block = issue_body_content.find('div', class_='user-content-block') if issue_body_content else None
+            p = user_content_block.find('p') if user_content_block else None
+            issuedetails = issue_body_content.find('ul', id='issuedetails') if issue_body_content else None
+            type_val = issuedetails.find('span', id='type-val') if issuedetails else None
+            priority_val = issuedetails.find('span', id='priority-val') if issuedetails else None
+            resolution_val = issuedetails.find('span', id='resolution-val') if issuedetails else None
+            fixfor_val = issuedetails.find('span', id='fixfor-val').find('a') if issuedetails else None
+            versions_val = issuedetails.find('span', id='versions-val') if issuedetails else None
+            sprint_val = issue_body_content.find('div', id='customfield_12310940-val') if issue_body_content else "None"
+
+            return jsonify({
+                'summary': summary_value.text if summary_value else "None",
+                'description': p.text if p else "None",
+                'details': {
+                    'type': type_val.text.strip() if type_val else "None",
+                    'priority': priority_val.text.strip() if priority_val else "None",
+                    'resolution': resolution_val.text.strip() if resolution_val else "None",
+                    'fixfor': fixfor_val.text if fixfor_val else "None",
+                    'versions': versions_val.text.strip() if versions_val else "None",
+                    'sprint': sprint_val.text.strip() if sprint_val else "None"
+                }
+            }), 200
         else:
             return jsonify({'error': 'Failed to fetch URL.'}), 500
 
     except Exception as e:
         app.logger.error(f"An error occurred: {e}")
         return jsonify({'error': 'An unexpected error occurred.'}), 500
+
 
 @app.route('/get-java-files', methods=['GET'])
 def get_java_files():

@@ -20,8 +20,8 @@ export function FilesDisplay() {
   const [submitClicked,setsubmitClicked]=useState(false);
 
   const extractTeiidFromUrl = (url) => {
-    const match = url.match(/TEIID-\d+/);
-    return match ? match[0] : null;
+    const key = url.split('/').pop();
+    return key ;
   };
 
   const handleUrlSubmit = async () => {
